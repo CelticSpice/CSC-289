@@ -5,7 +5,7 @@ reserverID int NOT NULL AUTO_INCREMENT,
 firstName varchar(35) NOT NULL,
 lastName varchar(35) NOT NULL,
 email varchar(255) NOT NULL,
-phone int NOT NULL,
+phone varchar(16) NOT NULL,
 PRIMARY KEY (reserverID)
 );
 

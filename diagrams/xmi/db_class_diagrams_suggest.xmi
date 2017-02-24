@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<XMI xmlns:UML="http://schema.omg.org/spec/UML/1.3" xmi.version="1.2" timestamp="2017-02-23T23:16:53" verified="false">
+<XMI xmlns:UML="http://schema.omg.org/spec/UML/1.3" xmi.version="1.2" timestamp="2017-02-23T23:17:49" verified="false">
  <XMI.header>
   <XMI.documentation>
    <XMI.exporter>umbrello uml modeller http://umbrello.kde.org</XMI.exporter>
@@ -672,10 +672,10 @@
      </UML:Namespace.ownedElement>
      <XMI.extension xmi.extender="umbrello">
       <diagrams resolution="101">
-       <diagram linewidth="0" textcolor="#000000" localid="-1" font="Sans Serif,9,-1,5,50,0,0,0,0,0" documentation="" showopsig="1" griddotcolor="#d3d3d3" showscope="1" isopen="1" xmi.id="7w4zRhUbaTlh" type="9" showops="1" showattribassocs="1" canvasheight="980" snapcsgrid="0" showpubliconly="0" snapgrid="1" backgroundcolor="#ffffff" canvaswidth="1581" fillcolor="#ffff00" showpackage="1" usefillcolor="1" showgrid="0" showstereotype="1" zoom="81" linecolor="#ff0000" snapy="25" showatts="1" name="Database" showattsig="1" snapx="25">
+       <diagram linewidth="0" textcolor="#000000" localid="-1" font="Sans Serif,9,-1,5,50,0,0,0,0,0" documentation="" showopsig="1" griddotcolor="#d3d3d3" showscope="1" isopen="1" xmi.id="7w4zRhUbaTlh" type="9" showops="1" showattribassocs="1" canvasheight="993" snapcsgrid="0" showpubliconly="0" snapgrid="1" backgroundcolor="#ffffff" canvaswidth="1604" fillcolor="#ffff00" showpackage="1" usefillcolor="1" showgrid="0" showstereotype="1" zoom="81" linecolor="#ff0000" snapy="25" showatts="1" name="Database" showattsig="1" snapx="25">
         <widgets>
          <entitywidget usesdiagramusefillcolor="0" y="-950" isinstance="0" linecolor="#ff0000" usefillcolor="1" xmi.id="nmsK3FVfhKhq" showstereotype="1" font="Sans Serif,9,-1,5,50,0,0,0,0,0" x="-1025" height="72.716" textcolor="#000000" fillcolor="#ffff00" usesdiagramfillcolor="0" width="123.531" linewidth="0" localid="oITlFDkllBsr"/>
-         <entitywidget usesdiagramusefillcolor="0" y="-950" isinstance="0" linecolor="#ff0000" usefillcolor="1" xmi.id="nzBKST5yPEI3" showstereotype="1" font="Sans Serif,9,-1,5,50,0,0,0,0,0" x="-1250" height="85.0617" textcolor="#000000" fillcolor="#ffff00" usesdiagramfillcolor="0" width="100" linewidth="0" localid="6IhDQp3Bg2eB"/>
+         <entitywidget usesdiagramusefillcolor="0" y="-950" isinstance="0" linecolor="#ff0000" usefillcolor="1" xmi.id="nzBKST5yPEI3" showstereotype="1" font="Sans Serif,9,-1,5,50,0,0,0,0,0" x="-1275" height="85.0617" textcolor="#000000" fillcolor="#ffff00" usesdiagramfillcolor="0" width="100" linewidth="0" localid="6IhDQp3Bg2eB"/>
          <entitywidget usesdiagramusefillcolor="0" y="-750" isinstance="0" linecolor="#ff0000" usefillcolor="1" xmi.id="J4jmnrJnIprT" showstereotype="1" font="Sans Serif,9,-1,5,50,0,0,0,0,0" x="-1050" height="126" textcolor="#000000" fillcolor="#ffff00" usesdiagramfillcolor="0" width="154" linewidth="0" localid="LKJv6y4sxB0J"/>
         </widgets>
         <messages/>
@@ -688,12 +688,13 @@
           <floatingtext linewidth="0" textcolor="none" localid="m2hO5BPH87vM" x="-925" isinstance="0" font="Sans,9,-1,5,50,0,0,0,0,0" y="-775" xmi.id="XEIZYt7SxubC" usesdiagramusefillcolor="1" text="0..1" fillcolor="none" width="31" usefillcolor="1" usesdiagramfillcolor="1" pretext="" showstereotype="1" linecolor="#ff0000" role="701" height="18" posttext=""/>
           <floatingtext linewidth="0" textcolor="none" localid="5k7PZfppJkKF" x="-925" isinstance="0" font="Sans,9,-1,5,50,0,0,0,0,0" y="-867" xmi.id="qUETHVWCEtRR" usesdiagramusefillcolor="1" text="0..1" fillcolor="none" width="31" usefillcolor="1" usesdiagramfillcolor="1" pretext="" showstereotype="1" linecolor="#ff0000" role="702" height="18" posttext=""/>
          </assocwidget>
-         <assocwidget linewidth="0" textcolor="none" indexb="1" font="Sans Serif,9,-1,5,50,0,0,0,0,0" changeabilityA="900" xmi.id="N7NYezgfjOaL" type="519" widgetbid="nmsK3FVfhKhq" usesdiagramusefillcolor="0" visibilityA="0" seqnum="" totalcounta="2" fillcolor="#ffff00" usefillcolor="1" usesdiagramfillcolor="0" visibilityB="0" linecolor="#ff0000" totalcountb="2" widgetaid="nzBKST5yPEI3" indexa="1" changeabilityB="900">
+         <assocwidget linewidth="0" textcolor="#000000" indexb="1" font="Sans Serif,9,-1,5,50,0,0,0,0,0" changeabilityA="900" xmi.id="N7NYezgfjOaL" type="519" widgetbid="nmsK3FVfhKhq" usesdiagramusefillcolor="0" visibilityA="0" seqnum="" totalcounta="2" fillcolor="#ffff00" usefillcolor="1" usesdiagramfillcolor="0" visibilityB="0" linecolor="#ff0000" totalcountb="2" widgetaid="nzBKST5yPEI3" indexa="1" changeabilityB="900">
           <linepath layout="Polyline">
-           <startpoint starty="-905" startx="-1150"/>
+           <startpoint starty="-905" startx="-1175"/>
            <endpoint endx="-1025" endy="-905"/>
           </linepath>
-          <floatingtext linewidth="0" textcolor="none" localid="giyGUVu1TMGk" x="-1100" isinstance="0" font="Sans,9,-1,5,50,0,0,0,0,0" y="-900" xmi.id="FfSXTxTrQzTw" usesdiagramusefillcolor="1" text="ReserversFK" fillcolor="none" width="93" usefillcolor="1" usesdiagramfillcolor="1" pretext="+" showstereotype="1" linecolor="#ff0000" role="710" height="18" posttext=""/>
+          <floatingtext linewidth="0" textcolor="none" localid="G0DTf3WHnD97" x="-1150" isinstance="0" font="Sans,9,-1,5,50,0,0,0,0,0" y="-925" xmi.id="SOlzkpoIAvB2" usesdiagramusefillcolor="1" text="1..*" fillcolor="none" width="29" usefillcolor="1" usesdiagramfillcolor="1" pretext="" showstereotype="1" linecolor="#ff0000" role="701" height="18" posttext=""/>
+          <floatingtext linewidth="0" textcolor="none" localid="cTrTJZjnLxuX" x="-1075" isinstance="0" font="Sans,9,-1,5,50,0,0,0,0,0" y="-925" xmi.id="OfuJzHe10zHB" usesdiagramusefillcolor="1" text="1..*" fillcolor="none" width="29" usefillcolor="1" usesdiagramfillcolor="1" pretext="" showstereotype="1" linecolor="#ff0000" role="702" height="18" posttext=""/>
          </assocwidget>
         </associations>
        </diagram>
@@ -704,7 +705,7 @@
   </UML:Model>
  </XMI.content>
  <XMI.extensions xmi.extender="umbrello">
-  <docsettings uniqueid="qUETHVWCEtRR" viewid="7w4zRhUbaTlh" documentation=""/>
+  <docsettings uniqueid="OfuJzHe10zHB" viewid="7w4zRhUbaTlh" documentation=""/>
   <listview>
    <listitem id="Views" open="1" type="800">
     <listitem id="Component View" open="1" type="821"/>

@@ -934,6 +934,7 @@ public class OpenScreenTest
     {//GEN-HEADEREND:event_registerBtnActionPerformed
         CardLayout screen = (CardLayout)(Screens.getLayout());
         screen.show(Screens,"registerScreen");
+        
     }//GEN-LAST:event_registerBtnActionPerformed
 
     /**

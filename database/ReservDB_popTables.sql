@@ -12,7 +12,7 @@ VALUES ('Cabin 01', 15, '2017-02-23', '2017-02-23', '08:30', '18:30', 350);
 
 -- Insert reservations table test record.
 
-INSERT INTO reservations (reservableID, reserverID, eventType, numberAttending)
+INSERT INTO Reservations (reservableID, reserverID, eventType, numberAttending)
 VALUES (1, 1, 'General Purpose', 12);
 
 
@@ -30,7 +30,7 @@ VALUES ('Bar 01', 35, '2017-03-30', '2017-03-31', '17:00', '03:00', 200);
 
 -- Insert reservations table test record.
 
-INSERT INTO reservations (reservableID, reserverID, eventType, numberAttending)
+INSERT INTO Reservations (reservableID, reserverID, eventType, numberAttending)
 VALUES (2, 2, 'General Purpose', 32);
 
 
@@ -48,7 +48,7 @@ VALUES ('Lake', 125, '2018-01-12', '2018-02-12', '09:00', '20:30', 600);
 
 -- Insert reservations table test record.
 
-INSERT INTO reservations (reservableID, reserverID, eventType, numberAttending)
+INSERT INTO Reservations (reservableID, reserverID, eventType, numberAttending)
 VALUES (3, 3, 'General Purpose', 113);
 
 
@@ -66,5 +66,5 @@ VALUES ('Theatre', 75, '2017-05-02', '2017-05-02', '17:00', '18:30', 285.26);
 
 -- Insert reservations table test record.
 
-INSERT INTO reservations (reservableID, reserverID, eventType, numberAttending)
+INSERT INTO Reservations (reservableID, reserverID, eventType, numberAttending)
 VALUES (4, 4, 'General Purpose', 68);

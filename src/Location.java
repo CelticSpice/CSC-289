@@ -44,26 +44,4 @@ public class Location
     {
         return name;
     }
-    
-    /**
-        SetCapacity - Sets the location's capacity
-    
-        @param c The location's capacity
-    */
-    
-    public void setCapacity(int c)
-    {
-        capacity = c;
-    }
-    
-    /**
-        SetName - Sets the location's name
-    
-        @param n The location's name
-    */
-    
-    public void setName(String n)
-    {
-        name = n;
-    }
 }

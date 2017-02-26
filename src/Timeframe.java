@@ -1,12 +1,15 @@
 /**
-    A timeframe consisting of a starting and ending hour and minute
+    A timeframe consisting of a starting and ending date, hour, and minute
     CSC-289 - Group 4
     @author Timothy Burns
 */
 
+import java.util.GregorianCalendar;
+
 public class Timeframe
 {
     // Fields
+    private GregorianCalendar dateStart, dateEnd;
     private int hStart, hEnd, mStart, mEnd;
     
     /**

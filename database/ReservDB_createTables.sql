@@ -1,6 +1,6 @@
 -- Create the Reservers table.
 
-CREATE TABLE Reservers(
+CREATE TABLE IF NOT EXISTS Reservers(
 reserverID int NOT NULL AUTO_INCREMENT,
 firstName varchar(35) NOT NULL,
 lastName varchar(35) NOT NULL,
@@ -12,7 +12,7 @@ PRIMARY KEY (reserverID)
 
 -- Create the Reservables table.
 
-CREATE TABLE Reservables(
+CREATE TABLE IF NOT EXISTS Reservables(
 reservableID int NOT NULL AUTO_INCREMENT,
 locationName varchar(35) NOT NULL,
 capacity int NOT NULL,
@@ -27,7 +27,7 @@ PRIMARY KEY (reservableID)
 
 -- Create the Reservations table.
 
-CREATE TABLE Reservations(
+CREATE TABLE IF NOT EXISTS Reservations(
 reservableID int NOT NULL,
 reserverID int NOT NULL,
 eventType varchar(35) NOT NULL,

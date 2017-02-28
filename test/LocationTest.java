@@ -54,22 +54,4 @@ public class LocationTest {
         // We expect that the location's capacity is equal to newCapacity
         assertEquals(newCapacity, loc.getCapacity());
     }
-
-    /**
-     * Test of setName method, of class Location.
-     */
-    
-    @Test
-    public void testSetName() {
-        String initialName = "Magic";
-        int capacity = 50;
-        Location loc = new Location(initialName, capacity);
-        
-        // Set new name
-        String newName = "Technology";
-        loc.setName(newName);
-        
-        // We expect that the location's name is equal to newName
-        assertEquals(newName, loc.getName());
-    }
 }

@@ -16,24 +16,21 @@ public class ReservableLocation extends Location
     private ArrayList<Timeframe> reserveTimeframes;
     
     /**
-        Constructor - Accepts the reservable location's name, capacity,
-        starting and ending dates and times, and cost
+        Constructor - Accepts the reservable location's name and capacity
     
-        @param n The reservable location's name
-        @param cap The reservable location's capacity
-        @param sDateTime The reservable location's start date and time
-        @param eDateTime The reservable location's end date and time
-        @param c The cost to reserve the location
+        @param name The reservable location's name
+        @param capacity The reservable location's capacity
     */
     
-    public ReservableLocation(String n, int cap, GregorianCalendar sDateTime,
-                              GregorianCalendar eDateTime, BigDecimal c)
+    public ReservableLocation(String name, int capacity)
     {
-        super(n, cap);
-        startDateTime = sDateTime;
-        endDateTime = eDateTime;
-        cost = c;
+        super(name, capacity);
+        reserveCosts = new ArrayList<>();
+        reserveTimeframes = new ArrayList<>();
     }
     
-    
+    /**
+        AddReserveSlot - Add a timeframe and cost that the reservable location
+        can be reserved for
+    */
 }

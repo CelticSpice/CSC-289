@@ -4,6 +4,7 @@
     @author Timothy Burns
 */
 
+import Data.Location;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 

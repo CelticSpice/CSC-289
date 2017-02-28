@@ -4,6 +4,8 @@
     @author Timothy Burns
 */
 
+package Data;
+
 public class Location
 {
     // Fields
@@ -44,15 +46,15 @@ public class Location
     {
         return name;
     }
-    public void setName(String n)
-    {
-        name = n;
-        
-    }
     
-    public void setCapacity(int c)
-    {
-        capacity = c;
-    }
+    /**
+        SetCapacity - Set the location's capacity
     
+        @param cap The location's capacity
+    */
+    
+    public void setCapacity(int cap)
+    {
+        capacity = cap;
+    }
 }

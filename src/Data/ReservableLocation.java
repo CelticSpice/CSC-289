@@ -6,17 +6,15 @@
 
 package Data;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class ReservableLocation extends Location
 {
     // Fields
-    private ArrayList<BigDecimal> reserveCosts;
-    private ArrayList<Timeframe> reserveTimeframes;
+    private ArrayList<ReservableTimeframe> reserveTimeframes;
     
     /**
-        Constructor - Accepts the reservable location's name and capacity
+        Constructor - Accepts the reservable location's name & capacity
     
         @param name The reservable location's name
         @param capacity The reservable location's capacity
@@ -25,12 +23,44 @@ public class ReservableLocation extends Location
     public ReservableLocation(String name, int capacity)
     {
         super(name, capacity);
-        reserveCosts = new ArrayList<>();
         reserveTimeframes = new ArrayList<>();
     }
     
     /**
-        AddReserveSlot - Add a timeframe and cost that the reservable location
+        AddReservableTimeframe - Add a timeframe the location
         can be reserved for
+    
+        @param reserveTimeframe Timeframe the location can be
+                                reserved for
     */
+    
+    public void addReservableTimeframe(ReservableTimeframe reserveTimeframe)
+    {
+        reserveTimeframes.add(reserveTimeframe);
+    }
+    
+    /**
+        GetNumReservableTimeframes - Return the number of reservable timeframes
+        allocated to the location
+    
+        @return The number of reservable timeframes allocated to the location
+    */
+    
+    public int getNumReservableTimeframes()
+    {
+        return reserveTimeframes.size();
+    }
+    
+    /**
+        RemoveReservableTimeframe - Remove the timeframe the location
+        can be reserved for specified by the index given
+    
+        @param index Index specifying timeframe the location can be
+                     reserved for to remove
+    */
+    
+    public void removeReservableTimeframe(int index)
+    {
+        reserveTimeframes.remove(index);
+    }
 }

@@ -1,5 +1,5 @@
 /**
-    A timeframe for which a location can be reserved for
+    A timeframe
     CSC-289 - Group 4
     @author Timothy Burns
 */
@@ -28,12 +28,13 @@ public class Timeframe
     }
     
     /**
-        GetEndDate - Return the ending date of the timeframe
+        GetEndDateString - Return the ending date of the timeframe as a string
+        in the format mm-dd-yyyy
     
-        @return The ending date
+        @return The ending date as a string
     */
     
-    public String getEndDate()
+    public String getEndDateString()
     {
         SimpleDateFormat fmt = new SimpleDateFormat("MM-dd-yyyy");
         fmt.setCalendar(endDateTime);
@@ -41,12 +42,27 @@ public class Timeframe
     }
     
     /**
-        GetStartDate - Return the starting date of the timeframe
+        GetEndTimeString - Return the ending time of the timeframe as a string
+        in the format hh:mm
     
-        @return The starting date
+        @return The ending time as a string
     */
     
-    public String getStartDate()
+    public String getEndTimeString()
+    {
+        SimpleDateFormat fmt = new SimpleDateFormat("HH:mm");
+        fmt.setCalendar(endDateTime);
+        return fmt.format(endDateTime.getTime());
+    }
+    
+    /**
+        GetStartDateString - Return the starting date of the timeframe as a
+        string in the format mm-dd-yyyy
+    
+        @return The starting date as a string
+    */
+    
+    public String getStartDateString()
     {
         SimpleDateFormat fmt = new SimpleDateFormat("MM-dd-yyyy");
         fmt.setCalendar(startDateTime);
@@ -54,27 +70,15 @@ public class Timeframe
     }
     
     /**
-        GetEndTime - Return the ending time of the timeframe
+        GetStartTimeString - Return the starting time of the timeframe as a
+        string in the format hh:mm
     
-        @return The ending time
+        @return The starting time as a string
     */
     
-    public String getEndTime()
+    public String getStartTimeString()
     {
-        SimpleDateFormat fmt = new SimpleDateFormat("HH-mm");
-        fmt.setCalendar(endDateTime);
-        return fmt.format(endDateTime.getTime());
-    }
-    
-    /**
-        GetStartTime - Return the starting time of the timeframe
-    
-        @return The starting time
-    */
-    
-    public String getStartTime()
-    {
-        SimpleDateFormat fmt = new SimpleDateFormat("HH-mm");
+        SimpleDateFormat fmt = new SimpleDateFormat("HH:mm");
         fmt.setCalendar(startDateTime);
         return fmt.format(startDateTime.getTime());
     }

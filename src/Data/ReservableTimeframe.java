@@ -19,7 +19,7 @@ public class ReservableTimeframe extends Timeframe
     
     /**
         Constructor - Accepts the starting & ending dates & times of the
-        reservable timeframe, and the cost to reserve it
+        timeframe, and the cost to reserve it
     
         @param startDateTime The starting date & time of the timeframe
         @param endDateTime The starting date & time of the timeframe

@@ -23,7 +23,7 @@ public class ReservableTimeframe extends Timeframe
         timeframe, and the cost to reserve it
     
         @param startDateTime The starting date & time of the timeframe
-        @param endDateTime The starting date & time of the timeframe
+        @param endDateTime The ending date & time of the timeframe
         @param c The cost to reserve the timeframe
     */
     
@@ -32,6 +32,15 @@ public class ReservableTimeframe extends Timeframe
     {
         super(startDateTime, endDateTime);
         cost = c;
+        reserved = false;
+    }
+    
+    /**
+        CancelReserve - Cancels the reservation of the timeframe
+    */
+    
+    public void cancelReserve()
+    {
         reserved = false;
     }
     
@@ -60,12 +69,12 @@ public class ReservableTimeframe extends Timeframe
     }
     
     /**
-        GetReserved - Return if the timeframe is reserved
+        IsReserved - Return if the timeframe is reserved
     
         @return Whether the timeframe is reserved
     */
     
-    public boolean getReserved()
+    public boolean isReserved()
     {
         return reserved;
     }

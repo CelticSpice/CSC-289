@@ -41,17 +41,57 @@ public class ReservableLocation extends Location
     }
     
     /**
+        CancelReserve - Cancels the reservation of the location at the timeframe
+        specified by the given index
+    
+        @param index Index of timeframe to cancel the reservation of the
+                     location on
+    */
+    
+    public void cancelReserve(int index)
+    {
+        timeframes.get(index).cancelReserve();
+    }
+    
+    /**
+        GetTimeframes - Return the reservable timeframes allocated to the
+        location
+    
+        @return The reservable timeframes allocated to the location
+    */
+    
+    public ReservableTimeframe[] getTimeframes()
+    {
+        return timeframes.toArray(new ReservableTimeframe[timeframes.size()]);
+    }
+    
+    /**
         IsAvailable - Return whether the location is available to be reserved
         on the specified date
     
-        @param availableDate Date to return whether the location is available
-                             to be reserved for
-        @return Whether the location can be reserved on the specified date
+        @param date Date to return whether the location is available to be
+                    reserved for
+        @return avail Whether the location can be reserved on the specified date
     */
     
-    public boolean isAvailable(GregorianCalendar availableDate)
+    public boolean isAvailable(GregorianCalendar date)
     {
-        return true;
+        boolean dateOnly = true;
+        boolean avail = false;
+        int i = 0;
+        
+        while (!avail && i < timeframes.size())
+        {
+            if (!timeframes.get(i).isReserved() &&
+                timeframes.get(i).startsOn(date, dateOnly))
+            {
+                avail = true;
+            }
+            else
+                i++;
+        }
+        
+        return avail;
     }
     
     /**
@@ -77,5 +117,17 @@ public class ReservableLocation extends Location
     public void removeTimeframe(int index)
     {
         timeframes.remove(index);
+    }
+    
+    /**
+        Reserve - Reserve the location at the timeframe specified by the given
+        index
+    
+        @param index Index specifying timeframe to reserve the location for
+    */
+    
+    public void reserve(int index)
+    {
+        timeframes.get(index).reserve();
     }
 }

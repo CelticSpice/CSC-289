@@ -24,49 +24,40 @@ public class Timeframe
     public Timeframe(GregorianCalendar sDateTime, GregorianCalendar eDateTime)
     {
         // We ignore milliseconds & seconds
-        startDateTime = new GregorianCalendar
-            (sDateTime.get(GregorianCalendar.YEAR),
-             sDateTime.get(GregorianCalendar.MONTH),
-             sDateTime.get(GregorianCalendar.DAY_OF_MONTH),
-             sDateTime.get(GregorianCalendar.HOUR_OF_DAY),
-             sDateTime.get(GregorianCalendar.MINUTE));
+        sDateTime.clear(GregorianCalendar.MILLISECOND);
+        sDateTime.clear(GregorianCalendar.SECOND);
+        eDateTime.clear(GregorianCalendar.MILLISECOND);
+        eDateTime.clear(GregorianCalendar.SECOND);
         
-        endDateTime = new GregorianCalendar
-            (eDateTime.get(GregorianCalendar.YEAR),
-             eDateTime.get(GregorianCalendar.MONTH),
-             eDateTime.get(GregorianCalendar.DAY_OF_MONTH),
-             eDateTime.get(GregorianCalendar.HOUR_OF_DAY),
-             eDateTime.get(GregorianCalendar.MINUTE));
+        startDateTime = sDateTime;
+        endDateTime = eDateTime;
     }
     
     /**
-        CompareStartTo - Compare the timeframe's start with 
-        another timeframe's start
+        StartsOn - Return whether the timeframe starts on the given date
     
-        @param timeframe Timeframe to compare to
-        @param dateOnly Whether to ignore hours & minutes in the comparison
-        @return 0 if the starts are equal, -1 if this timeframe's start
-                 is less than, or 1 otherwise
+        @param date Date to check if the timeframe starts on
+        @param dateOnly Whether to ignore hours & minutes in the computation
+        @return Whether the timeframe starts on the given date
     */
     
-    public int compareStartTo(Timeframe timeframe, boolean dateOnly)
+    public boolean startsOn(GregorianCalendar date, boolean dateOnly)
     {
-        if (!dateOnly)
-            return startDateTime.compareTo(timeframe.startDateTime);
-        else
+        date.clear(GregorianCalendar.MILLISECOND);
+        date.clear(GregorianCalendar.SECOND);
+        
+        if (dateOnly)
         {
-            GregorianCalendar startCopy1 = new GregorianCalendar
-                (startDateTime.get(GregorianCalendar.YEAR),
-                 startDateTime.get(GregorianCalendar.MONTH),
-                 startDateTime.get(GregorianCalendar.DAY_OF_MONTH));
-            
-            GregorianCalendar startCopy2 = new GregorianCalendar
-                (timeframe.startDateTime.get(GregorianCalendar.YEAR),
-                 timeframe.startDateTime.get(GregorianCalendar.MONTH),
-                 timeframe.startDateTime.get(GregorianCalendar.DAY_OF_MONTH));
-            
-            return startCopy1.compareTo(startCopy2);
+            date.set(GregorianCalendar.HOUR_OF_DAY,
+                     startDateTime.get(GregorianCalendar.HOUR_OF_DAY));
+            date.set(GregorianCalendar.MINUTE,
+                     startDateTime.get(GregorianCalendar.MINUTE));
         }
+        
+        if (startDateTime.compareTo(date) == 0)
+            return true;
+        else
+            return false;
     }
     
     /**

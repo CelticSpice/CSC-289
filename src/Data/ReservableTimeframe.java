@@ -16,6 +16,7 @@ public class ReservableTimeframe extends Timeframe
 {
     // Fields
     private BigDecimal cost;
+    private boolean reserved;
     
     /**
         Constructor - Accepts the starting & ending dates & times of the
@@ -31,6 +32,7 @@ public class ReservableTimeframe extends Timeframe
     {
         super(startDateTime, endDateTime);
         cost = c;
+        reserved = false;
     }
     
     /**
@@ -66,6 +68,17 @@ public class ReservableTimeframe extends Timeframe
     public void setCost(BigDecimal c)
     {
         cost = c;
+    }
+    
+    /**
+        SetReserved - Set whether the reservable timeframe is reserved
+    
+        @param isReserved Whether the timeframe is reserved
+    */
+    
+    public void setReserved(boolean isReserved)
+    {
+        reserved = isReserved;
     }
     
     /**

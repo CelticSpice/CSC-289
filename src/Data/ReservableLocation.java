@@ -7,11 +7,12 @@
 package Data;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 
 public class ReservableLocation extends Location
 {
     // Fields
-    private ArrayList<ReservableTimeframe> reserveTimeframes;
+    private ArrayList<ReservableTimeframe> timeframes;
     
     /**
         Constructor - Accepts the reservable location's name & capacity
@@ -23,44 +24,58 @@ public class ReservableLocation extends Location
     public ReservableLocation(String name, int capacity)
     {
         super(name, capacity);
-        reserveTimeframes = new ArrayList<>();
+        timeframes = new ArrayList<>();
     }
     
     /**
-        AddReservableTimeframe - Add a timeframe the location
+        AddTimeframe - Add a timeframe the location
         can be reserved for
     
-        @param reserveTimeframe Timeframe the location can be
+        @param timeframe Timeframe the location can be
                                 reserved for
     */
     
-    public void addReservableTimeframe(ReservableTimeframe reserveTimeframe)
+    public void addTimeframe(ReservableTimeframe timeframe)
     {
-        reserveTimeframes.add(reserveTimeframe);
+        timeframes.add(timeframe);
     }
     
     /**
-        GetNumReservableTimeframes - Return the number of reservable timeframes
-        allocated to the location
+        IsAvailable - Return whether the location is available to be reserved
+        on the specified date
     
-        @return The number of reservable timeframes allocated to the location
+        @param availableDate Date to return whether the location is available
+                             to be reserved for
+        @return Whether the location can be reserved on the specified date
     */
     
-    public int getNumReservableTimeframes()
+    public boolean isAvailable(GregorianCalendar availableDate)
     {
-        return reserveTimeframes.size();
+        return true;
     }
     
     /**
-        RemoveReservableTimeframe - Remove the timeframe the location
+        NumTimeframes - Return the number of timeframes
+        allocated to the location
+    
+        @return The number of timeframes allocated to the location
+    */
+    
+    public int numTimeFrames()
+    {
+        return timeframes.size();
+    }
+    
+    /**
+        RemoveTimeframe - Remove the timeframe the location
         can be reserved for specified by the index given
     
         @param index Index specifying timeframe the location can be
                      reserved for to remove
     */
     
-    public void removeReservableTimeframe(int index)
+    public void removeTimeframe(int index)
     {
-        reserveTimeframes.remove(index);
+        timeframes.remove(index);
     }
 }

@@ -60,6 +60,26 @@ public class ReservableTimeframe extends Timeframe
     }
     
     /**
+        GetReserved - Return if the timeframe is reserved
+    
+        @return Whether the timeframe is reserved
+    */
+    
+    public boolean getReserved()
+    {
+        return reserved;
+    }
+    
+    /**
+        Reserve - Reserve the timeframe
+    */
+    
+    public void reserve()
+    {
+        reserved = true;
+    }
+    
+    /**
         SetCost - Set the cost to reserve the timeframe
     
         @param c The cost to reserve the timeframe
@@ -68,17 +88,6 @@ public class ReservableTimeframe extends Timeframe
     public void setCost(BigDecimal c)
     {
         cost = c;
-    }
-    
-    /**
-        SetReserved - Set whether the reservable timeframe is reserved
-    
-        @param isReserved Whether the timeframe is reserved
-    */
-    
-    public void setReserved(boolean isReserved)
-    {
-        reserved = isReserved;
     }
     
     /**

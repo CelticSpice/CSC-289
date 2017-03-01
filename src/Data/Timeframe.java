@@ -29,14 +29,14 @@ public class Timeframe
     
     /**
         GetEndDateString - Return the ending date of the timeframe as a string
-        in the format mm-dd-yyyy
+        in the format mm/dd/yyyy
     
         @return The ending date as a string
     */
     
     public String getEndDateString()
     {
-        SimpleDateFormat fmt = new SimpleDateFormat("MM-dd-yyyy");
+        SimpleDateFormat fmt = new SimpleDateFormat("MM/dd/yyyy");
         fmt.setCalendar(endDateTime);
         return fmt.format(endDateTime.getTime());
     }
@@ -57,14 +57,14 @@ public class Timeframe
     
     /**
         GetStartDateString - Return the starting date of the timeframe as a
-        string in the format mm-dd-yyyy
+        string in the format mm/dd/yyyy
     
         @return The starting date as a string
     */
     
     public String getStartDateString()
     {
-        SimpleDateFormat fmt = new SimpleDateFormat("MM-dd-yyyy");
+        SimpleDateFormat fmt = new SimpleDateFormat("MM/dd/yyyy");
         fmt.setCalendar(startDateTime);
         return fmt.format(startDateTime.getTime());
     }
@@ -81,5 +81,18 @@ public class Timeframe
         SimpleDateFormat fmt = new SimpleDateFormat("HH:mm");
         fmt.setCalendar(startDateTime);
         return fmt.format(startDateTime.getTime());
+    }
+    
+    /**
+        ToString - Return a string representation of the object
+    
+        @return String representation of the object
+    */
+    
+    @Override
+    public String toString()
+    {
+        return getStartTimeString() + "-" + getStartDateString() +
+               ", " + getEndTimeString() + "-" + getEndDateString();
     }
 }

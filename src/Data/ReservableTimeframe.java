@@ -67,4 +67,16 @@ public class ReservableTimeframe extends Timeframe
     {
         cost = c;
     }
+    
+    /**
+        ToString - Return a string representation of the object
+    
+        @return A string representation of the object
+    */
+    
+    @Override
+    public String toString()
+    {
+        return super.toString() + " : " + getCostString();
+    }
 }

@@ -6,18 +6,15 @@
 
 package Data;
 
-import java.sql.SQLException;
-
 public class Application
 {
     /**
         Main method
     
         @param args The arguments
-        @throws SQLException There was an error executing SQL
     */
     
-    public static void main(String[] args) throws SQLException
+    public static void main(String[] args)
     {
         
     }

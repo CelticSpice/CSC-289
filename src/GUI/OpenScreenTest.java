@@ -6,6 +6,8 @@
 package GUI;
 
 import java.awt.CardLayout;
+import java.math.BigDecimal;
+import java.util.GregorianCalendar;
 import javax.swing.*;
 /**
  *
@@ -67,6 +69,11 @@ public class OpenScreenTest
         lblReserverDate = new javax.swing.JLabel();
         FTxtDatePicked = new javax.swing.JFormattedTextField();
         reserveBtn = new javax.swing.JButton();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        timelist = new javax.swing.JList<>();
+        lblTimeDisplay = new javax.swing.JLabel();
+        lblReserveType = new javax.swing.JLabel();
+        txtReserveType = new javax.swing.JTextField();
         adminView = new javax.swing.JTabbedPane();
         reservationsAvailablePane = new javax.swing.JPanel();
         jTextField1 = new javax.swing.JTextField();
@@ -181,7 +188,7 @@ public class OpenScreenTest
                     .addComponent(guestReservationBtn)
                     .addComponent(adminViewBtn)
                     .addComponent(registerBtn))
-                .addContainerGap(174, Short.MAX_VALUE))
+                .addContainerGap(210, Short.MAX_VALUE))
         );
 
         Screens.add(openScreenBtnPanel, "openScreen");
@@ -248,7 +255,7 @@ public class OpenScreenTest
                 .addGroup(logOnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(loginBtn)
                     .addComponent(registrationBtn))
-                .addContainerGap(134, Short.MAX_VALUE))
+                .addContainerGap(170, Short.MAX_VALUE))
         );
 
         Screens.add(logOnPanel, "logonScreen");
@@ -326,7 +333,7 @@ public class OpenScreenTest
                     .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(registationBtn)
-                .addContainerGap(72, Short.MAX_VALUE))
+                .addContainerGap(108, Short.MAX_VALUE))
         );
 
         Screens.add(registerPanel, "registerScreen");
@@ -354,32 +361,50 @@ public class OpenScreenTest
             }
         });
 
+        timelist.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        timelist.setModel(new javax.swing.AbstractListModel<String>()
+        {
+            String[] strings = { "Time Start , Time End", "Time Start , Time End", "Time Start , Time End", "Time Start , Time End", "Time Start , Time End" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        timelist.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        timelist.setToolTipText("");
+        jScrollPane4.setViewportView(timelist);
+
+        lblTimeDisplay.setText("Time:");
+
+        lblReserveType.setText("Type");
+
         javax.swing.GroupLayout guestReserveLayout = new javax.swing.GroupLayout(guestReserve);
         guestReserve.setLayout(guestReserveLayout);
         guestReserveLayout.setHorizontalGroup(
             guestReserveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(guestReserveLayout.createSequentialGroup()
-                .addGap(143, 143, 143)
-                .addGroup(guestReserveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(reserveBtn)
-                    .addGroup(guestReserveLayout.createSequentialGroup()
-                        .addGroup(guestReserveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblReserverLoc)
-                            .addComponent(lblReserverEmail)
-                            .addComponent(lblName)
-                            .addComponent(lblReserverDate))
-                        .addGap(41, 41, 41)
-                        .addGroup(guestReserveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(cbReserverLocations, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtReserverEmail)
-                            .addComponent(txrtReserverName)
-                            .addComponent(FTxtDatePicked, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(183, Short.MAX_VALUE))
+                .addGap(147, 147, 147)
+                .addGroup(guestReserveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblReserverLoc)
+                    .addComponent(lblReserverEmail)
+                    .addComponent(lblName)
+                    .addComponent(lblReserverDate)
+                    .addComponent(lblTimeDisplay)
+                    .addComponent(lblReserveType))
+                .addGap(41, 41, 41)
+                .addGroup(guestReserveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane4)
+                    .addComponent(cbReserverLocations, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtReserverEmail)
+                    .addComponent(txrtReserverName)
+                    .addComponent(FTxtDatePicked, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
+                    .addComponent(txtReserveType))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
+                .addComponent(reserveBtn)
+                .addGap(26, 26, 26))
         );
         guestReserveLayout.setVerticalGroup(
             guestReserveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, guestReserveLayout.createSequentialGroup()
-                .addContainerGap(70, Short.MAX_VALUE)
+                .addGap(20, 20, 20)
                 .addGroup(guestReserveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblName)
                     .addComponent(txrtReserverName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -395,9 +420,20 @@ public class OpenScreenTest
                 .addGroup(guestReserveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblReserverDate)
                     .addComponent(FTxtDatePicked, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
-                .addComponent(reserveBtn)
-                .addGap(66, 66, 66))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                .addGroup(guestReserveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblReserveType)
+                    .addComponent(txtReserveType, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(guestReserveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, guestReserveLayout.createSequentialGroup()
+                        .addComponent(reserveBtn)
+                        .addGap(17, 17, 17))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, guestReserveLayout.createSequentialGroup()
+                        .addGroup(guestReserveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblTimeDisplay)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap())))
         );
 
         Screens.add(guestReserve, "guestReserveScreen");
@@ -551,7 +587,7 @@ public class OpenScreenTest
                                 .addComponent(jScrollPane2))
                             .addGroup(reservationsAvailablePaneLayout.createSequentialGroup()
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE)))
+                                .addGap(0, 60, Short.MAX_VALUE)))
                         .addGap(18, 18, 18)
                         .addGroup(reservationsAvailablePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                             .addComponent(modifyLocBtn)
@@ -777,7 +813,6 @@ public class OpenScreenTest
                         .addGap(17, 17, 17)
                         .addGroup(reservationMangerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(reservationMangerPaneLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(contactReserverBtn)
                                 .addGap(53, 53, 53)
                                 .addComponent(reserveExitBtn))
@@ -799,7 +834,7 @@ public class OpenScreenTest
                     .addGroup(reservationMangerPaneLayout.createSequentialGroup()
                         .addGroup(reservationMangerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(reservationMangerPaneLayout.createSequentialGroup()
-                                .addGap(0, 9, Short.MAX_VALUE)
+                                .addGap(0, 45, Short.MAX_VALUE)
                                 .addGroup(reservationMangerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(jScrollPane3)
                                     .addComponent(reserverContactInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -840,8 +875,25 @@ public class OpenScreenTest
 
     private void reserveBtnActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_reserveBtnActionPerformed
     {//GEN-HEADEREND:event_reserveBtnActionPerformed
-        JOptionPane.showMessageDialog(null, "You have sent a reservation", "Made Reservation",
-                JOptionPane.OK_OPTION);
+//        JOptionPane.showMessageDialog(null, "You have sent a reservation", "Made Reservation",
+//                JOptionPane.OK_OPTION);
+        String fName, lName,e,p, tempa;
+         tempa = txrtReserverName.toString();
+         String[] parts = tempa.split(" ");
+         fName = parts[0];
+         lName = parts[1];
+         e = txtReserverEmail.toString();
+         p = txtPhone.toString();
+      
+        Data.ContactInfo ConInfo = new Data.ContactInfo(fName, lName, e, p);
+        Data.Reserver r = new Data.Reserver(ConInfo);
+        
+        tempa = txtReserveType.toString();
+        
+        Data.ReservableLocation loc = new Data.ReservableLocation(cbReserverLocations.toString(), ALLBITS);
+        //Data.Reservation reservation = new Data.Reservation(loc, loc.indexOfTimeframe(timeframe), SOMEBITS, tempa);
+        //need to get it to load the list with timeframes first and be able to pull it to this object.
+        
         CardLayout screen = (CardLayout)(Screens.getLayout());
         screen.show(Screens,"openScreen");
     }//GEN-LAST:event_reserveBtnActionPerformed
@@ -1034,6 +1086,7 @@ public class OpenScreenTest
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lblEmail;
@@ -1041,9 +1094,11 @@ public class OpenScreenTest
     private javax.swing.JLabel lblPW;
     private javax.swing.JLabel lblPassword;
     private javax.swing.JLabel lblPhone;
+    private javax.swing.JLabel lblReserveType;
     private javax.swing.JLabel lblReserverDate;
     private javax.swing.JLabel lblReserverEmail;
     private javax.swing.JLabel lblReserverLoc;
+    private javax.swing.JLabel lblTimeDisplay;
     private javax.swing.JLabel lblUN;
     private javax.swing.JLabel lblUsername;
     private javax.swing.JLabel locDisplay;
@@ -1075,10 +1130,12 @@ public class OpenScreenTest
     private javax.swing.JButton searchLocations;
     private javax.swing.JLabel timeDisplay;
     private javax.swing.JLabel timeSlot;
+    private javax.swing.JList<String> timelist;
     private javax.swing.JTextField txrtReserverName;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtPassword;
     private javax.swing.JTextField txtPhone;
+    private javax.swing.JTextField txtReserveType;
     private javax.swing.JTextField txtReserverEmail;
     private javax.swing.JTextField txtUsername;
     private javax.swing.JTextField txtUsername1;

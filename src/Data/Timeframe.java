@@ -34,6 +34,51 @@ public class Timeframe
     }
     
     /**
+        Conflicts - Return whether the timeframe conflicts with another
+        timeframe
+    
+        @param timeframe Timeframe to check for conflicts with
+        @return Whether there is a conflict
+    */
+    
+    public boolean conflicts(Timeframe timeframe)
+    {
+        long thisStartDateTimeMili = startDateTime.getTimeInMillis();
+        long thisEndDateTimeMili = endDateTime.getTimeInMillis();
+        long otherStartDateTimeMili = timeframe.startDateTime.getTimeInMillis();
+        long otherEndDateTimeMili = timeframe.endDateTime.getTimeInMillis();
+        
+        return (otherStartDateTimeMili >= thisStartDateTimeMili &&
+                otherStartDateTimeMili <= thisEndDateTimeMili)  ||
+               (otherEndDateTimeMili >= thisStartDateTimeMili   &&
+                otherEndDateTimeMili <= thisEndDateTimeMili);
+    }
+    
+    /**
+        EndsOn - Return whether the timeframe ends on the given date
+    
+        @param date Date to check if the timeframe ends on
+        @param dateOnly Whether to ignore hours & minutes in the computation
+        @return Whether the timeframe ends on the given date
+    */
+    
+    public boolean endsOn(GregorianCalendar date, boolean dateOnly)
+    {
+        date.clear(GregorianCalendar.MILLISECOND);
+        date.clear(GregorianCalendar.SECOND);
+        
+        if (dateOnly)
+        {
+            date.set(GregorianCalendar.HOUR_OF_DAY,
+                     endDateTime.get(GregorianCalendar.HOUR_OF_DAY));
+            date.set(GregorianCalendar.MINUTE,
+                     endDateTime.get(GregorianCalendar.MINUTE));
+        }
+        
+        return (endDateTime.compareTo(date) == 0);
+    }
+    
+    /**
         StartsOn - Return whether the timeframe starts on the given date
     
         @param date Date to check if the timeframe starts on
@@ -54,10 +99,7 @@ public class Timeframe
                      startDateTime.get(GregorianCalendar.MINUTE));
         }
         
-        if (startDateTime.compareTo(date) == 0)
-            return true;
-        else
-            return false;
+        return (startDateTime.compareTo(date) == 0);
     }
     
     /**

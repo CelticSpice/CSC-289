@@ -7,6 +7,7 @@ package GUI;
 
 import java.awt.CardLayout;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import javax.swing.*;
 /**
@@ -17,14 +18,22 @@ public class OpenScreenTest
         extends javax.swing.JFrame
 {
 
+    Data.ReservableLocation Barn = new Data.ReservableLocation("Barn", 500);
+    Data.ReservableLocation Lake = new Data.ReservableLocation("Lake", 400);
+    
+    
+    
     /**
      * Creates new form OpenScreenTest
      */
     public OpenScreenTest()
     {
         initComponents();
+        
+        cbReserverLocations.addItem(Barn.getName());
+        cbReserverLocations.addItem(Lake.getName());
     }
-
+    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -344,7 +353,14 @@ public class OpenScreenTest
 
         lblReserverLoc.setText("Location");
 
-        cbReserverLocations.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbReserverLocations.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select Location" }));
+        cbReserverLocations.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                cbReserverLocationsActionPerformed(evt);
+            }
+        });
 
         txrtReserverName.setToolTipText("");
 
@@ -988,6 +1004,30 @@ public class OpenScreenTest
         screen.show(Screens,"registerScreen");
         
     }//GEN-LAST:event_registerBtnActionPerformed
+
+    /**
+     * this will populate the list box based on the selection made by the combo
+     * box.
+     * 
+     * this will make it easy to show the time frames that are available to be 
+     * reserved.
+     * @param evt 
+     */
+    private void cbReserverLocationsActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_cbReserverLocationsActionPerformed
+    {//GEN-HEADEREND:event_cbReserverLocationsActionPerformed
+       if (cbReserverLocations.getSelectedIndex()== 1)
+       {
+           timelist.removeAll();
+           timelist.add(timelist,Barn.getTimeframes());
+           
+       }
+       else
+       {
+                    timelist.removeAll();
+                    timelist.add(timelist,Lake.getTimeframes());
+                    
+       }
+    }//GEN-LAST:event_cbReserverLocationsActionPerformed
 
     /**
      * @param args the command line arguments

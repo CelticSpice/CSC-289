@@ -66,6 +66,18 @@ public class ReservableLocation extends Location
     }
     
     /**
+        IndexOfTimeframe - Return the index of the timeframe given
+    
+        @param timeframe Timeframe to get index of
+        @return Index of timeframe; else, -1
+    */
+    
+    public int indexOfTimeframe(ReservableTimeframe timeframe)
+    {
+        return timeframes.indexOf(timeframe);
+    }
+    
+    /**
         IsAvailable - Return whether the location is available to be reserved
         on the specified date
     

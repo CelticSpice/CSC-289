@@ -15,16 +15,15 @@ public class Application
     
         @param args The arguments
     */
-    
-    public static void main(String[] args) throws SQLException
-    {
-        ReservableLocation loc = ReserveDB.getReservableLocation("Lake");
-        System.out.println("Got location " + loc.getName());
-        System.out.println("It has a capacity of " + loc.getCapacity());
-        
-        System.out.println("Here are its timeframes:\n");
-        
-        for (ReservableTimeframe timeframe : loc.getTimeframes())
-            System.out.println(timeframe);
-    }
+//    public static void main(String[] args) throws SQLException
+//    {
+//        ReservableLocation loc = ReserveDB.getReservableLocation("Lake");
+//        System.out.println("Got location " + loc.getName());
+//        System.out.println("It has a capacity of " + loc.getCapacity());
+//        
+//        System.out.println("Here are its timeframes:\n");
+//        
+//        for (ReservableTimeframe timeframe : loc.getTimeframes())
+//            System.out.println(timeframe);
+//    }
 }

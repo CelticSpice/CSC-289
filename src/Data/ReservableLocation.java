@@ -6,6 +6,7 @@
 
 package Data;
 
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
@@ -28,11 +29,27 @@ public class ReservableLocation extends Location
     }
     
     /**
+        Constructor - Accepts the reservable location's name, capacity, and
+        reservable timeframes
+    
+        @param name The reservable location's name
+        @param capacity The reservable location's capacity
+        @param reservableTimeframes The location's reservable timeframes
+    */
+    
+    public ReservableLocation(String name, int capacity,
+                              ReservableTimeframe[] reservableTimeframes)
+    {
+        super(name, capacity);
+        timeframes = new ArrayList<>(Arrays.asList(reservableTimeframes));
+    }
+    
+    /**
         AddTimeframe - Add a timeframe the location
         can be reserved for
     
         @param timeframe Timeframe the location can be
-                                reserved for
+                         reserved for
     */
     
     public void addTimeframe(ReservableTimeframe timeframe)
@@ -66,10 +83,11 @@ public class ReservableLocation extends Location
     }
     
     /**
-        IndexOfTimeframe - Return the index of the timeframe given
+        IndexOfTimeframe - Return the index of the given timeframe that the
+        location can be reserved for
     
-        @param timeframe Timeframe to get index of
-        @return Index of timeframe; else, -1
+        @param timeframe Reservable timeframe to get index of
+        @return Index of reservable timeframe; else, -1
     */
     
     public int indexOfTimeframe(ReservableTimeframe timeframe)

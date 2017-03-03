@@ -34,14 +34,14 @@ public class Timeframe
     }
     
     /**
-        Conflicts - Return whether the timeframe conflicts with another
+        ConflictsWith - Return whether the timeframe conflicts with another
         timeframe
     
         @param timeframe Timeframe to check for conflicts with
         @return Whether there is a conflict
     */
     
-    public boolean conflicts(Timeframe timeframe)
+    public boolean conflictsWith(Timeframe timeframe)
     {
         long thisStartDateTimeMili = startDateTime.getTimeInMillis();
         long thisEndDateTimeMili = endDateTime.getTimeInMillis();

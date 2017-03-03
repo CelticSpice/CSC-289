@@ -6,6 +6,7 @@
 
 package Data;
 
+import java.util.Arrays;
 import java.util.ArrayList;
 
 public class Reserver
@@ -27,68 +28,39 @@ public class Reserver
     }
     
     /**
-        AddReservation - Adds a reservation to the list of the reserver's
-        reservations
+        Constructor - Accepts the contact information of the reserver & a
+        list of reservations that the reserver has made
     
-        @param reservation Reservation to add
+        @param contact Contact info
+        @param reservationListing Reservations that the reserver has made
     */
     
-    public void addReservation
-    
-    /**
-        GetEmail - Return the email address of the reserver
-    
-        @return Email address of the reserver
-    */
-    
-    public String getEmail()
+    public Reserver(ContactInfo contact, Reservation[] reservationListing)
     {
-        return contactInfo.getEmail();
+        contactInfo = contact;
+        reservations = new ArrayList<>(Arrays.asList(reservationListing));
     }
     
     /**
-        GetFirstName - Return the first name of the reserver
+        GetContactInfo - Return the contact information of the reserver
     
-        @return First name of the reserver
+        @return The contact information of the reserver
     */
     
-    public String getFirstName()
+    public ContactInfo getContactInfo()
     {
-        return contactInfo.getFirstName();
+        return contactInfo;
     }
     
     /**
-        GetFullName - Return full name of the reserver
+        GetReservations - Return the reservations that the reserver has made
     
-        @param lastFirst Whether to return in format last, first
-        @return Full name of reserver
+        @return The reservations the reserver made
     */
     
-    public String getFullName(boolean lastFirst)
+    public Reservation[] getReservations()
     {
-        return contactInfo.getFullName(lastFirst);
-    }
-    
-    /**
-        GetLastName - Return the last name of the reserver
-    
-        @return Last name of reserver
-    */
-    
-    public String getLastName()
-    {
-        return contactInfo.getLastName();
-    }
-    
-    /**
-        GetPhoneNumber - Return the phone number of the reserver
-    
-        @return Phone number of reserver
-    */
-    
-    public String getPhoneNumber()
-    {
-        return contactInfo.getPhoneNumber();
+        return reservations.toArray(new Reservation[reservations.size()]);
     }
     
     /**
@@ -106,7 +78,7 @@ public class Reserver
                                 ReservableTimeframe timeframe,
                                 int numberAttending, String eventType)
     {
-        reservations.add(new Reservation(location, timeframe, numberAttending,
-                                         eventType));
+        reservations.add(new Reservation(this, location, timeframe,
+                                         numberAttending, eventType));
     }
 }

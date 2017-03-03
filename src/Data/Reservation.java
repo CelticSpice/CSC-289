@@ -59,18 +59,15 @@ public class Reservation
     }
     
     /**
-        Cancel - Cancel the reservation. Argument included is the email message
-        to be sent to the reserver informing of the cancellation
-    
-        @param email Email to be sent informing the reserver of the cancellation
+        Cancel - Cancel the reservation
     */
     
-    public void cancel(Email email)
+    public void cancel()
     {
         locationReserved.cancelReserve
             (locationReserved.indexOfTimeframe(timeframeReserved));
         
-        
+        reserver = null;
     }
     
     /**
@@ -115,5 +112,16 @@ public class Reservation
     public ReservableTimeframe getReservedTimeframe()
     {
         return timeframeReserved;
+    }
+    
+    /**
+        GetReserver - Return who made the reservation
+    
+        @return Who made the reservation
+    */
+    
+    public Reserver getReserver()
+    {
+        return reserver;
     }
 }

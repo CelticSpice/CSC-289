@@ -81,4 +81,15 @@ public class Reserver
         reservations.add(new Reservation(this, location, timeframe,
                                          numberAttending, eventType));
     }
+    
+    /**
+        RemoveReservation - Remove the reservation specified by the given index
+    
+        @param index Index of reservation the reserver has made to remove
+    */
+    
+    public void removeReservation(int index)
+    {
+        reservations.remove(index);
+    }
 }

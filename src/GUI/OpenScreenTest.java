@@ -5,33 +5,37 @@
  */
 package GUI;
 
+import Data.ReserveDB;
 import java.awt.CardLayout;
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 /**
  *
  * @author gayj5385
  */
-public class OpenScreenTest
-        extends javax.swing.JFrame
+public class OpenScreenTest extends javax.swing.JFrame
 {
-
-    Data.ReservableLocation Barn = new Data.ReservableLocation("Barn", 500);
-    Data.ReservableLocation Lake = new Data.ReservableLocation("Lake", 400);
-    
-    
-    
     /**
      * Creates new form OpenScreenTest
+     * @throws java.sql.SQLException
      */
-    public OpenScreenTest()
+    public OpenScreenTest() throws SQLException
     {
         initComponents();
+       
         
-        cbReserverLocations.addItem(Barn.getName());
-        cbReserverLocations.addItem(Lake.getName());
+       String[] locNames = ReserveDB.getLocationNames();
+        
+        for(int i = 0; i <= locNames.length; i++)
+        {
+            cbReserverLocations.addItem(locNames[i].toString());
+        }
+        
+        
     }
     
     
@@ -138,40 +142,12 @@ public class OpenScreenTest
         Screens.setLayout(new java.awt.CardLayout());
 
         logOnBtn.setText("Log On");
-        logOnBtn.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                logOnBtnActionPerformed(evt);
-            }
-        });
 
         registerBtn.setText("Register");
-        registerBtn.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                registerBtnActionPerformed(evt);
-            }
-        });
 
         guestReservationBtn.setText("Guest Reserve");
-        guestReservationBtn.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                reserveClick(evt);
-            }
-        });
 
         adminViewBtn.setText("Admin View");
-        adminViewBtn.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                adminViewBtnActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout openScreenBtnPanelLayout = new javax.swing.GroupLayout(openScreenBtnPanel);
         openScreenBtnPanel.setLayout(openScreenBtnPanelLayout);
@@ -186,7 +162,7 @@ public class OpenScreenTest
                 .addComponent(guestReservationBtn)
                 .addGap(18, 18, 18)
                 .addComponent(adminViewBtn)
-                .addContainerGap(82, Short.MAX_VALUE))
+                .addContainerGap(97, Short.MAX_VALUE))
         );
         openScreenBtnPanelLayout.setVerticalGroup(
             openScreenBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -209,22 +185,8 @@ public class OpenScreenTest
         lblPW.setText("Password");
 
         loginBtn.setText("Log in");
-        loginBtn.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                loginBtnActionPerformed(evt);
-            }
-        });
 
         registrationBtn.setText("Register");
-        registrationBtn.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                registrationBtnActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout logOnPanelLayout = new javax.swing.GroupLayout(logOnPanel);
         logOnPanel.setLayout(logOnPanelLayout);
@@ -286,13 +248,6 @@ public class OpenScreenTest
         txtPhone.setToolTipText("phone number format should look as follows 555-123-4567");
 
         registationBtn.setText("Register");
-        registationBtn.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                registationBtnActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout registerPanelLayout = new javax.swing.GroupLayout(registerPanel);
         registerPanel.setLayout(registerPanelLayout);
@@ -319,7 +274,7 @@ public class OpenScreenTest
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, registerPanelLayout.createSequentialGroup()
                                 .addGap(18, 18, 18)
                                 .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(148, Short.MAX_VALUE))
+                .addContainerGap(163, Short.MAX_VALUE))
         );
         registerPanelLayout.setVerticalGroup(
             registerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -354,13 +309,6 @@ public class OpenScreenTest
         lblReserverLoc.setText("Location");
 
         cbReserverLocations.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select Location" }));
-        cbReserverLocations.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                cbReserverLocationsActionPerformed(evt);
-            }
-        });
 
         txrtReserverName.setToolTipText("");
 
@@ -369,13 +317,6 @@ public class OpenScreenTest
         FTxtDatePicked.setToolTipText("01/01/2017");
 
         reserveBtn.setText("Reserve");
-        reserveBtn.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                reserveBtnActionPerformed(evt);
-            }
-        });
 
         timelist.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         timelist.setModel(new javax.swing.AbstractListModel<String>()
@@ -413,7 +354,7 @@ public class OpenScreenTest
                     .addComponent(txrtReserverName)
                     .addComponent(FTxtDatePicked, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
                     .addComponent(txtReserveType))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 91, Short.MAX_VALUE)
                 .addComponent(reserveBtn)
                 .addGap(26, 26, 26))
         );
@@ -487,56 +428,21 @@ public class OpenScreenTest
         searchLocations.setMnemonic('s');
         searchLocations.setText("Search");
         searchLocations.setToolTipText("");
-        searchLocations.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                searchLocationsActionPerformed(evt);
-            }
-        });
 
         addBtn.setMnemonic('a');
         addBtn.setText("Add");
-        addBtn.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                addBtnActionPerformed(evt);
-            }
-        });
 
         removeBtn.setMnemonic('r');
         removeBtn.setText("Remove");
-        removeBtn.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                removeBtnActionPerformed(evt);
-            }
-        });
 
         modifyLocBtn.setMnemonic('m');
         modifyLocBtn.setText("Modify Location");
-        modifyLocBtn.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                modifyLocBtnActionPerformed(evt);
-            }
-        });
 
         costAmount.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         costAmount.setMaximumSize(new java.awt.Dimension(0, 0));
 
         adminExit.setMnemonic('x');
         adminExit.setText("Exit");
-        adminExit.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                adminExitActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout reservationsAvailablePaneLayout = new javax.swing.GroupLayout(reservationsAvailablePane);
         reservationsAvailablePane.setLayout(reservationsAvailablePaneLayout);
@@ -571,7 +477,7 @@ public class OpenScreenTest
                                         .addGap(20, 20, 20))))
                             .addGroup(reservationsAvailablePaneLayout.createSequentialGroup()
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 193, Short.MAX_VALUE))))
+                                .addGap(0, 208, Short.MAX_VALUE))))
                     .addGroup(reservationsAvailablePaneLayout.createSequentialGroup()
                         .addComponent(addBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -774,7 +680,7 @@ public class OpenScreenTest
                 .addGroup(reserverContactInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(phoneDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(phoneString, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(40, 40, 40))
+                .addGap(34, 34, 34))
         );
 
         reserveSearchBtn.setMnemonic('s');
@@ -782,33 +688,12 @@ public class OpenScreenTest
 
         reserveExitBtn.setMnemonic('x');
         reserveExitBtn.setText("Exit");
-        reserveExitBtn.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                reserveExitBtnActionPerformed(evt);
-            }
-        });
 
         cancelReserveBtn.setMnemonic('c');
         cancelReserveBtn.setText("Cancel Reserve");
-        cancelReserveBtn.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                cancelReserveBtnActionPerformed(evt);
-            }
-        });
 
         contactReserverBtn.setMnemonic('o');
         contactReserverBtn.setText("Contact");
-        contactReserverBtn.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                contactReserverBtnActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout reservationMangerPaneLayout = new javax.swing.GroupLayout(reservationMangerPane);
         reservationMangerPane.setLayout(reservationMangerPaneLayout);
@@ -821,23 +706,25 @@ public class OpenScreenTest
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(reserveAdminSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(reservationMangerPaneLayout.createSequentialGroup()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(reservationMangerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cancelReserveBtn)
-                            .addComponent(reservationInformation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(17, 17, 17)
+                        .addGap(58, 58, 58)
+                        .addComponent(cancelReserveBtn)
+                        .addGap(51, 51, 51)
                         .addGroup(reservationMangerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(reservationMangerPaneLayout.createSequentialGroup()
                                 .addComponent(contactReserverBtn)
                                 .addGap(53, 53, 53)
                                 .addComponent(reserveExitBtn))
                             .addGroup(reservationMangerPaneLayout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(reserverContactInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(19, 19, 19)
+                                .addGap(166, 166, 166)
                                 .addComponent(reserveSearchBtn)
-                                .addGap(0, 0, Short.MAX_VALUE)))))
+                                .addGap(0, 100, Short.MAX_VALUE))))
+                    .addGroup(reservationMangerPaneLayout.createSequentialGroup()
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(reservationInformation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(reserverContactInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         reservationMangerPaneLayout.setVerticalGroup(
@@ -848,23 +735,19 @@ public class OpenScreenTest
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(reservationMangerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(reservationMangerPaneLayout.createSequentialGroup()
-                        .addGroup(reservationMangerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(reservationMangerPaneLayout.createSequentialGroup()
-                                .addGap(0, 45, Short.MAX_VALUE)
-                                .addGroup(reservationMangerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jScrollPane3)
-                                    .addComponent(reserverContactInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addGroup(reservationMangerPaneLayout.createSequentialGroup()
-                                .addComponent(reservationInformation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addGap(18, 18, 18)
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(reservationMangerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
+                            .addComponent(reservationInformation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(reserverContactInfo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(reservationMangerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(cancelReserveBtn)
                             .addComponent(contactReserverBtn))
                         .addGap(33, 33, 33))
                     .addGroup(reservationMangerPaneLayout.createSequentialGroup()
                         .addComponent(reserveSearchBtn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 230, Short.MAX_VALUE)
                         .addComponent(reserveExitBtn)
                         .addContainerGap())))
         );
@@ -881,214 +764,22 @@ public class OpenScreenTest
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void reserveClick(java.awt.event.ActionEvent evt)//GEN-FIRST:event_reserveClick
-    {//GEN-HEADEREND:event_reserveClick
-        
-        CardLayout screen = (CardLayout)(Screens.getLayout());
-        screen.show(Screens,"guestReserveScreen");
-        
-    }//GEN-LAST:event_reserveClick
-
-    private void reserveBtnActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_reserveBtnActionPerformed
-    {//GEN-HEADEREND:event_reserveBtnActionPerformed
-//        JOptionPane.showMessageDialog(null, "You have sent a reservation", "Made Reservation",
-//                JOptionPane.OK_OPTION);
-        String fName, lName,e,p, tempa;
-         tempa = txrtReserverName.toString();
-         String[] parts = tempa.split(" ");
-         fName = parts[0];
-         lName = parts[1];
-         e = txtReserverEmail.toString();
-         p = txtPhone.toString();
-      
-        Data.ContactInfo ConInfo = new Data.ContactInfo(fName, lName, e, p);
-        Data.Reserver r = new Data.Reserver(ConInfo);
-        
-        tempa = txtReserveType.toString();
-        
-        Data.ReservableLocation loc = new Data.ReservableLocation(cbReserverLocations.toString(), ALLBITS);
-        //Data.Reservation reservation = new Data.Reservation(loc, loc.indexOfTimeframe(timeframe), SOMEBITS, tempa);
-        //need to get it to load the list with timeframes first and be able to pull it to this object.
-        
-        CardLayout screen = (CardLayout)(Screens.getLayout());
-        screen.show(Screens,"openScreen");
-    }//GEN-LAST:event_reserveBtnActionPerformed
-
-    private void logOnBtnActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_logOnBtnActionPerformed
-    {//GEN-HEADEREND:event_logOnBtnActionPerformed
-         CardLayout screen = (CardLayout)(Screens.getLayout());
-        screen.show(Screens,"logonScreen");
-    }//GEN-LAST:event_logOnBtnActionPerformed
-
-    private void registrationBtnActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_registrationBtnActionPerformed
-    {//GEN-HEADEREND:event_registrationBtnActionPerformed
-         CardLayout screen = (CardLayout)(Screens.getLayout());
-        screen.show(Screens,"registerScreen");
-    }//GEN-LAST:event_registrationBtnActionPerformed
-
-    private void loginBtnActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_loginBtnActionPerformed
-    {//GEN-HEADEREND:event_loginBtnActionPerformed
-        JOptionPane.showMessageDialog(null, "Logged in", "You have logged in",
-                JOptionPane.OK_OPTION);
-        
-        
-        CardLayout screen = (CardLayout)(Screens.getLayout());
-        screen.show(Screens,"openScreen");
-    }//GEN-LAST:event_loginBtnActionPerformed
-
-    private void registationBtnActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_registationBtnActionPerformed
-    {//GEN-HEADEREND:event_registationBtnActionPerformed
-        JOptionPane.showMessageDialog(null, "You have sent registered", "Made user",
-                JOptionPane.OK_OPTION);
-        CardLayout screen = (CardLayout)(Screens.getLayout());
-        screen.show(Screens,"openScreen");
-    }//GEN-LAST:event_registationBtnActionPerformed
-
-    private void cancelReserveBtnActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_cancelReserveBtnActionPerformed
-    {//GEN-HEADEREND:event_cancelReserveBtnActionPerformed
-        JOptionPane.showMessageDialog(null, "You have cancled Reservation", "Cancel Reservation",
-                JOptionPane.OK_OPTION);
-    }//GEN-LAST:event_cancelReserveBtnActionPerformed
-
-    private void adminViewBtnActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_adminViewBtnActionPerformed
-    {//GEN-HEADEREND:event_adminViewBtnActionPerformed
-       CardLayout screen = (CardLayout)(Screens.getLayout());
-        screen.show(Screens,"adminViewScreen");
-    }//GEN-LAST:event_adminViewBtnActionPerformed
-
-    private void contactReserverBtnActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_contactReserverBtnActionPerformed
-    {//GEN-HEADEREND:event_contactReserverBtnActionPerformed
-        JOptionPane.showMessageDialog(null, "You have emailed your contact", "Email reserver",
-                JOptionPane.OK_OPTION);
-    }//GEN-LAST:event_contactReserverBtnActionPerformed
-
-    private void reserveExitBtnActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_reserveExitBtnActionPerformed
-    {//GEN-HEADEREND:event_reserveExitBtnActionPerformed
-         CardLayout screen = (CardLayout)(Screens.getLayout());
-        screen.show(Screens,"logonScreen");
-    }//GEN-LAST:event_reserveExitBtnActionPerformed
-
-    private void adminExitActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_adminExitActionPerformed
-    {//GEN-HEADEREND:event_adminExitActionPerformed
-         CardLayout screen = (CardLayout)(Screens.getLayout());
-        screen.show(Screens,"logonScreen");
-    }//GEN-LAST:event_adminExitActionPerformed
-
-    private void addBtnActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_addBtnActionPerformed
-    {//GEN-HEADEREND:event_addBtnActionPerformed
-         JOptionPane.showMessageDialog(null, "You have added the location info", "Location Add",
-                JOptionPane.OK_OPTION);
-    }//GEN-LAST:event_addBtnActionPerformed
-
-    private void removeBtnActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_removeBtnActionPerformed
-    {//GEN-HEADEREND:event_removeBtnActionPerformed
-         JOptionPane.showMessageDialog(null, "You have removed the Time", "Location Time Remove",
-                JOptionPane.OK_OPTION);
-    }//GEN-LAST:event_removeBtnActionPerformed
-
-    private void modifyLocBtnActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_modifyLocBtnActionPerformed
-    {//GEN-HEADEREND:event_modifyLocBtnActionPerformed
-         JOptionPane.showMessageDialog(null, "You have Modified the location", "Location Modify",
-                JOptionPane.OK_OPTION);
-    }//GEN-LAST:event_modifyLocBtnActionPerformed
-
-    private void searchLocationsActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_searchLocationsActionPerformed
-    {//GEN-HEADEREND:event_searchLocationsActionPerformed
-         JOptionPane.showMessageDialog(null, "Your search is displayed", "Search Results",
-                JOptionPane.OK_OPTION);
-    }//GEN-LAST:event_searchLocationsActionPerformed
-
-    private void registerBtnActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_registerBtnActionPerformed
-    {//GEN-HEADEREND:event_registerBtnActionPerformed
-        CardLayout screen = (CardLayout)(Screens.getLayout());
-        screen.show(Screens,"registerScreen");
-        
-    }//GEN-LAST:event_registerBtnActionPerformed
-
-    /**
-     * this will populate the list box based on the selection made by the combo
-     * box.
-     * 
-     * this will make it easy to show the time frames that are available to be 
-     * reserved.
-     * @param evt 
-     */
-    private void cbReserverLocationsActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_cbReserverLocationsActionPerformed
-    {//GEN-HEADEREND:event_cbReserverLocationsActionPerformed
-       if (cbReserverLocations.getSelectedIndex()== 1)
-       {
-           timelist.removeAll();
-           timelist.add(timelist,Barn.getTimeframes());
-           
-       }
-       else
-       {
-                    timelist.removeAll();
-                    timelist.add(timelist,Lake.getTimeframes());
-                    
-       }
-    }//GEN-LAST:event_cbReserverLocationsActionPerformed
-
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[])
+    public static void main(String args[]) throws SQLException
     {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try
-        {
-            for (javax.swing.UIManager.LookAndFeelInfo info
-                    : javax.swing.UIManager.getInstalledLookAndFeels())
-            {
-                if ("Nimbus".equals(info.getName()))
-                {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        }
-        catch (ClassNotFoundException ex)
-        {
-            java.util.logging.Logger.getLogger(OpenScreenTest.class.getName()).
-                    log(java.util.logging.Level.SEVERE,
-                            null,
-                            ex);
-        }
-        catch (InstantiationException ex)
-        {
-            java.util.logging.Logger.getLogger(OpenScreenTest.class.getName()).
-                    log(java.util.logging.Level.SEVERE,
-                            null,
-                            ex);
-        }
-        catch (IllegalAccessException ex)
-        {
-            java.util.logging.Logger.getLogger(OpenScreenTest.class.getName()).
-                    log(java.util.logging.Level.SEVERE,
-                            null,
-                            ex);
-        }
-        catch (javax.swing.UnsupportedLookAndFeelException ex)
-        {
-            java.util.logging.Logger.getLogger(OpenScreenTest.class.getName()).
-                    log(java.util.logging.Level.SEVERE,
-                            null,
-                            ex);
-        }
-        //</editor-fold>
+        
+         new OpenScreenTest();
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable()
-        {
-            public void run()
-            {
-                new OpenScreenTest().setVisible(true);
-            }
-        });
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() throws SQLException
+//        {
+//            public void run() throws SQLEXception
+//            {
+//              
+//            }
+//        });
         
         
     }

@@ -766,11 +766,12 @@ public class OpenScreenTest extends javax.swing.JFrame
 
     /**
      * @param args the command line arguments
+     * @throws java.sql.SQLException
      */
     public static void main(String args[]) throws SQLException
     {
         
-         new OpenScreenTest();
+         new OpenScreenTest().setVisible(true);
 
 //        /* Create and display the form */
 //        java.awt.EventQueue.invokeLater(new Runnable() throws SQLException

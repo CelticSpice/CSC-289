@@ -18,12 +18,12 @@ public class TimeframeTest {
     @Test
     public void testConflictsWithDoesConflict() {
         GregorianCalendar startDateTime = new GregorianCalendar(2017, 3, 30);
-        GregorianCalendar endDateTime = new GregorianCalendar(2017, 3, 30);
+        GregorianCalendar endDateTime = new GregorianCalendar(2017, 4, 2);
         
         GregorianCalendar otherStartDateTime = new GregorianCalendar
-            (2017, 3, 30);
+            (2017, 3, 25);
         
-        GregorianCalendar otherEndDateTime = new GregorianCalendar(2017, 3, 30);
+        GregorianCalendar otherEndDateTime = new GregorianCalendar(2017, 4, 20);
         
         Timeframe timeframe = new Timeframe(startDateTime, endDateTime);
         

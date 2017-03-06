@@ -6,8 +6,8 @@
 
 package Data;
 
-import java.util.Arrays;
 import java.util.ArrayList;
+import static java.util.Arrays.asList;
 
 public class Reserver
 {
@@ -38,7 +38,7 @@ public class Reserver
     public Reserver(ContactInfo contact, Reservation[] reservationListing)
     {
         contactInfo = contact;
-        reservations = new ArrayList<>(Arrays.asList(reservationListing));
+        reservations = new ArrayList<>(asList(reservationListing));
     }
     
     /**

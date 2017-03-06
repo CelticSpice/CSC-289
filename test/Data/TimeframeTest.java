@@ -1,5 +1,5 @@
 /**
-    Test Timeframe class
+    Tests for Timeframe class
     CSC-289 - Group 4
     @author Timothy Burns
 */
@@ -7,8 +7,8 @@
 package Data;
 
 import java.util.GregorianCalendar;
+import org.junit.Assert;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 public class TimeframeTest {
     /**
@@ -33,7 +33,7 @@ public class TimeframeTest {
         boolean expectedResult = true;
         boolean actualResult = timeframe.conflictsWith(otherTimeframe);
         
-        assertEquals(expectedResult, actualResult);
+        Assert.assertEquals(expectedResult, actualResult);
     }
     
     /**
@@ -58,6 +58,6 @@ public class TimeframeTest {
         boolean expectedResult = false;
         boolean actualResult = timeframe.conflictsWith(otherTimeframe);
         
-        assertEquals(expectedResult, actualResult);
+        Assert.assertEquals(expectedResult, actualResult);
     }
 }

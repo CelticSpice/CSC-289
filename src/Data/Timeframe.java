@@ -12,6 +12,12 @@ import java.util.GregorianCalendar;
 public class Timeframe
 {
     // Fields
+    public static final int START = 0;
+    public static final int END = 1;
+    
+    public static final int TIME = 0;
+    public static final int DATE = 1;
+    
     private GregorianCalendar startDateTime, endDateTime;
     
     /**
@@ -24,13 +30,19 @@ public class Timeframe
     public Timeframe(GregorianCalendar sDateTime, GregorianCalendar eDateTime)
     {
         // We ignore milliseconds & seconds
-        sDateTime.clear(GregorianCalendar.MILLISECOND);
-        sDateTime.clear(GregorianCalendar.SECOND);
-        eDateTime.clear(GregorianCalendar.MILLISECOND);
-        eDateTime.clear(GregorianCalendar.SECOND);
+        startDateTime = new GregorianCalendar
+                (sDateTime.get(GregorianCalendar.YEAR),
+                 sDateTime.get(GregorianCalendar.MONTH),
+                 sDateTime.get(GregorianCalendar.DAY_OF_MONTH),
+                 sDateTime.get(GregorianCalendar.HOUR_OF_DAY),
+                 sDateTime.get(GregorianCalendar.MINUTE));
         
-        startDateTime = sDateTime;
-        endDateTime = eDateTime;
+        endDateTime = new GregorianCalendar
+                (eDateTime.get(GregorianCalendar.YEAR),
+                 eDateTime.get(GregorianCalendar.MONTH),
+                 eDateTime.get(GregorianCalendar.DAY_OF_MONTH),
+                 eDateTime.get(GregorianCalendar.HOUR_OF_DAY),
+                 eDateTime.get(GregorianCalendar.MINUTE));
     }
     
     /**
@@ -51,111 +63,99 @@ public class Timeframe
         return (otherStartDateTimeMili >= thisStartDateTimeMili &&
                 otherStartDateTimeMili <= thisEndDateTimeMili)  ||
                (otherEndDateTimeMili >= thisStartDateTimeMili   &&
-                otherEndDateTimeMili <= thisEndDateTimeMili);
+                otherEndDateTimeMili <= thisEndDateTimeMili)
+                
+                                                                ||
+                
+               (thisStartDateTimeMili >= otherStartDateTimeMili &&
+                thisStartDateTimeMili <= otherEndDateTimeMili)  ||
+               (thisEndDateTimeMili >= otherStartDateTimeMili   &&
+                thisEndDateTimeMili <= otherEndDateTimeMili);
     }
     
     /**
-        EndsOn - Return whether the timeframe ends on the given date
+        GetString - Return the starting or ending date or time of the timeframe
+        as a string in the formats of mm/dd/yyyy or hh:mm
     
-        @param date Date to check if the timeframe ends on
-        @param dateOnly Whether to ignore hours & minutes in the computation
-        @return Whether the timeframe ends on the given date
+        @param timeDate Whether to get the time or date as a string
+        @param startEnd Whether to get the starting or ending time or date as a
+                        string
+        @return The starting or ending time or date as a string
     */
     
-    public boolean endsOn(GregorianCalendar date, boolean dateOnly)
+    public String getString(int timeDate, int startEnd)
     {
-        date.clear(GregorianCalendar.MILLISECOND);
-        date.clear(GregorianCalendar.SECOND);
-        
-        if (dateOnly)
+        if (timeDate == TIME)
         {
-            date.set(GregorianCalendar.HOUR_OF_DAY,
-                     endDateTime.get(GregorianCalendar.HOUR_OF_DAY));
-            date.set(GregorianCalendar.MINUTE,
-                     endDateTime.get(GregorianCalendar.MINUTE));
+            SimpleDateFormat fmt = new SimpleDateFormat("HH:mm");
+            fmt.setCalendar((startEnd == START) ? startDateTime : endDateTime);
+            return fmt.format((startEnd == START) ? startDateTime.getTime() :
+                                                    endDateTime.getTime());
         }
-        
-        return (endDateTime.compareTo(date) == 0);
+        else
+        {
+            SimpleDateFormat fmt = new SimpleDateFormat("MM/dd/yyyy");
+            fmt.setCalendar((startEnd == START) ? startDateTime : endDateTime);
+            return fmt.format((startEnd == START) ? startDateTime.getTime() :
+                                                    endDateTime.getTime());
+        }
     }
     
     /**
-        StartsOn - Return whether the timeframe starts on the given date
+        StartsEndsOn - Return whether the timeframe starts or ends on the
+        given date
     
-        @param date Date to check if the timeframe starts on
+        @param date Date to check if the timeframe starts or ends on
+        @param startEnd Whether to check if the timeframe starts or ends on
         @param dateOnly Whether to ignore hours & minutes in the computation
-        @return Whether the timeframe starts on the given date
+        @return isOn Whether the timeframe starts or ends on the given date
     */
     
-    public boolean startsOn(GregorianCalendar date, boolean dateOnly)
+    public boolean startsEndsOn(GregorianCalendar date, int startEnd,
+                                boolean dateOnly)
     {
+        boolean isOn;
+        int dateMilliseconds = date.get(GregorianCalendar.MILLISECOND);
+        int dateSeconds = date.get(GregorianCalendar.SECOND);
+        
         date.clear(GregorianCalendar.MILLISECOND);
         date.clear(GregorianCalendar.SECOND);
         
         if (dateOnly)
         {
-            date.set(GregorianCalendar.HOUR_OF_DAY,
+            int dateHour = date.get(GregorianCalendar.HOUR_OF_DAY);
+            int dateMinute = date.get(GregorianCalendar.MINUTE);
+            
+            if (startEnd == START)
+            {
+                date.set(GregorianCalendar.HOUR_OF_DAY,
                      startDateTime.get(GregorianCalendar.HOUR_OF_DAY));
-            date.set(GregorianCalendar.MINUTE,
+                date.set(GregorianCalendar.MINUTE,
                      startDateTime.get(GregorianCalendar.MINUTE));
+                
+                isOn = startDateTime.compareTo(date) == 0;
+            }
+            else
+            {
+                date.set(GregorianCalendar.HOUR_OF_DAY,
+                     endDateTime.get(GregorianCalendar.HOUR_OF_DAY));
+                date.set(GregorianCalendar.MINUTE,
+                     endDateTime.get(GregorianCalendar.MINUTE));
+            
+                isOn = endDateTime.compareTo(date) == 0;
+            }
+            
+            date.set(GregorianCalendar.HOUR_OF_DAY, dateHour);
+            date.set(GregorianCalendar.MINUTE, dateMinute);
         }
+        else
+            isOn = (startEnd == START) ? startDateTime.compareTo(date) == 0 :
+                                         endDateTime.compareTo(date) == 0;
         
-        return (startDateTime.compareTo(date) == 0);
-    }
-    
-    /**
-        GetEndDateString - Return the ending date of the timeframe as a string
-        in the format mm/dd/yyyy
-    
-        @return The ending date as a string
-    */
-    
-    public String getEndDateString()
-    {
-        SimpleDateFormat fmt = new SimpleDateFormat("MM/dd/yyyy");
-        fmt.setCalendar(endDateTime);
-        return fmt.format(endDateTime.getTime());
-    }
-    
-    /**
-        GetEndTimeString - Return the ending time of the timeframe as a string
-        in the format hh:mm
-    
-        @return The ending time as a string
-    */
-    
-    public String getEndTimeString()
-    {
-        SimpleDateFormat fmt = new SimpleDateFormat("HH:mm");
-        fmt.setCalendar(endDateTime);
-        return fmt.format(endDateTime.getTime());
-    }
-    
-    /**
-        GetStartDateString - Return the starting date of the timeframe as a
-        string in the format mm/dd/yyyy
-    
-        @return The starting date as a string
-    */
-    
-    public String getStartDateString()
-    {
-        SimpleDateFormat fmt = new SimpleDateFormat("MM/dd/yyyy");
-        fmt.setCalendar(startDateTime);
-        return fmt.format(startDateTime.getTime());
-    }
-    
-    /**
-        GetStartTimeString - Return the starting time of the timeframe as a
-        string in the format hh:mm
-    
-        @return The starting time as a string
-    */
-    
-    public String getStartTimeString()
-    {
-        SimpleDateFormat fmt = new SimpleDateFormat("HH:mm");
-        fmt.setCalendar(startDateTime);
-        return fmt.format(startDateTime.getTime());
+        date.set(GregorianCalendar.MILLISECOND, dateMilliseconds);
+        date.set(GregorianCalendar.SECOND, dateSeconds);
+        
+        return isOn;
     }
     
     /**
@@ -167,7 +167,7 @@ public class Timeframe
     @Override
     public String toString()
     {
-        return getStartTimeString() + "-" + getStartDateString() +
-               ", " + getEndTimeString() + "-" + getEndDateString();
+        return getString(TIME, START) + "-" + getString(DATE, START)    +
+               ", " + getString(TIME, END) + "-" + getString(DATE, END);
     }
 }

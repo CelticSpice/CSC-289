@@ -6,9 +6,9 @@
 
 package Data;
 
-import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import static java.util.Arrays.asList;
 
 public class ReservableLocation extends Location
 {
@@ -41,7 +41,7 @@ public class ReservableLocation extends Location
                               ReservableTimeframe[] reservableTimeframes)
     {
         super(name, capacity);
-        timeframes = new ArrayList<>(Arrays.asList(reservableTimeframes));
+        timeframes = new ArrayList<>(asList(reservableTimeframes));
     }
     
     /**
@@ -58,7 +58,7 @@ public class ReservableLocation extends Location
     }
     
     /**
-        CancelReserve - Cancels the reservation of the location at the timeframe
+        CancelReserve - Cancel the reservation of the location at the timeframe
         specified by the given index
     
         @param index Index of timeframe to cancel the reservation of the
@@ -87,7 +87,8 @@ public class ReservableLocation extends Location
         location can be reserved for
     
         @param timeframe Reservable timeframe to get index of
-        @return Index of reservable timeframe; else, -1
+        @return Index of reservable timeframe; else, -1 if the location cannot
+                be reserved at the given timeframe
     */
     
     public int indexOfTimeframe(ReservableTimeframe timeframe)
@@ -113,7 +114,7 @@ public class ReservableLocation extends Location
         while (!avail && i < timeframes.size())
         {
             if (!timeframes.get(i).isReserved() &&
-                timeframes.get(i).startsOn(date, dateOnly))
+                timeframes.get(i).startsEndsOn(date, Timeframe.START, dateOnly))
             {
                 avail = true;
             }

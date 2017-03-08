@@ -6,19 +6,16 @@
 
 package Data;
 
-import java.text.SimpleDateFormat;
-import java.util.GregorianCalendar;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Timeframe
 {
     // Fields
-    public static final int START = 0;
-    public static final int END = 1;
-    
-    public static final int TIME = 0;
-    public static final int DATE = 1;
-    
-    private GregorianCalendar startDateTime, endDateTime;
+    private ZonedDateTime startDateTime, endDateTime;
     
     /**
         Constructor - Accepts the starting & ending dates & times
@@ -27,135 +24,180 @@ public class Timeframe
         @param eDateTime The ending date & time
     */
     
-    public Timeframe(GregorianCalendar sDateTime, GregorianCalendar eDateTime)
+    public Timeframe(ZonedDateTime sDateTime, ZonedDateTime eDateTime)
     {
-        // We ignore milliseconds & seconds
-        startDateTime = new GregorianCalendar
-                (sDateTime.get(GregorianCalendar.YEAR),
-                 sDateTime.get(GregorianCalendar.MONTH),
-                 sDateTime.get(GregorianCalendar.DAY_OF_MONTH),
-                 sDateTime.get(GregorianCalendar.HOUR_OF_DAY),
-                 sDateTime.get(GregorianCalendar.MINUTE));
-        
-        endDateTime = new GregorianCalendar
-                (eDateTime.get(GregorianCalendar.YEAR),
-                 eDateTime.get(GregorianCalendar.MONTH),
-                 eDateTime.get(GregorianCalendar.DAY_OF_MONTH),
-                 eDateTime.get(GregorianCalendar.HOUR_OF_DAY),
-                 eDateTime.get(GregorianCalendar.MINUTE));
+        // We ignore nanoseconds & seconds
+        startDateTime = sDateTime.withNano(0).withSecond(0);
+        endDateTime = eDateTime.withNano(0).withSecond(0);
     }
     
     /**
-        ConflictsWith - Return whether the timeframe conflicts with another
+        ConsistsOf - Return whether the timeframe consists of another
         timeframe
     
-        @param timeframe Timeframe to check for conflicts with
-        @return Whether there is a conflict
+        @param t Timeframe to check for consistency with
+        @return Whether the timeframe consists of the given timeframe
     */
     
-    public boolean conflictsWith(Timeframe timeframe)
+    public boolean consistsOf(Timeframe t)
     {
-        long thisStartDateTimeMili = startDateTime.getTimeInMillis();
-        long thisEndDateTimeMili = endDateTime.getTimeInMillis();
-        long otherStartDateTimeMili = timeframe.startDateTime.getTimeInMillis();
-        long otherEndDateTimeMili = timeframe.endDateTime.getTimeInMillis();
+        long thisSDateTimeMilli = startDateTime.toInstant().toEpochMilli();
+        long thisEDateTimeMilli = endDateTime.toInstant().toEpochMilli();
+        long otherSDateTimeMilli = t.startDateTime.toInstant().toEpochMilli();
+        long otherEDateTimeMilli = t.endDateTime.toInstant().toEpochMilli();
         
-        return (otherStartDateTimeMili >= thisStartDateTimeMili &&
-                otherStartDateTimeMili <= thisEndDateTimeMili)  ||
-               (otherEndDateTimeMili >= thisStartDateTimeMili   &&
-                otherEndDateTimeMili <= thisEndDateTimeMili)
+        return (otherSDateTimeMilli >= thisSDateTimeMilli   &&
+                otherSDateTimeMilli <= thisEDateTimeMilli)  ||
+               (otherEDateTimeMilli >= thisSDateTimeMilli   &&
+                otherEDateTimeMilli <= thisEDateTimeMilli)
                 
-                                                                ||
+                                                            ||
                 
-               (thisStartDateTimeMili >= otherStartDateTimeMili &&
-                thisStartDateTimeMili <= otherEndDateTimeMili)  ||
-               (thisEndDateTimeMili >= otherStartDateTimeMili   &&
-                thisEndDateTimeMili <= otherEndDateTimeMili);
+               (thisSDateTimeMilli >= otherSDateTimeMilli   &&
+                thisSDateTimeMilli <= otherEDateTimeMilli)  ||
+               (thisEDateTimeMilli >= otherSDateTimeMilli   &&
+                thisEDateTimeMilli <= otherEDateTimeMilli);
     }
     
     /**
-        GetString - Return the starting or ending date or time of the timeframe
-        as a string in the formats of mm/dd/yyyy or hh:mm
+        ConsistsOf - Return whether the timeframe consists of the given
+        date & time
     
-        @param timeDate Whether to get the time or date as a string
-        @param startEnd Whether to get the starting or ending time or date as a
-                        string
-        @return The starting or ending time or date as a string
+        @param dateTime Date & time to determine if the timeframe consists of
+        @return Whether the timeframe consists of the given date & time
     */
     
-    public String getString(int timeDate, int startEnd)
+    public boolean consistsOf(LocalDateTime dateTime)
     {
-        if (timeDate == TIME)
-        {
-            SimpleDateFormat fmt = new SimpleDateFormat("HH:mm");
-            fmt.setCalendar((startEnd == START) ? startDateTime : endDateTime);
-            return fmt.format((startEnd == START) ? startDateTime.getTime() :
-                                                    endDateTime.getTime());
-        }
-        else
-        {
-            SimpleDateFormat fmt = new SimpleDateFormat("MM/dd/yyyy");
-            fmt.setCalendar((startEnd == START) ? startDateTime : endDateTime);
-            return fmt.format((startEnd == START) ? startDateTime.getTime() :
-                                                    endDateTime.getTime());
-        }
+        Timeframe t = new Timeframe(dateTime.atZone(startDateTime.getZone()),
+                                    dateTime.atZone(startDateTime.getZone()));
+        return consistsOf(t);
     }
     
     /**
-        StartsEndsOn - Return whether the timeframe starts or ends on the
-        given date
+        EndsOnDate - Return whether the timeframe ends on the given date
     
-        @param date Date to check if the timeframe starts or ends on
-        @param startEnd Whether to check if the timeframe starts or ends on
-        @param dateOnly Whether to ignore hours & minutes in the computation
-        @return isOn Whether the timeframe starts or ends on the given date
+        @param date Date to check if the timeframe ends on
+        @return Whether the timeframe ends on the given date
     */
     
-    public boolean startsEndsOn(GregorianCalendar date, int startEnd,
-                                boolean dateOnly)
+    public boolean endsOnDate(LocalDate date)
     {
-        boolean isOn;
-        int dateMilliseconds = date.get(GregorianCalendar.MILLISECOND);
-        int dateSeconds = date.get(GregorianCalendar.SECOND);
+        return endDateTime.toLocalDate().equals(date);
+    }
+    
+    /**
+        EndsOnTime - Return whether the timeframe ends on the given time
+    
+        @param time Time to check if the timeframe ends on
+        @return Whether the timeframe ends on the given time
+    */
+    
+    public boolean endsOnTime(LocalTime time)
+    {
+        // We ignore nanoseconds & seconds
+        time = time.withNano(0).withSecond(0);
         
-        date.clear(GregorianCalendar.MILLISECOND);
-        date.clear(GregorianCalendar.SECOND);
+        return endDateTime.toLocalTime().equals(time);
+    }
+    
+    /**
+        GetEndDate - Return the ending date of the timeframe
+    
+        @return The ending date of the timeframe
+    */
+    
+    public LocalDate getEndDate()
+    {
+        return endDateTime.toLocalDate();
+    }
+    
+    /**
+        GetEndTime - Return the ending time of the timeframe
+    
+        @return The ending time of the timeframe
+    */
+    
+    public LocalTime getEndTime()
+    {
+        return endDateTime.toLocalTime();
+    }
+    
+    /**
+        GetEndDateTimeString - Return the ending date & time as a string in the
+        format specified by the given formatter
+    
+        @param format Format to return the starting date & time as a string in
+        @return String representing the starting date & time in the specified
+                format
+    */
+    
+    public String getEndDateTimeString(DateTimeFormatter format)
+    {
+        return endDateTime.format(format);
+    }
+    
+    /**
+        GetStartDate - Return the starting date of the timeframe
+    
+        @return The starting date of the timeframe
+    */
+    
+    public LocalDate getStartDate()
+    {
+        return startDateTime.toLocalDate();
+    }
+    
+    /**
+        GetStartTime - Return the starting time of the timeframe
+    
+        @return The starting time of the timeframe
+    */
+    
+    public LocalTime getStartTime()
+    {
+        return startDateTime.toLocalTime();
+    }
+    
+    /**
+        GetStartDateTimeString - Return the starting date & time as a string
+        in the format specified by the given formatter
+    
+        @param format Format to return the starting date & time as a string in
+        @return String representing the starting date & time in the specified
+                format
+    */
+    
+    public String getStartDateTimeString(DateTimeFormatter format)
+    {
+        return startDateTime.format(format);
+    }
+    
+    /**
+        StartsOnDate - Return whether the timeframe starts on the given date
+    
+        @param date Date to check if the timeframe starts on
+        @return Whether the timeframe starts on the given date
+    */
+    
+    public boolean startsOnDate(LocalDate date)
+    {
+        return startDateTime.toLocalDate().equals(date);
+    }
+    
+    /**
+        StartsOnTime - Return whether the timeframe starts on the given time
+    
+        @param time Time to check if the timeframe starts on
+        @return Whether the timeframe starts on the given time
+    */
+    
+    public boolean startsOnTime(LocalTime time)
+    {
+        // We ignore nanoseconds & seconds
+        time = time.withNano(0).withSecond(0);
         
-        if (dateOnly)
-        {
-            int dateHour = date.get(GregorianCalendar.HOUR_OF_DAY);
-            int dateMinute = date.get(GregorianCalendar.MINUTE);
-            
-            if (startEnd == START)
-            {
-                date.set(GregorianCalendar.HOUR_OF_DAY,
-                     startDateTime.get(GregorianCalendar.HOUR_OF_DAY));
-                date.set(GregorianCalendar.MINUTE,
-                     startDateTime.get(GregorianCalendar.MINUTE));
-                
-                isOn = startDateTime.compareTo(date) == 0;
-            }
-            else
-            {
-                date.set(GregorianCalendar.HOUR_OF_DAY,
-                     endDateTime.get(GregorianCalendar.HOUR_OF_DAY));
-                date.set(GregorianCalendar.MINUTE,
-                     endDateTime.get(GregorianCalendar.MINUTE));
-            
-                isOn = endDateTime.compareTo(date) == 0;
-            }
-            
-            date.set(GregorianCalendar.HOUR_OF_DAY, dateHour);
-            date.set(GregorianCalendar.MINUTE, dateMinute);
-        }
-        else
-            isOn = (startEnd == START) ? startDateTime.compareTo(date) == 0 :
-                                         endDateTime.compareTo(date) == 0;
-        
-        date.set(GregorianCalendar.MILLISECOND, dateMilliseconds);
-        date.set(GregorianCalendar.SECOND, dateSeconds);
-        
-        return isOn;
+        return startDateTime.toLocalTime().equals(time);
     }
     
     /**
@@ -167,7 +209,9 @@ public class Timeframe
     @Override
     public String toString()
     {
-        return getString(TIME, START) + "-" + getString(DATE, START)    +
-               ", " + getString(TIME, END) + "-" + getString(DATE, END);
+        DateTimeFormatter fmt = DateTimeFormatter.
+                ofPattern("yyyy-MM-dd, HH:mm");
+        
+        return startDateTime.format(fmt) + " : " + endDateTime.format(fmt);
     }
 }

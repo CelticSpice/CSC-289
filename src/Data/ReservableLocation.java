@@ -6,14 +6,12 @@
 
 package Data;
 
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import static java.util.Arrays.asList;
+import java.time.LocalDate;
 
 public class ReservableLocation extends Location
 {
     // Fields
-    private ArrayList<ReservableTimeframe> timeframes;
+    private ReservableTimeframeList timeframes;
     
     /**
         Constructor - Accepts the reservable location's name & capacity
@@ -25,12 +23,12 @@ public class ReservableLocation extends Location
     public ReservableLocation(String name, int capacity)
     {
         super(name, capacity);
-        timeframes = new ArrayList<>();
+        timeframes = new ReservableTimeframeList();
     }
     
     /**
-        Constructor - Accepts the reservable location's name, capacity, and
-        reservable timeframes
+        Constructor - Accepts the reservable location's name, capacity, and a
+        list of reservable timeframes
     
         @param name The reservable location's name
         @param capacity The reservable location's capacity
@@ -38,10 +36,10 @@ public class ReservableLocation extends Location
     */
     
     public ReservableLocation(String name, int capacity,
-                              ReservableTimeframe[] reservableTimeframes)
+                              ReservableTimeframeList reservableTimeframes)
     {
         super(name, capacity);
-        timeframes = new ArrayList<>(asList(reservableTimeframes));
+        timeframes = reservableTimeframes;
     }
     
     /**
@@ -71,29 +69,14 @@ public class ReservableLocation extends Location
     }
     
     /**
-        GetTimeframes - Return the reservable timeframes allocated to the
-        location
+        GetTimeframes - Return the list of timeframes allocated to the location
     
-        @return The reservable timeframes allocated to the location
+        @return The list of timeframes allocated to the location
     */
     
-    public ReservableTimeframe[] getTimeframes()
+    public ReservableTimeframeList getTimeframes()
     {
-        return timeframes.toArray(new ReservableTimeframe[timeframes.size()]);
-    }
-    
-    /**
-        IndexOfTimeframe - Return the index of the given timeframe that the
-        location can be reserved for
-    
-        @param timeframe Reservable timeframe to get index of
-        @return Index of reservable timeframe; else, -1 if the location cannot
-                be reserved at the given timeframe
-    */
-    
-    public int indexOfTimeframe(ReservableTimeframe timeframe)
-    {
-        return timeframes.indexOf(timeframe);
+        return timeframes;
     }
     
     /**
@@ -105,16 +88,15 @@ public class ReservableLocation extends Location
         @return avail Whether the location can be reserved on the specified date
     */
     
-    public boolean isAvailable(GregorianCalendar date)
+    public boolean isAvailable(LocalDate date)
     {
-        boolean dateOnly = true;
         boolean avail = false;
         int i = 0;
-        
+                
         while (!avail && i < timeframes.size())
         {
             if (!timeframes.get(i).isReserved() &&
-                timeframes.get(i).startsEndsOn(date, Timeframe.START, dateOnly))
+                 timeframes.get(i).startsOnDate(date))
             {
                 avail = true;
             }

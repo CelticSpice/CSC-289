@@ -14,8 +14,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 
 public class ReserveDB
 {
@@ -200,7 +203,7 @@ public class ReserveDB
             
             rSet = stmt.executeQuery(sql);
             
-            ArrayList<ReservableTimeframe> timeframes = new ArrayList<>();
+            ReservableTimeframeList timeframes = new ReservableTimeframeList();
             
             BigDecimal cost;
             Date startDate, endDate;
@@ -214,21 +217,20 @@ public class ReserveDB
                 endTime = rSet.getTime(4);
                 cost = rSet.getBigDecimal(5);
 
+                ZonedDateTime startDateTime = ZonedDateTime
+                        .of(startDate.toLocalDate(), startTime.toLocalTime(),
+                            ZoneId.systemDefault());
                 
-                GregorianCalendar startDateTime = new GregorianCalendar();
-                startDateTime.setTimeInMillis(startDate.getTime() +
-                                              startTime.getTime());
+                ZonedDateTime endDateTime = ZonedDateTime
+                        .of(endDate.toLocalDate(), endTime.toLocalTime(),
+                            ZoneId.systemDefault());
                 
-                GregorianCalendar endDateTime = new GregorianCalendar();
-                endDateTime.setTimeInMillis(endDate.getTime() +
-                                            endTime.getTime());
                 
                 timeframes.add(new ReservableTimeframe(startDateTime,
                                                        endDateTime, cost));
             }
             
-            return new ReservableLocation(name, capacity,
-                timeframes.toArray(new ReservableTimeframe[timeframes.size()]));
+            return new ReservableLocation(name, capacity, timeframes);
         }
         else
             return null;

@@ -78,7 +78,7 @@ public class Reserver
                                 ReservableTimeframe timeframe,
                                 int numberAttending, String eventType)
     {
-        reservations.add(new Reservation(this, location, timeframe,
+        reservations.add(new Reservation(location, timeframe,
                                          numberAttending, eventType));
     }
     

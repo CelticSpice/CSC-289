@@ -9,7 +9,7 @@ package Data;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
-import java.util.GregorianCalendar;
+import java.time.ZonedDateTime;
 import java.util.Locale;
 
 public class ReservableTimeframe extends Timeframe
@@ -27,8 +27,8 @@ public class ReservableTimeframe extends Timeframe
         @param c The cost to reserve the timeframe
     */
     
-    public ReservableTimeframe(GregorianCalendar startDateTime,
-                               GregorianCalendar endDateTime, BigDecimal c)
+    public ReservableTimeframe(ZonedDateTime startDateTime,
+                               ZonedDateTime endDateTime, BigDecimal c)
     {
         super(startDateTime, endDateTime);
         cost = c;
@@ -108,6 +108,6 @@ public class ReservableTimeframe extends Timeframe
     @Override
     public String toString()
     {
-        return super.toString() + " : " + getCostString();
+        return super.toString() + " :: " + getCostString();
     }
 }

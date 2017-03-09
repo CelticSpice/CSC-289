@@ -8,11 +8,6 @@ package GUI;
 import Data.ReserveDB;
 import java.awt.CardLayout;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.*;
 /**
  *
  * @author gayj5385
@@ -50,11 +45,20 @@ public class OpenScreenTest extends javax.swing.JFrame
     {
 
         Screens = new javax.swing.JPanel();
+        contactAdminScreen = new javax.swing.JPanel();
+        emailBody = new javax.swing.JScrollPane();
+        TxtAreaEmailBody = new javax.swing.JTextArea();
+        txtSubjectLine = new javax.swing.JTextField();
+        subjectLbl = new javax.swing.JLabel();
+        cancelBtn = new javax.swing.JButton();
+        sendBtn = new javax.swing.JButton();
+        lblguestEmail = new javax.swing.JLabel();
+        txtGuestEmail = new javax.swing.JTextField();
         openScreenBtnPanel = new javax.swing.JPanel();
         logOnBtn = new javax.swing.JButton();
-        registerBtn = new javax.swing.JButton();
+        exitBtn = new javax.swing.JButton();
         guestReservationBtn = new javax.swing.JButton();
-        adminViewBtn = new javax.swing.JButton();
+        contactAdminBtn = new javax.swing.JButton();
         logOnPanel = new javax.swing.JPanel();
         lblUN = new javax.swing.JLabel();
         pwFieldUserPw = new javax.swing.JPasswordField();
@@ -71,7 +75,7 @@ public class OpenScreenTest extends javax.swing.JFrame
         txtPassword = new javax.swing.JTextField();
         txtEmail = new javax.swing.JTextField();
         txtPhone = new javax.swing.JTextField();
-        registationBtn = new javax.swing.JButton();
+        sendRegistationBtn = new javax.swing.JButton();
         guestReserve = new javax.swing.JPanel();
         lblName = new javax.swing.JLabel();
         lblReserverEmail = new javax.swing.JLabel();
@@ -141,39 +145,115 @@ public class OpenScreenTest extends javax.swing.JFrame
 
         Screens.setLayout(new java.awt.CardLayout());
 
+        TxtAreaEmailBody.setColumns(20);
+        TxtAreaEmailBody.setRows(5);
+        emailBody.setViewportView(TxtAreaEmailBody);
+
+        txtSubjectLine.setToolTipText("");
+
+        subjectLbl.setText("Subject:");
+
+        cancelBtn.setMnemonic('c');
+        cancelBtn.setText("Cancel");
+
+        sendBtn.setMnemonic('S');
+        sendBtn.setText("Send");
+
+        lblguestEmail.setText("Your Email:");
+
+        txtGuestEmail.setToolTipText("");
+
+        javax.swing.GroupLayout contactAdminScreenLayout = new javax.swing.GroupLayout(contactAdminScreen);
+        contactAdminScreen.setLayout(contactAdminScreenLayout);
+        contactAdminScreenLayout.setHorizontalGroup(
+            contactAdminScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(contactAdminScreenLayout.createSequentialGroup()
+                .addGap(87, 87, 87)
+                .addGroup(contactAdminScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(contactAdminScreenLayout.createSequentialGroup()
+                        .addComponent(sendBtn)
+                        .addGap(32, 32, 32)
+                        .addComponent(cancelBtn))
+                    .addGroup(contactAdminScreenLayout.createSequentialGroup()
+                        .addGroup(contactAdminScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(contactAdminScreenLayout.createSequentialGroup()
+                                .addComponent(subjectLbl)
+                                .addGap(18, 18, 18))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contactAdminScreenLayout.createSequentialGroup()
+                                .addComponent(lblguestEmail)
+                                .addGap(32, 32, 32)))
+                        .addGroup(contactAdminScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtSubjectLine, javax.swing.GroupLayout.DEFAULT_SIZE, 333, Short.MAX_VALUE)
+                            .addComponent(txtGuestEmail))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contactAdminScreenLayout.createSequentialGroup()
+                .addContainerGap(87, Short.MAX_VALUE)
+                .addComponent(emailBody, javax.swing.GroupLayout.PREFERRED_SIZE, 446, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(50, Short.MAX_VALUE))
+        );
+        contactAdminScreenLayout.setVerticalGroup(
+            contactAdminScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contactAdminScreenLayout.createSequentialGroup()
+                .addContainerGap(29, Short.MAX_VALUE)
+                .addGroup(contactAdminScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtSubjectLine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(subjectLbl))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(contactAdminScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblguestEmail)
+                    .addComponent(txtGuestEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(8, 8, 8)
+                .addComponent(emailBody, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addGroup(contactAdminScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cancelBtn)
+                    .addComponent(sendBtn))
+                .addContainerGap())
+        );
+
+        Screens.add(contactAdminScreen, "contactAdminScreen");
+
+        logOnBtn.setMnemonic('l');
         logOnBtn.setText("Log On");
 
-        registerBtn.setText("Register");
+        exitBtn.setMnemonic('x');
+        exitBtn.setText("Exit");
 
+        guestReservationBtn.setMnemonic('r');
         guestReservationBtn.setText("Guest Reserve");
 
-        adminViewBtn.setText("Admin View");
+        contactAdminBtn.setMnemonic('o');
+        contactAdminBtn.setText("Contact Admin");
 
         javax.swing.GroupLayout openScreenBtnPanelLayout = new javax.swing.GroupLayout(openScreenBtnPanel);
         openScreenBtnPanel.setLayout(openScreenBtnPanelLayout);
         openScreenBtnPanelLayout.setHorizontalGroup(
             openScreenBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(openScreenBtnPanelLayout.createSequentialGroup()
-                .addGap(63, 63, 63)
-                .addComponent(logOnBtn)
-                .addGap(29, 29, 29)
-                .addComponent(registerBtn)
-                .addGap(18, 18, 18)
+                .addGap(137, 137, 137)
                 .addComponent(guestReservationBtn)
-                .addGap(18, 18, 18)
-                .addComponent(adminViewBtn)
-                .addContainerGap(97, Short.MAX_VALUE))
+                .addGap(77, 77, 77)
+                .addComponent(contactAdminBtn)
+                .addContainerGap(143, Short.MAX_VALUE))
+            .addGroup(openScreenBtnPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(logOnBtn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(exitBtn)
+                .addGap(14, 14, 14))
         );
         openScreenBtnPanelLayout.setVerticalGroup(
             openScreenBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(openScreenBtnPanelLayout.createSequentialGroup()
-                .addGap(124, 124, 124)
+                .addGap(132, 132, 132)
+                .addGroup(openScreenBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(guestReservationBtn)
+                    .addComponent(contactAdminBtn))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 155, Short.MAX_VALUE)
                 .addGroup(openScreenBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(logOnBtn)
-                    .addComponent(guestReservationBtn)
-                    .addComponent(adminViewBtn)
-                    .addComponent(registerBtn))
-                .addContainerGap(210, Short.MAX_VALUE))
+                    .addComponent(exitBtn))
+                .addGap(15, 15, 15))
         );
 
         Screens.add(openScreenBtnPanel, "openScreen");
@@ -247,7 +327,7 @@ public class OpenScreenTest extends javax.swing.JFrame
 
         txtPhone.setToolTipText("phone number format should look as follows 555-123-4567");
 
-        registationBtn.setText("Register");
+        sendRegistationBtn.setText("Register");
 
         javax.swing.GroupLayout registerPanelLayout = new javax.swing.GroupLayout(registerPanel);
         registerPanel.setLayout(registerPanelLayout);
@@ -256,7 +336,7 @@ public class OpenScreenTest extends javax.swing.JFrame
             .addGroup(registerPanelLayout.createSequentialGroup()
                 .addGap(108, 108, 108)
                 .addGroup(registerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(registationBtn)
+                    .addComponent(sendRegistationBtn)
                     .addGroup(registerPanelLayout.createSequentialGroup()
                         .addGroup(registerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblPhone)
@@ -296,7 +376,7 @@ public class OpenScreenTest extends javax.swing.JFrame
                     .addComponent(lblPhone)
                     .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(registationBtn)
+                .addComponent(sendRegistationBtn)
                 .addContainerGap(108, Short.MAX_VALUE))
         );
 
@@ -477,7 +557,7 @@ public class OpenScreenTest extends javax.swing.JFrame
                                         .addGap(20, 20, 20))))
                             .addGroup(reservationsAvailablePaneLayout.createSequentialGroup()
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 208, Short.MAX_VALUE))))
+                                .addContainerGap())))
                     .addGroup(reservationsAvailablePaneLayout.createSequentialGroup()
                         .addComponent(addBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -664,7 +744,7 @@ public class OpenScreenTest extends javax.swing.JFrame
         reserverContactInfoLayout.setVerticalGroup(
             reserverContactInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(reserverContactInfoLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(18, 18, 18)
                 .addGroup(reserverContactInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(idDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(idNum2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -680,7 +760,7 @@ public class OpenScreenTest extends javax.swing.JFrame
                 .addGroup(reserverContactInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(phoneDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(phoneString, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(34, 34, 34))
+                .addGap(22, 22, 22))
         );
 
         reserveSearchBtn.setMnemonic('s');
@@ -706,25 +786,25 @@ public class OpenScreenTest extends javax.swing.JFrame
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(reserveAdminSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(reservationMangerPaneLayout.createSequentialGroup()
-                        .addGap(58, 58, 58)
-                        .addComponent(cancelReserveBtn)
-                        .addGap(51, 51, 51)
-                        .addGroup(reservationMangerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGap(394, 394, 394)
+                        .addComponent(reserveSearchBtn)
+                        .addGap(0, 100, Short.MAX_VALUE))
+                    .addGroup(reservationMangerPaneLayout.createSequentialGroup()
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(reservationMangerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(reservationMangerPaneLayout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(cancelReserveBtn)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(contactReserverBtn)
                                 .addGap(53, 53, 53)
                                 .addComponent(reserveExitBtn))
                             .addGroup(reservationMangerPaneLayout.createSequentialGroup()
-                                .addGap(166, 166, 166)
-                                .addComponent(reserveSearchBtn)
-                                .addGap(0, 100, Short.MAX_VALUE))))
-                    .addGroup(reservationMangerPaneLayout.createSequentialGroup()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(reservationInformation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(reserverContactInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addComponent(reservationInformation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(reserverContactInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         reservationMangerPaneLayout.setVerticalGroup(
@@ -740,11 +820,11 @@ public class OpenScreenTest extends javax.swing.JFrame
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
                             .addComponent(reservationInformation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(reserverContactInfo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(reservationMangerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cancelReserveBtn)
-                            .addComponent(contactReserverBtn))
-                        .addGap(33, 33, 33))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(reservationMangerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(contactReserverBtn)
+                            .addComponent(cancelReserveBtn))
+                        .addGap(27, 27, 27))
                     .addGroup(reservationMangerPaneLayout.createSequentialGroup()
                         .addComponent(reserveSearchBtn)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 230, Short.MAX_VALUE)
@@ -788,10 +868,11 @@ public class OpenScreenTest extends javax.swing.JFrame
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFormattedTextField FTxtDatePicked;
     private javax.swing.JPanel Screens;
+    private javax.swing.JTextArea TxtAreaEmailBody;
     private javax.swing.JButton addBtn;
     private javax.swing.JButton adminExit;
     private javax.swing.JTabbedPane adminView;
-    private javax.swing.JButton adminViewBtn;
+    private javax.swing.JButton cancelBtn;
     private javax.swing.JButton cancelReserveBtn;
     private javax.swing.JLabel capDisplay;
     private javax.swing.JLabel capacity;
@@ -799,6 +880,8 @@ public class OpenScreenTest extends javax.swing.JFrame
     private javax.swing.JLabel capacity2;
     private javax.swing.JLabel capdisplay;
     private javax.swing.JComboBox<String> cbReserverLocations;
+    private javax.swing.JButton contactAdminBtn;
+    private javax.swing.JPanel contactAdminScreen;
     private javax.swing.JButton contactReserverBtn;
     private javax.swing.JLabel costAmount;
     private javax.swing.JLabel costDisplauy;
@@ -806,9 +889,11 @@ public class OpenScreenTest extends javax.swing.JFrame
     private javax.swing.JLabel costNum;
     private javax.swing.JLabel date;
     private javax.swing.JLabel dateDisplay;
+    private javax.swing.JScrollPane emailBody;
     private javax.swing.JLabel emailDisplauy;
     private javax.swing.JLabel emailString;
     private javax.swing.JLabel eventTypeDisplay;
+    private javax.swing.JButton exitBtn;
     private javax.swing.JButton guestReservationBtn;
     private javax.swing.JPanel guestReserve;
     private javax.swing.JLabel idDisplay;
@@ -833,6 +918,7 @@ public class OpenScreenTest extends javax.swing.JFrame
     private javax.swing.JLabel lblTimeDisplay;
     private javax.swing.JLabel lblUN;
     private javax.swing.JLabel lblUsername;
+    private javax.swing.JLabel lblguestEmail;
     private javax.swing.JLabel locDisplay;
     private javax.swing.JLabel locName;
     private javax.swing.JButton logOnBtn;
@@ -845,8 +931,6 @@ public class OpenScreenTest extends javax.swing.JFrame
     private javax.swing.JLabel phoneDisplay;
     private javax.swing.JLabel phoneString;
     private javax.swing.JPasswordField pwFieldUserPw;
-    private javax.swing.JButton registationBtn;
-    private javax.swing.JButton registerBtn;
     private javax.swing.JPanel registerPanel;
     private javax.swing.JButton registrationBtn;
     private javax.swing.JButton removeBtn;
@@ -860,16 +944,101 @@ public class OpenScreenTest extends javax.swing.JFrame
     private javax.swing.JButton reserveSearchBtn;
     private javax.swing.JPanel reserverContactInfo;
     private javax.swing.JButton searchLocations;
+    private javax.swing.JButton sendBtn;
+    private javax.swing.JButton sendRegistationBtn;
+    private javax.swing.JLabel subjectLbl;
     private javax.swing.JLabel timeDisplay;
     private javax.swing.JLabel timeSlot;
     private javax.swing.JList<String> timelist;
     private javax.swing.JTextField txrtReserverName;
     private javax.swing.JTextField txtEmail;
+    private javax.swing.JTextField txtGuestEmail;
     private javax.swing.JTextField txtPassword;
     private javax.swing.JTextField txtPhone;
     private javax.swing.JTextField txtReserveType;
     private javax.swing.JTextField txtReserverEmail;
+    private javax.swing.JTextField txtSubjectLine;
     private javax.swing.JTextField txtUsername;
     private javax.swing.JTextField txtUsername1;
     // End of variables declaration//GEN-END:variables
+
+   public void btnClicked(String btnName)
+   {
+        CardLayout screen = (CardLayout)(Screens.getLayout());
+      switch(btnName)
+      {
+          case "logOnBtn":
+             screen.show(Screens,"logOnScreen");
+             break;
+          case "guestReservationBtn":
+             screen.show(Screens,"guestReserveScreen");
+             break;
+          case "contactAdminBtn":
+              screen.show(Screens,"contactAdminScreen");
+              break;
+          case "exitBtn":
+              //exit command here
+          case "sendBtn":
+              //send email Method
+          case "cancelBtn":
+              screen.show(Screens,"openScreen");
+              break;
+          case "registrationBtn":
+              screen.show(Screens, "registerScreen");
+              break;
+          case "loginBtn":
+              //login method
+               //validate method
+              screen.show(Screens, "adminViewScreen");
+              break;
+          case "sendRegistationBtn":
+              //method to make accout
+              screen.show(Screens,"logOnScreen");
+          case "reserveBtn":
+              //method to make reservation
+              //method to make Reserver
+              //show a thank you message 
+              //Conformation email method
+              screen.show(Screens,"openScreen");
+              break;
+          case "addBtn":
+              //method that pops up the add screen for admin
+              break;
+          case "removeBtn":
+              //method that pops up the remove screen
+              //asks if they are sure
+              break;
+          case "modifyLocBtn":
+              //method to pop up the modify screen
+              break;
+          case "searchLocations":
+              //method to do the search of the locations
+              break;
+          case "adminExit":
+              screen.show(Screens,"openScreen");
+              break;
+          case "cancelReserveBtn":
+                //Conformation you want to cancel reservation
+               //method that removes reservation
+              //sends email to Reserver
+              break;
+          case "contactReserverBtn":
+              //method that brings up a screen to send an email to guest
+              break;
+          case "reserveExitBtn":
+              screen.show(Screens,"openScreen");
+              break;
+          case "reserveSearchBtn":
+              //method to search reservations for the search term(s)
+              break;
+              
+              
+           
+      
+      
+      
+      
+      }
+      
+   }
 }

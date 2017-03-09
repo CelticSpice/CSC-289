@@ -14,8 +14,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -27,6 +25,22 @@ public class ReserveDB
                                      "user=burnst_test&password=PASSWORD";
     
     private static final String DB_NAME = "ReserveDB";
+    
+    /**
+        AddRecord - Add a record to the database
+    
+        @param recordAdd The adding of a record
+        @throws SQLException There was an error adding a record
+    */
+    
+    public static void addRecord(RecordAdd recordAdd) throws SQLException
+    {
+        Connection conn = DriverManager.getConnection(DB);
+        Statement stmt = conn.createStatement();
+        stmt.execute("USE " + DB_NAME);
+        
+        stmt.executeUpdate(recordAdd.toString());
+    }
     
     /**
         Create - Create the database
@@ -248,5 +262,22 @@ public class ReserveDB
     private static boolean isData(ResultSet rSet) throws SQLException
     {
         return (rSet.isBeforeFirst());
+    }
+    
+    /**
+        RunQuery - Run the query provided and return the result set
+    
+        @param query The query to run
+        @throws SQLException There was an error running the query
+        @return The result set of the query
+    */
+    
+    public static ResultSet runQuery(Query query) throws SQLException
+    {
+        Connection conn = DriverManager.getConnection(DB);
+        Statement stmt = conn.createStatement();
+        stmt.execute("USE " + DB_NAME);
+        
+        return stmt.executeQuery(query.toString());
     }
 }

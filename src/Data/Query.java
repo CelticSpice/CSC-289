@@ -37,7 +37,7 @@ public class Query
               "FROM Locations " +
               "WHERE LocationName = '" + name + "'";
         
-        return !ResultSetParser.isEmpty(ReserveDB.runQuery(this));
+        return !ResultSetParser.isEmpty(ReserveDB.getInstance().runQuery(this));
     }
     
     /**
@@ -53,7 +53,9 @@ public class Query
               "FROM Locations " +
               "ORDER BY LocationName";
         
-        return ResultSetParser.parseLocationNames(ReserveDB.runQuery(this));
+        return ResultSetParser.parseLocationNames(ReserveDB
+                                                  .getInstance()
+                                                  .runQuery(this));
     }
     
     /**
@@ -79,7 +81,8 @@ public class Query
               "ORDER BY StartDate, StartTime, EndDate, EndTime, Cost";
         
         return ResultSetParser.parseReservableTimeframes(ReserveDB
-                                                            .runQuery(this));
+                                                         .getInstance()
+                                                         .runQuery(this));
     }
     
     /**
@@ -122,7 +125,7 @@ public class Query
               "AND EndDate = '" + timeframe.getEndDate() + "' " +
               "AND EndTime = '" + timeframe.getEndTime() + "'";
         
-        return !ResultSetParser.isEmpty(ReserveDB.runQuery(this));
+        return !ResultSetParser.isEmpty(ReserveDB.getInstance().runQuery(this));
     }
     
     /**
@@ -145,7 +148,7 @@ public class Query
               "AND EndDate = '" + t.getEndDate() + "' " +
               "AND EndTime = '" + t.getEndTime() + "'";
         
-        return !ResultSetParser.isEmpty(ReserveDB.runQuery(this));
+        return !ResultSetParser.isEmpty(ReserveDB.getInstance().runQuery(this));
     }
     
     /**

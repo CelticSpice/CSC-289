@@ -57,7 +57,7 @@ public class RecordAdd
                       "VALUES ('" + location.getName() + "', " +
                                     location.getCapacity() + ")";
                 
-                ReserveDB.addRecord(this);
+                ReserveDB.getInstance().addRecord(this);
             }
             
             // Avoid duplicating a record of a timeframe
@@ -68,7 +68,7 @@ public class RecordAdd
                       "VALUES ('" + startDate + "', '" + startTime + "', '" +
                                     endDate   + "', '" + endTime + "')";
                 
-                ReserveDB.addRecord(this);
+                ReserveDB.getInstance().addRecord(this);
             }
             
             String subSelect = "(SELECT Timeframes.TimeframeID " +
@@ -82,7 +82,7 @@ public class RecordAdd
                   "VALUES ('" + location.getName() + "', " + subSelect + ", " +
                                 cost.doubleValue() + ")";
           
-            ReserveDB.addRecord(this);
+            ReserveDB.getInstance().addRecord(this);
         }
         else
             throw new RecordExistsException();

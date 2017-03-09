@@ -6,17 +6,11 @@
 
 package Data;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Time;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
 
 public class ReserveDB
 {
@@ -26,6 +20,19 @@ public class ReserveDB
     
     private static final String DB_NAME = "ReserveDB";
     
+    private Connection connection;
+    private static ReserveDB db;
+    
+    /**
+        Constructor
+        @throws SQLException There was an error connecting to the database
+    */
+    
+    private ReserveDB() throws SQLException
+    {
+        connection = DriverManager.getConnection(DB);
+    }
+    
     /**
         AddRecord - Add a record to the database
     
@@ -33,10 +40,9 @@ public class ReserveDB
         @throws SQLException There was an error adding a record
     */
     
-    public static void addRecord(RecordAdd recordAdd) throws SQLException
+    public void addRecord(RecordAdd recordAdd) throws SQLException
     {
-        Connection conn = DriverManager.getConnection(DB);
-        Statement stmt = conn.createStatement();
+        Statement stmt = connection.createStatement();
         stmt.execute("USE " + DB_NAME);
         
         stmt.executeUpdate(recordAdd.toString());
@@ -48,30 +54,24 @@ public class ReserveDB
         @throws SQLException There was an error creating the database
     */
     
-    public static void create() throws SQLException
+    public void create() throws SQLException
     {
-        Connection conn = DriverManager.getConnection(DB);
-        Statement stmt = conn.createStatement();
-        stmt.execute("CREATE DATABASE ReserveDB");
-        stmt.execute("USE ReserveDB");
-        createTables();
+        Statement stmt = connection.createStatement();
+        stmt.execute("CREATE DATABASE " + DB_NAME);
+        stmt.execute("USE " + DB_NAME);
+        createTables(stmt);
         System.out.println("Successfully created database");
     }
     
     /**
         CreateTables - Create the database tables, if they do not exist
     
-        @param statement Statement object
+        @param statement Statement object for working with the database
         @throws SQLException There was an error creating the tables
     */
     
-    public static void createTables() throws SQLException
-    {
-        Connection conn = DriverManager.getConnection(DB);
-        Statement statement = conn.createStatement();
-        
-        statement.execute("USE ReserveDB");
-        
+    public void createTables(Statement statement) throws SQLException
+    {        
         // Create Reservers table
         String sql = "CREATE TABLE Reservers ("   +
                      "reserverID int NOT NULL AUTO_INCREMENT, " +
@@ -119,33 +119,15 @@ public class ReserveDB
     }
     
     /**
-        DropTables - Drops the tables from the database
-    
-        @throws SQLException Error working with the database
-    */
-    
-    public static void dropTables() throws SQLException
-    {
-        Connection conn = DriverManager.getConnection(DB);
-        Statement stmt = conn.createStatement();
-        stmt.execute("USE ReserveDB");
-        
-        stmt.execute("DROP TABLE IF EXISTS Reservations");
-        stmt.execute("DROP TABLE IF EXISTS Reservables");
-        stmt.execute("DROP TABLE IF EXISTS Reservers");
-    }
-    
-    /**
         Exists - Return whether the database exists
     
         @return Whether the database exists
-        @throws SQLException Error connecting to database
+        @throws SQLException Error working with the database
     */
     
-    public static boolean exists() throws SQLException
+    public boolean exists() throws SQLException
     {
-        Connection conn = DriverManager.getConnection(DB);
-        Statement stmt = conn.createStatement();
+        Statement stmt = connection.createStatement();
         
         String sql = "SELECT SCHEMA_NAME " +
                      "FROM INFORMATION_SCHEMA.SCHEMATA " +
@@ -157,111 +139,19 @@ public class ReserveDB
     }
     
     /**
-        GetLocationNames - Return the unique names of every location in the
-        database
+        GetInstance - Return an instance of the database
     
-        @throws SQLException There was an error working with the database
-        @return The unique names of every location
+        @throws SQLException There was an error getting an instance of the
+                             database
+        @return An instance of the database
     */
     
-    public static String[] getLocationNames() throws SQLException
+    public static ReserveDB getInstance() throws SQLException
     {
-        Connection conn = DriverManager.getConnection(DB);
-        Statement stmt = conn.createStatement();
+        if (db == null)
+            db = new ReserveDB();
         
-        stmt.execute("USE ReserveDB");
-        
-        String sql = "SELECT UNIQUE name FROM Reservables";
-        
-        ResultSet rSet = stmt.executeQuery(sql);
-        
-        ArrayList<String> names = new ArrayList<>();
-        
-        if (isData(rSet))
-            while (rSet.next())
-                names.add(rSet.getString(1));
-        
-        return names.toArray(new String[names.size()]);
-    }
-    
-    /**
-        GetReservableLocation - Return the reservable location with the
-        specified name. If no location with the given name exists, null is
-        returned
-    
-        @param name Name of location to retrieve
-        @throws SQLException There was an error working with the database
-        @return location The location with the specified name
-    */
-    
-    public static ReservableLocation getReservableLocation(String name)
-            throws SQLException
-    {
-        Connection conn = DriverManager.getConnection(DB);
-        Statement stmt = conn.createStatement();
-        
-        stmt.execute("USE ReserveDB");
-        
-        String sql = "SELECT DISTINCT capacity FROM Reservables " +
-                     "WHERE locationName = '" + name + "'";
-        
-        ResultSet rSet = stmt.executeQuery(sql);
-        if (isData(rSet))
-        {
-            rSet.next();
-            int capacity = rSet.getInt(1);
-            
-            sql = "SELECT startDate, endDate, startTime, endTime, cost " +
-                  "FROM Reservables " +
-                  "WHERE locationName = '" + name + "'";
-            
-            rSet = stmt.executeQuery(sql);
-            
-            ReservableTimeframeList timeframes = new ReservableTimeframeList();
-            
-            BigDecimal cost;
-            Date startDate, endDate;
-            Time startTime, endTime;
-            
-            while (rSet.next())
-            {
-                startDate = rSet.getDate(1);
-                endDate = rSet.getDate(2);
-                startTime = rSet.getTime(3);
-                endTime = rSet.getTime(4);
-                cost = rSet.getBigDecimal(5);
-
-                ZonedDateTime startDateTime = ZonedDateTime
-                        .of(startDate.toLocalDate(), startTime.toLocalTime(),
-                            ZoneId.systemDefault());
-                
-                ZonedDateTime endDateTime = ZonedDateTime
-                        .of(endDate.toLocalDate(), endTime.toLocalTime(),
-                            ZoneId.systemDefault());
-                
-                
-                timeframes.add(new ReservableTimeframe(startDateTime,
-                                                       endDateTime, cost));
-            }
-            
-            return new ReservableLocation(name, capacity, timeframes);
-        }
-        else
-            return null;
-            
-    }
-    
-    /**
-        IsData - Return whether data was returned from a query
-    
-        @param rSet ResultSet to determine if data was returned in
-        @throws SQLException Error in working with the ResultSet
-        @return Whether there is data in the result set
-    */
-    
-    private static boolean isData(ResultSet rSet) throws SQLException
-    {
-        return (rSet.isBeforeFirst());
+        return db;
     }
     
     /**
@@ -272,10 +162,9 @@ public class ReserveDB
         @return The result set of the query
     */
     
-    public static ResultSet runQuery(Query query) throws SQLException
+    public ResultSet runQuery(Query query) throws SQLException
     {
-        Connection conn = DriverManager.getConnection(DB);
-        Statement stmt = conn.createStatement();
+        Statement stmt = connection.createStatement();
         stmt.execute("USE " + DB_NAME);
         
         return stmt.executeQuery(query.toString());

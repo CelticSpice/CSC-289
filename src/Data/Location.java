@@ -9,7 +9,7 @@ package Data;
 public class Location
 {
     // Fields
-    private int capacity;
+    private int capacity, id;
     private String name;
     
     /**
@@ -23,6 +23,22 @@ public class Location
     {
         name = n;
         capacity = cap;
+        id = -1;
+    }
+    
+    /**
+        Constructor - Accepts the location's name, capacity, & ID
+    
+        @param n The location's name
+        @param cap The location's capacity
+        @param i The location's ID
+    */
+    
+    public Location(String n, int cap, int i)
+    {
+        name = n;
+        capacity = cap;
+        id = i;
     }
     
     /**
@@ -34,6 +50,17 @@ public class Location
     public int getCapacity()
     {
         return capacity;
+    }
+    
+    /**
+        GetID - Return the location's ID
+    
+        @return The location's ID
+    */
+    
+    public int getID()
+    {
+        return id;
     }
     
     /**

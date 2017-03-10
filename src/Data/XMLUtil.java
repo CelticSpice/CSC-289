@@ -38,63 +38,35 @@ public class XMLUtil
         Element adminRoot = doc.createElement("Admin");
         root.appendChild(adminRoot);
         
-        // SendEmail element
-        Element sendEmail = doc.createElement("SendEmail");
-        adminRoot.appendChild(sendEmail);
-        
-        // Construct SendEmail element
-        Element address = doc.createElement("Address");
+        // Construct elements with information on sending email
+        Element address = doc.createElement("SendAddress");
         address.appendChild(doc.createTextNode("foo@bar.com"));
-        sendEmail.appendChild(address);
+        adminRoot.appendChild(address);
         
         Element host = doc.createElement("Host");
         host.appendChild(doc.createTextNode("smtp.foo.bar"));
-        sendEmail.appendChild(host);
+        adminRoot.appendChild(host);
         
         Element security = doc.createElement("Security");
         security.appendChild(doc.createTextNode("SSL|TLS"));
-        sendEmail.appendChild(security);
+        adminRoot.appendChild(security);
         
         Element port = doc.createElement("Port");
         port.appendChild(doc.createTextNode("587"));
-        sendEmail.appendChild(port);
+        adminRoot.appendChild(port);
         
         Element user = doc.createElement("User");
         user.appendChild(doc.createTextNode("Mr. Foobar"));
-        sendEmail.appendChild(user);
+        adminRoot.appendChild(user);
         
         Element pass = doc.createElement("Pass");
         pass.appendChild(doc.createTextNode("password"));
-        sendEmail.appendChild(pass);
+        adminRoot.appendChild(pass);
 
-        // GetEmail element
-        Element getEmail = doc.createElement("GetEmail");
+        // Construct element containing information to receive email
+        Element getEmail = doc.createElement("GetAddress");
+        getEmail.appendChild(doc.createTextNode("foo@bar.com"));
         adminRoot.appendChild(getEmail);
-        
-        // Construct GetEmail element
-        address = doc.createElement("Address");
-        address.appendChild(doc.createTextNode("foo@bar.com"));
-        getEmail.appendChild(address);
-        
-        host = doc.createElement("Host");
-        host.appendChild(doc.createTextNode("smtp.foo.bar"));
-        getEmail.appendChild(host);
-        
-        security = doc.createElement("Security");
-        security.appendChild(doc.createTextNode("SSL|TLS"));
-        getEmail.appendChild(security);
-        
-        port = doc.createElement("Port");
-        port.appendChild(doc.createTextNode("587"));
-        getEmail.appendChild(port);
-        
-        user = doc.createElement("User");
-        user.appendChild(doc.createTextNode("Mr. Foobar"));
-        getEmail.appendChild(user);
-        
-        pass = doc.createElement("Pass");
-        pass.appendChild(doc.createTextNode("password"));
-        getEmail.appendChild(pass);
     }
     
     /**
@@ -107,52 +79,47 @@ public class XMLUtil
     
     private static void buildGuestEmailInfo(Document doc, Element root)
     {
-        // Root element
+        // Root guest element
         Element guestRoot = doc.createElement("Guest");
         root.appendChild(guestRoot);
         
-        // SendEmail element
-        Element sendEmail = doc.createElement("SendEmail");
-        guestRoot.appendChild(sendEmail);
-        
-        // Construct SendEmail element
-        Element address = doc.createElement("Address");
+        // Construct elements containing information to send email
+        Element address = doc.createElement("SendAddress");
         address.appendChild(doc.createTextNode("foo@bar.com"));
-        sendEmail.appendChild(address);
+        guestRoot.appendChild(address);
         
         Element host = doc.createElement("Host");
         host.appendChild(doc.createTextNode("smtp.foo.bar"));
-        sendEmail.appendChild(host);
+        guestRoot.appendChild(host);
         
         Element security = doc.createElement("Security");
         security.appendChild(doc.createTextNode("SSL|TLS"));
-        sendEmail.appendChild(security);
+        guestRoot.appendChild(security);
         
         Element port = doc.createElement("Port");
         port.appendChild(doc.createTextNode("587"));
-        sendEmail.appendChild(port);
+        guestRoot.appendChild(port);
         
         Element user = doc.createElement("User");
         user.appendChild(doc.createTextNode("Mr. Foobar"));
-        sendEmail.appendChild(user);
+        guestRoot.appendChild(user);
         
         Element pass = doc.createElement("Pass");
         pass.appendChild(doc.createTextNode("password"));
-        sendEmail.appendChild(pass);
+        guestRoot.appendChild(pass);
     }
     
     /**
-        GetAdminGetEmailNodeList - Return the list of nodes with information on
-        the administrator's address & host to receive email on
+        GetAdminEmailNodeList - Return the list of nodes with information on
+        the administrator's email
     
         @param xml XML file containing the info
         @throws IOException Failed reading XML file
         @throws ParserConfigurationException Bad internal configuration
-        @return list List of nodes with information on administrator's address
-                     & host to receive email on
+        @return list List of nodes with information on administrator's email
     */
     
-    public static NodeList getAdminGetEmailNodeList(File xml)
+    public static NodeList getAdminEmailNodeList(File xml)
             throws IOException, ParserConfigurationException
     {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -164,7 +131,39 @@ public class XMLUtil
         {
             Document doc = db.parse(xml);
             
-            list = doc.getElementsByTagName("GetEmail").item(0).getChildNodes();
+            list = doc.getElementsByTagName("Admin").item(0).getChildNodes();
+        }
+        catch (SAXException ex)
+        {
+            System.err.println(ex.getMessage());
+        }
+        
+        return list;
+    }
+    
+    /**
+        GetGuestEmailNodeList - Return the list of nodes containing
+        information on the guest's email
+    
+        @param xml XML file containing the info
+        @throws IOException Failed reading XML file
+        @throws ParserConfigurationException Bad internal configuration
+        @return list List of nodes with information on guest's email
+    */
+    
+    public static NodeList getGuestEmailNodeList(File xml)
+            throws IOException, ParserConfigurationException
+    {
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        
+        NodeList list = null;
+        
+        try
+        {
+            Document doc = db.parse(xml);
+            
+            list = doc.getElementsByTagName("Guest").item(0).getChildNodes();
         }
         catch (SAXException ex)
         {

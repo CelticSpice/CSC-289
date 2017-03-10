@@ -15,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 public class Timeframe
 {
     // Fields
+    private int id;
     private ZonedDateTime startDateTime, endDateTime;
     
     /**
@@ -29,6 +30,23 @@ public class Timeframe
         // We ignore nanoseconds & seconds
         startDateTime = sDateTime.withNano(0).withSecond(0);
         endDateTime = eDateTime.withNano(0).withSecond(0);
+    }
+    
+    /**
+        Constructor - Accepts the starting & ending dates & times and the
+        timeframe's ID
+    
+        @param sDateTime The starting date & time
+        @param eDateTime The ending date & time
+        @param i The timeframe's ID
+    */
+    
+    public Timeframe(ZonedDateTime sDateTime, ZonedDateTime eDateTime, int i)
+    {
+        // We ignore nanoseconds & seconds
+        startDateTime = sDateTime.withNano(0).withSecond(0);
+        endDateTime = eDateTime.withNano(0).withSecond(0);
+        id = i;
     }
     
     /**
@@ -135,6 +153,17 @@ public class Timeframe
     public String getEndDateTimeString(DateTimeFormatter format)
     {
         return endDateTime.format(format);
+    }
+    
+    /**
+        GetID - Return the timeframe's ID
+    
+        @return The timeframe's ID
+    */
+    
+    public int getID()
+    {
+        return id;
     }
     
     /**

@@ -7,6 +7,7 @@
 package Data;
 
 import java.io.IOException;
+import java.util.Properties;
 import javax.mail.internet.AddressException;
 import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.NodeList;
@@ -27,8 +28,12 @@ public class EmailUtil
             throws AddressException, IOException, ParserConfigurationException
     {
         NodeList nodeList = XMLUtil
-                            .getAdminEmailNodeList(SystemUtil.getEmailFile());
+            .getAdminGetEmailNodeList(SystemUtil
+                .getEmailFile());
         
-        XMLParser.parseAdminGetEmailProperties(nodeList);
+        Properties adminGetEmailProps = XMLParser
+                .parseAdminGetEmailProps(nodeList);
+        
+        
     }
 }

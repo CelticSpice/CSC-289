@@ -9,6 +9,7 @@ package Data;
 public class Reservation
 {
     // Fields
+    private boolean approved;
     private int numberAttending;
     private ReservableLocation locationReserved;
     private ReservableTimeframe timeframeReserved;
@@ -27,6 +28,7 @@ public class Reservation
                        ReservableTimeframe timeframe,
                        int numAttending)
     {
+        approved = false;
         numberAttending = numAttending;
         locationReserved = location;
         timeframeReserved = timeframe;
@@ -51,6 +53,17 @@ public class Reservation
         locationReserved = location;
         timeframeReserved = timeframe;
         eventType = type;
+    }
+    
+    /**
+        IsApproved - Return if the reservation has been approved
+    
+        @return If the reservation is approved
+    */
+    
+    public boolean isApproved()
+    {
+        return approved;
     }
     
     /**

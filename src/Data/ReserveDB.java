@@ -64,7 +64,7 @@ public class ReserveDB
     }
     
     /**
-        CreateTables - Create the database tables, if they do not exist
+        CreateTables - Create the database tables
     
         @param statement Statement object for working with the database
         @throws SQLException There was an error creating the tables

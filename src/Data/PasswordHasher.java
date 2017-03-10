@@ -1,5 +1,5 @@
 /**
-    An application of the SHA-256 hashing algorithm
+    A password hasher & salter
     CSC-289 - Group 4
     @author Timothy Burns
 */
@@ -9,24 +9,26 @@ package Data;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class SHA256
+public class PasswordHasher
 {
     // Fields
     private static final String ALGO = "SHA-256";
+    private static final String SALT = "ShaBuzz556qle+7d??754!+Rw5ar?";
     private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
     
     /**
-        Digest - Digest & return a hex-string of the given input, hashed using
-        SHA-256
+        Hash - Salt & hash the given input, returning the results
     
         @param input Input to hash
         @throws NoSuchAlgorithmException If SHA-256 algorithm cannot be found
-        @return Input hashed using the SHA-256 algorithm
+        @return Input salted & hashed using the SHA-256 algorithm
     */
     
-    public static String digest(String input) throws NoSuchAlgorithmException
+    public static String hash(String input) throws NoSuchAlgorithmException
     {
         MessageDigest sha256 = MessageDigest.getInstance(ALGO);
+        
+        input += SALT;
         
         byte[] digestResult = sha256.digest(input.getBytes());
         

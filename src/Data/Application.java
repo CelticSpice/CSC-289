@@ -24,6 +24,8 @@ public class Application
                                                   ParserConfigurationException,
                                                   TransformerException
     {
-        SystemResource.initResources();
+        SystemUtil.initResources();
+        System.out.println(XMLParser.parseAdminGetEmailProps(XMLUtil
+                .getAdminGetEmailNodeList(SystemUtil.getEmailFile())));
     }
 }

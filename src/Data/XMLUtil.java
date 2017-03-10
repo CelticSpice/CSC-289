@@ -1,5 +1,5 @@
 /**
-    Utility class for reading & writing XML
+    Utility for reading & writing XML
     CSC-289 - Group 4
     @author Timothy Burns
 */
@@ -7,6 +7,7 @@
 package Data;
 
 import java.io.File;
+import java.io.IOException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -18,6 +19,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 public class XMLUtil
 {
@@ -139,10 +142,45 @@ public class XMLUtil
     }
     
     /**
+        GetAdminGetEmailNodeList - Return the list of nodes with information on
+        the administrator's address & host to receive email on
+    
+        @param xml XML file containing the info
+        @throws IOException Failed reading XML file
+        @throws ParserConfigurationException Bad internal configuration
+        @return list List of nodes with information on administrator's address
+                     & host to receive email on
+    */
+    
+    public static NodeList getAdminGetEmailNodeList(File xml)
+            throws IOException, ParserConfigurationException
+    {
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        
+        NodeList list = null;
+        
+        try
+        {
+            Document doc = db.parse(xml);
+            
+            list = doc.getElementsByTagName("GetEmail").item(0).getChildNodes();
+        }
+        catch (SAXException ex)
+        {
+            System.err.println(ex.getMessage());
+        }
+        
+        return list;
+    }
+    
+    /**
         InitEmailXMLFile - Create the XML file containing email info
         anew
     
         @param xml The XML file to contain the email info
+        @throws TransformerException Error creating the XML file
+        @throws ParserConfigurationException Bad internal configuration
     */
     
     public static void initEmailXMLFile(File xml) 

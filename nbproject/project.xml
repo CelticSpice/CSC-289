@@ -12,7 +12,11 @@
             </test-roots>
         </data>
         <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
+            <word>admin</word>
+            <word>admin's</word>
+            <word>emails</word>
             <word>location's</word>
+            <word>nodelist</word>
             <word>reservable</word>
             <word>timeframe</word>
             <word>timeframes</word>

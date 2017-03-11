@@ -42,14 +42,14 @@ public class Reserver
     }
     
     /**
-        GetContactInfo - Return the contact information of the reserver
+        GetEmailAddress - Return the email address of the reserver
     
-        @return The contact information of the reserver
+        @return The email address of the reserver
     */
     
-    public ContactInfo getContactInfo()
+    public String getEmailAddress()
     {
-        return contactInfo;
+        return contactInfo.getEmail();
     }
     
     /**

@@ -90,6 +90,68 @@ public class EmailUtil
         {
             System.err.println(ex);
         }
+    }
+    
+    /**
+        EmailReserver - Send an email to a reserver, with information parsed
+        from the email XML file
+    
+        @param reserver The reserver to send an email message to
+        @param subject The subject of the message
+        @param body The body of the message
+        @throws AddressException Error parsing addresses
+    */
+    
+    public static void emailReserver(Reserver reserver, String subject,
+                                     String body)
+            throws AddressException, IOException, ParserConfigurationException,
+                    SAXException, XPathExpressionException
+    {
+        // Get the properties for the admin to send email
+        File emailXML = SystemUtil.getEmailFile();
+        Properties props = XMLParser.parseSendEmailProps(emailXML, "Admin");
+        
+        // Get address, username, password from properties
+        InternetAddress from = new InternetAddress(props
+                .getProperty("Address"));
+        String username = props.getProperty("User");
+        String password = props.getProperty("Pass");
+        
+        // Transform the properties
+        props = transformProps(props);
+        
+        // Get the address for the reserver to receive email at
+        InternetAddress to = new InternetAddress(reserver.getEmailAddress());
+        
+        // Build authenticator
+        Authenticator auth = new Authenticator() {
+            private PasswordAuthentication pa = new PasswordAuthentication
+                    (username, password);
+            
+            @Override
+            public PasswordAuthentication getPasswordAuthentication() {
+                return pa;
+            }
+        };
+        
+        // Create session
+        Session session = Session.getInstance(props, auth);
+        
+        // Create & send message
+        MimeMessage message = new MimeMessage(session);
+        try
+        {
+            message.setFrom(from);
+            message.setRecipient(Message.RecipientType.TO, to);
+            message.setSubject(subject);
+            message.setSentDate(new Date());
+            message.setText(body);
+            Transport.send(message);
+        }
+        catch (MessagingException ex)
+        {
+            System.err.println(ex);
+        }
         
     }
     

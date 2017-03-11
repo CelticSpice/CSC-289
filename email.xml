@@ -3,18 +3,18 @@
   <Admin>
     <SendAddress>foo@bar.com</SendAddress>
     <Host>smtp.foo.bar</Host>
-    <Security>SSL|TLS</Security>
+    <Security>TLS|None</Security>
     <Port>587</Port>
     <User>Mr. Foobar</User>
-    <Pass>password</Pass>
+    <Pass><![CDATA[PasswordHere]]></Pass>
     <GetAddress>foo@bar.com</GetAddress>
   </Admin>
   <Guest>
     <SendAddress>foo@bar.com</SendAddress>
     <Host>smtp.foo.bar</Host>
-    <Security>SSL|TLS</Security>
+    <Security>TLS|None</Security>
     <Port>587</Port>
     <User>Mr. Foobar</User>
-    <Pass>password</Pass>
+    <Pass><![CDATA[PasswordHere]]></Pass>
   </Guest>
 </Email>

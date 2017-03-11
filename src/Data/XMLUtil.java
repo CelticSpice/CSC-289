@@ -52,7 +52,7 @@ public class XMLUtil
         adminRoot.appendChild(host);
         
         Element security = doc.createElement("Security");
-        security.appendChild(doc.createTextNode("SSL|TLS"));
+        security.appendChild(doc.createTextNode("TLS|None"));
         adminRoot.appendChild(security);
         
         Element port = doc.createElement("Port");
@@ -64,7 +64,7 @@ public class XMLUtil
         adminRoot.appendChild(user);
         
         Element pass = doc.createElement("Pass");
-        pass.appendChild(doc.createTextNode("password"));
+        pass.appendChild(doc.createCDATASection("PasswordHere"));
         adminRoot.appendChild(pass);
 
         // Construct element containing information to receive email
@@ -97,7 +97,7 @@ public class XMLUtil
         guestRoot.appendChild(host);
         
         Element security = doc.createElement("Security");
-        security.appendChild(doc.createTextNode("SSL|TLS"));
+        security.appendChild(doc.createTextNode("TLS|None"));
         guestRoot.appendChild(security);
         
         Element port = doc.createElement("Port");
@@ -109,7 +109,7 @@ public class XMLUtil
         guestRoot.appendChild(user);
         
         Element pass = doc.createElement("Pass");
-        pass.appendChild(doc.createTextNode("password"));
+        pass.appendChild(doc.createCDATASection("PasswordHere"));
         guestRoot.appendChild(pass);
     }
     

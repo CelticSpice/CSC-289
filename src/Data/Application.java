@@ -9,6 +9,7 @@ package Data;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import javax.mail.internet.AddressException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
@@ -26,9 +27,9 @@ public class Application
                                                   ParserConfigurationException,
                                                   TransformerException,
                                                   SAXException,
-                                                  XPathExpressionException
+                                                  XPathExpressionException,
+                                                  AddressException
     {
         SystemUtil.initResources();
-        
     }
 }

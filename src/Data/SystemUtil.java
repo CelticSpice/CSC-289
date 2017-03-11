@@ -79,8 +79,8 @@ public class SystemUtil
         File emailFile = new File(EMAIL_FILE);
         if (emailFile.createNewFile())
             XMLUtil.initEmailXMLFile(emailFile);
-        
-        XMLUtil.validateXML(new File(EMAIL_FILE), new File(EMAIL_XSD_FILE));
+        else
+            XMLUtil.validateXML(new File(EMAIL_FILE), new File(EMAIL_XSD_FILE));
     }
     
     /**

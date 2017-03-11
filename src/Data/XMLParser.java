@@ -45,7 +45,7 @@ public class XMLParser
         XPathFactory xPathFactory = XPathFactory.newInstance();
         XPath xPath = xPathFactory.newXPath();
         
-        return xPath.evaluate("/Email/Admin/GetAddress", doc);
+        return xPath.evaluate("/Email/Admin/GetAddress", doc).trim();
     }
     
     /**
@@ -88,32 +88,32 @@ public class XMLParser
         
         // Get address
         XPathExpression expr = xPath.compile("/Email/" + user + "/SendAddress");
-        address = expr.evaluate(doc);
+        address = expr.evaluate(doc).trim();
         props.put("Address", address);
         
         // Get host
         expr = xPath.compile("/Email/" + user + "/Host");
-        host = expr.evaluate(doc);
+        host = expr.evaluate(doc).trim();
         props.put("Host", host);
         
         // Get security
         expr = xPath.compile("/Email/" + user + "/Security");
-        security = expr.evaluate(doc);
+        security = expr.evaluate(doc).trim();
         props.put("Security", security);
         
         // Get port
         expr = xPath.compile("/Email/" + user + "/Port");
-        port = expr.evaluate(doc);
+        port = expr.evaluate(doc).trim();
         props.put("Port", port);
         
         // Get user
         expr = xPath.compile("/Email/" + user + "/User");
-        userName = expr.evaluate(doc);
+        userName = expr.evaluate(doc).trim();
         props.put("User", userName);
         
         // Get pass
         expr = xPath.compile("/Email/" + user + "/Pass");
-        pass = expr.evaluate(doc);
+        pass = expr.evaluate(doc).trim();
         props.put("Pass", pass);
         
         return props;

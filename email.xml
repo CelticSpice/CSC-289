@@ -1,31 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Email>
   <Admin>
-    <SendEmail>
-      <Address>foo@bar.com</Address>
-      <Host>smtp.foo.bar</Host>
-      <Security>SSL|TLS</Security>
-      <Port>587</Port>
-      <User>Mr. Foobar</User>
-      <Pass>password</Pass>
-    </SendEmail>
-    <GetEmail>
-      <Address>foo@bar.com</Address>
-      <Host>smtp.foo.bar</Host>
-      <Security>SSL|TLS</Security>
-      <Port>587</Port>
-      <User>Mr. Foobar</User>
-      <Pass>password</Pass>
-    </GetEmail>
+    <SendAddress>foo@bar.com</SendAddress>
+    <Host>smtp.foo.bar</Host>
+    <Security>SSL|TLS</Security>
+    <Port>587</Port>
+    <User>Mr. Foobar</User>
+    <Pass>password</Pass>
+    <GetAddress>foo@bar.com</GetAddress>
   </Admin>
   <Guest>
-    <SendEmail>
-      <Address>foo@bar.com</Address>
-      <Host>smtp.foo.bar</Host>
-      <Security>SSL|TLS</Security>
-      <Port>587</Port>
-      <User>Mr. Foobar</User>
-      <Pass>password</Pass>
-    </SendEmail>
+    <SendAddress>foo@bar.com</SendAddress>
+    <Host>smtp.foo.bar</Host>
+    <Security>SSL|TLS</Security>
+    <Port>587</Port>
+    <User>Mr. Foobar</User>
+    <Pass>password</Pass>
   </Guest>
 </Email>

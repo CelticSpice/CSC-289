@@ -11,6 +11,8 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+import javax.xml.xpath.XPathExpressionException;
+import org.xml.sax.SAXException;
 
 public class Application
 {    
@@ -22,10 +24,11 @@ public class Application
     public static void main(String[] args) throws SQLException, IOException,
                                                   NoSuchAlgorithmException,
                                                   ParserConfigurationException,
-                                                  TransformerException
+                                                  TransformerException,
+                                                  SAXException,
+                                                  XPathExpressionException
     {
         SystemUtil.initResources();
-        System.out.println(XMLParser.parseAdminGetEmailProps(XMLUtil
-                .getAdminGetEmailNodeList(SystemUtil.getEmailFile())));
+        
     }
 }

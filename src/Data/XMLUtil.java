@@ -1,5 +1,5 @@
 /**
-    Utility for reading & writing XML
+    Utility for working with XML
     CSC-289 - Group 4
     @author Timothy Burns
 */
@@ -8,6 +8,7 @@ package Data;
 
 import java.io.File;
 import java.io.IOException;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -17,15 +18,18 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class XMLUtil
 {
     /**
-        BuildAdminEmailInfo - Build the admin's portion of the XML file
+        BuildAdminEmailInfo - Build the administrator's portion of the XML file
         containing email info
         
         @param doc The document object
@@ -39,9 +43,9 @@ public class XMLUtil
         root.appendChild(adminRoot);
         
         // Construct elements with information on sending email
-        Element address = doc.createElement("SendAddress");
-        address.appendChild(doc.createTextNode("foo@bar.com"));
-        adminRoot.appendChild(address);
+        Element sendAddress = doc.createElement("SendAddress");
+        sendAddress.appendChild(doc.createTextNode("foo@bar.com"));
+        adminRoot.appendChild(sendAddress);
         
         Element host = doc.createElement("Host");
         host.appendChild(doc.createTextNode("smtp.foo.bar"));
@@ -64,9 +68,9 @@ public class XMLUtil
         adminRoot.appendChild(pass);
 
         // Construct element containing information to receive email
-        Element getEmail = doc.createElement("GetAddress");
-        getEmail.appendChild(doc.createTextNode("foo@bar.com"));
-        adminRoot.appendChild(getEmail);
+        Element getAddress = doc.createElement("GetAddress");
+        getAddress.appendChild(doc.createTextNode("foo@bar.com"));
+        adminRoot.appendChild(getAddress);
     }
     
     /**
@@ -84,9 +88,9 @@ public class XMLUtil
         root.appendChild(guestRoot);
         
         // Construct elements containing information to send email
-        Element address = doc.createElement("SendAddress");
-        address.appendChild(doc.createTextNode("foo@bar.com"));
-        guestRoot.appendChild(address);
+        Element sendAddress = doc.createElement("SendAddress");
+        sendAddress.appendChild(doc.createTextNode("foo@bar.com"));
+        guestRoot.appendChild(sendAddress);
         
         Element host = doc.createElement("Host");
         host.appendChild(doc.createTextNode("smtp.foo.bar"));
@@ -110,72 +114,7 @@ public class XMLUtil
     }
     
     /**
-        GetAdminEmailNodeList - Return the list of nodes with information on
-        the administrator's email
-    
-        @param xml XML file containing the info
-        @throws IOException Failed reading XML file
-        @throws ParserConfigurationException Bad internal configuration
-        @return list List of nodes with information on administrator's email
-    */
-    
-    public static NodeList getAdminEmailNodeList(File xml)
-            throws IOException, ParserConfigurationException
-    {
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        
-        NodeList list = null;
-        
-        try
-        {
-            Document doc = db.parse(xml);
-            
-            list = doc.getElementsByTagName("Admin").item(0).getChildNodes();
-        }
-        catch (SAXException ex)
-        {
-            System.err.println(ex.getMessage());
-        }
-        
-        return list;
-    }
-    
-    /**
-        GetGuestEmailNodeList - Return the list of nodes containing
-        information on the guest's email
-    
-        @param xml XML file containing the info
-        @throws IOException Failed reading XML file
-        @throws ParserConfigurationException Bad internal configuration
-        @return list List of nodes with information on guest's email
-    */
-    
-    public static NodeList getGuestEmailNodeList(File xml)
-            throws IOException, ParserConfigurationException
-    {
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        
-        NodeList list = null;
-        
-        try
-        {
-            Document doc = db.parse(xml);
-            
-            list = doc.getElementsByTagName("Guest").item(0).getChildNodes();
-        }
-        catch (SAXException ex)
-        {
-            System.err.println(ex.getMessage());
-        }
-        
-        return list;
-    }
-    
-    /**
         InitEmailXMLFile - Create the XML file containing email info
-        anew
     
         @param xml The XML file to contain the email info
         @throws TransformerException Error creating the XML file
@@ -201,11 +140,54 @@ public class XMLUtil
         tr.setOutputProperty(OutputKeys.INDENT, "yes");
         tr.setOutputProperty(OutputKeys.METHOD, "xml");
         tr.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-        tr.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+        tr.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");        
         
         DOMSource source = new DOMSource(doc);
         StreamResult result = new StreamResult(xml);
         
         tr.transform(source, result);
+    }
+    
+    /**
+        InitEmailXSDFile - Create the XSD file describing the email XML file
+    
+        @param xsd The XSD file to contain the description of the email XML file
+        @throws TransformerException Error creating the XSD file
+        @throws ParserConfigurationException Bad internal configuration
+    */
+    
+    
+    
+    /**
+        ValidateXML - Validate the given XML file with the given XSD
+    
+        @param xml The XML file to validate
+        @param xsd The XSD file to validate the XML file against
+        @throws IOException Error reading XML or XSD file
+        @throws SAXException Internal error
+        @return valid If the XML file conforms to the XSD
+    */
+    
+    public static boolean validateXML(File xml, File xsd)
+            throws IOException, SAXException
+    {
+        SchemaFactory sf = SchemaFactory
+                .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        Schema schema = sf.newSchema(xsd);
+        Validator validator = schema.newValidator();
+        
+        boolean valid = false;
+        
+        try
+        {
+            validator.validate(new StreamSource(xml));
+            valid = true;
+        }
+        catch (SAXException ex)
+        {
+            System.err.println(ex);
+        }
+        
+        return valid;
     }
 }

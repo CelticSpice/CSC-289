@@ -25,67 +25,86 @@ public class RecordAdd
     }
     
     /**
-        AddReservable - Adds a reservable (location & timeframe) to the
-        database
+        AddReservable - Add a record of a reservable to the database
     
-        @param location Reservable location to add
-        @param timeframe Reservable timeframe to add
-        @param cost The cost to reserve the reservable
-        @throws SQLException There was an error adding the record
-        @throws RecordExistsException Record already exists in database
+        @param reservable The reservable to add
+        @throws SQLException Error adding record to the database
+        @throws RecordExistsException Identical record exists in the database
     */
     
-    public void addReservable(Location location, Timeframe timeframe,
-                              BigDecimal cost)
+    public void addReservable(Reservable reservable)
             throws SQLException, RecordExistsException
     {
         // Ensure that the record does not already exist
         Query query = new Query();
         
-        if (!query.queryIfReservableExists(location, timeframe))
+        if (!query.queryIfReservableExists(reservable))
         {
-            // Get dates & times of timeframe as strings
-            String startDate = timeframe.getStartDate().toString();
-            String startTime = timeframe.getStartTime().toString();
-            String endDate = timeframe.getEndDate().toString();
-            String endTime = timeframe.getEndTime().toString();
+            ReserveDB db = ReserveDB.getInstance();
             
             // Avoid duplicating a record of a location
-            if (!query.queryIfLocationExists(location.getName()))
+            if (!query.queryIfLocationExists(reservable.getName()))
             {
                 sql = "INSERT INTO Locations " +
-                      "VALUES ('" + location.getName() + "', " +
-                                    location.getCapacity() + ")";
+                      "VALUES ('" + reservable.getName() + "', " +
+                                    reservable.getCapacity() + ")";
                 
-                ReserveDB.getInstance().addRecord(this);
+                db.addRecord(this);
             }
             
             // Avoid duplicating a record of a timeframe
-            if (!query.queryIfTimeframeExists(timeframe))
+            if (!query.queryIfTimeframeExists(reservable.getTimeframe()))
             {
                 sql = "INSERT INTO Timeframes " +
                       "(StartDate, StartTime, EndDate, EndTime) " +
-                      "VALUES ('" + startDate + "', '" + startTime + "', '" +
-                                    endDate   + "', '" + endTime + "')";
+                      "VALUES ('" + reservable.getStartDate() + "', '" +
+                                    reservable.getStartTime() + "', '" +
+                                    reservable.getEndDate()   + "', '" +
+                                    reservable.getEndTime() + "')";
                 
-                ReserveDB.getInstance().addRecord(this);
+                db.addRecord(this);
             }
             
-            String subSelect = "(SELECT Timeframes.TimeframeID " +
-                                "FROM Timeframes T " +
-                                "WHERE T.StartDate = '" + startDate + "' " +
-                                "AND T.StartTime = '" + startTime + "' " +
-                                "AND T.EndDate = '" + endDate + "' " +
-                                "AND T.EndTime = '" + endTime + "')";
+            String timeframeID = "(SELECT Timeframes.TimeframeID " +
+                                 "FROM Timeframes " +
+                                 "WHERE Timeframes.StartDate = '" +
+                                    reservable.getStartDate() + "' " +
+                                 "AND Timeframes.StartTime = '" +
+                                    reservable.getStartTime() + "' " +
+                                 "AND Timeframes.EndDate = '" +
+                                    reservable.getEndDate() + "' " +
+                                 "AND Timeframes.EndTime = '" +
+                                    reservable.getEndTime() + "')";
             
-            sql = "INSERT INTO LocationTimeframes " +
-                  "VALUES ('" + location.getName() + "', " + subSelect + ", " +
-                                cost.doubleValue() + ")";
+            sql = "INSERT INTO Reservables " +
+                  "VALUES ('" + reservable.getName() + "', " +
+                                timeframeID + ", " +
+                                reservable.getCost().doubleValue() + ")";
           
-            ReserveDB.getInstance().addRecord(this);
+            db.addRecord(this);
         }
         else
             throw new RecordExistsException();
+    }
+    
+    /**
+        AddReservation - Add a record of a reservation to the database
+    
+        @param reservation The reservation to add
+        @throws SQLException Error adding record to the database
+        @throws RecordExistsException Identical record exists in the database
+    */
+    
+    public void addReservation(Reservation reservation)
+            throws SQLException, RecordExistsException
+    {
+        // Ensure that the record does not already exist
+        Query query = new Query();
+        
+        if (!query.queryIfReservationExists(reservation))
+        {
+            
+        }
     }
     
     /**

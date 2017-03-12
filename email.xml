@@ -3,7 +3,7 @@
   <Admin>
     <SendAddress>foo@bar.com</SendAddress>
     <Host>smtp.foo.bar</Host>
-    <Security>TLS|None</Security>
+    <Security>TLS</Security>
     <Port>587</Port>
     <User>Mr. Foobar</User>
     <Pass><![CDATA[PasswordHere]]></Pass>
@@ -12,7 +12,7 @@
   <Guest>
     <SendAddress>foo@bar.com</SendAddress>
     <Host>smtp.foo.bar</Host>
-    <Security>TLS|None</Security>
+    <Security>TLS</Security>
     <Port>587</Port>
     <User>Mr. Foobar</User>
     <Pass><![CDATA[PasswordHere]]></Pass>

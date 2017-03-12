@@ -7,7 +7,8 @@
 package Data;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class Reservable
 {
@@ -51,14 +52,25 @@ public class Reservable
     }
     
     /**
-        GetEndDateTime - Return the ending date & time of the reservable
+        GetEndDate - Return the ending date of the reservable
     
-        @return The ending date & time of the reservable
+        @return The ending date of the reservable
     */
     
-    public LocalDateTime getEndDateTime()
+    public LocalDate getEndDate()
     {
-        return timeframe.getEndDate().atTime(timeframe.getEndTime());
+        return timeframe.getEndDate();
+    }
+    
+    /**
+        GetEndTime - Return the ending time of the reservable
+    
+        @return The ending time of the reservable
+    */
+    
+    public LocalTime getEndTime()
+    {
+        return timeframe.getEndTime();
     }
     
     /**
@@ -73,13 +85,35 @@ public class Reservable
     }
     
     /**
-        GetStartDateTime - Return the starting date & time of the reservable
+        GetStartDate - Return the starting date of the reservable
     
-        @return The starting date & time of the reservable
+        @return The starting date of the reservable
     */
     
-    public LocalDateTime getStartDateTime()
+    public LocalDate getStartDate()
     {
-        return timeframe.getStartDate().atTime(timeframe.getStartTime());
+        return timeframe.getStartDate();
+    }
+    
+    /**
+        GetStartTime - Return the starting time of the reservable
+    
+        @return The starting time of the reservable
+    */
+    
+    public LocalTime getStartTime()
+    {
+        return timeframe.getStartTime();
+    }
+    
+    /**
+        GetTimeframe - Return the reservable timeframe of the reservable
+    
+        @return The reservable timeframe of the reservable
+    */
+    
+    public ReservableTimeframe getTimeframe()
+    {
+        return timeframe;
     }
 }

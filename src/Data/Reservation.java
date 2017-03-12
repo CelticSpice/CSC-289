@@ -6,64 +6,85 @@
 
 package Data;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 public class Reservation
 {
     // Fields
     private boolean approved;
     private int numberAttending;
-    private ReservableLocation locationReserved;
-    private ReservableTimeframe timeframeReserved;
+    private Reservable reservable;
+    private Reserver reserver;
     private String eventType;
     
     /**
-        Constructor - Accepts the location & the
-        timeframe reserved, and the expected number of attendees
+        Constructor - Accepts the reserver, reservable & the expected number of
+        attendees
     
-        @param location Reservable location reserved
-        @param timeframe Reservable timeframe reserved
+        @param rver The reserver
+        @param rble The reservable
         @param numAttending Expected number of attendees
     */
     
-    public Reservation(ReservableLocation location,
-                       ReservableTimeframe timeframe,
-                       int numAttending)
+    public Reservation(Reserver rver, Reservable rble, int numAttending)
     {
         approved = false;
         numberAttending = numAttending;
-        locationReserved = location;
-        timeframeReserved = timeframe;
+        reservable = rble;
+        reserver = rver;
         eventType = "General";
     }
     
-    /**
-        Constructor - Accepts the location & the
-        timeframe reserved, expected number of attendees, and the event type
-        
-        @param location Reservable location reserved
-        @param timeframe Reservable timeframe reserved
+   /**
+        Constructor - Accepts the reserver, reservable, expected number of
+        attendees, & the event type
+    
+        @param rver The reserver
+        @param rble The reservable
         @param numAttending Expected number of attendees
-        @param type Event type
+        @param type The event type
     */
     
-    public Reservation(ReservableLocation location,
-                       ReservableTimeframe timeframe,
-                       int numAttending, String type)
+    public Reservation(Reserver rver, Reservable rble, int numAttending,
+                       String type)
     {
+        approved = false;
         numberAttending = numAttending;
-        locationReserved = location;
-        timeframeReserved = timeframe;
+        reservable = rble;
+        reserver = rver;
         eventType = type;
     }
     
     /**
-        IsApproved - Return if the reservation has been approved
-    
-        @return If the reservation is approved
+        Approve - Approve the reservation
     */
     
-    public boolean isApproved()
+    public void approve()
     {
-        return approved;
+        approved = true;
+    }
+    
+    /**
+        GetEndDate - Return the ending date of the reservation
+    
+        @return The ending date of the reservation
+    */
+    
+    public LocalDate getEndDate()
+    {
+        return reservable.getEndDate();
+    }
+    
+    /**
+        GetEndTime - Return the ending time of the reservation
+    
+        @return The ending time of the reservation
+    */
+    
+    public LocalTime getEndTime()
+    {
+        return reservable.getEndTime();
     }
     
     /**
@@ -78,14 +99,14 @@ public class Reservation
     }
     
     /**
-        GetLocation - Return the location reserved
+        GetLocationName - Return the name of the location reserved
     
-        @return The location reserved
+        @return The name of the location reserved
     */
     
-    public ReservableLocation getLocation()
+    public String getLocationName()
     {
-        return locationReserved;
+        return reservable.getName();
     }
     
     /**
@@ -100,13 +121,77 @@ public class Reservation
     }
     
     /**
-        GetReservedTimeframe - Return the timeframe reserved
+        GetReserver - Return the reserver of the reservation
     
-        @return The timeframe reserved
+        @return The reserver
     */
     
-    public ReservableTimeframe getReservedTimeframe()
+    public Reserver getReserver()
     {
-        return timeframeReserved;
+        return reserver;
+    }
+    
+    /**
+        GetReserverEmail - Return the email address of the reserver
+    
+        @return The email address of the reserver
+    */
+    
+    public String getReserverEmail()
+    {
+        return reserver.getEmailAddress();
+    }
+    
+    /**
+        GetReserverName - Return the name of the reserver
+    
+        @return The name of the reserver
+    */
+    
+    public String getReserverName()
+    {
+        return reserver.getName();
+    }
+    
+    /**
+        GetReserverPhone - Return the phone number of the reserver
+    */
+    
+    public String getReserverPhone()
+    {
+        return reserver.getPhoneNumer();
+    }
+    
+    /**
+        GetStartDate - Return the starting date of the reservation
+    
+        @return The starting date of the reservation
+    */
+    
+    public LocalDate getStartDate()
+    {
+        return reservable.getStartDate();
+    }
+    
+    /**
+        GetStartTime - Return the starting time of the reservation
+    
+        @return The starting time of the reservation
+    */
+    
+    public LocalTime getStartTime()
+    {
+        return reservable.getStartTime();
+    }
+    
+    /**
+        IsApproved - Return if the reservation is approved
+    
+        @return If the reservation is approved
+    */
+    
+    public boolean isApproved()
+    {
+        return approved;
     }
 }

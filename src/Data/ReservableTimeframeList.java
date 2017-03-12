@@ -153,7 +153,7 @@ public class ReservableTimeframeList extends ArrayList<ReservableTimeframe>
         @return A sublist of timeframes that end on the given time
     */
     
-    public ReservableTimeframeList filterEndDate(LocalTime time)
+    public ReservableTimeframeList filterEndTime(LocalTime time)
     {
         return new ReservableTimeframeList(stream()
                 .filter(t -> t.endsOnTime(time))

@@ -23,19 +23,22 @@ public class Query
     }
     
     /**
-        QueryIfLocationExists - Return if the location with the specified name
-        exists in the database
+        QueryIfLocationExists - Query if a record of a location exists in
+        the database
     
-        @param name The location name
-        @throws SQLException Error running the query
-        @return If the location with the specified name exists in the database
+        @param locationName The name of the location to query if exists in the
+                            database
+        @throws SQLException Error querying the database
+        @return Whether the record of the location with the specified name
+                exists in the database
     */
     
-    public boolean queryIfLocationExists(String name) throws SQLException
+    public boolean queryIfLocationExists(String locationName) 
+            throws SQLException
     {
         sql = "SELECT Locations.LocationName " +
               "FROM Locations " +
-              "WHERE LocationName = '" + name + "'";
+              "WHERE LocationName = '" + locationName + "'";
         
         return !ResultSetParser.isEmpty(ReserveDB.getInstance().runQuery(this));
     }
@@ -86,67 +89,83 @@ public class Query
     }
     
     /**
-        QueryReservedTimeframes - Query the database for timeframes that have
-        been reserved at the location specified by the given name
+        QueryIfReservableExists - Query if a record of a reservable exists in
+        the database
     
-        @param name The name of the location to query the reserved timeframes
-                    of
-        @throws SQLException Error running the query
-        @return timeframes The reservable timeframes the location is reserved
-                           for
+        @param reservable The reservable to query if exists in the database
+        @throws SQLException Error querying the database
+        @return Whether the record of the reservable exists in the database
     */
     
-    /**
-        QueryIfReservableExists - Query if a reservable matching the arguments
-        exists in the database
-    
-        @param location Location of the reservable
-        @param timeframe Timeframe of the reservable
-        @throws SQLException Error running the query
-        @return If a reservable matching the arguments exists
-    */
-    
-    public boolean queryIfReservableExists(Location location, 
-                                           Timeframe timeframe)
+    public boolean queryIfReservableExists(Reservable reservable)
             throws SQLException
     {
-        sql = "SELECT Locations.LocationName, Locations.Capacity, " +
-              "Timeframes.StartDate, Timeframes.StartTime, " +
-              "Timeframes.EndDate, Timeframes.EndTime, " +
-              "LocationTimeframes.Cost " +
-              "FROM LocationTimeframes " +
+        sql = "SELECT Locations.LocationName, Timeframes.StartDate, " +
+              "Timeframes.StartTime, Timeframes.EndDate, Timeframes.EndTime " +
+              "FROM Reservables " +
               "INNER JOIN Locations " +
-              "ON LocationTimeframes.LocationName = Locations.LocationName " +
+              "ON Reservables.LocationName = Locations.LocationName " +
               "INNER JOIN Timeframes " +
-              "ON LocationTimeframes.TimeframeID = Timeframes.TimeframeID " +
-              "WHERE Locations.LocationName = '" + location.getName() + "' " +
-              "AND StartDate = '" + timeframe.getStartDate() + "' " +
-              "AND StartTime = '" + timeframe.getStartTime() + "' " +
-              "AND EndDate = '" + timeframe.getEndDate() + "' " +
-              "AND EndTime = '" + timeframe.getEndTime() + "'";
+              "ON Reservables.TimeframeID = Timeframes.TimeframeID " +
+              "WHERE Locations.LocationName = '" + reservable.getName()+ "' " +
+              "AND StartDate = '" + reservable.getStartDate() + "' " +
+              "AND StartTime = '" + reservable.getStartTime() + "' " +
+              "AND EndDate = '" + reservable.getEndDate() + "' " +
+              "AND EndTime = '" + reservable.getEndTime() + "'";
         
         return !ResultSetParser.isEmpty(ReserveDB.getInstance().runQuery(this));
     }
     
     /**
-        QueryIfTimeframeExists - Query if the timeframe specified exists in the
-        database
+        QueryIfReservationExists - Query if a record of a reservation exists
+        in the database
     
-        @param t Timeframe to check if exists in the database
-        @throws SQLException Error running the query
-        @return If the specified timeframe exists in the database
+        @param reservation The reservation to query if exists in the database
+        @throws SQLException Error querying the database
+        @return Whether the record of the reservation exists in the database
     */
     
-    public boolean queryIfTimeframeExists(Timeframe t)
+    public boolean queryIfReservationExists(Reservation reservation)
+            throws SQLException
+    {
+        sql = "SELECT Locations.LocationName, Timeframes.StartDate, " +
+              "Timeframes.StartTime, Timeframes.EndDate, Timeframes.EndTime, " +
+              "FROM Reservations " +
+              "INNER JOIN Reservables " +
+              "ON Reservations.LocationName = Reservables.LocationName " +
+              "AND Reservations.TimeframeID = Reservables.TimeframeID " +
+              "INNER JOIN Locations " +
+              "ON Reservables.LocationName = Locations.LocationName " +
+              "INNER JOIN Timeframes " +
+              "ON Reservables.TimeframeID = Timeframes.TimeframeID " +
+              "WHERE LocationName = '" + reservation.getLocationName() + "' " +
+              "AND StartDate = '" + reservation.getStartDate() + "' " +
+              "AND StartTime = '" + reservation.getStartTime() + "' " +
+              "AND EndDate = '" + reservation.getEndDate() + "' " +
+              "AND EndTime = '" + reservation.getEndTime() + "'";
+        
+        return !ResultSetParser.isEmpty(ReserveDB.getInstance().runQuery(this));
+    }
+    
+    /**
+        QueryIfTimeframeExists - Query if a record of a timeframe exists
+        in the database
+    
+        @param timeframe The timeframe to query if exists in the database
+        @throws SQLException Error querying the database
+        @return Whether the record of the timeframe exists in the database
+    */
+    
+    public boolean queryIfTimeframeExists(Timeframe timeframe)
             throws SQLException
     {
         sql = "SELECT Timeframes.StartDate, Timeframes.StartTime, " +
               "Timeframes.EndDate, Timeframes.EndTime " +
               "FROM Timeframes " +
-              "WHERE StartDate = '" + t.getStartDate() + "' " +
-              "AND StartTime = '" + t.getStartTime() + "' " +
-              "AND EndDate = '" + t.getEndDate() + "' " +
-              "AND EndTime = '" + t.getEndTime() + "'";
+              "WHERE StartDate = '" + timeframe.getStartDate() + "' " +
+              "AND StartTime = '" + timeframe.getStartTime() + "' " +
+              "AND EndDate = '" + timeframe.getEndDate() + "' " +
+              "AND EndTime = '" + timeframe.getEndTime() + "'";
         
         return !ResultSetParser.isEmpty(ReserveDB.getInstance().runQuery(this));
     }

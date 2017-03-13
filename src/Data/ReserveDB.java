@@ -16,7 +16,7 @@ public class ReserveDB
 {
     // Fields
     private static final String DB = "jdbc:mariadb://localhost?" +
-                                     "user=burnst_test&password=PASSWORD";
+                                     "user=shane&password=mariadb";
     
     private static final String DB_NAME = "ReserveDB";
     
@@ -72,50 +72,71 @@ public class ReserveDB
     
     public void createTables(Statement statement) throws SQLException
     {        
-        // Create Reservers table
-        String sql = "CREATE TABLE Reservers ("   +
-                     "reserverID int NOT NULL AUTO_INCREMENT, " +
-                     "firstName varchar(35) NOT NULL, "         +
-                     "lastName varchar(35) NOT NULL, "          +
-                     "email varchar(255) NOT NULL, "            +
-                     "phone varchar(16) NOT NULL, "             +
-                     "PRIMARY KEY (reserverID)"                 +
+        // Create Locations table
+        String sql = "CREATE TABLE Locations(\n" +
+                     "locationName VARCHAR(20) NOT NULL," +
+                     "capacity INT NOT NULL," +
+                     "PRIMARY KEY (locationName)" +
                      ")";
+        
+        statement.execute(sql);
+        System.out.println("Created Locations table");
+        
+        // Create Timeframe table
+        sql = "CREATE TABLE Timeframes(" +
+              "timeframeID INT NOT NULL AUTO_INCREMENT," +
+              "startDate DATE NOT NULL," +
+              "endDate DATE NOT NULL," +
+              "startTime TIME NOT NULL," +
+              "endTime TIME NOT NULL," +
+              "PRIMARY KEY (timeframeID)" +
+              ")";
+
+        statement.execute(sql);
+        System.out.println("Created Timeframes table");
+        
+        // Create Reservables table        
+        sql = "CREATE TABLE Reservables(" +
+              "locationName VARCHAR(20) NOT NULL," +
+              "timeframeID INT NOT NULL," +
+              "cost DECIMAL(7,2) NOT NULL," +
+              "FOREIGN KEY (locationName) REFERENCES Locations(locationName)," +
+              "FOREIGN KEY (timeframeID) REFERENCES Timeframes(timeframeID)," +
+              "CONSTRAINT locTime PRIMARY KEY (locationName, timeframeID)" +
+              ")";
+        
+        statement.execute(sql);
+        System.out.println("Created Reservables table");
+        
+        // Create Reservers table        
+        sql = "CREATE TABLE Reservers(" +
+              "reserverID INT NOT NULL AUTO_INCREMENT," +
+              "firstName VARCHAR(35) NOT NULL," +
+              "lastName VARCHAR(35) NOT NULL," +
+              "email VARCHAR(255) NOT NULL," +
+              "phone VARCHAR(16) NOT NULL," +
+              "PRIMARY KEY (reserverID)" +
+              ")";
         
         statement.execute(sql);
         System.out.println("Created Reservers table");
         
-        // Create Reservables table
-        sql = "CREATE TABLE Reservables ("    +
-              "reservableID int NOT NULL AUTO_INCREMENT, "  +
-              "locationName varchar(35) NOT NULL, "         +
-              "capacity int NOT NULL, "                     +
-              "startDate date NOT NULL, "                   +
-              "endDate date NOT NULL, "                     +
-              "startTime time NOT NULL, "                   +
-              "endTime time NOT NULL, "                     +
-              "cost decimal(7,2) NOT NULL, "                +
-              "PRIMARY KEY (reservableID)"                  +
-              ")";
-
-        statement.execute(sql);
-        System.out.println("Created Reservables table");
-        
-        // Create Reservations table        
-        sql = "CREATE TABLE Reservations ("   +
-              "reservableID int NOT NULL, "                 +
-              "reserverID int NOT NULL, "                   +
-              "eventType varchar(35) NOT NULL, "            +
-              "numberAttending int NOT NULL, "              +
-              "PRIMARY KEY (reservableID), "                +
-              "FOREIGN KEY (reservableID) "                 +
-              "REFERENCES Reservables(reservableID), "      +
-              "FOREIGN KEY (reserverID) "                   +
-              "REFERENCES Reservers(reserverID)"            +
+        // Create Reservervations table        
+        sql = "CREATE TABLE Reservations(" +
+              "locationName VARCHAR(20) NOT NULL," +
+              "timeframeID INT NOT NULL," +
+              "reserverID INT NOT NULL," +
+              "eventType VARCHAR(35) NOT NULL," +
+              "numberAttending INT NOT NULL," +
+              "approved BOOLEAN NOT NULL DEFAULT 0," +
+              "FOREIGN KEY (locationName) REFERENCES Locations(locationName)," +
+              "FOREIGN KEY (timeframeID) REFERENCES Timeframes(timeframeID)," +
+              "FOREIGN KEY (reserverID) REFERENCES Reservers(reserverID)," +
+              "CONSTRAINT locTime PRIMARY KEY (locationName, timeframeID)" +
               ")";
         
         statement.execute(sql);
-        System.out.println("Created Reservations table");
+        System.out.println("Created Reservervations table");
     }
     
     /**

@@ -1,8 +1,23 @@
-/* This script drops everything in reservDB
-   in the proper order. */
+-- Drop Reservations table.
 
-DROP TABLE Reservations;
+DROP TABLE IF EXISTS Reservations;
 
-DROP TABLE Reservables;
 
-DROP TABLE Reservers;
+-- Drop Reservers table.
+
+DROP TABLE IF EXISTS Reservers;
+
+
+-- Drop Reservables table.
+
+DROP TABLE IF EXISTS Reservables;
+
+
+-- Drop Timeframes table.
+
+DROP TABLE IF EXISTS Timeframes;
+
+
+-- Drop Locations table.
+
+DROP TABLE IF EXISTS Locations;

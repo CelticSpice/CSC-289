@@ -92,4 +92,14 @@ public class Reserver
     {
         reservations.remove(index);
     }
+    
+    /**
+        GetContactInfo - Get the contact info of this reserver
+         
+        @return the contact info
+     */
+    public ContactInfo getContactInfo()
+    {
+        return contactInfo;
+    }
 }

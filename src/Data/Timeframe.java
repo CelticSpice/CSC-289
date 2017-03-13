@@ -6,6 +6,7 @@
 
 package Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -201,7 +202,9 @@ public class Timeframe
     }
     
     /**
-        ToString - Return a string representation of the object
+        ToString - Return a string representation of the object. The
+        timeframe's starting & ending date & time will be returned as a string
+        in the form of: yyyy-MM-dd, HH:mm
     
         @return String representation of the object
     */

@@ -7,6 +7,7 @@
 package Data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class ReservableLocation extends Location
 {
@@ -80,6 +81,38 @@ public class ReservableLocation extends Location
     }
     
     /**
+        GetTimeframesEndingOn - Return a list of timeframes allocated to the
+        location ending on the given datetime
+    
+        @param datetime Datetime to get a list of timeframes ending on
+        @return A list of timeframes ending on the specified date
+    */
+    
+    public ReservableTimeframeList getTimeframesEndingOn
+        (LocalDateTime datetime)
+    {
+        return timeframes
+                .filterEndDate(datetime.toLocalDate())
+                .filterEndTime(datetime.toLocalTime());
+    }
+    
+    /**
+        GetTimeframesStartingOn - Return a list of timeframes allocated to the
+        location starting on the given datetime
+    
+        @param datetime Datetime to get a list of timeframes starting on
+        @return A list of timeframes starting on the specified date
+    */
+    
+    public ReservableTimeframeList getTimeframesStartingOn
+        (LocalDateTime datetime)
+    {
+        return timeframes
+                .filterStartDate(datetime.toLocalDate())
+                .filterStartTime(datetime.toLocalTime());
+    }
+    
+    /**
         IsAvailable - Return whether the location is available to be reserved
         on the specified date
     
@@ -90,25 +123,14 @@ public class ReservableLocation extends Location
     
     public boolean isAvailable(LocalDate date)
     {
-        boolean avail = false;
-        int i = 0;
-                
-        while (!avail && i < timeframes.size())
-        {
-            if (!timeframes.get(i).isReserved() &&
-                 timeframes.get(i).startsOnDate(date))
-            {
-                avail = true;
-            }
-            else
-                i++;
-        }
-        
-        return avail;
+        ReservableTimeframeList list = timeframes
+                .filterStartDate(date)
+                .filterNotReserved();
+        return !list.isEmpty();
     }
     
     /**
-        NumTimeframes - Return the number of timeframes
+        NumTimeframes - Return the number of reservable timeframes
         allocated to the location
     
         @return The number of timeframes allocated to the location
@@ -133,14 +155,13 @@ public class ReservableLocation extends Location
     }
     
     /**
-        Reserve - Reserve the location at the timeframe specified by the given
-        index
+        ReserveAt - Reserve the location at the given timeframe
     
-        @param index Index specifying timeframe to reserve the location for
+        @param timeframe Timeframe to reserve the location at
     */
     
-    public void reserve(int index)
+    public void reserveAt(ReservableTimeframe timeframe)
     {
-        timeframes.get(index).reserve();
+        
     }
 }

@@ -73,7 +73,7 @@ public class ResultSetParser
             
             BigDecimal cost = rs.getBigDecimal("Cost");
             
-            ReservableTimeframe timeframe = new ReservableTimeframe
+            Timeframe timeframe = new Timeframe
                     (startDateTime, endDateTime, cost);
             
             return new Reservable(location, timeframe);
@@ -91,10 +91,10 @@ public class ResultSetParser
         @return timeframes The reservable timeframes defined by the result set
     */
     
-    public static ReservableTimeframeList parseReservableTimeframes
+    public static TimeframeList parseReservableTimeframes
         (ResultSet rs) throws SQLException
     {
-        ReservableTimeframeList timeframes = new ReservableTimeframeList();
+        TimeframeList timeframes = new TimeframeList();
         
         if (!isEmpty(rs))
         {
@@ -115,7 +115,7 @@ public class ResultSetParser
                 
                 cost = rs.getBigDecimal("Cost");
                 
-                timeframes.add(new ReservableTimeframe(startDateTime,
+                timeframes.add(new Timeframe(startDateTime,
                                                        endDateTime, cost));     
             }
         }

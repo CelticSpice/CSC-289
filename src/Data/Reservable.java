@@ -14,7 +14,7 @@ public class Reservable
 {
     // Fields
     private Location location;
-    private ReservableTimeframe timeframe;
+    private Timeframe timeframe;
     
     /**
         Constructor - Accepts the location & timeframe of the reservable
@@ -23,7 +23,7 @@ public class Reservable
         @param time The timeframe
     */
     
-    public Reservable(Location loc, ReservableTimeframe time)
+    public Reservable(Location loc, Timeframe time)
     {
         location = loc;
         timeframe = time;
@@ -112,7 +112,7 @@ public class Reservable
         @return The reservable timeframe of the reservable
     */
     
-    public ReservableTimeframe getTimeframe()
+    public Timeframe getTimeframe()
     {
         return timeframe;
     }

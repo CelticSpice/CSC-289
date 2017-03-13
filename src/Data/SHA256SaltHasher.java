@@ -63,6 +63,9 @@ public class SHA256SaltHasher
     {
         MessageDigest sha256 = MessageDigest.getInstance(ALGO);
         
+        if (input == null)
+            input = "";
+        
         input += salt;
         
         byte[] digestResult = sha256.digest(input.getBytes());

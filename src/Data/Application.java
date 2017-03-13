@@ -49,7 +49,7 @@ public class Application
                 .of(LocalDate.of(2018, 4, 26), LocalTime.of(6, 0),
                         ZoneId.systemDefault());
         
-        ReservableTimeframe timeframe = new ReservableTimeframe
+        Timeframe timeframe = new Timeframe
                 (start, end, new BigDecimal(175));
         
         Admin.addReservable(new Reservable(loc, timeframe));

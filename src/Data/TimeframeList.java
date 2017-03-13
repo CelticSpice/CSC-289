@@ -1,5 +1,5 @@
 /**
-    A list of reservable timeframes
+    A list of timeframes
     CSC-289 - Group 4
     @author Timothy Burns
 */
@@ -14,26 +14,26 @@ import java.util.Comparator;
 import java.util.List;
 import static java.util.stream.Collectors.toList;
 
-public class ReservableTimeframeList extends ArrayList<ReservableTimeframe>
+public class TimeframeList extends ArrayList<Timeframe>
 {    
     /*
         Static class objects
     */
     
     /**
-        COST_COMPARATOR - Comparator to compare reservable timeframes on their
+        COST_COMPARATOR - Comparator to compare timeframes on their
         cost
     */
     
-    public static final Comparator<ReservableTimeframe> COST_COMPARATOR =
+    public static final Comparator<Timeframe> COST_COMPARATOR =
             (a, b) -> a.getCost().compareTo(b.getCost());
     
     /**
-        END_DATE_COMPARATOR - Comparator to compare reservable timeframes on
+        END_DATE_COMPARATOR - Comparator to compare timeframes on
         their end dates
     */
     
-    public static final Comparator<ReservableTimeframe> END_DATE_COMPARATOR =
+    public static final Comparator<Timeframe> END_DATE_COMPARATOR =
             (a, b) -> {
                 LocalDate dateA = a.getEndDate();
                 LocalDate dateB = b.getEndDate();
@@ -41,11 +41,11 @@ public class ReservableTimeframeList extends ArrayList<ReservableTimeframe>
             };
     
     /**
-        END_TIME_COMPARATOR - Comparator to compare reservable timeframes on
+        END_TIME_COMPARATOR - Comparator to compare timeframes on
         their end times
     */
     
-    public static final Comparator<ReservableTimeframe> END_TIME_COMPARATOR =
+    public static final Comparator<Timeframe> END_TIME_COMPARATOR =
             (a, b) -> {
                 LocalTime timeA = a.getEndTime();
                 LocalTime timeB = b.getEndTime();
@@ -53,11 +53,11 @@ public class ReservableTimeframeList extends ArrayList<ReservableTimeframe>
             };
     
     /**
-        START_DATE_COMPARATOR - Comparator to compare reservable timeframes on
+        START_DATE_COMPARATOR - Comparator to compare timeframes on
         their start dates
     */
     
-    public static final Comparator<ReservableTimeframe> START_DATE_COMPARATOR =
+    public static final Comparator<Timeframe> START_DATE_COMPARATOR =
             (a, b) -> {
                 LocalDate dateA = a.getStartDate();
                 LocalDate dateB = b.getStartDate();
@@ -65,11 +65,11 @@ public class ReservableTimeframeList extends ArrayList<ReservableTimeframe>
             };
     
     /**
-        START_TIME_COMPARATOR - Comparator to compare reservable timeframes on
+        START_TIME_COMPARATOR - Comparator to compare timeframes on
         their start times
     */
     
-    public static final Comparator<ReservableTimeframe> START_TIME_COMPARATOR =
+    public static final Comparator<Timeframe> START_TIME_COMPARATOR =
             (a, b) -> {
                 LocalTime timeA = a.getStartTime();
                 LocalTime timeB = b.getStartTime();
@@ -80,19 +80,19 @@ public class ReservableTimeframeList extends ArrayList<ReservableTimeframe>
         Constructor
     */
     
-    public ReservableTimeframeList()
+    public TimeframeList()
     {
         super();
     }
     
     /**
-        Constructor - Accepts a list of reservable timeframes to include
+        Constructor - Accepts a list of timeframes to include
         in the list
     
-        @param timeframes List of reservable timeframes to include in the list
+        @param timeframes List of timeframes to include in the list
     */
     
-    public ReservableTimeframeList(List<ReservableTimeframe> timeframes)
+    public TimeframeList(List<Timeframe> timeframes)
     {
         super(timeframes);
     }
@@ -104,9 +104,9 @@ public class ReservableTimeframeList extends ArrayList<ReservableTimeframe>
         @return A sublist of timeframes with the given cost
     */
     
-    public ReservableTimeframeList filerCost(BigDecimal cost)
+    public TimeframeList filerCost(BigDecimal cost)
     {
-        return new ReservableTimeframeList(stream()
+        return new TimeframeList(stream()
                 .filter(t -> t.getCost().equals(cost))
                 .collect(toList()));
     }
@@ -121,10 +121,10 @@ public class ReservableTimeframeList extends ArrayList<ReservableTimeframe>
                 inclusively
     */
     
-    public ReservableTimeframeList filterCost(BigDecimal costA,
+    public TimeframeList filterCost(BigDecimal costA,
                                                 BigDecimal costB)
     {
-        return new ReservableTimeframeList(stream()
+        return new TimeframeList(stream()
                 .filter(t -> t.getCost().compareTo(costA) >= 0 &&
                              t.getCost().compareTo(costB) <= 0)
                 .collect(toList()));
@@ -138,9 +138,9 @@ public class ReservableTimeframeList extends ArrayList<ReservableTimeframe>
         @return A sublist of timeframes that end on the given date
     */
     
-    public ReservableTimeframeList filterEndDate(LocalDate date)
+    public TimeframeList filterEndDate(LocalDate date)
     {
-        return new ReservableTimeframeList(stream()
+        return new TimeframeList(stream()
                 .filter(t -> t.endsOnDate(date))
                 .collect(toList()));
     }
@@ -153,9 +153,9 @@ public class ReservableTimeframeList extends ArrayList<ReservableTimeframe>
         @return A sublist of timeframes that end on the given time
     */
     
-    public ReservableTimeframeList filterEndTime(LocalTime time)
+    public TimeframeList filterEndTime(LocalTime time)
     {
-        return new ReservableTimeframeList(stream()
+        return new TimeframeList(stream()
                 .filter(t -> t.endsOnTime(time))
                 .collect(toList()));
     }
@@ -167,9 +167,9 @@ public class ReservableTimeframeList extends ArrayList<ReservableTimeframe>
         @return A sublist of timeframes that have not been reserved
     */
     
-    public ReservableTimeframeList filterNotReserved()
+    public TimeframeList filterNotReserved()
     {
-        return new ReservableTimeframeList(stream()
+        return new TimeframeList(stream()
                 .filter(t -> !t.isReserved())
                 .collect(toList()));
     }
@@ -180,9 +180,9 @@ public class ReservableTimeframeList extends ArrayList<ReservableTimeframe>
         @return A sublist of timeframes that have been reserved
     */
     
-    public ReservableTimeframeList filterReserved()
+    public TimeframeList filterReserved()
     {
-        return new ReservableTimeframeList(stream()
+        return new TimeframeList(stream()
                 .filter(t -> t.isReserved())
                 .collect(toList()));
     }
@@ -195,9 +195,9 @@ public class ReservableTimeframeList extends ArrayList<ReservableTimeframe>
         @return A sublist of timeframes that start on the given date
     */
     
-    public ReservableTimeframeList filterStartDate(LocalDate date)
+    public TimeframeList filterStartDate(LocalDate date)
     {
-        return new ReservableTimeframeList(stream()
+        return new TimeframeList(stream()
                 .filter(t -> t.startsOnDate(date))
                 .collect(toList()));
     }
@@ -210,10 +210,63 @@ public class ReservableTimeframeList extends ArrayList<ReservableTimeframe>
         @return A sublist of timeframes that start on the given time
     */
     
-    public ReservableTimeframeList filterStartTime(LocalTime time)
+    public TimeframeList filterStartTime(LocalTime time)
     {
-        return new ReservableTimeframeList(stream()
+        return new TimeframeList(stream()
                 .filter(t -> t.startsOnTime(time))
                 .collect(toList()));
+    }
+    
+    /**
+        Sort - Sort the list of timeframes according to the provided comparators
+    
+        @param cmprtrs Comparators to sort the list of timeframes by
+    */
+    
+    public void sort(Comparator<Timeframe> ... cmprtrs)
+    {
+        MultiComparator<Timeframe> comparator = new MultiComparator(cmprtrs);
+        sort(comparator);
+    }
+    
+    /**
+        MultiComparator inner class
+    */
+    
+    private class MultiComparator<Timeframe> implements Comparator<Timeframe>
+    {
+        // Fields
+        private final Comparator<Timeframe>[] comparators;
+
+        /**
+            Constructor - Accepts an array of timeframe comparators
+            @param cmprtrs Array of timeframe comparators
+        */
+        
+        public MultiComparator(Comparator<Timeframe>... cmprtrs)
+        {
+            comparators = cmprtrs;
+        }
+        
+        /**
+            Compare - Compare timeframes using the multiple comparators within
+            this comparator
+        
+            @param t1 Timeframe 1
+            @param t2 Timeframe 2
+            @return The result of the comparison
+        */
+
+        @Override
+        public int compare(Timeframe t1, Timeframe t2)
+        {
+            for (Comparator<Timeframe> c : comparators)
+            {
+                int result = c.compare(t1, t2);
+                if (result != 0)
+                    return result;
+            }
+            return 0;
+        }
     }
 }

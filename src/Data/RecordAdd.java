@@ -7,7 +7,6 @@
 package Data;
 
 import Exception.RecordExistsException;
-import java.math.BigDecimal;
 import java.sql.SQLException;
 
 public class RecordAdd

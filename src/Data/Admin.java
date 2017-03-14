@@ -23,11 +23,22 @@ public class Admin
         @throws RecordExistsException A record of an identical reservable
                                       exists in the database
     */
-    
+
     public static void addReservable(Reservable reservable) 
             throws SQLException, RecordExistsException
     {
         new RecordAdd().addReservable(reservable);
+    }
+
+    /**
+        RemoveReservable - Remove a reservable that can be reserved
+
+        @param reservable The reservable to remove
+    */
+
+    public static void removeReservable(Reservable reservable)
+    {
+        new RecordDelete().deleteReservable(reservable);
     }
     
     /**

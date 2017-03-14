@@ -6,11 +6,7 @@
 
 package Data;
 
-import java.io.UnsupportedEncodingException;
-import java.util.Properties;
 import java.util.prefs.BackingStoreException;
-import javax.mail.MessagingException;
-import javax.mail.internet.AddressException;
 
 public class Application
 {    
@@ -20,8 +16,7 @@ public class Application
         @param args The arguments
     */
     
-    public static void main(String[] args) throws BackingStoreException,
-                AddressException, MessagingException, UnsupportedEncodingException
+    public static void main(String[] args) throws BackingStoreException
     {
         SystemUtil.initPreferences();
     }

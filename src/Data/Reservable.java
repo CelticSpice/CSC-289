@@ -1,5 +1,5 @@
 /**
-    A reservable, encapsulating a location & reservable timeframe
+    A reservable, encapsulating a location & timeframe
     CSC-289 - Group 4
     @author Timothy Burns
 */
@@ -107,9 +107,9 @@ public class Reservable
     }
     
     /**
-        GetTimeframe - Return the reservable timeframe of the reservable
+        GetTimeframe - Return the timeframe of the reservable
     
-        @return The reservable timeframe of the reservable
+        @return The timeframe of the reservable
     */
     
     public Timeframe getTimeframe()

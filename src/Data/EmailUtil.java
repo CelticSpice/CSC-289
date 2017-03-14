@@ -83,7 +83,7 @@ public class EmailUtil
         message.setRecipient(Message.RecipientType.TO, to);
         message.setSubject("Message from Guest " + senderName);
         message.setSentDate(new Date());
-        message.setText("Message from guest" + address.toString() +
+        message.setText("Message from guest " + address.toString() +
                 "\n\n" + body);
         Transport.send(message);
     }

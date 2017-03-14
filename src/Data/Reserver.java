@@ -91,7 +91,7 @@ public class Reserver
         @return The phone number of the reserver
     */
     
-    public String getPhoneNumer()
+    public String getPhoneNumber()
     {
         return contactInfo.getPhoneNumber();
     }

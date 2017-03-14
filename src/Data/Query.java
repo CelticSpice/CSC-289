@@ -199,6 +199,20 @@ public class Query
     }
     
     /**
+        QueryLocationReservations - Query for reservations that have been made
+        at the location with the given name
+    
+        @param locationName Name of location to query reservations made at
+        @return A list of reservations that have been made at the location with
+                the given name
+    */
+    
+    public ReservationList queryLocationReservations(String locationName)
+    {
+        return null;
+    }
+    
+    /**
         ToString - Return a string representation of the object
     
         @return A string representation of the object

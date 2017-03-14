@@ -6,16 +6,11 @@
 
 package Data;
 
-import Exception.RecordExistsException;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.sql.SQLException;
+import java.io.UnsupportedEncodingException;
+import java.util.Properties;
 import java.util.prefs.BackingStoreException;
+import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.xpath.XPathExpressionException;
-import org.xml.sax.SAXException;
 
 public class Application
 {    
@@ -24,15 +19,9 @@ public class Application
     
         @param args The arguments
     */
-    public static void main(String[] args) throws SQLException, IOException,
-                                                  NoSuchAlgorithmException,
-                                                  ParserConfigurationException,
-                                                  TransformerException,
-                                                  SAXException,
-                                                  XPathExpressionException,
-                                                  AddressException,
-                                                  RecordExistsException,
-                                                  BackingStoreException
+    
+    public static void main(String[] args) throws BackingStoreException,
+                AddressException, MessagingException, UnsupportedEncodingException
     {
         SystemUtil.initPreferences();
     }

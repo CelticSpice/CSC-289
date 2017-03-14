@@ -7,12 +7,10 @@
 package Data;
 
 import Exception.RecordExistsException;
-import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
+import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPathExpressionException;
-import org.xml.sax.SAXException;
 
 public class Guest
 {
@@ -23,17 +21,13 @@ public class Guest
         @param address The email address that may be replied to
         @param message The message to send to the administrator
         @throws AddressException Malformed email address
-        @throws IOException Error reading email information from email XML file
-        @throws ParserConfigurationException Error reading email information
-                                             from email XML file
-        @throws SAXException Bad internal configuration for XML parser
-        @throws XPathExpressionException Error parsing information from email
-                                         XML file
+        @throws MessagingException Error sending message
+        @throws UnsupportedEncodingException Failed to encode name in address
     */
     
     public static void emailAdmin(String name, String address, String message)
-            throws AddressException, IOException, ParserConfigurationException,
-                   SAXException, XPathExpressionException
+            throws AddressException, MessagingException,
+                   UnsupportedEncodingException
     {
         EmailUtil.emailAdmin(name, address, message);
     }

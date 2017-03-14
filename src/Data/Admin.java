@@ -8,6 +8,7 @@ package Data;
 
 import Exception.RecordExistsException;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import javax.mail.internet.AddressException;
 import javax.xml.parsers.ParserConfigurationException;
@@ -53,5 +54,18 @@ public class Admin
                    SAXException, XPathExpressionException
     {
         EmailUtil.emailReserver(reserver, subject, message);
+    }
+    
+    /**
+        UpdatePassword - Update the administrator's password
+    
+        @param pass The updated password
+        @throws NoSuchAlgorithmException Error hashing password
+    */
+    
+    public static void updatePassword(String pass)
+            throws NoSuchAlgorithmException
+    {
+        SystemUtil.updateAdminPassword(pass);
     }
 }

@@ -16,7 +16,8 @@ public class ReserveDB
 {
     // Fields
     private static final String DB = "jdbc:mariadb://localhost?" +
-                                     "user=shane&password=mariadb";
+                                     "user=" + SystemUtil.getDBUser() +"&" +
+                                     "pass=" + SystemUtil.getDBPass();
     
     private static final String DB_NAME = "ReserveDB";
     

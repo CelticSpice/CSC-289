@@ -71,7 +71,7 @@ public class Query
         @return timeframes The reservable timeframes allocated to the location
     */
     
-    public ReservableTimeframeList queryLocationTimeframes(String name)
+    public TimeframeList queryLocationTimeframes(String name)
             throws SQLException
     {
         sql = "SELECT Timeframes.StartDate, Timeframes.StartTime, " +

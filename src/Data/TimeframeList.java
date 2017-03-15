@@ -53,6 +53,24 @@ public class TimeframeList extends ArrayList<Timeframe>
             };
     
     /**
+        RESERVED_COMPARATOR - Comparator to compare timeframes on
+        their reserved status
+    */
+    
+    public static final Comparator<Timeframe> RESERVED_COMPARATOR =
+            (a, b) -> {
+                if (a.isReserved() && b.isReserved() ||
+                   !a.isReserved() && !b.isReserved())
+                {
+                    return 0;
+                }
+                else if (a.isReserved() && !b.isReserved())
+                    return 1;
+                else
+                    return -1;
+            };
+    
+    /**
         START_DATE_COMPARATOR - Comparator to compare timeframes on
         their start dates
     */
@@ -227,46 +245,5 @@ public class TimeframeList extends ArrayList<Timeframe>
     {
         MultiComparator<Timeframe> comparator = new MultiComparator(cmprtrs);
         sort(comparator);
-    }
-    
-    /**
-        MultiComparator inner class
-    */
-    
-    private class MultiComparator<Timeframe> implements Comparator<Timeframe>
-    {
-        // Fields
-        private final Comparator<Timeframe>[] comparators;
-
-        /**
-            Constructor - Accepts an array of timeframe comparators
-            @param cmprtrs Array of timeframe comparators
-        */
-        
-        public MultiComparator(Comparator<Timeframe>... cmprtrs)
-        {
-            comparators = cmprtrs;
-        }
-        
-        /**
-            Compare - Compare timeframes using the multiple comparators within
-            this comparator
-        
-            @param t1 Timeframe 1
-            @param t2 Timeframe 2
-            @return The result of the comparison
-        */
-
-        @Override
-        public int compare(Timeframe t1, Timeframe t2)
-        {
-            for (Comparator<Timeframe> c : comparators)
-            {
-                int result = c.compare(t1, t2);
-                if (result != 0)
-                    return result;
-            }
-            return 0;
-        }
     }
 }

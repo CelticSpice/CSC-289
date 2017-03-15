@@ -7,9 +7,8 @@
 package Data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
@@ -21,24 +20,20 @@ public class TimeframeTest {
     @Test
     public void testConsistsOfDoesConsist() {
         // March 30, 2017 - 6:30
-        ZonedDateTime startDateTime = ZonedDateTime.of(
-                LocalDate.of(2017, 3, 30), LocalTime.of(6, 30),
-                ZoneId.systemDefault());
+        LocalDateTime startDateTime = LocalDateTime.of(
+                LocalDate.of(2017, 3, 30), LocalTime.of(6, 30));
         
         // April 2, 2017 - 14:00
-        ZonedDateTime endDateTime = ZonedDateTime.of(
-                LocalDate.of(2017, 4, 2), LocalTime.of(14, 0),
-                ZoneId.systemDefault());
+        LocalDateTime endDateTime = LocalDateTime.of(
+                LocalDate.of(2017, 4, 2), LocalTime.of(14, 0));
         
         // March 25, 2017 - 6:00
-        ZonedDateTime otherStartDateTime = ZonedDateTime.of(
-                LocalDate.of(2017, 3, 25), LocalTime.of(6, 0),
-                ZoneId.systemDefault());
+        LocalDateTime otherStartDateTime = LocalDateTime.of(
+                LocalDate.of(2017, 3, 25), LocalTime.of(6, 0));
         
         // April 4, 2017 - 14:00
-        ZonedDateTime otherEndDateTime = ZonedDateTime.of(
-                LocalDate.of(2017, 4, 20), LocalTime.of(14, 0),
-                ZoneId.systemDefault());
+        LocalDateTime otherEndDateTime = LocalDateTime.of(
+                LocalDate.of(2017, 4, 20), LocalTime.of(14, 0));
         
         Timeframe timeframe = new Timeframe(startDateTime, endDateTime);
         
@@ -58,24 +53,20 @@ public class TimeframeTest {
     @Test
     public void testConsistsOfDoesNotConsist() {
         // March 30, 2017 - 6:30
-        ZonedDateTime startDateTime = ZonedDateTime.of(
-                LocalDate.of(2017, 3, 30), LocalTime.of(6, 30),
-                ZoneId.systemDefault());
+        LocalDateTime startDateTime = LocalDateTime.of(
+                LocalDate.of(2017, 3, 30), LocalTime.of(6, 30));
         
         // March 30, 2017 - 14:00
-        ZonedDateTime endDateTime = ZonedDateTime.of(
-                LocalDate.of(2017, 3, 30), LocalTime.of(14, 0),
-                ZoneId.systemDefault());
+        LocalDateTime endDateTime = LocalDateTime.of(
+                LocalDate.of(2017, 3, 30), LocalTime.of(14, 0));
         
         // March 31, 2017 - 6:00
-        ZonedDateTime otherStartDateTime = ZonedDateTime.of(
-                LocalDate.of(2017, 3, 31), LocalTime.of(6, 0),
-                ZoneId.systemDefault());
+        LocalDateTime otherStartDateTime = LocalDateTime.of(
+                LocalDate.of(2017, 3, 31), LocalTime.of(6, 0));
         
         // March 31, 2017 - 14:00
-        ZonedDateTime otherEndDateTime = ZonedDateTime.of(
-                LocalDate.of(2017, 3, 31), LocalTime.of(14, 0),
-                ZoneId.systemDefault());
+        LocalDateTime otherEndDateTime = LocalDateTime.of(
+                LocalDate.of(2017, 3, 31), LocalTime.of(14, 0));
         
         Timeframe timeframe = new Timeframe(startDateTime, endDateTime);
         
@@ -95,14 +86,12 @@ public class TimeframeTest {
     @Test
     public void testEndsOnDateDoesEndOn() {
         // March 25, 2017 - 6:00
-        ZonedDateTime startDateTime = ZonedDateTime.of(
-                LocalDate.of(2017, 3, 25), LocalTime.of(6, 0),
-                ZoneId.systemDefault());
+        LocalDateTime startDateTime = LocalDateTime.of(
+                LocalDate.of(2017, 3, 25), LocalTime.of(6, 0));
         
         // April 20, 2017 - 14:00
-        ZonedDateTime endDateTime = ZonedDateTime.of(
-                LocalDate.of(2017, 4, 20), LocalTime.of(14, 0),
-                ZoneId.systemDefault());
+        LocalDateTime endDateTime = LocalDateTime.of(
+                LocalDate.of(2017, 4, 20), LocalTime.of(14, 0));
         
         Timeframe timeframe = new Timeframe(startDateTime, endDateTime);
         
@@ -122,14 +111,12 @@ public class TimeframeTest {
     @Test
     public void testEndsOnDateDoesNotEndOn() {
         // March 25, 2017 - 6:00
-        ZonedDateTime startDateTime = ZonedDateTime.of(
-                LocalDate.of(2017, 3, 25), LocalTime.of(6, 0),
-                ZoneId.systemDefault());
+        LocalDateTime startDateTime = LocalDateTime.of(
+                LocalDate.of(2017, 3, 25), LocalTime.of(6, 0));
         
         // April 4, 2017 - 14:00
-        ZonedDateTime endDateTime = ZonedDateTime.of(
-                LocalDate.of(2017, 4, 20), LocalTime.of(14, 0),
-                ZoneId.systemDefault());
+        LocalDateTime endDateTime = LocalDateTime.of(
+                LocalDate.of(2017, 4, 20), LocalTime.of(14, 0));
         
         Timeframe timeframe = new Timeframe(startDateTime, endDateTime);
         
@@ -149,14 +136,12 @@ public class TimeframeTest {
     @Test
     public void testStartsOnDateDoesStartOn() {
         // March 25, 2017 - 6:00
-        ZonedDateTime startDateTime = ZonedDateTime.of(
-                LocalDate.of(2017, 3, 25), LocalTime.of(6, 0),
-                ZoneId.systemDefault());
+        LocalDateTime startDateTime = LocalDateTime.of(
+                LocalDate.of(2017, 3, 25), LocalTime.of(6, 0));
         
         // April 4, 2017 - 14:00
-        ZonedDateTime endDateTime = ZonedDateTime.of(
-                LocalDate.of(2017, 4, 20), LocalTime.of(14, 0),
-                ZoneId.systemDefault());
+        LocalDateTime endDateTime = LocalDateTime.of(
+                LocalDate.of(2017, 4, 20), LocalTime.of(14, 0));
         
         Timeframe timeframe = new Timeframe(startDateTime, endDateTime);
         
@@ -176,14 +161,12 @@ public class TimeframeTest {
     @Test
     public void testStartsOnDateDoesNotStartOn() {
         // March 25, 2017 - 6:00
-        ZonedDateTime startDateTime = ZonedDateTime.of(
-                LocalDate.of(2017, 3, 25), LocalTime.of(6, 0),
-                ZoneId.systemDefault());
+        LocalDateTime startDateTime = LocalDateTime.of(
+                LocalDate.of(2017, 3, 25), LocalTime.of(6, 0));
         
         // April 4, 2017 - 14:00
-        ZonedDateTime endDateTime = ZonedDateTime.of(
-                LocalDate.of(2017, 4, 20), LocalTime.of(14, 0),
-                ZoneId.systemDefault());
+        LocalDateTime endDateTime = LocalDateTime.of(
+                LocalDate.of(2017, 4, 20), LocalTime.of(14, 0));
         
         Timeframe timeframe = new Timeframe(startDateTime, endDateTime);
         
@@ -203,14 +186,12 @@ public class TimeframeTest {
     @Test
     public void testStartsOnTimeDoesStartOn() {
         // March 25, 2017 - 6:00
-        ZonedDateTime startDateTime = ZonedDateTime.of(
-                LocalDate.of(2017, 3, 25), LocalTime.of(6, 0),
-                ZoneId.systemDefault());
+        LocalDateTime startDateTime = LocalDateTime.of(
+                LocalDate.of(2017, 3, 25), LocalTime.of(6, 0));
         
         // April 4, 2017 - 14:00
-        ZonedDateTime endDateTime = ZonedDateTime.of(
-                LocalDate.of(2017, 4, 20), LocalTime.of(14, 0),
-                ZoneId.systemDefault());
+        LocalDateTime endDateTime = LocalDateTime.of(
+                LocalDate.of(2017, 4, 20), LocalTime.of(14, 0));
         
         Timeframe timeframe = new Timeframe(startDateTime, endDateTime);
         
@@ -230,14 +211,12 @@ public class TimeframeTest {
     @Test
     public void testStartsOnTimeDoesNotStartOn() {
         // March 25, 2017 - 6:00
-        ZonedDateTime startDateTime = ZonedDateTime.of(
-                LocalDate.of(2017, 3, 25), LocalTime.of(6, 0),
-                ZoneId.systemDefault());
+        LocalDateTime startDateTime = LocalDateTime.of(
+                LocalDate.of(2017, 3, 25), LocalTime.of(6, 0));
         
         // April 4, 2017 - 14:00
-        ZonedDateTime endDateTime = ZonedDateTime.of(
-                LocalDate.of(2017, 4, 20), LocalTime.of(14, 0),
-                ZoneId.systemDefault());
+        LocalDateTime endDateTime = LocalDateTime.of(
+                LocalDate.of(2017, 4, 20), LocalTime.of(14, 0));
         
         Timeframe timeframe = new Timeframe(startDateTime, endDateTime);
         
@@ -258,18 +237,16 @@ public class TimeframeTest {
     public void testToString()
     {
         // March 25, 2017 - 6:00
-        ZonedDateTime startDateTime = ZonedDateTime.of(
-                LocalDate.of(2017, 3, 25), LocalTime.of(6, 0),
-                ZoneId.systemDefault());
+        LocalDateTime startDateTime = LocalDateTime.of(
+                LocalDate.of(2017, 3, 25), LocalTime.of(6, 0));
         
         // April 4, 2017 - 14:00
-        ZonedDateTime endDateTime = ZonedDateTime.of(
-                LocalDate.of(2017, 4, 20), LocalTime.of(14, 0),
-                ZoneId.systemDefault());
+        LocalDateTime endDateTime = LocalDateTime.of(
+                LocalDate.of(2017, 4, 20), LocalTime.of(14, 0));
         
         Timeframe timeframe = new Timeframe(startDateTime, endDateTime);
         
-        String expectedResult = "2017-03-25, 06:00 : 2017-04-20, 14:00";
+        String expectedResult = "2017-03-25|06:00, 2017-04-20|14:00";
         String actualResult = timeframe.toString();
         
         assertEquals(expectedResult, actualResult);

@@ -141,6 +141,21 @@ public class ReserveDB
     }
     
     /**
+        DeleteRecord - Delete a record from the database
+    
+        @param recordDelete The deletion of a record
+        @throws SQLException Error deleting record from database
+    */
+    
+    public void deleteRecord(RecordDelete recordDelete) throws SQLException
+    {
+        Statement stmt = connection.createStatement();
+        stmt.execute("USE " + DB_NAME);
+        
+        stmt.executeUpdate(recordDelete.toString());
+    }
+    
+    /**
         Exists - Return whether the database exists
     
         @return Whether the database exists

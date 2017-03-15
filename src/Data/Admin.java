@@ -34,9 +34,11 @@ public class Admin
         RemoveReservable - Remove a reservable that can be reserved
 
         @param reservable The reservable to remove
+        @throws SQLException Error removing record from database
     */
 
     public static void removeReservable(Reservable reservable)
+            throws SQLException
     {
         new RecordDelete().deleteReservable(reservable);
     }

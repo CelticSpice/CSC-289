@@ -100,18 +100,72 @@ public class Query
     public boolean queryIfReservableExists(Reservable reservable)
             throws SQLException
     {
-        sql = "SELECT Locations.LocationName, Timeframes.StartDate, " +
+        sql = "SELECT Reservables.LocationName, Timeframes.StartDate, " +
               "Timeframes.StartTime, Timeframes.EndDate, Timeframes.EndTime " +
               "FROM Reservables " +
-              "INNER JOIN Locations " +
-              "ON Reservables.LocationName = Locations.LocationName " +
               "INNER JOIN Timeframes " +
               "ON Reservables.TimeframeID = Timeframes.TimeframeID " +
-              "WHERE Locations.LocationName = '" + reservable.getName()+ "' " +
-              "AND StartDate = '" + reservable.getStartDate() + "' " +
-              "AND StartTime = '" + reservable.getStartTime() + "' " +
-              "AND EndDate = '" + reservable.getEndDate() + "' " +
-              "AND EndTime = '" + reservable.getEndTime() + "'";
+              "WHERE Reservables.LocationName = '" +
+                reservable.getName() + "' " +
+              "AND StartDate = '" +
+                reservable.getStartDate() + "' " +
+              "AND StartTime = '" +
+                reservable.getStartTime() + "' " +
+              "AND EndDate = '" +
+                reservable.getEndDate() + "' " +
+              "AND EndTime = '" +
+                reservable.getEndTime() + "'";
+        
+        return !ResultSetParser.isEmpty(ReserveDB.getInstance().runQuery(this));
+    }
+    
+    /**
+        QueryIfReservableExists - Query if a record of a reservable with the
+        given name exists in the database
+    
+        @param reservableName Name of reservable to query if exists in the
+                              database
+        @throws SQLException Error querying the database
+        @return Whether a record of a reservable with the given name exists
+                in the database
+    */
+    
+    public boolean queryIfReservableExists(String reservableName)
+            throws SQLException
+    {
+        sql = "SELECT Reservables.LocationName " +
+              "FROM Reservables " +
+              "WHERE Reservables.LocationName = '" + reservableName + "'";
+        
+        return !ResultSetParser.isEmpty(ReserveDB.getInstance().runQuery(this));
+    }
+    
+    /**
+        QueryIfReservableExists - Query if a record of a reservable with the
+        given timeframe exists in the database
+    
+        @param timeframe Timeframe of reservable to query if exists in the
+                         database
+        @throws SQLException Error querying the database
+        @return Whether a record of a reservable with the given timeframe exists
+                in the database
+    */
+    
+    public boolean queryIfReservableExists(Timeframe timeframe)
+            throws SQLException
+    {  
+        sql = "SELECT Reservables.TimeframeID " +
+              "FROM Reservables " +
+              "INNER JOIN Timeframes " +
+              "ON Reservables.TimeframeID = Timeframes.TimeframeID " +
+              "WHERE Timeframes.StartDate = '" +
+                timeframe.getStartDate() + "' " +
+              "AND Timeframes.StartTime = '" +
+                timeframe.getStartTime() + "' " +
+              "AND Timeframes.EndDate = '" +
+                timeframe.getEndDate() + "' " +
+              "AND Timeframes.EndTime = '" +
+                timeframe.getEndTime() + "'";
         
         return !ResultSetParser.isEmpty(ReserveDB.getInstance().runQuery(this));
     }

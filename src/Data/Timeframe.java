@@ -29,13 +29,22 @@ public class Timeframe
     
         @param sDateTime The starting date & time
         @param eDateTime The ending date & time
+        @throws IllegalArgumentException Starting datetime after or equal to
+                                         ending datetime
     */
     
     public Timeframe(ZonedDateTime sDateTime, ZonedDateTime eDateTime)
+            throws IllegalArgumentException
     {
         // We ignore nanoseconds & seconds
         startDateTime = sDateTime.withNano(0).withSecond(0);
         endDateTime = eDateTime.withNano(0).withSecond(0);
+        
+        // Check that starting datetime before ending date time
+        if (!(startDateTime.compareTo(endDateTime) < 0))
+            throw new IllegalArgumentException
+                ("End datetime before or equal to start datetime");
+        
         cost = new BigDecimal(0);
         reserved = false;
     }
@@ -47,6 +56,9 @@ public class Timeframe
         @param sDateTime The starting date & time
         @param eDateTime The ending date & time
         @param c The cost to reserve the timeframe
+        @throws IllegalArgumentException Starting datetime after or equal to
+                                         ending datetime or the cost is less
+                                         than $0.00
     */
     
     public Timeframe(ZonedDateTime sDateTime, ZonedDateTime eDateTime,
@@ -55,6 +67,16 @@ public class Timeframe
         // We ignore nanoseconds & seconds
         startDateTime = sDateTime.withNano(0).withSecond(0);
         endDateTime = eDateTime.withNano(0).withSecond(0);
+        
+        // Check that starting datetime before ending date time
+        if (!(startDateTime.compareTo(endDateTime) < 0))
+            throw new IllegalArgumentException
+                ("End datetime before or equal to start datetime");
+        
+        // Check that cost is greater than or equal to $0.00
+        if (!(c.compareTo(new BigDecimal(0.00)) >= 0))
+            throw new IllegalArgumentException("Cost less than $0.00");
+        
         cost = c;
         reserved = false;
     }
@@ -67,6 +89,9 @@ public class Timeframe
         @param eDateTime The ending date & time
         @param c The cost to reserve the timeframe
         @param isRsrvd If the timeframe is reserved
+        @throws IllegalArgumentException Starting datetime after or equal to
+                                         ending datetime or the cost is less
+                                         than $0.00
     */
     
     public Timeframe(ZonedDateTime sDateTime, ZonedDateTime eDateTime,
@@ -75,6 +100,16 @@ public class Timeframe
         // We ignore nanoseconds & seconds
         startDateTime = sDateTime.withNano(0).withSecond(0);
         endDateTime = eDateTime.withNano(0).withSecond(0);
+        
+        // Check that starting datetime before ending date time
+        if (!(startDateTime.compareTo(endDateTime) < 0))
+            throw new IllegalArgumentException
+                ("End datetime before or equal to start datetime");
+        
+        // Check that cost is greater than or equal to $0.00
+        if (!(c.compareTo(new BigDecimal(0.00)) >= 0))
+            throw new IllegalArgumentException("Cost less than $0.00");
+        
         cost = c;
         reserved = isRsrvd;
     }

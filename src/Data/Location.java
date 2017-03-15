@@ -18,10 +18,19 @@ public class Location
     
         @param n The location name
         @param cap The location capacity
+        @throws IllegalArgumentException Name is empty or capacity 0 or less
     */
     
     public Location(String n, int cap)
     {
+        // Check that name is valid
+        if (n == null || n.isEmpty())
+            throw new IllegalArgumentException("Name is blank");
+        
+        // Check that capacity is valid
+        if (cap <= 0)
+            throw new IllegalArgumentException("Capacity 0 or less");
+        
         name = n;
         capacity = cap;
         timeframes = new TimeframeList();
@@ -38,6 +47,14 @@ public class Location
     
     public Location(String n, int cap, TimeframeList times)
     {
+        // Check that name is valid
+        if (n == null || n.isEmpty())
+            throw new IllegalArgumentException("Name is blank");
+        
+        // Check that capacity is valid
+        if (cap <= 0)
+            throw new IllegalArgumentException("Capacity 0 or less");
+        
         name = n;
         capacity = cap;
         timeframes = times;

@@ -6,8 +6,6 @@
 
 package Data;
 
-import java.time.LocalDateTime;
-
 public class Location
 {
     // Fields
@@ -46,17 +44,6 @@ public class Location
     }
     
     /**
-        AddTimeframe - Add a timeframe the location can be reserved for
-    
-        @param timeframe Timeframe the location can be reserved for
-    */
-    
-    public void addTimeframe(Timeframe timeframe)
-    {
-        timeframes.add(timeframe);
-    }
-    
-    /**
         GetCapacity - Return the location's capacity
     
         @return The location's capacity
@@ -79,75 +66,14 @@ public class Location
     }
     
     /**
-        GetNumTimeframes - Return the number of timeframes allocated to the
-        location
+        GetTimeframes - Return the list of timeframes allocated to the location
     
-        @return The number of timeframes allocated to the location
-    */
-    
-    public int getNumTimeframes()
-    {
-        return timeframes.size();
-    }
-    
-    /**
-        GetTimeframes - Return a list of timeframes allocated to the location
-    
-        @return A list of timeframes allocated to the location
+        @return The list of timeframes allocated to the location
     */
     
     public TimeframeList getTimeframes()
     {
         return timeframes;
-    }
-    
-    /**
-        GetTimeframesEndingOn - Return a list of timeframes allocated to the
-        location ending on the given datetime
-    
-        @param datetime Datetime to get a list of timeframes ending on
-        @return A list of timeframes ending on the specified date
-    */
-    
-    public TimeframeList getTimeframesEndingOn(LocalDateTime datetime)
-    {
-        return timeframes
-                .filterEndDate(datetime.toLocalDate())
-                .filterEndTime(datetime.toLocalTime());
-    }
-    
-    /**
-        GetTimeframesStartingOn - Return a list of timeframes allocated to the
-        location starting on the given datetime
-    
-        @param datetime Datetime to get a list of timeframes starting on
-        @return A list of timeframes starting on the specified date
-    */
-    
-    public TimeframeList getTimeframesStartingOn(LocalDateTime datetime)
-    {
-        return timeframes
-                .filterStartDate(datetime.toLocalDate())
-                .filterStartTime(datetime.toLocalTime());
-    }
-    
-    /**
-        IsAvailable - Return whether the location is available to be reserved
-        on the specified datetime
-    
-        @param datetime Datetime to return whether the location is available to
-                        be reserved on
-        @return Whether the location is available to be reserved on the
-                specified datetime
-    */
-    
-    public boolean isAvailable(LocalDateTime datetime)
-    {
-        return !timeframes
-                .filterStartDate(datetime.toLocalDate())
-                .filterStartTime(datetime.toLocalTime())
-                .filterNotReserved()
-                .isEmpty();
     }
     
     /**
@@ -159,5 +85,16 @@ public class Location
     public void setCapacity(int cap)
     {
         capacity = cap;
+    }
+    
+    /**
+        SetName - Set the name of the location
+    
+        @param n The name of the location
+    */
+    
+    public void setName(String n)
+    {
+        name = n;
     }
 }

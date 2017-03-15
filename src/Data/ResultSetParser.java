@@ -9,17 +9,20 @@ package Data;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ResultSetParser
 {  
     /**
         IsEmpty - Return whether a result set is empty
     
-        @param rs Result set to determine if empty
-        @throws SQLException Error in working with the result set
+        @param rs The result set to parse
+        @throws SQLException Error parsing the result set
         @return Whether the result set is empty
     */
     
@@ -29,20 +32,64 @@ public class ResultSetParser
     }
     
     /**
-        ParseLocationNames - Parse a result set containing only location names
+        ParseLocationNames - Parse a result set containing the names of
+        locations
     
         @param rs The result set to parse
-        @throws SQLException There was an error working with the result set
-        @return names Every location name included in the result set
+        @throws SQLException Error parsing the result set
+        @return The location names parsed from the result set
     */
     
     public static String[] parseLocationNames(ResultSet rs) throws SQLException
     {
-        ArrayList<String> names = new ArrayList<>();
-        if (!isEmpty(rs))
-            while (rs.next())
-                names.add(rs.getString(1));
+        List<String> names = new ArrayList<>();
+        while (rs.next())
+            names.add(rs.getString(0));
         return names.toArray(new String[names.size()]);
+    }
+    
+    /**
+        ParseTimeframes - Parse a result set containing timeframes
+    
+        @param rs The result set to parse
+        @param reserved Whether the parser should mark timeframes as reserved
+        @throws SQLException Error parsing the result set
+        @return timeframes A list of timeframes at the given location
+    */
+    
+    public static TimeframeList parseTimeframes(ResultSet rs, boolean reserved)
+            throws SQLException
+    {
+        TimeframeList timeframes = new TimeframeList();
+        Timeframe timeframe;
+        LocalDate startDate, endDate;
+        LocalTime startTime, endTime;
+        BigDecimal cost;
+        ZonedDateTime start, end;
+        
+        while (rs.next())
+        {
+            startDate = rs.getDate("StartDate").toLocalDate();
+            startTime = rs.getTime("StartTime").toLocalTime();
+            endDate = rs.getDate("EndDate").toLocalDate();
+            endTime = rs.getTime("EndTime").toLocalTime();
+            cost = rs.getBigDecimal("Cost");
+            
+            start = ZonedDateTime
+                    .of(startDate, startTime, ZoneId.systemDefault());
+            
+            end = ZonedDateTime
+                    .of(endDate, endTime, ZoneId.systemDefault());
+            
+            if (reserved)
+                timeframe = new Timeframe(start, end, cost, true);
+            else
+                timeframe = new Timeframe(start, end, cost);
+            
+            timeframes.add(timeframe);
+        }
+        
+        return timeframes;
     }
     
     /**

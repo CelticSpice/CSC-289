@@ -60,6 +60,26 @@ public class Timeframe
     }
     
     /**
+        Constructor - Accepts the starting & ending dates & times of the
+        timeframe, the cost to reserve it, and whether it is reserved
+    
+        @param sDateTime The starting date & time
+        @param eDateTime The ending date & time
+        @param c The cost to reserve the timeframe
+        @param isRsrvd If the timeframe is reserved
+    */
+    
+    public Timeframe(ZonedDateTime sDateTime, ZonedDateTime eDateTime,
+            BigDecimal c, boolean isRsrvd)
+    {
+        // We ignore nanoseconds & seconds
+        startDateTime = sDateTime.withNano(0).withSecond(0);
+        endDateTime = eDateTime.withNano(0).withSecond(0);
+        cost = c;
+        reserved = isRsrvd;
+    }
+    
+    /**
         CancelReserve - Cancel the reservation of the timeframe
     */
     
@@ -293,9 +313,7 @@ public class Timeframe
     }
     
     /**
-        ToString - Return a string representation of the object. The
-        timeframe's starting & ending date & time will be returned as a string
-        in the form of: yyyy-MM-dd - HH:mm, $cost
+        ToString - Return a string representation of the object
     
         @return String representation of the object
     */
@@ -304,9 +322,10 @@ public class Timeframe
     public String toString()
     {
         DateTimeFormatter fmt = DateTimeFormatter.
-                ofPattern("yyyy-MM-dd - HH:mm");
+                ofPattern("yyyy-MM-dd:HH-mm");
         
-        return startDateTime.format(fmt) + ", " + cost +
-                " : " + endDateTime.format(fmt) + ", " + cost;
+        return startDateTime.format(fmt) + ", " +
+                endDateTime.format(fmt) + " : " + cost +
+                " : " + ((reserved) ? "Reserved" : "Not Reserved");
     }
 }

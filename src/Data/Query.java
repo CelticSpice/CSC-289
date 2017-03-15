@@ -23,6 +23,35 @@ public class Query
     }
     
     /**
+        QueryAvailableLocationTimeframes - Query for & return a list of
+        available timeframes at the location specified by the given name
+    
+        @param locationName Name of location to get available timeframes of
+                            from the database
+        @throws SQLException Error querying the database
+        @return A list of available timeframes at the specified location
+    */
+    
+    private TimeframeList queryAvailableLocationTimeframes(String locationName)
+            throws SQLException
+    {
+        sql = "SELECT Timeframes.StartDate, Timeframes.StartTime, " +
+              "Timeframes.EndDate, Timeframes.EndTime, Reservables.Cost " +
+              "FROM Timeframes " +
+              "INNER JOIN Reservables " +
+              "ON Timeframes.TimeframeID = Reservables.TimeframeID " +
+              "INNER JOIN Reservations " +
+              "ON Reservables.LocationName = Reservations.LocationName " +
+              "AND Reservables.TimeframeID = Reservations.TimeframeID " +
+              "WHERE Reservables.LocationName = '" + locationName + "' " +
+              "AND Reservables.LocationName <> Reservations.LocationName " +
+              "ORDER BY StartDate, StartTime, EndDate, EndTime, Cost";
+        
+        return ResultSetParser.parseTimeframes
+            (ReserveDB.getInstance().runQuery(this), false);
+    }
+    
+    /**
         QueryIfLocationExists - Query if a record of a location exists in
         the database
     
@@ -44,10 +73,24 @@ public class Query
     }
     
     /**
+        QueryLocation - Query for and return the location with the specified
+        name
+    
+        @param locationName Name of location to get from the database
+        @throws SQLException Error querying the database
+        @return The location with the specified name
+    */
+    
+    public Location queryLocation(String locationName) throws SQLException
+    {
+        return null;
+    }
+    
+    /**
         QueryLocationNames - Return the names of every location in the database
     
-        @throws SQLException Error running the query
-        @return names The names of every location in the database
+        @throws SQLException Error querying the database
+        @return The names of every location in the database
     */
     
     public String[] queryLocationNames() throws SQLException
@@ -56,36 +99,31 @@ public class Query
               "FROM Locations " +
               "ORDER BY LocationName";
         
-        return ResultSetParser.parseLocationNames(ReserveDB
-                                                  .getInstance()
-                                                  .runQuery(this));
+        return ResultSetParser.parseLocationNames
+            (ReserveDB.getInstance().runQuery(this));
     }
     
     /**
-        QueryLocationTimeframes - Query the reservable timeframes allocated to
-        a location
+        QueryLocationTimeframes - Query for & return the list of
+        timeframes at the location specified by the given name
     
-        @param name The name of the location to query the allocated timeframes
-                    of
-        @throws SQLException Error running the query
-        @return timeframes The reservable timeframes allocated to the location
+        @param name Name of location to get timeframes of from the database
+        @throws SQLException Error querying the database
+        @return timeframes A list of timeframes at the specified location
     */
     
-    public TimeframeList queryLocationTimeframes(String name)
+    private TimeframeList queryLocationTimeframes(String name)
             throws SQLException
     {
-        sql = "SELECT Timeframes.StartDate, Timeframes.StartTime, " +
-              "Timeframes.EndDate, Timeframes.EndTime, " +
-              "LocationTimeframes.Cost " +
-              "FROM LocationTimeframes " +
-              "INNER JOIN Timeframes " +
-              "ON LocationTimeframes.TimeframeID = Timeframes.TimeframeID " +
-              "WHERE LocationTimeframes.LocationName = '" + name + "' " +
-              "ORDER BY StartDate, StartTime, EndDate, EndTime, Cost";
+        TimeframeList timeframes =
+                queryReservedLocationTimeframes(name);
         
-        return ResultSetParser.parseReservableTimeframes(ReserveDB
-                                                         .getInstance()
-                                                         .runQuery(this));
+        TimeframeList availableTimeframes =
+                queryAvailableLocationTimeframes(name);
+        
+        timeframes.addAll(availableTimeframes);
+        
+        return timeframes;
     }
     
     /**
@@ -174,9 +212,9 @@ public class Query
         QueryIfReservationExists - Query if a record of a reservation exists
         in the database
     
-        @param reservation The reservation to query if exists in the database
+        @param reservation Reservation to query if exists in the database
         @throws SQLException Error querying the database
-        @return Whether the record of the reservation exists in the database
+        @return Whether a record of a reservation exists in the database
     */
     
     public boolean queryIfReservationExists(Reservation reservation)
@@ -205,7 +243,7 @@ public class Query
         QueryIfTimeframeExists - Query if a record of a timeframe exists
         in the database
     
-        @param timeframe The timeframe to query if exists in the database
+        @param timeframe Timeframe to query if exists in the database
         @throws SQLException Error querying the database
         @return Whether the record of the timeframe exists in the database
     */
@@ -225,45 +263,54 @@ public class Query
     }
     
     /**
-        QueryIfReserverExists - Query if the reserver exists in the database
+        QueryIfReserverExists - Query if a record of a reserver exists in the
+        database
         
-        @param r The reserver being checked
-        @return If the reserver exists
-        @throws SQLException SQLException Error running the query
+        @param r Reserver to query if exists in the database
+        @throws SQLException Error querying the database
+        @return Whether the record of a reserver exists in the database
      */
     
     public boolean queryIfReserverExists(Reserver r) throws SQLException
     {
-        // Store reserver info as Strings
-        String firstName = r.getContactInfo().getFirstName();
-        String lastName = r.getContactInfo().getLastName();
-        String email = r.getContactInfo().getEmail();
-        String phone = r.getContactInfo().getPhoneNumber();
-        
         // Build SQL statement
-        sql = "SELECT Reservers.firstName, Reservers.lastName, " +
-              "Reservers.email, Reservers.phone" +
-              "FROM Reservers" +
-              "WHERE firstName = '" + firstName + "'" +
-              "AND lastName = '" + lastName + "'" +
-              "AND email = '" + email + "'" +
-              "AND phone = '" + phone + "'";
+        sql = "SELECT Reservers.FirstName, Reservers.LastName, " +
+              "Reservers.Email, Reservers.Phone " +
+              "FROM Reservers " +
+              "WHERE FirstName = '" + r.getFirstName() + "' " +
+              "AND LastName = '" + r.getLastName() + "' " +
+              "AND Email = '" + r.getEmailAddress() + "' " +
+              "AND Phone = '" + r.getPhoneNumber() + "'";
         
         return !ResultSetParser.isEmpty(ReserveDB.getInstance().runQuery(this));
     }
     
     /**
-        QueryLocationReservations - Query for reservations that have been made
-        at the location with the given name
+        QueryReservedLocationTimeframes - Query for & return a list of
+        reserved timeframes at the location specified by the given name
     
-        @param locationName Name of location to query reservations made at
-        @return A list of reservations that have been made at the location with
-                the given name
+        @param locationName Name of location to get reserved timeframes of
+                            from the database
+        @throws SQLException Error querying the database
+        @return A list of reserved timeframes at the specified location
     */
     
-    public ReservationList queryLocationReservations(String locationName)
-    {
-        return null;
+    private TimeframeList queryReservedLocationTimeframes(String locationName)
+            throws SQLException
+    {          
+        sql = "SELECT Timeframes.StartDate, Timeframes.StartTime, " +
+              "Timeframes.EndDate, Timeframes.EndTime, Reservables.Cost " +
+              "FROM Timeframes " +
+              "INNER JOIN Reservables " +
+              "ON Timeframes.TimeframeID = Reservables.TimeframeID " +
+              "INNER JOIN Reservations " +
+              "ON Reservables.LocationName = Reservations.LocationName " +
+              "AND Reservables.TimeframeID = Reservations.TimeframeID " +
+              "WHERE Reservations.LocationName = '" + locationName + "' " +
+              "ORDER BY StartDate, StartTime, EndDate, EndTime, Cost";
+        
+        return ResultSetParser.parseTimeframes
+            (ReserveDB.getInstance().runQuery(this), true);
     }
     
     /**

@@ -43,6 +43,7 @@ public class Location
         @param n The reservable location's name
         @param cap The reservable location's capacity
         @param times The location's allocated timeframes
+        @throws IllegalArgumentException Name is empty or capacity 0 or less
     */
     
     public Location(String n, int cap, TimeframeList times)

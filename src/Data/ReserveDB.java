@@ -15,9 +15,7 @@ import java.sql.Statement;
 public class ReserveDB
 {
     // Fields
-    private static final String DB = "jdbc:mariadb://localhost?" +
-                                     "user=" + SystemUtil.getDBUser() +"&" +
-                                     "pass=" + SystemUtil.getDBPass();
+    private static String dbOptions;
     
     private static final String DB_NAME = "ReserveDB";
     
@@ -31,7 +29,10 @@ public class ReserveDB
     
     private ReserveDB() throws SQLException
     {
-        connection = DriverManager.getConnection(DB);
+        dbOptions = "jdbc:mariadb://localhost?user=" + SystemUtil.getDBUser() +
+             "&pass=" + SystemUtil.getDBPass();
+        
+        connection = DriverManager.getConnection(dbOptions);
     }
     
     /**

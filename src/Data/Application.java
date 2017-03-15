@@ -6,7 +6,12 @@
 
 package Data;
 
-import java.time.ZonedDateTime;
+import Exception.RecordExistsException;
+import java.math.BigDecimal;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Scanner;
 import java.util.prefs.BackingStoreException;
 
 public class Application
@@ -17,8 +22,10 @@ public class Application
         @param args The arguments
     */
     
-    public static void main(String[] args) throws BackingStoreException
+    public static void main(String[] args)
+            throws BackingStoreException, SQLException, RecordExistsException
     {
         SystemUtil.initPreferences();
+        ReserveDB.getInstance();
     }
 }

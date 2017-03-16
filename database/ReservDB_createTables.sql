@@ -39,7 +39,8 @@ firstName VARCHAR(35) NOT NULL,
 lastName VARCHAR(35) NOT NULL,
 email VARCHAR(255) NOT NULL,
 phone VARCHAR(16) NOT NULL,
-PRIMARY KEY (reserverID)
+PRIMARY KEY (reserverID),
+UNIQUE (email)
 );
 
 

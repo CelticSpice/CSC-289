@@ -80,6 +80,7 @@ public class RecordAdd
                                 timeframeID + ", " +
                                 reservable.getCost().doubleValue() + ")";
           
+
             ReserveDB.getInstance().addRecord(this);
         }
         else
@@ -101,8 +102,10 @@ public class RecordAdd
         Query query = new Query();
         
         if (!query.queryIfReservationExists(reservation))
-        {               
-            // Avoid duplicating a record of a reserver
+        {   
+            // Check valid Reservable????
+            
+            // Make sure Reserver is not a duplicate
             Reserver reserver = reservation.getReserver();
             
             if (!query.queryIfReserverExists(reserver))
@@ -141,7 +144,7 @@ public class RecordAdd
             ReserveDB.getInstance().addRecord(this);
         }
         else
-            throw new RecordExistsException();         
+            throw new RecordExistsException();
     }
     
     /**

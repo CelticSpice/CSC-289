@@ -87,4 +87,38 @@ public class ResultSetParser
         
         return timeframes;
     }
+    
+    /**
+     * ParseTimeframes - Parse a result set containing timeframes
+     * 
+     * @param rs The result set to parse
+     * @return A list of timeframes
+     * @throws SQLException Error parsing the result set
+     */
+    public static TimeframeList parseTimeframes(ResultSet rs)
+            throws SQLException
+    {
+        TimeframeList timeframes = new TimeframeList();
+        Timeframe timeframe;
+        LocalDate startDate, endDate;
+        LocalTime startTime, endTime;
+        LocalDateTime start, end;
+        
+        while (rs.next())
+        {
+            startDate = rs.getDate("StartDate").toLocalDate();
+            startTime = rs.getTime("StartTime").toLocalTime();
+            endDate = rs.getDate("EndDate").toLocalDate();
+            endTime = rs.getTime("EndTime").toLocalTime();
+            
+            start = LocalDateTime.of(startDate, startTime);
+            end = LocalDateTime.of(endDate, endTime);
+            
+            timeframe = new Timeframe(start, end);
+            
+            timeframes.add(timeframe);
+        }
+        
+        return timeframes;
+    }
 }

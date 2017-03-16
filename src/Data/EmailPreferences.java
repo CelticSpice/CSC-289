@@ -6,7 +6,6 @@
 
 package Data;
 
-import java.util.Properties;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
@@ -45,15 +44,15 @@ public class EmailPreferences
         @return props Properties of the administrator's SMTP server setup
     */
     
-    public Properties getAdminSMTPProperties()
+    public SMTPProperties getAdminSMTPProperties()
     {
-        Properties props = new Properties();
-        props.put("Address", prefs.get("AdminSendAddress", ""));
-        props.put("Host", prefs.get("AdminSMTPHost", ""));
-        props.put("Security", prefs.get("AdminSMTPSecurity", ""));
-        props.put("Port", prefs.get("AdminSMTPPort", ""));
-        props.put("User", prefs.get("AdminSMTPUser", ""));
-        props.put("Pass", prefs.get("AdminSMTPPass", ""));
+        SMTPProperties props = new SMTPProperties();
+        props.setAddress(prefs.get("AdminSendAddress", ""));
+        props.setHost(prefs.get("AdminSMTPHost", ""));
+        props.setSecurity(prefs.get("AdminSMTPSecurity", ""));
+        props.setPort(prefs.get("AdminSMTPPort", ""));
+        props.setUser(prefs.get("AdminSMTPUser", ""));
+        props.setPassword(prefs.get("AdminSMTPPass", ""));
         return props;
     }
     
@@ -64,15 +63,15 @@ public class EmailPreferences
         @return props Properties of the guest's SMTP server setup
     */
     
-    public Properties getGuestSMTPProperties()
+    public SMTPProperties getGuestSMTPProperties()
     {
-        Properties props = new Properties();
-        props.put("Address", prefs.get("GuestSendAddress", ""));
-        props.put("Host", prefs.get("GuestSMTPHost", ""));
-        props.put("Security", prefs.get("GuestSMTPSecurity", ""));
-        props.put("Port", prefs.get("GuestSMTPPort", ""));
-        props.put("User", prefs.get("GuestSMTPUser", ""));
-        props.put("Pass", prefs.get("GuestSMTPPass", ""));
+        SMTPProperties props = new SMTPProperties();
+        props.setAddress(prefs.get("GuestSendAddress", ""));
+        props.setHost(prefs.get("GuestSMTPHost", ""));
+        props.setSecurity(prefs.get("GuestSMTPSecurity", ""));
+        props.setPort(prefs.get("GuestSMTPPort", ""));
+        props.setUser(prefs.get("GuestSMTPUser", ""));
+        props.setPassword(prefs.get("GuestSMTPPass", ""));
         return props;
     }
     
@@ -142,14 +141,14 @@ public class EmailPreferences
         @param props Preferences of the administrator's SMTP server
     */
     
-    public void setAdminSMTPPrefs(Properties props)
+    public void setAdminSMTPPrefs(SMTPProperties props)
     {
-        prefs.put("AdminSendAddress", props.getProperty("Address", ""));
-        prefs.put("AdminSMTPHost", props.getProperty("Host", ""));
-        prefs.put("AdminSMTPSecurity", props.getProperty("Security", ""));
-        prefs.put("AdminSMTPPort", props.getProperty("Port", ""));
-        prefs.put("AdminSMTPUser", props.getProperty("User", ""));
-        prefs.put("AdminSMTPPass", props.getProperty("Pass", ""));
+        prefs.put("AdminSendAddress", props.getAddress());
+        prefs.put("AdminSMTPHost", props.getHost());
+        prefs.put("AdminSMTPSecurity", props.getSecurity());
+        prefs.put("AdminSMTPPort", props.getPort());
+        prefs.put("AdminSMTPUser", props.getUser());
+        prefs.put("AdminSMTPPass", props.getPassword());
     }
     
     /**
@@ -158,13 +157,13 @@ public class EmailPreferences
         @param props Preferences of the guest's SMTP server
     */
     
-    public void setGuestSMTPPrefs(Properties props)
+    public void setGuestSMTPPrefs(SMTPProperties props)
     {
-        prefs.put("GuestSendAddress", props.getProperty("Address", ""));
-        prefs.put("GuestSMTPHost", props.getProperty("Host", ""));
-        prefs.put("GuestSMTPSecurity", props.getProperty("Security", ""));
-        prefs.put("GuestSMTPPort", props.getProperty("Port", ""));
-        prefs.put("GuestSMTPUser", props.getProperty("User", ""));
-        prefs.put("GuestSMTPPass", props.getProperty("Pass", ""));
+        prefs.put("GuestSendAddress", props.getAddress());
+        prefs.put("GuestSMTPHost", props.getHost());
+        prefs.put("GuestSMTPSecurity", props.getSecurity());
+        prefs.put("GuestSMTPPort", props.getPort());
+        prefs.put("GuestSMTPUser", props.getUser());
+        prefs.put("GuestSMTPPass", props.getPassword());
     }
 }

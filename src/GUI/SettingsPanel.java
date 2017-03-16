@@ -115,15 +115,15 @@ public class SettingsPanel extends JPanel
         panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
-        // Build save button panel
-        JPanel saveBtnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        saveBtnPanel.add(saveBtn = new JButton("Save"));
+        // Build leftmost button panel
+        JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        leftPanel.add(saveBtn = new JButton("Save"));
         
         // Build exit button panel
         JPanel exitBtnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT,0,0));
         exitBtnPanel.add(exitBtn = new JButton("Exit"));
         
-        panel.add(saveBtnPanel);
+        panel.add(leftPanel);
         panel.add(Box.createHorizontalGlue());
         panel.add(exitBtnPanel);
         

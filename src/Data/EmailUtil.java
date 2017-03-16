@@ -43,24 +43,23 @@ public class EmailUtil
             address.setPersonal(senderName);
         
         // Get the properties for the guest to send email
-        Properties props = SystemUtil.getGuestSMTPProperties();
+        SMTPProperties props = SystemUtil.getGuestSMTPProperties();
         
         // Get address, username, password from properties
-        InternetAddress from = new InternetAddress(props
-                .getProperty("Address"));
-        String username = props.getProperty("User");
-        String password = props.getProperty("Pass");
-        
-        // Parse the properties
-        props = parseProps(props);
+        InternetAddress from = new InternetAddress(props.getAddress());
+        String username = props.getUser();
+        String password = props.getPassword();
         
         // Get the address for the administrator to receive email at
         InternetAddress to = new InternetAddress
             (SystemUtil.getAdminGetAddress());
         
+        // Prepare SMTP properties for session
+        Properties smtpProps = props.asSessionProperties();
+        
         // Build authenticator
         Authenticator auth = null;
-        if (props.containsKey("mail.smtp.auth"))
+        if (smtpProps.containsKey("mail.smtp.auth"))
         {
             auth = new Authenticator()
             {
@@ -75,7 +74,7 @@ public class EmailUtil
         }
         
         // Create session
-        Session session = Session.getInstance(props, auth);
+        Session session = Session.getInstance(smtpProps, auth);
         
         // Create & send message
         MimeMessage message = new MimeMessage(session);
@@ -103,23 +102,22 @@ public class EmailUtil
             throws AddressException, MessagingException
     {
         // Get the properties for the admin to send email
-        Properties props = SystemUtil.getAdminSMTPProperties();
+        SMTPProperties props = SystemUtil.getAdminSMTPProperties();
         
         // Get address, username, password from properties
-        InternetAddress from = new InternetAddress(props
-                .getProperty("Address"));
-        String username = props.getProperty("User");
-        String password = props.getProperty("Pass");
-        
-        // Parse the properties
-        props = parseProps(props);
+        InternetAddress from = new InternetAddress(props.getAddress());
+        String username = props.getUser();
+        String password = props.getPassword();
         
         // Get the address for the reserver to receive email at
         InternetAddress to = new InternetAddress(reserver.getEmailAddress());
         
+        // Prepare SMTP properties for session
+        Properties smtpProps = props.asSessionProperties();
+        
         // Build authenticator
         Authenticator auth = null;
-        if (props.containsKey("mail.smtp.auth"))
+        if (smtpProps.containsKey("mail.smtp.auth"))
         {
             auth = new Authenticator()
             {
@@ -134,7 +132,7 @@ public class EmailUtil
         }
         
         // Create session
-        Session session = Session.getInstance(props, auth);
+        Session session = Session.getInstance(smtpProps, auth);
         
         // Create & send message
         MimeMessage message = new MimeMessage(session);
@@ -144,34 +142,5 @@ public class EmailUtil
         message.setSentDate(new Date());
         message.setText(body);
         Transport.send(message);
-    }
-    
-    /**
-        ParseProps - Parse email properties into formats suitable for sending
-        email
-    
-        @param props Email properties to parse
-        @return parsedProps Properties parsed into suitable formats
-    */
-    
-    private static Properties parseProps(Properties props)
-    {
-        Properties parsedProps = new Properties();
-        
-        parsedProps.put("mail.smtp.host", props.getProperty("Host"));
-        parsedProps.put("mail.smtp.port", props.getProperty("Port"));
-        
-        if (props.getProperty("Security").equalsIgnoreCase("SSL"))
-            parsedProps.put("mail.smtp.ssl.enable", "true");
-        else if (props.getProperty("Security").equalsIgnoreCase("TLS"))
-            parsedProps.put("mail.smtp.starttls.enable", "true");
-        
-        if (!props.getProperty("User").isEmpty() ||
-            !props.getProperty("Pass").isEmpty())
-        {
-            parsedProps.put("mail.smtp.auth", "true");
-        }
-        
-        return parsedProps;
     }
 }

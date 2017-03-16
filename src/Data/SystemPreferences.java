@@ -41,24 +41,13 @@ public class SystemPreferences
     }
     
     /**
-        GetAdminPassword - Return the administrator's password
-    
-        @return The administrator's password
-    */
-    
-    public String getAdminPassword()
-    {
-        return prefs.get("AdminPass", "");
-    }
-    
-    /**
         GetAdminSMTPProperties - Return properties of the administrator's
         SMTP server setup
     
         @return props Properties of the administrator's SMTP server setup
     */
     
-    public Properties getAdminSMTPProperties()
+    public SMTPProperties getAdminSMTPProperties()
     {
         return emailPrefs.getAdminSMTPProperties();
     }
@@ -92,7 +81,7 @@ public class SystemPreferences
         @return props Properties of the guest's SMTP server setup
     */
     
-    public Properties getGuestSMTPProperties()
+    public SMTPProperties getGuestSMTPProperties()
     {
         return emailPrefs.getGuestSMTPProperties();
     }
@@ -132,7 +121,7 @@ public class SystemPreferences
         @param props Preferences of the administrator's SMTP server
     */
     
-    public void setAdminSMTPPrefs(Properties props)
+    public void setAdminSMTPPrefs(SMTPProperties props)
     {
         emailPrefs.setAdminSMTPPrefs(props);
     }
@@ -165,7 +154,7 @@ public class SystemPreferences
         @param props Preferences of the guest's SMTP server
     */
     
-    public void setGuestSMTPPrefs(Properties props)
+    public void setGuestSMTPPrefs(SMTPProperties props)
     {
         emailPrefs.setGuestSMTPPrefs(props);
     }

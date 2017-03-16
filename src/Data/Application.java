@@ -7,12 +7,10 @@
 package Data;
 
 import Exception.RecordExistsException;
-import java.math.BigDecimal;
+import GUI.AdminPanel;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.Scanner;
 import java.util.prefs.BackingStoreException;
+import javax.swing.JFrame;
 
 public class Application
 {    
@@ -25,7 +23,9 @@ public class Application
     public static void main(String[] args)
             throws BackingStoreException, SQLException, RecordExistsException
     {
-        SystemUtil.initPreferences();
-        ReserveDB.getInstance();
+        JFrame frame = new JFrame();
+        frame.add(new AdminPanel());
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
     }
 }

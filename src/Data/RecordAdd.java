@@ -7,9 +7,7 @@
 package Data;
 
 import Exception.RecordExistsException;
-import java.math.BigDecimal;
 import java.sql.SQLException;
-import javax.swing.JOptionPane;
 
 public class RecordAdd
 {
@@ -96,82 +94,63 @@ public class RecordAdd
        @throws RecordExistsException Identical record exists in the database
      */
     
-    public void addReserver(Reserver r)
-            throws SQLException, RecordExistsException
+    private void addReserver(Reserver reserver) throws SQLException
     {
-        // Ensure that the record does not already exist
-        Query query = new Query();
-        
-        if (!query.queryIfReserverExists(r))
-        {
-            sql = "INSERT INTO Reservers (firstName, lastName, email, phone" +
-                  "VALUES ('" + r.getContactInfo().getFirstName() + "', " +
-                  "'" + r.getContactInfo().getLastName() + "', " +
-                  "'" + r.getContactInfo().getEmail() + "', " +
-                  "'" + r.getContactInfo().getPhoneNumber() + "')";
+        sql = "INSERT INTO Reservers (firstName, lastName, email, phone" +
+              "VALUES ('" + reserver.getFirstName() + "', " +
+              "'" + reserver.getLastName() + "', " +
+              "'" + reserver.getEmailAddress() + "', " +
+              "'" + reserver.getPhoneNumber() + "')";
             
-            ReserveDB.getInstance().addRecord(this);
-        }
-        else
-            throw new RecordExistsException();
+        ReserveDB.getInstance().addRecord(this);
     }
     
     /**
         AddReservation - Add a record of a reservation to the database
     
         @param reservation The reservation to add
-        @param reserver The reserver of the reservation to add
         @throws SQLException Error adding record to the database
         @throws RecordExistsException Identical record exists in the database
     */
     
-    public void addReservation(Reservation reservation, Reserver reserver)
+    public void addReservation(Reservation reservation)
             throws SQLException, RecordExistsException
     {
         // Ensure that the record does not already exist
         Query query = new Query();
         
         if (!query.queryIfReservationExists(reservation))
-        {
-            Location location = reservation.getLocation();
-            Timeframe timeframe = reservation.getReservedTimeframe();
+        {   
+            // Check valid Reservable????
             
-            if (!query.queryIfReservableExists(location, timeframe))
+            // Make sure Reserver is not a duplicate
+            Reserver reserver = reservation.getReserver();
+            
+            if (!query.queryIfReserverExists(reserver))
             {
-                String input = JOptionPane.showInputDialog("Enter the cost " +
-                        "of the reservable timeframe.");
-                BigDecimal cost = BigDecimal.valueOf(Double.parseDouble(input));
-                
-                this.addReservable(location, timeframe, cost);
+                    addReserver(reserver);
             }
             
-            String locationName = reservation.getLocation().getName();
-            String startDate = reservation.getReservedTimeframe().getStartDate().toString();
-            String endDate = reservation.getReservedTimeframe().getEndDate().toString();
-            String startTime = reservation.getReservedTimeframe().getStartTime().toString();
-            String endTime = reservation.getReservedTimeframe().getEndTime().toString();
-            String firstName = reserver.getContactInfo().getFirstName();
-            String lastName = reserver.getContactInfo().getLastName();
-            String email = reserver.getContactInfo().getEmail();
-            String phone = reserver.getContactInfo().getPhoneNumber();
+            String timeframeID = "(SELECT Timeframes.TimeframeID " +
+                                 "FROM Timeframes " +
+                                 "WHERE Timeframes.StartDate = '" +
+                                    reservation.getStartDate() + "' " +
+                                 "AND Timeframes.StartTime = '" +
+                                    reservation.getStartTime() + "' " +
+                                 "AND Timeframes.EndDate = '" +
+                                    reservation.getEndDate() + "' " +
+                                 "AND Timeframes.EndTime = '" +
+                                    reservation.getEndTime() + "')";
             
-            sql = "INSERT INTO Reservations (locationName, timeframeID, " +
-                  "reserverID, eventType, numberAttending)" +
-                  "VALUES ('" + locationName + "', " +
-                  "(SELECT DISTINCT Reservables.timeframeID" +
-                  "FROM Reservables" +
-                  "INNER JOIN Timeframes" +
-                  "ON Reservables.timeframeID = Timeframes.timeframeID" +
-                  "WHERE startDate = '" + startDate + "'" +
-                  "AND endDate = '" + endDate + "'" +
-                  "AND startTime = '" + startTime + "'" +
-                  "AND endTime = '" + endTime + "'), " +
+            sql = "INSERT INTO Reservations" +
+                  "VALUES ('" + reservation.getLocationName() + "', " +
+                  timeframeID +
                   "(SELECT reserverID" +
                   "FROM Reservers" +
-                  "WHERE firstName = '" + firstName + "'" +
-                  "AND lastName = '" + lastName + "'" +
-                  "AND email = '" + email + "'" +
-                  "AND phone = '" + phone + "')," + 
+                  "WHERE firstName = '" + reserver.getFirstName() + "'" +
+                  "AND lastName = '" + reserver.getLastName() + "'" +
+                  "AND email = '" + reserver.getEmailAddress() + "'" +
+                  "AND phone = '" + reserver.getPhoneNumber() + "')," + 
                   reservation.getEventType() + ", " +
                   reservation.getNumberAttending() + ")";
             
@@ -179,7 +158,6 @@ public class RecordAdd
         }
         else
             throw new RecordExistsException();         
-        }
     }
     
     /**

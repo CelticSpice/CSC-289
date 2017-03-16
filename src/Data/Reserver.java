@@ -91,7 +91,7 @@ public class Reserver
         @return The phone number of the reserver
     */
     
-    public String getPhoneNumer()
+    public String getPhoneNumber()
     {
         return contactInfo.getPhoneNumber();
     }
@@ -105,15 +105,5 @@ public class Reserver
     public Reservation[] getReservations()
     {
         return reservations.toArray(new Reservation[reservations.size()]);
-    }
-    
-    /**
-        GetContactInfo - Get the contact info of this reserver
-         
-        @return the contact info
-     */
-    public ContactInfo getContactInfo()
-    {
-        return contactInfo;
     }
 }

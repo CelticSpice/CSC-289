@@ -159,7 +159,7 @@ public class Reservation
     
     public String getReserverPhone()
     {
-        return reserver.getPhoneNumer();
+        return reserver.getPhoneNumber();
     }
     
     /**

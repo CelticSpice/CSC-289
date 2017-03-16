@@ -173,53 +173,30 @@ public class Query
     /**
         QueryIfReserverExists - Query if the reserver exists in the database
         
-        @param r The reserver being checked
+        @param reserver The reserver being checked
         @return If the reserver exists
         @throws SQLException SQLException Error running the query
      */
-    public boolean queryIfReserverExists(Reserver r) throws SQLException
+    
+    public boolean queryIfReserverExists(Reserver reserver) throws SQLException
     {
-        // Store reserver info as Strings
-        String firstName = r.getContactInfo().getFirstName();
-        String lastName = r.getContactInfo().getLastName();
-        String email = r.getContactInfo().getEmail();
-        String phone = r.getContactInfo().getPhoneNumber();
-        
         // Build SQL statement
         sql = "SELECT Reservers.firstName, Reservers.lastName, " +
               "Reservers.email, Reservers.phone" +
               "FROM Reservers" +
-              "WHERE firstName = '" + firstName + "'" +
-              "AND lastName = '" + lastName + "'" +
-              "AND email = '" + email + "'" +
-              "AND phone = '" + phone + "'";
+              "WHERE firstName = '" + reserver.getFirstName() + "'" +
+              "AND lastName = '" + reserver.getLastName() + "'" +
+              "AND email = '" + reserver.getEmailAddress() + "'" +
+              "AND phone = '" + reserver.getPhoneNumber() + "'";
         
         return !ResultSetParser.isEmpty(ReserveDB.getInstance().runQuery(this));
     }
     
-    /**
-        QueryIfReservationExists - Query if the reservation specified exists in
-        the database
-        
-        @param r The reservation to be checked if it exists
-        @return If the specified reservation exists
-        @throws SQLException SQLException Error running the query
-     */
-    public boolean queryIfReservationExists(Reservation r) throws SQLException            
+    public boolean queryIfReserverExists(String email) throws SQLException
     {
-        // Build SQL statement
-        sql = "SELECT DISTINCT Reservations.LocationName, Timeframes.StartDate, " +
-              "Timeframes.EndDate, Timeframes.StartTime, Timeframes.EndTime " +
-              "FROM Reservations, Timeframes" +
-              "INNER JOIN Reservables " +
-              "ON Reservations.LocationName = Reservables.LocationName" +
-              "INNER JOIN Timeframes " +
-              "ON Reservations.TimeframeID = Timeframes.TimeframeID " +
-              "WHERE Reservations.LocationName = '" + r.getLocation().getName() + "'" +
-              "AND StartDate = '" + r.getReservedTimeframe().getStartDate() + "'" +
-              "AND EndDate = '" + r.getReservedTimeframe().getEndDate() + "'" +
-              "AND StartTime = '" + r.getReservedTimeframe().getStartTime() + "'" +
-              "AND EndTime = '" + r.getReservedTimeframe().getEndTime() + "'";
+        sql = "SELECT Reservers.email"
+            + "FROM Reservers"
+            + "WHERE email = '" + email + "'";
         
         return !ResultSetParser.isEmpty(ReserveDB.getInstance().runQuery(this));
     }

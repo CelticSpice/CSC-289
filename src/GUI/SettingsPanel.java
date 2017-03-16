@@ -6,6 +6,8 @@
 
 package GUI;
 
+import Data.SMTPProperties;
+import Data.SecurityOption;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -13,7 +15,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
-import java.util.Properties;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -27,19 +28,13 @@ import javax.swing.JTextField;
 public class SettingsPanel extends JPanel
 {
     // Fields
-    private JButton saveBtn, exitBtn;
+    private JButton save, updatePasswd, cancel, logout;
     private JComboBox adminSecurity, guestSecurity;
-    
+    private JPasswordField adminPass, guestPass, dbPass;
     private JTextField adminSendAddress, adminHost, adminPort,
                        adminUser, adminGetAddress,
                        guestSendAddress, guestHost, guestPort,
-                       guestUser;
-    
-    private JTextField dbUser;
-    
-    
-    private JPasswordField adminPass, guestPass, adminLogPass,
-                           adminVerifyLogPass, dbPass;
+                       guestUser, dbUser;
     
     /**
         Constructor
@@ -84,26 +79,6 @@ public class SettingsPanel extends JPanel
     }
     
     /**
-        BuildAdminPassPanel - Build & return the panel allowing updates to
-        the administrator's password
-    
-        @return panel The built panel
-    */
-    
-    private JPanel buildAdminPassPanel()
-    {
-        JPanel panel = new JPanel(new GridLayout(2, 2, 5, 5));
-        panel.setBorder(BorderFactory.createTitledBorder("Admin Password"));
-        
-        panel.add(new JLabel("Admin Pass:"));
-        panel.add(adminLogPass = new JPasswordField());
-        panel.add(new JLabel("Verify Pass:"));
-        panel.add(adminVerifyLogPass = new JPasswordField());
-        
-        return panel;
-    }
-    
-    /**
         BuildBottomPanel - Build & return the bottom panel of this panel
     
         @return panel The built panel
@@ -116,16 +91,18 @@ public class SettingsPanel extends JPanel
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
         // Build leftmost button panel
-        JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        leftPanel.add(saveBtn = new JButton("Save"));
+        JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+        leftPanel.add(save = new JButton("Save"));
+        leftPanel.add(updatePasswd = new JButton("Update Password"));
+        leftPanel.add(cancel = new JButton("Cancel"));
         
-        // Build exit button panel
-        JPanel exitBtnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT,0,0));
-        exitBtnPanel.add(exitBtn = new JButton("Exit"));
+        // Build rightmost button panel
+        JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT,5,0));
+        rightPanel.add(logout = new JButton("Logout"));
         
         panel.add(leftPanel);
         panel.add(Box.createHorizontalGlue());
-        panel.add(exitBtnPanel);
+        panel.add(rightPanel);
         
         return panel;
     }
@@ -139,31 +116,14 @@ public class SettingsPanel extends JPanel
     
     private JPanel buildDBPanel()
     {
-        JPanel panel = new JPanel(new GridLayout(2, 2, 5, 5));
+        JPanel panel = new JPanel(new GridLayout(2, 2, 5 ,5));
         panel.setBorder(BorderFactory.createTitledBorder("Database"));
         
         panel.add(new JLabel("Database User:"));
         panel.add(dbUser = new JTextField());
         panel.add(new JLabel("Database Pass:"));
         panel.add(dbPass = new JPasswordField());
-        
-        return panel;
-    }
-    
-    /**
-        BuildEastPanel - Build & return the panel allowing database &
-        administrator password updates
-    
-        @param panel The built panel
-    */
-    
-    private JPanel buildEastPanel()
-    {
-        JPanel panel = new JPanel(new GridLayout(2, 1, 0, 5));
-        
-        panel.add(buildDBPanel());
-        panel.add(buildAdminPassPanel());
-        
+                
         return panel;
     }
     
@@ -176,7 +136,7 @@ public class SettingsPanel extends JPanel
     
     private JPanel buildGuestEmailPanel()
     {
-        JPanel panel = new JPanel(new GridLayout(6, 2, 5, 5));
+        JPanel panel = new JPanel(new GridLayout(7, 2, 5, 5));
         panel.setBorder(BorderFactory.createTitledBorder("Guest Email"));
         
         panel.add(new JLabel("Send Address:"));
@@ -218,46 +178,37 @@ public class SettingsPanel extends JPanel
         
         gbc.gridx = 2;
         gbc.insets = new Insets(0, 0, 0, 0);
-        panel.add(buildEastPanel(), gbc);
+        panel.add(buildDBPanel(), gbc);
         
         return panel;
     }
     
     /**
-        PopulateFields - Populate the fields with the given data
+        SetEmailFields - Populate the email fields with the given data
     
-        @param adminEmailProps Properties for the admin's email
-        @param adminGet Admin's get address
-        @param guestEmailProps Properties for the guest's email
-        @param dbProps Properties for the database
-        @param adminPassword The current administrator password
+        @param adminSMTP Admin SMTP properties
+        @param guestSMTP Guest SMTP properties
+        @param adminGet Address for admin to receive email at
     */
     
-    public void populateFields(Properties adminEmailProps,
-                               String adminGet, 
-                               Properties guestEmailProps, Properties dbProps,
-                               String adminPassword)
+    public void setEmailFields(SMTPProperties adminSMTP,
+                               SMTPProperties guestSMTP, String adminGet)
     {
-        adminSendAddress.setText(adminEmailProps.getProperty("Address"));
-        adminHost.setText(adminEmailProps.getProperty("Host"));
-        adminSecurity.setSelectedItem(adminEmailProps.getProperty("Security"));
-        adminPort.setText(adminEmailProps.getProperty("Port"));
-        adminUser.setText(adminEmailProps.getProperty("User"));
-        adminPass.setText(adminEmailProps.getProperty("Pass"));
+        adminSendAddress.setText(adminSMTP.getAddress());
+        adminHost.setText(adminSMTP.getHost());
+        adminSecurity.setSelectedItem(adminSMTP.getSecurity());
+        adminPort.setText(adminSMTP.getPort());
+        adminUser.setText(adminSMTP.getUser());
+        adminPass.setText(adminSMTP.getPassword());
+        
         adminGetAddress.setText(adminGet);
         
-        guestSendAddress.setText(guestEmailProps.getProperty("Address"));
-        guestHost.setText(guestEmailProps.getProperty("Host"));
-        guestSecurity.setSelectedItem(guestEmailProps.getProperty("Security"));
-        guestPort.setText(guestEmailProps.getProperty("Port"));
-        guestUser.setText(guestEmailProps.getProperty("User"));
-        guestPass.setText(guestEmailProps.getProperty("Pass"));
-        
-        dbUser.setText(dbProps.getProperty("User"));
-        dbPass.setText(dbProps.getProperty("Pass"));
-        
-        adminLogPass.setText(adminPassword);
-        adminVerifyLogPass.setText(adminPassword);
+        guestSendAddress.setText(guestSMTP.getAddress());
+        guestHost.setText(guestSMTP.getHost());
+        guestSecurity.setSelectedItem(guestSMTP.getSecurity());
+        guestPort.setText(guestSMTP.getPort());
+        guestUser.setText(guestSMTP.getUser());
+        guestPass.setText(guestSMTP.getPassword());
     }
     
     /**
@@ -266,9 +217,9 @@ public class SettingsPanel extends JPanel
         @param options Security options available to choose from
     */
     
-    public void setSecurityOptions(String[] options)
+    public void setSecurityOptions(SecurityOption[] options)
     {
-        for (String option : options)
+        for (SecurityOption option : options)
         {
             adminSecurity.addItem(option);
             guestSecurity.addItem(option);

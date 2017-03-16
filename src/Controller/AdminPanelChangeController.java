@@ -6,9 +6,10 @@
 
 package Controller;
 
+import Data.SMTPProperties;
+import Data.SecurityOption;
 import Data.SystemUtil;
 import GUI.AdminPanel;
-import java.util.Properties;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -40,16 +41,12 @@ public class AdminPanelChangeController implements ChangeListener
         switch (view.getActiveTab())
         {
             case "Settings":
-                case "Save":
-                Properties adminEmailProps = SystemUtil.getAdminSMTPProperties();
-                Properties guestEmailProps = SystemUtil.getGuestSMTPProperties();
-                String adminPass = SystemUtil.getAdminPassword();
-                String adminGetAddress = SystemUtil.getAdminGetAddress();
-                Properties dbProps = new Properties();
-                dbProps.put("User", SystemUtil.getDBUser());
-                dbProps.put("Pass", SystemUtil.getDBPass());
-                
-                view.populateSettingsFields(adminEmailProps, adminPass, guestEmailProps, dbProps, adminPass);
+                SMTPProperties adminSMTP = SystemUtil.getAdminSMTPProperties();
+                SMTPProperties guestSMTP = SystemUtil.getGuestSMTPProperties();
+                String adminGet = SystemUtil.getAdminGetAddress();
+                view.setSettingsSecurityOptions(SecurityOption.values());
+                view.setSettingsEmailFields(adminSMTP, guestSMTP, adminGet);
+                break;
         }
     }
 }

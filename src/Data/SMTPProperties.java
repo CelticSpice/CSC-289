@@ -39,12 +39,12 @@ public class SMTPProperties
         
         if (props.containsKey("Security"))
         {
-            switch (props.getProperty("Security"))
+            switch ((SecurityOption) props.get("Security"))
             {
-                case "ssl":
+                case SSL:
                     sessionProps.put("mail.smtp.ssl.enable", "true");
                     break;
-                case "tls":
+                case TLS:
                     sessionProps.put("mail.smtp.starttls.enable", "true");
                     break;
                 default:
@@ -108,9 +108,10 @@ public class SMTPProperties
         @return The security protocol to be used
     */
     
-    public String getSecurity()
+    public SecurityOption getSecurity()
     {
-        return props.getProperty("Security", "").toUpperCase();
+        return (SecurityOption) props.getOrDefault
+            ("Security", SecurityOption.NONE);
     }
     
     /**
@@ -165,7 +166,7 @@ public class SMTPProperties
     
     public void setPort(int port)
     {
-        props.put("Port", port);
+        props.put("Port", String.valueOf(port));
     }
     
     /**
@@ -176,7 +177,7 @@ public class SMTPProperties
     
     public void setPort(String port)
     {
-        props.put("Port", Integer.parseInt(port));
+        props.put("Port", port);
     }
     
     /**
@@ -185,9 +186,9 @@ public class SMTPProperties
         @param security The security protocol to be used
     */
     
-    public void setSecurity(String security)
+    public void setSecurity(SecurityOption security)
     {
-        props.put("Security", security.toLowerCase());
+        props.put("Security", security);
     }
     
     /**

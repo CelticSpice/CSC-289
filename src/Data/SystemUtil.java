@@ -7,7 +7,6 @@
 package Data;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.Properties;
 import java.util.prefs.BackingStoreException;
 
 public class SystemUtil

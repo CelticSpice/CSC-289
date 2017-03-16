@@ -49,7 +49,10 @@ public class EmailPreferences
         SMTPProperties props = new SMTPProperties();
         props.setAddress(prefs.get("AdminSendAddress", ""));
         props.setHost(prefs.get("AdminSMTPHost", ""));
-        props.setSecurity(prefs.get("AdminSMTPSecurity", ""));
+        
+        props.setSecurity(SecurityOption.valueOf
+            (prefs.get("AdminSMTPSecurity", "NONE")));
+        
         props.setPort(prefs.get("AdminSMTPPort", ""));
         props.setUser(prefs.get("AdminSMTPUser", ""));
         props.setPassword(prefs.get("AdminSMTPPass", ""));
@@ -68,7 +71,8 @@ public class EmailPreferences
         SMTPProperties props = new SMTPProperties();
         props.setAddress(prefs.get("GuestSendAddress", ""));
         props.setHost(prefs.get("GuestSMTPHost", ""));
-        props.setSecurity(prefs.get("GuestSMTPSecurity", ""));
+        props.setSecurity(SecurityOption.valueOf
+            (prefs.get("GuestSMTPSecurity", "NONE")));
         props.setPort(prefs.get("GuestSMTPPort", ""));
         props.setUser(prefs.get("GuestSMTPUser", ""));
         props.setPassword(prefs.get("GuestSMTPPass", ""));
@@ -93,7 +97,7 @@ public class EmailPreferences
             prefs.put("AdminSMTPHost", "smtp.foo.com");
         
         if (!prefs.nodeExists("AdminSMTPSecurity"))
-            prefs.put("AdminSMTPSecurity", "SSL|TLS|None");
+            prefs.put("AdminSMTPSecurity", "NONE");
         
         if (!prefs.nodeExists("AdminSMTPPort"))
             prefs.put("AdminSMTPPort", "587");
@@ -111,7 +115,7 @@ public class EmailPreferences
             prefs.put("GuestSMTPHost", "smtp.foo.com");
         
         if (!prefs.nodeExists("GuestSMTPSecurity"))
-            prefs.put("GuestSMTPSecurity", "SSL|TLS|None");
+            prefs.put("GuestSMTPSecurity", "NONE");
         
         if (!prefs.nodeExists("GuestSMTPPort"))
             prefs.put("GuestSMTPPort", "587");
@@ -145,7 +149,7 @@ public class EmailPreferences
     {
         prefs.put("AdminSendAddress", props.getAddress());
         prefs.put("AdminSMTPHost", props.getHost());
-        prefs.put("AdminSMTPSecurity", props.getSecurity());
+        prefs.put("AdminSMTPSecurity", props.getSecurity().toString());
         prefs.put("AdminSMTPPort", props.getPort());
         prefs.put("AdminSMTPUser", props.getUser());
         prefs.put("AdminSMTPPass", props.getPassword());
@@ -161,7 +165,7 @@ public class EmailPreferences
     {
         prefs.put("GuestSendAddress", props.getAddress());
         prefs.put("GuestSMTPHost", props.getHost());
-        prefs.put("GuestSMTPSecurity", props.getSecurity());
+        prefs.put("GuestSMTPSecurity", props.getSecurity().toString());
         prefs.put("GuestSMTPPort", props.getPort());
         prefs.put("GuestSMTPUser", props.getUser());
         prefs.put("GuestSMTPPass", props.getPassword());

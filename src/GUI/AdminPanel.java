@@ -7,8 +7,9 @@
 package GUI;
 
 import Controller.ManageReservableBtnController;
+import Data.SMTPProperties;
+import Data.SecurityOption;
 import java.awt.BorderLayout;
-import java.util.Properties;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeListener;
@@ -30,9 +31,7 @@ public class AdminPanel extends JPanel
         tabbedPane = new JTabbedPane();
         
         tabbedPane.add("Manage Reservables", buildManageReservablePanel());
-        
-        settingsPanel = buildSettingsPanel();
-        tabbedPane.add("Settings", settingsPanel);
+        tabbedPane.add("Settings", buildSettingsPanel());
         
         add(tabbedPane);
     }
@@ -41,7 +40,7 @@ public class AdminPanel extends JPanel
         BuildManageReservablePanel - Build & return the panel to manage
         reservables on
     
-        @return panel The built panel
+        @return The built panel
     */
     
     private ManageReservablePanel buildManageReservablePanel()
@@ -53,16 +52,16 @@ public class AdminPanel extends JPanel
     }
     
     /**
-        BuildSettingsPanel - Build & return the panel allowing settings
-        changes
+        BuildSettingsPanel - Build & return the panel allowing updates to
+        settings to be made
     
-        @return panel The built panel
+        @return The built panel
     */
     
     private SettingsPanel buildSettingsPanel()
     {
-        SettingsPanel panel = new SettingsPanel();
-        return panel;
+        settingsPanel = new SettingsPanel();
+        return settingsPanel;
     }
     
     /**
@@ -77,23 +76,29 @@ public class AdminPanel extends JPanel
     }
     
     /**
-        PopulateSettingsFields - Populate the fields in the settings tab
+        SetSettingsEmailFields - Populate the email fields in the settings tab
     
-        @param adminEmailProps Properties for the admin's email
-        @param adminGet Admin's get address
-        @param guestEmailProps Properties for the guest's email
-        @param dbProps Properties for the database
-        @param adminPassword The current administrator password
+        @param adminSMTP Admin SMTP properties
+        @param guestSMTP Guest SMTP properties
+        @param adminGet Address for admin to receive email at
     */
     
-    public void populateSettingsFields(Properties adminEmailProps,
-                                       String adminGet, 
-                                       Properties guestEmailProps,
-                                       Properties dbProps,
-                                       String adminPassword)
+    public void setSettingsEmailFields(SMTPProperties adminSMTP,
+                                       SMTPProperties guestSMTP,String adminGet)
     {
-        settingsPanel.populateFields(adminEmailProps, adminGet, guestEmailProps,
-                                     dbProps, adminPassword);
+        settingsPanel.setEmailFields(adminSMTP, guestSMTP, adminGet);
+    }
+    
+    /**
+        SetSettingsSecurityOptions - Set the security options available to
+        choose from on the settings panel
+    
+        @param options The options available to choose from
+    */
+    
+    public void setSettingsSecurityOptions(SecurityOption[] options)
+    {
+        settingsPanel.setSecurityOptions(options);
     }
     
     /**

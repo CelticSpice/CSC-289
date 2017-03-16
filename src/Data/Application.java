@@ -25,6 +25,7 @@ public class Application
     public static void main(String[] args)
             throws BackingStoreException, SQLException, RecordExistsException
     {
+        SystemUtil.initPreferences();
         JFrame frame = new JFrame();
         AdminPanel panel = new AdminPanel();
         panel.registerChangeController(new AdminPanelChangeController(panel));

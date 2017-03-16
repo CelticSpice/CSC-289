@@ -6,101 +6,171 @@
 
 package Data;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.FileWriter;
 import java.security.NoSuchAlgorithmException;
-import java.util.Scanner;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-import org.xml.sax.SAXException;
+import java.util.Properties;
+import java.util.prefs.BackingStoreException;
 
 public class SystemUtil
 {
     // Fields
     private static final String SALT = "ShaBuzz556qle+7d??754!+Rw5ar?";
-    private static final String PASSWD_FILE = "passwd";
-    private static final String EMAIL_FILE = "email.xml";
-    private static final String EMAIL_XSD_FILE = "email.xsd";
-    private static final String DEFAULT_PASSWD = "PASSWORD";
+    
+    private static final SHA256SaltHasher SALT_HASHER =
+            new SHA256SaltHasher(SALT);
+    
+    private static final SystemPreferences PREFS =
+            new SystemPreferences("EventReservationSystem");
     
     /**
-        UpdatePassword - Update the administrator password
+        GetAdminGetAddress - Return the address for the administrator to
+        receive email at
     
-        @param password The updated password
-        @throws IOException Error updating password file
+        @return The address for the administrator to receive email at
+    */
+    
+    public static String getAdminGetAddress()
+    {
+        return PREFS.getAdminGetAddress();
+    }
+    
+    /**
+        GetAdminSMTPProperties - Return properties of the administrator's
+        SMTP server setup
+    
+        @return props Properties of the administrator's SMTP server setup
+    */
+    
+    public static Properties getAdminSMTPProperties()
+    {
+        return PREFS.getAdminSMTPProperties();
+    }
+    
+    /**
+        GetDBPass - Return the password for the database
+    
+        @return The password for the database
+    */
+    
+    public static String getDBPass()
+    {
+        return PREFS.getDBPass();
+    }
+    
+    /**
+        GetDBUser - Return the username for the database
+    
+        @return The username for the database
+    */
+    
+    public static String getDBUser()
+    {
+        return PREFS.getDBUser();
+    }
+    
+    /**
+        GetGuestSMTPProperties - Return properties of the guest's
+        SMTP server setup
+    
+        @return props Properties of the guest's SMTP server setup
+    */
+    
+    public static Properties getGuestSMTPProperties()
+    {
+        return PREFS.getGuestSMTPProperties();
+    }
+    
+    /**
+        SetAdminGetAddress - Set the address the administrator will receive
+        emails at
+    
+        @param address Address the administrator will receive emails at
+    */
+    
+    public static void setAdminGetAddress(String address)
+    {
+        PREFS.setAdminGetAddress(address);
+    }
+    
+    /**
+        SetAdminSMTPPrefs - Set preferences for the administrator's SMTP server
+    
+        @param props Preferences of the administrator's SMTP server
+    */
+    
+    public static void setAdminSMTPPrefs(Properties props)
+    {
+        PREFS.setAdminSMTPPrefs(props);
+    }
+    
+    /**
+        SetDBPass - Set the password for the database
+    
+        @param pass The password for the database
+    */
+    
+    public static void setDBPass(String pass)
+    {
+        PREFS.setDBPass(pass);
+    }
+    
+    /**
+        SetDBUser - Set the username for the database
+    
+        @param user The username for the database
+    */
+    
+    public static void setDBUser(String user)
+    {
+        PREFS.setDBUser(user);
+    }
+    
+    /**
+        SetGuestSMTPPrefs - Set preferences for the guest's SMTP server
+    
+        @param props Preferences of the guest's SMTP server
+    */
+    
+    public static void setGuestSMTPPrefs(Properties props)
+    {
+        PREFS.setGuestSMTPPrefs(props);
+    }
+    
+    /**
+        UpdateAdminPassword - Update the administrator password
+    
+        @param pass The updated password
         @throws NoSuchAlgorithmException Error hashing the password
     */
     
-    public static void updatePassword(String password)
-            throws IOException, NoSuchAlgorithmException
+    public static void updateAdminPassword(String pass)
+            throws NoSuchAlgorithmException
     {
-        FileWriter writer = new FileWriter(new File(PASSWD_FILE));
-        SHA256SaltHasher hasher = new SHA256SaltHasher(SALT);
-        writer.write(hasher.saltHash(password));
-        writer.close();
+        PREFS.updateAdminPassword(SALT_HASHER.saltHash(pass));
     }
     
     /**
-        GetEmailFile - Return the email XML file
+        InitPreferences - Initialize the system preferences
     
-        @return The email XML file
+        @throws BackingStoreException Error communicating with preferences
     */
     
-    public static File getEmailFile()
+    public static void initPreferences() throws BackingStoreException
     {
-        return new File(EMAIL_FILE);
+        PREFS.init();
     }
     
     /**
-        InitResources - Initialize the system resources
-        @throws IOException Error creating password file
-        @throws NoSuchAlgorithmException Error hashing the password
-        @throws ParserConfigurationException Error initializing email XML file
-        @throws TransformerException Error initializing email XML file
-        @throws SAXException Bad email XML file
-    */
-    
-    public static void initResources() 
-            throws IOException, NoSuchAlgorithmException,
-                    ParserConfigurationException, TransformerException,
-                    SAXException
-    {
-        File passwdFile = new File(PASSWD_FILE);
-        if (passwdFile.createNewFile())
-        {
-            FileWriter writer = new FileWriter(passwdFile);
-            SHA256SaltHasher hasher = new SHA256SaltHasher(SALT);
-            writer.write(hasher.saltHash(DEFAULT_PASSWD));
-            writer.close();
-        }
-        
-        File emailFile = new File(EMAIL_FILE);
-        if (emailFile.createNewFile())
-            XMLUtil.initEmailXMLFile(emailFile);
-        else
-            XMLUtil.validateXML(new File(EMAIL_FILE), new File(EMAIL_XSD_FILE));
-    }
-    
-    /**
-        ValidatePassword - Validate that the given string matches the password
-        contained in the password file
+        ValidateAdminPassword - Validate the given string against the
+        administrator's password
     
         @param pass The password to validate
-        @throws FileNotFoundException Error reading password file
         @throws NoSuchAlgorithmException Error hashing password
-        @return valid Whether the password matches the password in the password
-                      file
+        @return Whether the string matches the administrator's password
     */
     
-    public static boolean validatePassword(String pass)
-            throws FileNotFoundException, NoSuchAlgorithmException
+    public static boolean validateAdminPassword(String pass)
+            throws NoSuchAlgorithmException
     {
-        Scanner passwdFile = new Scanner(new File(PASSWD_FILE));
-        SHA256SaltHasher hasher = new SHA256SaltHasher(SALT);
-        boolean valid = hasher.saltHash(pass).equals(passwdFile.nextLine());
-        passwdFile.close();
-        return valid;
+        return PREFS.validateAdminPassword(SALT_HASHER.saltHash(pass));
     }
 }

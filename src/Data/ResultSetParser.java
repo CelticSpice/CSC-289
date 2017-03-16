@@ -9,17 +9,19 @@ package Data;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ResultSetParser
 {  
     /**
         IsEmpty - Return whether a result set is empty
     
-        @param rs Result set to determine if empty
-        @throws SQLException Error in working with the result set
+        @param rs The result set to parse
+        @throws SQLException Error parsing the result set
         @return Whether the result set is empty
     */
     
@@ -29,95 +31,92 @@ public class ResultSetParser
     }
     
     /**
-        ParseLocationNames - Parse a result set containing only location names
+        ParseLocationNames - Parse a result set containing the names of
+        locations
     
         @param rs The result set to parse
-        @throws SQLException There was an error working with the result set
-        @return names Every location name included in the result set
+        @throws SQLException Error parsing the result set
+        @return The location names parsed from the result set
     */
     
     public static String[] parseLocationNames(ResultSet rs) throws SQLException
     {
-        ArrayList<String> names = new ArrayList<>();
-        if (!isEmpty(rs))
-            while (rs.next())
-                names.add(rs.getString(1));
+        List<String> names = new ArrayList<>();
+        while (rs.next())
+            names.add(rs.getString(0));
         return names.toArray(new String[names.size()]);
     }
     
     /**
-        ParseReservable - Parse a result set containing a reservable
+        ParseTimeframes - Parse a result set containing timeframes
     
         @param rs The result set to parse
-        @throws SQLException There was an error working with the result set
-        @return The reservable defined by the result set; else, if result set
-                is empty, null
+        @param reserved Whether the parser should mark timeframes as reserved
+        @throws SQLException Error parsing the result set
+        @return timeframes A list of timeframes
     */
     
-    public static Reservable parseReservable(ResultSet rs) throws SQLException
+    public static TimeframeList parseTimeframes(ResultSet rs, boolean reserved)
+            throws SQLException
     {
-        if (!isEmpty(rs))
+        TimeframeList timeframes = new TimeframeList();
+        Timeframe timeframe;
+        LocalDate startDate, endDate;
+        LocalTime startTime, endTime;
+        BigDecimal cost;
+        LocalDateTime start, end;
+        
+        while (rs.next())
         {
-            Location location = new Location(rs.getString("LocationName"),
-                                             rs.getInt("Capacity"));
+            startDate = rs.getDate("StartDate").toLocalDate();
+            startTime = rs.getTime("StartTime").toLocalTime();
+            endDate = rs.getDate("EndDate").toLocalDate();
+            endTime = rs.getTime("EndTime").toLocalTime();
+            cost = rs.getBigDecimal("Cost");
             
-            ZonedDateTime startDateTime = ZonedDateTime
-                    .of(rs.getDate("StartDate").toLocalDate(),
-                        rs.getTime("StartTime").toLocalTime(),
-                        ZoneId.systemDefault());
+            start = LocalDateTime.of(startDate, startTime);
+            end = LocalDateTime.of(endDate, endTime);
             
-            ZonedDateTime endDateTime = ZonedDateTime
-                    .of(rs.getDate("EndDate").toLocalDate(),
-                        rs.getTime("EndTime").toLocalTime(),
-                        ZoneId.systemDefault());
+            if (reserved)
+                timeframe = new Timeframe(start, end, cost, true);
+            else
+                timeframe = new Timeframe(start, end, cost);
             
-            BigDecimal cost = rs.getBigDecimal("Cost");
-            
-            ReservableTimeframe timeframe = new ReservableTimeframe
-                    (startDateTime, endDateTime, cost);
-            
-            return new Reservable(location, timeframe);
+            timeframes.add(timeframe);
         }
-        else
-            return null;
+        
+        return timeframes;
     }
     
     /**
-        ParseReservableTimeframes - Parse a result set containing reservable
-        timeframes
-    
-        @param rs The result set to parse
-        @throws SQLException There was an error working with the result set
-        @return timeframes The reservable timeframes defined by the result set
-    */
-    
-    public static ReservableTimeframeList parseReservableTimeframes
-        (ResultSet rs) throws SQLException
+     * ParseTimeframes - Parse a result set containing timeframes
+     * 
+     * @param rs The result set to parse
+     * @return A list of timeframes
+     * @throws SQLException Error parsing the result set
+     */
+    public static TimeframeList parseTimeframes(ResultSet rs)
+            throws SQLException
     {
-        ReservableTimeframeList timeframes = new ReservableTimeframeList();
+        TimeframeList timeframes = new TimeframeList();
+        Timeframe timeframe;
+        LocalDate startDate, endDate;
+        LocalTime startTime, endTime;
+        LocalDateTime start, end;
         
-        if (!isEmpty(rs))
+        while (rs.next())
         {
-            ZonedDateTime startDateTime, endDateTime;
-            BigDecimal cost;
+            startDate = rs.getDate("StartDate").toLocalDate();
+            startTime = rs.getTime("StartTime").toLocalTime();
+            endDate = rs.getDate("EndDate").toLocalDate();
+            endTime = rs.getTime("EndTime").toLocalTime();
             
-            while (rs.next())
-            {
-                startDateTime = ZonedDateTime
-                        .of(rs.getDate("StartDate").toLocalDate(),
-                            rs.getTime("StartTime").toLocalTime(),
-                            ZoneId.systemDefault());
-                
-                endDateTime = ZonedDateTime
-                        .of(rs.getDate("EndDate").toLocalDate(),
-                            rs.getTime("EndTime").toLocalTime(),
-                            ZoneId.systemDefault());
-                
-                cost = rs.getBigDecimal("Cost");
-                
-                timeframes.add(new ReservableTimeframe(startDateTime,
-                                                       endDateTime, cost));     
-            }
+            start = LocalDateTime.of(startDate, startTime);
+            end = LocalDateTime.of(endDate, endTime);
+            
+            timeframe = new Timeframe(start, end);
+            
+            timeframes.add(timeframe);
         }
         
         return timeframes;

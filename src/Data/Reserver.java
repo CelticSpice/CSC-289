@@ -6,14 +6,11 @@
 
 package Data;
 
-import java.util.ArrayList;
-import static java.util.Arrays.asList;
-
 public class Reserver
 {
     // Fields
     private ContactInfo contactInfo;
-    private ArrayList<Reservation> reservations;
+    private ReservationList reservations;
     
     /**
         Constructor - Accepts the contact information of the reserver
@@ -24,7 +21,7 @@ public class Reserver
     public Reserver(ContactInfo contact)
     {
         contactInfo = contact;
-        reservations = new ArrayList<>();
+        reservations = new ReservationList();
     }
     
     /**
@@ -32,13 +29,13 @@ public class Reserver
         list of reservations that the reserver has made
     
         @param contact Contact info
-        @param reservationListing Reservations that the reserver has made
+        @param reservationList Reservations that the reserver has made
     */
     
-    public Reserver(ContactInfo contact, Reservation[] reservationListing)
+    public Reserver(ContactInfo contact, ReservationList reservationList)
     {
         contactInfo = contact;
-        reservations = new ArrayList<>(asList(reservationListing));
+        reservations = reservationList;
     }
     
     /**
@@ -102,8 +99,8 @@ public class Reserver
         @return The reservations the reserver made
     */
     
-    public Reservation[] getReservations()
+    public ReservationList getReservations()
     {
-        return reservations.toArray(new Reservation[reservations.size()]);
+        return reservations;
     }
 }

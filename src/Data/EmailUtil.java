@@ -6,8 +6,7 @@
 
 package Data;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.Properties;
 import javax.mail.Authenticator;
@@ -19,33 +18,32 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPathExpressionException;
-import org.xml.sax.SAXException;
 
 public class EmailUtil
 {
     /**
-        EmailAdmin - Send an email to the administrator of the system, with
-        information parsed from the email XML file
+        EmailAdmin - Send an email to the administrator of the system
     
-        @param name Name of sender
-        @param address Email address of sender
+        @param senderName Name of sender
+        @param senderAddress Email address of sender
         @param body Body of message
         @throws AddressException Error parsing addresses
+        @throws MessagingException Error sending message
+        @throws UnsupportedEncodingException Failed to encode name in address
     */
     
-    public static void emailAdmin(String name, String address, String body)
-            throws AddressException, IOException, ParserConfigurationException,
-                    SAXException, XPathExpressionException
+    public static void emailAdmin(String senderName, String senderAddress,
+                                  String body)
+            throws AddressException, MessagingException,
+                   UnsupportedEncodingException
     {
-        InternetAddress guestFrom = new InternetAddress(address);
-        if (name != null && !name.isEmpty())
-            guestFrom.setPersonal(name);
+        // Build address to display in message
+        InternetAddress address = new InternetAddress(senderAddress);
+        if (senderName != null && !senderName.isEmpty())
+            address.setPersonal(senderName);
         
         // Get the properties for the guest to send email
-        File emailXML = SystemUtil.getEmailFile();
-        Properties props = XMLParser.parseSendEmailProps(emailXML, "Guest");
+        Properties props = SystemUtil.getGuestSMTPProperties();
         
         // Get address, username, password from properties
         InternetAddress from = new InternetAddress(props
@@ -53,63 +51,59 @@ public class EmailUtil
         String username = props.getProperty("User");
         String password = props.getProperty("Pass");
         
-        // Transform the properties
-        props = transformProps(props);
+        // Parse the properties
+        props = parseProps(props);
         
         // Get the address for the administrator to receive email at
-        InternetAddress to = new InternetAddress(XMLParser
-                .parseAdminGetAddress(emailXML));
+        InternetAddress to = new InternetAddress
+            (SystemUtil.getAdminGetAddress());
         
         // Build authenticator
-        Authenticator auth = new Authenticator() {
-            private PasswordAuthentication pa = new PasswordAuthentication
-                    (username, password);
-            
-            @Override
-            public PasswordAuthentication getPasswordAuthentication() {
-                return pa;
-            }
-        };
+        Authenticator auth = null;
+        if (props.containsKey("mail.smtp.auth"))
+        {
+            auth = new Authenticator()
+            {
+                private PasswordAuthentication pa = new PasswordAuthentication
+                        (username, password);
+
+                @Override
+                public PasswordAuthentication getPasswordAuthentication() {
+                    return pa;
+                }
+            };
+        }
         
         // Create session
         Session session = Session.getInstance(props, auth);
         
         // Create & send message
         MimeMessage message = new MimeMessage(session);
-        try
-        {
-            message.setFrom(from);
-            message.setRecipient(Message.RecipientType.TO, to);
-            message.setSubject("Message from Guest " + name);
-            message.setSentDate(new Date());
-            message.setText("Message from " + guestFrom.toString() +
-                    "\n\n" + body);
-            Transport.send(message);
-        }
-        catch (MessagingException ex)
-        {
-            System.err.println(ex);
-        }
+        message.setFrom(from);
+        message.setRecipient(Message.RecipientType.TO, to);
+        message.setSubject("Message from Guest " + senderName);
+        message.setSentDate(new Date());
+        message.setText("Message from guest " + address.toString() +
+                "\n\n" + body);
+        Transport.send(message);
     }
     
     /**
-        EmailReserver - Send an email to a reserver, with information parsed
-        from the email XML file
+        EmailReserver - Send an email to a reserver
     
         @param reserver The reserver to send an email message to
         @param subject The subject of the message
         @param body The body of the message
         @throws AddressException Error parsing addresses
+        @throws MessagingException Error sending message
     */
     
     public static void emailReserver(Reserver reserver, String subject,
                                      String body)
-            throws AddressException, IOException, ParserConfigurationException,
-                    SAXException, XPathExpressionException
+            throws AddressException, MessagingException
     {
         // Get the properties for the admin to send email
-        File emailXML = SystemUtil.getEmailFile();
-        Properties props = XMLParser.parseSendEmailProps(emailXML, "Admin");
+        Properties props = SystemUtil.getAdminSMTPProperties();
         
         // Get address, username, password from properties
         InternetAddress from = new InternetAddress(props
@@ -117,68 +111,67 @@ public class EmailUtil
         String username = props.getProperty("User");
         String password = props.getProperty("Pass");
         
-        // Transform the properties
-        props = transformProps(props);
+        // Parse the properties
+        props = parseProps(props);
         
         // Get the address for the reserver to receive email at
         InternetAddress to = new InternetAddress(reserver.getEmailAddress());
         
         // Build authenticator
-        Authenticator auth = new Authenticator() {
-            private PasswordAuthentication pa = new PasswordAuthentication
-                    (username, password);
-            
-            @Override
-            public PasswordAuthentication getPasswordAuthentication() {
-                return pa;
-            }
-        };
+        Authenticator auth = null;
+        if (props.containsKey("mail.smtp.auth"))
+        {
+            auth = new Authenticator()
+            {
+                private PasswordAuthentication pa = new PasswordAuthentication
+                        (username, password);
+
+                @Override
+                public PasswordAuthentication getPasswordAuthentication() {
+                    return pa;
+                }
+            };
+        }
         
         // Create session
         Session session = Session.getInstance(props, auth);
         
         // Create & send message
         MimeMessage message = new MimeMessage(session);
-        try
-        {
-            message.setFrom(from);
-            message.setRecipient(Message.RecipientType.TO, to);
-            message.setSubject(subject);
-            message.setSentDate(new Date());
-            message.setText(body);
-            Transport.send(message);
-        }
-        catch (MessagingException ex)
-        {
-            System.err.println(ex);
-        }
-        
+        message.setFrom(from);
+        message.setRecipient(Message.RecipientType.TO, to);
+        message.setSubject(subject);
+        message.setSentDate(new Date());
+        message.setText(body);
+        Transport.send(message);
     }
     
     /**
-        TransformProps - Transform email properties into names suitable for
+        ParseProps - Parse email properties into formats suitable for sending
         email
     
-        @param props Email properties to transform
-        @return transformedProps Properties transformed from the given
-                                 properties
+        @param props Email properties to parse
+        @return parsedProps Properties parsed into suitable formats
     */
     
-    private static Properties transformProps(Properties props)
+    private static Properties parseProps(Properties props)
     {
-        Properties transformedProps = new Properties();
+        Properties parsedProps = new Properties();
         
-        if (!props.getProperty("Security").equals("NONE"))
+        parsedProps.put("mail.smtp.host", props.getProperty("Host"));
+        parsedProps.put("mail.smtp.port", props.getProperty("Port"));
+        
+        if (props.getProperty("Security").equalsIgnoreCase("SSL"))
+            parsedProps.put("mail.smtp.ssl.enable", "true");
+        else if (props.getProperty("Security").equalsIgnoreCase("TLS"))
+            parsedProps.put("mail.smtp.starttls.enable", "true");
+        
+        if (!props.getProperty("User").isEmpty() ||
+            !props.getProperty("Pass").isEmpty())
         {
-            transformedProps.setProperty("mail.smtp.auth", "true");
-            transformedProps.setProperty("mail.smtp.starttls.enable", "true");
+            parsedProps.put("mail.smtp.auth", "true");
         }
         
-        transformedProps
-                .setProperty("mail.smtp.host", props.getProperty("Host"));
-        transformedProps
-                .setProperty("mail.smtp.port", props.getProperty("Port"));
-        
-        return transformedProps;
+        return parsedProps;
     }
 }

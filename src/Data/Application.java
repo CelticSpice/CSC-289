@@ -7,19 +7,12 @@
 package Data;
 
 import Exception.RecordExistsException;
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import javax.mail.internet.AddressException;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.xpath.XPathExpressionException;
-import org.xml.sax.SAXException;
+import java.util.Scanner;
+import java.util.prefs.BackingStoreException;
 
 public class Application
 {    
@@ -28,30 +21,11 @@ public class Application
     
         @param args The arguments
     */
-    public static void main(String[] args) throws SQLException, IOException,
-                                                  NoSuchAlgorithmException,
-                                                  ParserConfigurationException,
-                                                  TransformerException,
-                                                  SAXException,
-                                                  XPathExpressionException,
-                                                  AddressException,
-                                                  RecordExistsException
+    
+    public static void main(String[] args)
+            throws BackingStoreException, SQLException, RecordExistsException
     {
-        SystemUtil.initResources();
-        
-        Location loc = new Location("Barn", 75);
-        
-        ZonedDateTime start = ZonedDateTime
-                .of(LocalDate.of(2018, 4, 25), LocalTime.of(6, 0),
-                        ZoneId.systemDefault());
-        
-        ZonedDateTime end = ZonedDateTime
-                .of(LocalDate.of(2018, 4, 26), LocalTime.of(6, 0),
-                        ZoneId.systemDefault());
-        
-        ReservableTimeframe timeframe = new ReservableTimeframe
-                (start, end, new BigDecimal(175));
-        
-        Admin.addReservable(new Reservable(loc, timeframe));
+        SystemUtil.initPreferences();
+        ReserveDB.getInstance();
     }
 }

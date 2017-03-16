@@ -6,6 +6,7 @@
 
 package Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -63,6 +64,17 @@ public class Reservation
     public void approve()
     {
         approved = true;
+    }
+    
+    /**
+        GetCost - Return the cost of the reservation
+    
+        @return The cost of the reservation
+    */
+    
+    public BigDecimal getCost()
+    {
+        return reservable.getCost();
     }
     
     /**

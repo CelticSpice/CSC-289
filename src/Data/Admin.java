@@ -7,12 +7,10 @@
 package Data;
 
 import Exception.RecordExistsException;
-import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPathExpressionException;
-import org.xml.sax.SAXException;
 
 public class Admin
 {
@@ -25,11 +23,24 @@ public class Admin
         @throws RecordExistsException A record of an identical reservable
                                       exists in the database
     */
-    
+
     public static void addReservable(Reservable reservable) 
             throws SQLException, RecordExistsException
     {
         new RecordAdd().addReservable(reservable);
+    }
+
+    /**
+        RemoveReservable - Remove a reservable that can be reserved
+
+        @param reservable The reservable to remove
+        @throws SQLException Error removing record from database
+    */
+
+    public static void removeReservable(Reservable reservable)
+            throws SQLException
+    {
+        new RecordDelete().deleteReservable(reservable);
     }
     
     /**
@@ -39,19 +50,26 @@ public class Admin
         @param subject The subject of the email
         @param message The message to send
         @throws AddressException Malformed email address
-        @throws IOException Error reading email information from email XML file
-        @throws ParserConfigurationException Error reading email information
-                                             from email XML file
-        @throws SAXException Bad internal configuration for XML parser
-        @throws XPathExpressionException Error parsing information from email
-                                         XML file
+        @throws MessagingException Error sending message
     */
     
     public static void emailReserver(Reserver reserver, String subject,
                                      String message)
-            throws AddressException, IOException, ParserConfigurationException,
-                   SAXException, XPathExpressionException
+            throws AddressException, MessagingException
     {
         EmailUtil.emailReserver(reserver, subject, message);
+    }
+    
+    /**
+        UpdatePassword - Update the administrator's password
+    
+        @param pass The updated password
+        @throws NoSuchAlgorithmException Error hashing password
+    */
+    
+    public static void updatePassword(String pass)
+            throws NoSuchAlgorithmException
+    {
+        SystemUtil.updateAdminPassword(pass);
     }
 }

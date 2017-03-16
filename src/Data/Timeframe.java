@@ -7,72 +7,152 @@
 package Data;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 public class Timeframe
 {
     // Fields
-    private ZonedDateTime startDateTime, endDateTime;
+    private BigDecimal cost;
+    private boolean reserved;
+    private LocalDateTime startDateTime, endDateTime;
     
     /**
-        Constructor - Accepts the starting & ending dates & times
+        Constructor - Accepts the starting & ending dates & times of the
+        timeframe
     
         @param sDateTime The starting date & time
         @param eDateTime The ending date & time
+        @throws IllegalArgumentException Starting datetime after or equal to
+                                         ending datetime
     */
     
-    public Timeframe(ZonedDateTime sDateTime, ZonedDateTime eDateTime)
+    public Timeframe(LocalDateTime sDateTime, LocalDateTime eDateTime)
+            throws IllegalArgumentException
     {
         // We ignore nanoseconds & seconds
         startDateTime = sDateTime.withNano(0).withSecond(0);
         endDateTime = eDateTime.withNano(0).withSecond(0);
+        
+        // Check that starting datetime before ending date time
+        if (!(startDateTime.compareTo(endDateTime) < 0))
+            throw new IllegalArgumentException
+                ("End datetime before or equal to start datetime");
+        
+        cost = new BigDecimal(0);
+        reserved = false;
+    }
+    
+    /**
+        Constructor - Accepts the starting & ending dates & times of the
+        timeframe, and the cost to reserve it
+    
+        @param sDateTime The starting date & time
+        @param eDateTime The ending date & time
+        @param c The cost to reserve the timeframe
+        @throws IllegalArgumentException Starting datetime after or equal to
+                                         ending datetime or the cost is less
+                                         than $0.00
+    */
+    
+    public Timeframe(LocalDateTime sDateTime, LocalDateTime eDateTime,
+            BigDecimal c)
+    {
+        // We ignore nanoseconds & seconds
+        startDateTime = sDateTime.withNano(0).withSecond(0);
+        endDateTime = eDateTime.withNano(0).withSecond(0);
+        
+        // Check that starting datetime before ending date time
+        if (!(startDateTime.compareTo(endDateTime) < 0))
+            throw new IllegalArgumentException
+                ("End datetime before or equal to start datetime");
+        
+        // Check that cost is greater than or equal to $0.00
+        if (!(c.compareTo(new BigDecimal(0.00)) >= 0))
+            throw new IllegalArgumentException("Cost less than $0.00");
+        
+        cost = c;
+        reserved = false;
+    }
+    
+    /**
+        Constructor - Accepts the starting & ending dates & times of the
+        timeframe, the cost to reserve it, and whether it is reserved
+    
+        @param sDateTime The starting date & time
+        @param eDateTime The ending date & time
+        @param c The cost to reserve the timeframe
+        @param isRsrvd If the timeframe is reserved
+        @throws IllegalArgumentException Starting datetime after or equal to
+                                         ending datetime or the cost is less
+                                         than $0.00
+    */
+    
+    public Timeframe(LocalDateTime sDateTime, LocalDateTime eDateTime,
+            BigDecimal c, boolean isRsrvd)
+    {
+        // We ignore nanoseconds & seconds
+        startDateTime = sDateTime.withNano(0).withSecond(0);
+        endDateTime = eDateTime.withNano(0).withSecond(0);
+        
+        // Check that starting datetime before ending date time
+        if (!(startDateTime.compareTo(endDateTime) < 0))
+            throw new IllegalArgumentException
+                ("End datetime before or equal to start datetime");
+        
+        // Check that cost is greater than or equal to $0.00
+        if (!(c.compareTo(new BigDecimal(0.00)) >= 0))
+            throw new IllegalArgumentException("Cost less than $0.00");
+        
+        cost = c;
+        reserved = isRsrvd;
+    }
+    
+    /**
+        CancelReserve - Cancel the reservation of the timeframe
+    */
+    
+    public void cancelReserve()
+    {
+        reserved = false;
     }
     
     /**
         ConsistsOf - Return whether the timeframe consists of another
         timeframe
     
-        @param t Timeframe to check for consistency with
+        @param timeframe Timeframe to check for consistency with
         @return Whether the timeframe consists of the given timeframe
     */
     
-    public boolean consistsOf(Timeframe t)
+    public boolean consistsOf(Timeframe timeframe)
     {
-        long thisSDateTimeMilli = startDateTime.toInstant().toEpochMilli();
-        long thisEDateTimeMilli = endDateTime.toInstant().toEpochMilli();
-        long otherSDateTimeMilli = t.startDateTime.toInstant().toEpochMilli();
-        long otherEDateTimeMilli = t.endDateTime.toInstant().toEpochMilli();
-        
-        return (otherSDateTimeMilli >= thisSDateTimeMilli   &&
-                otherSDateTimeMilli <= thisEDateTimeMilli)  ||
-               (otherEDateTimeMilli >= thisSDateTimeMilli   &&
-                otherEDateTimeMilli <= thisEDateTimeMilli)
-                
-                                                            ||
-                
-               (thisSDateTimeMilli >= otherSDateTimeMilli   &&
-                thisSDateTimeMilli <= otherEDateTimeMilli)  ||
-               (thisEDateTimeMilli >= otherSDateTimeMilli   &&
-                thisEDateTimeMilli <= otherEDateTimeMilli);
+        return (timeframe.consistsOf(startDateTime) ||
+                timeframe.consistsOf(endDateTime))  ||
+               (consistsOf(timeframe.startDateTime) ||
+                consistsOf(timeframe.endDateTime));
     }
     
     /**
         ConsistsOf - Return whether the timeframe consists of the given
-        date & time
+        datetime
     
-        @param dateTime Date & time to determine if the timeframe consists of
-        @return Whether the timeframe consists of the given date & time
+        @param dateTime Datetime to determine if the timeframe consists of
+        @return Whether the timeframe consists of the given datetime
     */
     
     public boolean consistsOf(LocalDateTime dateTime)
     {
-        Timeframe t = new Timeframe(dateTime.atZone(startDateTime.getZone()),
-                                    dateTime.atZone(startDateTime.getZone()));
-        return consistsOf(t);
+        // We ignore nanoseconds & seconds
+        dateTime = dateTime.withNano(0).withSecond(0);
+        
+        return (dateTime.compareTo(startDateTime) >= 0 &&
+                dateTime.compareTo(endDateTime) <= 0);
     }
     
     /**
@@ -100,6 +180,30 @@ public class Timeframe
         time = time.withNano(0).withSecond(0);
         
         return endDateTime.toLocalTime().equals(time);
+    }
+    
+    /**
+        GetCost - Return the cost to reserve the timeframe
+    
+        @return The cost to reserve the timeframe
+    */
+    
+    public BigDecimal getCost()
+    {
+        return cost;
+    }
+    
+    /**
+        GetCostString - Return the cost to reserve the timeframe as a string
+    
+        @return The cost to reserve the timeframe as a string
+    */
+    
+    public String getCostString()
+    {
+        BigDecimal displayVal = cost.setScale(2, RoundingMode.HALF_EVEN);
+        NumberFormat fmt = NumberFormat.getCurrencyInstance(Locale.US);
+        return fmt.format(displayVal.doubleValue());
     }
     
     /**
@@ -175,6 +279,37 @@ public class Timeframe
     }
     
     /**
+        IsReserved - Return if the timeframe is reserved
+    
+        @return Whether the timeframe is reserved
+    */
+    
+    public boolean isReserved()
+    {
+        return reserved;
+    }
+    
+    /**
+        Reserve - Reserve the timeframe
+    */
+    
+    public void reserve()
+    {
+        reserved = true;
+    }
+    
+    /**
+        SetCost - Set the cost to reserve the timeframe
+    
+        @param c The cost to reserve the timeframe
+    */
+    
+    public void setCost(BigDecimal c)
+    {
+        cost = c;
+    }
+    
+    /**
         StartsOnDate - Return whether the timeframe starts on the given date
     
         @param date Date to check if the timeframe starts on
@@ -202,19 +337,18 @@ public class Timeframe
     }
     
     /**
-        ToString - Return a string representation of the object. The
-        timeframe's starting & ending date & time will be returned as a string
-        in the form of: yyyy-MM-dd, HH:mm
+        ToString - Return a string representation of the object
     
-        @return String representation of the object
+        @return str String representation of the object
     */
     
     @Override
     public String toString()
     {
         DateTimeFormatter fmt = DateTimeFormatter.
-                ofPattern("yyyy-MM-dd, HH:mm");
+                ofPattern("yyyy-MM-dd|HH:mm");
         
-        return startDateTime.format(fmt) + " : " + endDateTime.format(fmt);
+        return startDateTime.format(fmt) + ", " +
+               endDateTime.format(fmt);
     }
 }

@@ -1,5 +1,5 @@
 /**
-    A reservable, encapsulating a location & reservable timeframe
+    A reservable, encapsulating a location & timeframe
     CSC-289 - Group 4
     @author Timothy Burns
 */
@@ -14,7 +14,7 @@ public class Reservable
 {
     // Fields
     private Location location;
-    private ReservableTimeframe timeframe;
+    private Timeframe timeframe;
     
     /**
         Constructor - Accepts the location & timeframe of the reservable
@@ -23,7 +23,7 @@ public class Reservable
         @param time The timeframe
     */
     
-    public Reservable(Location loc, ReservableTimeframe time)
+    public Reservable(Location loc, Timeframe time)
     {
         location = loc;
         timeframe = time;
@@ -107,12 +107,12 @@ public class Reservable
     }
     
     /**
-        GetTimeframe - Return the reservable timeframe of the reservable
+        GetTimeframe - Return the timeframe of the reservable
     
-        @return The reservable timeframe of the reservable
+        @return The timeframe of the reservable
     */
     
-    public ReservableTimeframe getTimeframe()
+    public Timeframe getTimeframe()
     {
         return timeframe;
     }

@@ -15,8 +15,7 @@ import java.sql.Statement;
 public class ReserveDB
 {
     // Fields
-    private static final String DB = "jdbc:mariadb://localhost?" +
-                                     "user=shane&password=mariadb";
+    private static String dbOptions;
     
     private static final String DB_NAME = "ReserveDB";
     
@@ -30,7 +29,10 @@ public class ReserveDB
     
     private ReserveDB() throws SQLException
     {
-        connection = DriverManager.getConnection(DB);
+        dbOptions = "jdbc:mariadb://localhost?user=" + SystemUtil.getDBUser() +
+             "&pass=" + SystemUtil.getDBPass();
+        
+        connection = DriverManager.getConnection(dbOptions);
     }
     
     /**
@@ -140,6 +142,21 @@ public class ReserveDB
     }
     
     /**
+        DeleteRecord - Delete a record from the database
+    
+        @param recordDelete The deletion of a record
+        @throws SQLException Error deleting record from database
+    */
+    
+    public void deleteRecord(RecordDelete recordDelete) throws SQLException
+    {
+        Statement stmt = connection.createStatement();
+        stmt.execute("USE " + DB_NAME);
+        
+        stmt.executeUpdate(recordDelete.toString());
+    }
+    
+    /**
         Exists - Return whether the database exists
     
         @return Whether the database exists
@@ -189,5 +206,75 @@ public class ReserveDB
         stmt.execute("USE " + DB_NAME);
         
         return stmt.executeQuery(query.toString());
+    }
+       
+    /**
+     * RemovePassedTimeframes - Delete Reservations, Reservables and Timeframes 
+     * that have passed
+     * 
+     * @throws SQLException There was an error deleting
+     */
+    public void removePassedTimeframes() throws SQLException
+    {
+        Statement stmt = connection.createStatement();
+        stmt.execute("USE " + DB_NAME);
+        
+        // Delete passed Reservations.
+        String sql = "DELETE reservations" +
+                     "FROM Reservations, Timeframes" +
+                     "WHERE Reservations.timeframeID = Timeframes.timeframeID" +
+                     "AND Timeframes.EndDate < CURDATE()";
+        
+        stmt.executeUpdate(sql);
+                
+        // Delete passed Reservables.
+        sql = "DELETE reservables" +
+              "FROM Reservables, Timeframes" +
+              "WHERE Reservables.timeframeID = Timeframes.timeframeID" +
+              "AND Timeframes.EndDate < CURDATE()";
+        
+        stmt.executeUpdate(sql);
+        
+        // Delete passed Timeframes.
+        sql = "DELETE timeframes" +
+              "FROM Timeframes" +
+              "WHERE Timeframes.EndDate < CURDATE()";
+        
+        stmt.executeUpdate(sql);
+    }
+    
+    /**
+     * AddFutureTimeframes - Add timeframes a set time into the future
+     * 
+     * @throws SQLException Error inserting timeframes
+     */
+    public void addFutureTimeframes() throws SQLException
+    {
+        /*
+        This is incomplete; by no means is it near finished. Just laying some
+        foundational work.
+        */
+        Statement stmt = connection.createStatement();
+        stmt.execute("USE " + DB_NAME);
+        
+        String sql = "SELECT Timeframes.StartDate, Timeframes.EndDate, " +
+                     "Timeframes.StartTime, Timeframes.EndTime" +
+                     "FROM Timeframes" +
+                     "WHERE StartDate = CURDATE()";
+        
+        ResultSet rs = stmt.executeQuery(sql);
+        
+        TimeframeList referenceTimes = ResultSetParser.parseTimeframes(rs);
+        
+        for (Timeframe t : referenceTimes)
+        {
+            sql = "INSERT INTO Timeframes(StartDate, EndDate, StartTime, " +
+                  "EndTime)" +
+                  "VALUES('" + t.getStartDate().plusYears(1) + "', " +
+                  "'" + t.getEndDate().plusYears(1) + "', " +
+                  "'" + t.getStartTime() + "', '" + t.getEndTime() + "')";
+            
+            stmt.executeUpdate(sql);
+        }
     }
 }

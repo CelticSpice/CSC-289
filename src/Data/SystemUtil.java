@@ -34,6 +34,17 @@ public class SystemUtil
     }
     
     /**
+        GetAdminPassword - Return the administrator's password
+    
+        @return The administrator's password
+    */
+    
+    public static String getAdminPassword()
+    {
+        return PREFS.getAdminPassword();
+    }
+    
+    /**
         GetAdminSMTPProperties - Return properties of the administrator's
         SMTP server setup
     

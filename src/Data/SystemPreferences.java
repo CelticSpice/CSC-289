@@ -41,6 +41,17 @@ public class SystemPreferences
     }
     
     /**
+        GetAdminPassword - Return the administrator's password
+    
+        @return The administrator's password
+    */
+    
+    public String getAdminPassword()
+    {
+        return prefs.get("AdminPass", "");
+    }
+    
+    /**
         GetAdminSMTPProperties - Return properties of the administrator's
         SMTP server setup
     

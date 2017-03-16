@@ -58,7 +58,7 @@ public class ManageReservablePanel extends JPanel
     {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
-        panel.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
         // Build main button panel
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));

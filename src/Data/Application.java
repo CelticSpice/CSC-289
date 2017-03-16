@@ -6,6 +6,7 @@
 
 package Data;
 
+import Controller.AdminPanelChangeController;
 import Exception.RecordExistsException;
 import GUI.AdminPanel;
 import java.sql.SQLException;
@@ -24,7 +25,10 @@ public class Application
             throws BackingStoreException, SQLException, RecordExistsException
     {
         JFrame frame = new JFrame();
-        frame.add(new AdminPanel());
+        AdminPanel panel = new AdminPanel();
+        panel.registerChangeController(new AdminPanelChangeController(panel));
+        frame.add(panel);
+        frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
     }

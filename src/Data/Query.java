@@ -220,16 +220,11 @@ public class Query
     public boolean queryIfReservationExists(Reservation reservation)
             throws SQLException
     {
-        sql = "SELECT Locations.LocationName, Timeframes.StartDate, " +
+        sql = "SELECT Reservations.LocationName, Timeframes.StartDate, " +
               "Timeframes.StartTime, Timeframes.EndDate, Timeframes.EndTime, " +
               "FROM Reservations " +
-              "INNER JOIN Reservables " +
-              "ON Reservations.LocationName = Reservables.LocationName " +
-              "AND Reservations.TimeframeID = Reservables.TimeframeID " +
-              "INNER JOIN Locations " +
-              "ON Reservables.LocationName = Locations.LocationName " +
               "INNER JOIN Timeframes " +
-              "ON Reservables.TimeframeID = Timeframes.TimeframeID " +
+              "ON Reservations.TimeframeID = Timeframes.TimeframeID " +
               "WHERE LocationName = '" + reservation.getLocationName() + "' " +
               "AND StartDate = '" + reservation.getStartDate() + "' " +
               "AND StartTime = '" + reservation.getStartTime() + "' " +

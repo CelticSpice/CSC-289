@@ -1,3 +1,9 @@
+/**
+    The administrator login
+    CSC-289 - Group 4
+    @author Jessica Gay
+*/
+
 package GUI;
 
 import java.awt.GridBagConstraints;
@@ -9,16 +15,17 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-/**
- *
- * @author Rey
- */
 public class LogOnScreen extends JPanel
 {
+    // Fields
     private JTextField username;
     private JPasswordField password;
     private JLabel unDisplay,pwDisplay;
-    private JButton logOnBtn,exitBtn;
+    private JButton logOnBtn;
+    
+    /**
+        Constructor
+    */
     
     public LogOnScreen()
     {
@@ -39,8 +46,8 @@ public class LogOnScreen extends JPanel
         c.weighty = 0;
         add(pwDisplay,c);
         
-       username = new JTextField(25);
-       username.setSize(14, 24);
+        username = new JTextField(25);
+        username.setSize(14, 24);
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 2;
         c.gridy = 3;
@@ -48,7 +55,7 @@ public class LogOnScreen extends JPanel
         c.weighty = 0;
         add(username,c);
         
-       password = new JPasswordField(25);
+        password = new JPasswordField(25);
         c.gridx = 2;
         c.gridy = 5;
         c.weightx = .1;
@@ -60,10 +67,6 @@ public class LogOnScreen extends JPanel
         c.gridx = 1;
         c.gridy = 6;
         c.insets = new Insets(50,25,25,15);
-        
 	add(logOnBtn,c);
-
     }
-
-
 }

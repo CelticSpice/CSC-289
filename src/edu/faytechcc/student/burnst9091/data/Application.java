@@ -6,12 +6,15 @@
 
 package edu.faytechcc.student.burnst9091.data;
 
-import edu.faytechcc.student.gayj5385.controller.AdminPanelChangeController;
 import edu.faytechcc.student.burnst9091.exception.RecordExistsException;
+import edu.faytechcc.student.gayj5385.controller.AdminPanelController;
 import edu.faytechcc.student.gayj5385.gui.AdminPanel;
+import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.prefs.BackingStoreException;
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
 import javax.swing.JFrame;
 
 public class Application
@@ -24,12 +27,13 @@ public class Application
     
     public static void main(String[] args)
             throws BackingStoreException, SQLException, RecordExistsException,
-                   NoSuchAlgorithmException
+                   NoSuchAlgorithmException, AddressException, MessagingException,
+                   UnsupportedEncodingException
     {
         SystemUtil.initPreferences();
         JFrame frame = new JFrame();
         AdminPanel panel = new AdminPanel();
-        panel.registerChangeController(new AdminPanelChangeController(panel));
+        panel.registerChangeController(new AdminPanelController(panel));
         frame.add(panel);
         frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

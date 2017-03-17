@@ -22,6 +22,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -50,10 +51,10 @@ public class SettingsPanel extends JPanel
     }
     
     /**
-        BuildAdminEmailPanel - Build & return the panel allowing the editing
-        of administrator email settings
+        Build & return the panel allowing the editing of administrator email
+        settings
     
-        @return panel The built panel
+        @return The built panel
     */
     
     private JPanel buildAdminEmailPanel()
@@ -80,9 +81,9 @@ public class SettingsPanel extends JPanel
     }
     
     /**
-        BuildBottomPanel - Build & return the bottom panel of this panel
+        Build & return the bottom panel of this panel
     
-        @return panel The built panel
+        @return The built panel
     */
     
     private JPanel buildBottomPanel()
@@ -91,28 +92,47 @@ public class SettingsPanel extends JPanel
         panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
-        // Build leftmost button panel
-        JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
-        leftPanel.add(save = new JButton("Save"));
-        leftPanel.add(updatePasswd = new JButton("Update Password"));
-        leftPanel.add(cancel = new JButton("Cancel"));
-        
-        // Build rightmost button panel
-        JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT,5,0));
-        rightPanel.add(logout = new JButton("Logout"));
-        
-        panel.add(leftPanel);
+        panel.add(buildBottomLeftPanel());
         panel.add(Box.createHorizontalGlue());
-        panel.add(rightPanel);
+        panel.add(buildBottomRightPanel());
         
         return panel;
     }
     
     /**
-        BuildDBPanel - Build & return the panel allowing updates to database
-        information
+        Build & return the bottom-left panel of this panel
     
-        @return panel The built panel
+        @return The built panel
+    */
+    
+    private JPanel buildBottomLeftPanel()
+    {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+        
+        panel.add(save = new JButton("Save"));
+        panel.add(updatePasswd = new JButton("Update Password"));
+        panel.add(cancel = new JButton("Cancel"));
+        
+        return panel;
+    }
+    
+    /**
+        Build & return the bottom-right panel of this panel
+    
+        @return The built panel
+    */
+    
+    private JPanel buildBottomRightPanel()
+    {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));
+        panel.add(logout = new JButton("Logout"));
+        return panel;
+    }
+    
+    /**
+        Build & return the panel allowing updates to database information
+    
+        @return The built panel
     */
     
     private JPanel buildDBPanel()
@@ -129,10 +149,9 @@ public class SettingsPanel extends JPanel
     }
     
     /**
-        BuildGuestEmailPanel - Build & return the panel allowing the editing
-        of guest email settings
+        Build & return the panel allowing the editing of guest email settings
     
-        @return panel The built panel
+        @return The built panel
     */
     
     private JPanel buildGuestEmailPanel()
@@ -157,9 +176,9 @@ public class SettingsPanel extends JPanel
     }
     
     /**
-        BuildMainPanel - Build & return the main panel of this panel
+        Build & return the main panel of this panel
     
-        @return panel The built panel
+        @return The built panel
     */
     
     private JPanel buildMainPanel()
@@ -185,6 +204,75 @@ public class SettingsPanel extends JPanel
     }
     
     /**
+        Return the set admin SMTP properties
+    
+        @return The admin's set SMTP properties
+    */
+    
+    public SMTPProperties getAdminSMTPProperties()
+    {
+        SMTPProperties props = new SMTPProperties();
+        props.setAddress(adminSendAddress.getText());
+        props.setHost(adminHost.getText());
+        props.setSecurity((SecurityOption) adminSecurity.getSelectedItem());
+        props.setPort(adminPort.getText());
+        props.setUser(adminUser.getText());
+        props.setPassword(String.valueOf(adminPass.getPassword()));
+        return props;
+    }
+    
+    /**
+        Return the admin's set address to receive email at
+    
+        @return The admin's set address to receive email at
+    */
+    
+    public String getAdminGetAddress()
+    {
+        return adminGetAddress.getText();
+    }
+    
+    /**
+        Return the set database password
+    
+        @return The set database password
+    */
+    
+    public char[] getDBPass()
+    {
+        return dbPass.getPassword();
+    }
+    
+    /**
+        Return the set database username
+    
+        @return The set database username
+    */
+    
+    public String getDBUser()
+    {
+        return dbUser.getText();
+    }
+    
+    /**
+        Return the set guest SMTP properties
+    
+        @return The guest's set SMTP properties
+    */
+    
+    public SMTPProperties getGuestSMTPProperties()
+    {
+        SMTPProperties props = new SMTPProperties();
+        props.setAddress(guestSendAddress.getText());
+        props.setHost(guestHost.getText());
+        props.setSecurity((SecurityOption) guestSecurity.getSelectedItem());
+        props.setPort(guestPort.getText());
+        props.setUser(guestUser.getText());
+        props.setPassword(String.valueOf(guestPass.getPassword()));
+        return props;
+    }
+    
+    /**
         Register a controller to the buttons on the panel
     
         @param controller The controller to register to the buttons
@@ -195,10 +283,24 @@ public class SettingsPanel extends JPanel
         save.addActionListener(controller);
         updatePasswd.addActionListener(controller);
         cancel.addActionListener(controller);
+        logout.addActionListener(controller);
     }
     
     /**
-        SetEmailFields - Populate the email fields with the given data
+        Populate the database settings fields with the given data
+    
+        @param user Database username
+        @param pass Database password
+    */
+    
+    public void setDatabaseFields(String user, String pass)
+    {
+        dbUser.setText(user);
+        dbPass.setText(pass);
+    }
+    
+    /**
+        Populate the email settings fields with the given data
     
         @param adminSMTP Admin SMTP properties
         @param guestSMTP Guest SMTP properties
@@ -226,9 +328,9 @@ public class SettingsPanel extends JPanel
     }
     
     /**
-        SetSecurityOptions - Set the available security options to choose from
+        Set the available SMTP security protocol options to choose from
     
-        @param options Security options available to choose from
+        @param options Security protocol options available to choose from
     */
     
     public void setSecurityOptions(SecurityOption[] options)
@@ -238,5 +340,16 @@ public class SettingsPanel extends JPanel
             adminSecurity.addItem(option);
             guestSecurity.addItem(option);
         }
+    }
+    
+    /**
+        Show a message to the user in a dialog box
+    
+        @param message The message to show
+    */
+    
+    public void showMessage(String message)
+    {
+        JOptionPane.showMessageDialog(this, message);
     }
 }

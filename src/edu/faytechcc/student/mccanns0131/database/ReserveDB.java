@@ -33,7 +33,7 @@ public class ReserveDB
     private ReserveDB() throws SQLException
     {
         dbOptions = "jdbc:mariadb://localhost?user=" + SystemUtil.getDBUser() +
-             "&pass=" + SystemUtil.getDBPass();
+             "&password=" + SystemUtil.getDBPass();
         
         connection = DriverManager.getConnection(dbOptions);
     }

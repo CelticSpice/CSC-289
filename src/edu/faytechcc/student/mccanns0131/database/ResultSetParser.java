@@ -42,6 +42,7 @@ public class ResultSetParser
     
     public static int parseLocationCapacity(ResultSet rs) throws SQLException
     {
+        rs.next();
         return rs.getInt(1);
     }
     
@@ -58,7 +59,7 @@ public class ResultSetParser
     {
         List<String> names = new ArrayList<>();
         while (rs.next())
-            names.add(rs.getString(0));
+            names.add(rs.getString(1));
         return names.toArray(new String[names.size()]);
     }
     

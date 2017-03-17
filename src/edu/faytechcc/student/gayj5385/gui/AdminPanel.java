@@ -10,7 +10,10 @@ import edu.faytechcc.student.gayj5385.controller.ManageReservableBtnController;
 import edu.faytechcc.student.gayj5385.controller.SettingsPanelController;
 import edu.faytechcc.student.burnst9091.data.SMTPProperties;
 import edu.faytechcc.student.burnst9091.data.SecurityOption;
+import edu.faytechcc.student.mccanns0131.database.Query;
 import java.awt.BorderLayout;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeListener;
@@ -19,6 +22,7 @@ public class AdminPanel extends JPanel
 {
     // Fields
     private JTabbedPane tabbedPane;
+    private ManageReservablePanel mngReservablePanel;
     private SettingsPanel settingsPanel;
     
     /**
@@ -38,18 +42,29 @@ public class AdminPanel extends JPanel
     }
     
     /**
-        BuildManageReservablePanel - Build & return the panel to manage
-        reservables on
+        Build & return the panel to manage reservables on
     
         @return The built panel
     */
     
     private ManageReservablePanel buildManageReservablePanel()
     {
-        ManageReservablePanel panel = new ManageReservablePanel();
-        panel.registerButtonController
-            (new ManageReservableBtnController(panel));
-        return panel;
+        mngReservablePanel = new ManageReservablePanel();
+        mngReservablePanel.registerButtonController
+            (new ManageReservableBtnController(mngReservablePanel));
+        
+        try
+        {
+            Query q = new Query();
+            mngReservablePanel.setLocations(q.queryLocations());
+        }
+        catch (SQLException ex)
+        {
+            JOptionPane.showMessageDialog(this, "Error loading location data",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        
+        return mngReservablePanel;
     }
     
     /**
@@ -67,7 +82,7 @@ public class AdminPanel extends JPanel
     }
     
     /**
-        GetActiveTab - Return the name of the active tab
+        Return the name of the active tab
     
         @return The name of the active tab
     */
@@ -90,7 +105,7 @@ public class AdminPanel extends JPanel
     }
     
     /**
-        SetSettingsEmailFields - Populate the email fields in the settings tab
+        Populate the email fields in the settings tab
     
         @param adminSMTP Admin SMTP properties
         @param guestSMTP Guest SMTP properties
@@ -104,8 +119,7 @@ public class AdminPanel extends JPanel
     }
     
     /**
-        SetSettingsSecurityOptions - Set the security options available to
-        choose from on the settings panel
+        Set the security options available to choose from on the settings panel
     
         @param options The options available to choose from
     */
@@ -116,7 +130,7 @@ public class AdminPanel extends JPanel
     }
     
     /**
-        RegisterChangeController - Register change controller to the tabbed pane
+        Register change controller to the tabbed pane
     
         @param controller The controller to register
     */

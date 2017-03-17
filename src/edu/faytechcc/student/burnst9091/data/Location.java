@@ -115,4 +115,16 @@ public class Location
     {
         name = n;
     }
+    
+    /**
+        Return a string representation of the object
+    
+        @return A string representation of the object
+    */
+    
+    @Override
+    public String toString()
+    {
+        return name;
+    }
 }

@@ -6,6 +6,7 @@
 
 package Data;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
@@ -88,13 +89,16 @@ public class SystemPreferences
     /**
         Init - Initialize the system preferences with default values
     
+        @param saltHasher For salting & hashing initial password, if needed
         @throws BackingStoreException Error communicating with preferences
+        @throws NoSuchAlgorithmException Error hashing initial password
     */
     
-    public void init() throws BackingStoreException
+    public void init(SHA256SaltHasher saltHasher)
+            throws BackingStoreException, NoSuchAlgorithmException
     {
         if (!prefs.nodeExists("AdminPass"))
-            prefs.put("AdminPass", "");
+            prefs.put("AdminPass", saltHasher.saltHash(""));
         if (!prefs.nodeExists("DBUser"))
             prefs.put("DBUser", "Username");
         if (!prefs.nodeExists("DBPass"))

@@ -15,6 +15,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -181,6 +182,19 @@ public class SettingsPanel extends JPanel
         panel.add(buildDBPanel(), gbc);
         
         return panel;
+    }
+    
+    /**
+        Register a controller to the buttons on the panel
+    
+        @param controller The controller to register to the buttons
+    */
+    
+    public void registerController(ActionListener controller)
+    {
+        save.addActionListener(controller);
+        updatePasswd.addActionListener(controller);
+        cancel.addActionListener(controller);
     }
     
     /**

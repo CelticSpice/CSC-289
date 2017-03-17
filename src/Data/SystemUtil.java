@@ -155,7 +155,7 @@ public class SystemUtil
     
     public static void initPreferences() throws BackingStoreException
     {
-        PREFS.init();
+        PREFS.init(SALT_HASHER);
     }
     
     /**

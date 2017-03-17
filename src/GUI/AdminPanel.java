@@ -7,6 +7,7 @@
 package GUI;
 
 import Controller.ManageReservableBtnController;
+import Controller.SettingsPanelController;
 import Data.SMTPProperties;
 import Data.SecurityOption;
 import java.awt.BorderLayout;
@@ -52,8 +53,7 @@ public class AdminPanel extends JPanel
     }
     
     /**
-        BuildSettingsPanel - Build & return the panel allowing updates to
-        settings to be made
+        Build & return the panel allowing updates to settings to be made
     
         @return The built panel
     */
@@ -61,6 +61,8 @@ public class AdminPanel extends JPanel
     private SettingsPanel buildSettingsPanel()
     {
         settingsPanel = new SettingsPanel();
+        settingsPanel.registerController(
+                new SettingsPanelController(settingsPanel));
         return settingsPanel;
     }
     

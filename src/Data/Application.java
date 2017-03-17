@@ -9,7 +9,6 @@ package Data;
 import Controller.AdminPanelChangeController;
 import Exception.RecordExistsException;
 import GUI.AdminPanel;
-import GUI.OpenPanel;
 import java.sql.SQLException;
 import java.util.prefs.BackingStoreException;
 import javax.swing.JFrame;

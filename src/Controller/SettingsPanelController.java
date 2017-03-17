@@ -6,11 +6,10 @@
 
 package Controller;
 
-import Data.SystemUtil;
 import GUI.SettingsPanel;
+import GUI.UpdatePasswordDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Properties;
 
 public class SettingsPanelController implements ActionListener
 {
@@ -18,9 +17,9 @@ public class SettingsPanelController implements ActionListener
     private SettingsPanel view;
     
     /**
-        Constructor - Accepts the view to act for
+        Constructor - Accepts the view to control buttons for
     
-        @param v The view to act for
+        @param v The view
     */
     
     public SettingsPanelController(SettingsPanel v)
@@ -29,7 +28,7 @@ public class SettingsPanelController implements ActionListener
     }
     
     /**
-        ActionPerformed - Handles action events for view
+        Handles the clicking of a button
     
         @param e The action event
     */
@@ -39,7 +38,11 @@ public class SettingsPanelController implements ActionListener
     {
         switch (e.getActionCommand())
         {
-            
+            case "Update Password":
+                UpdatePasswordDialog dialog = new UpdatePasswordDialog();
+                dialog.registerController(new UpdatePasswordController(dialog));
+                dialog.setVisible(true);
+                break;
         }
     }
 }

@@ -79,20 +79,6 @@ public class Query
     }
     
     /**
-        QueryLocation - Query for and return the location with the specified
-        name
-    
-        @param locationName Name of location to get from the database
-        @throws SQLException Error querying the database
-        @return The location with the specified name
-    */
-    
-    public Location queryLocation(String locationName) throws SQLException
-    {
-        return null;
-    }
-    
-    /**
         QueryLocationNames - Return the names of every location in the database
     
         @throws SQLException Error querying the database

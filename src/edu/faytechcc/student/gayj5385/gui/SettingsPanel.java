@@ -335,6 +335,9 @@ public class SettingsPanel extends JPanel
     
     public void setSecurityOptions(SecurityOption[] options)
     {
+        adminSecurity.removeAllItems();
+        guestSecurity.removeAllItems();
+        
         for (SecurityOption option : options)
         {
             adminSecurity.addItem(option);

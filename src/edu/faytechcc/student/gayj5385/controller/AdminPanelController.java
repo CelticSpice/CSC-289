@@ -13,7 +13,7 @@ import edu.faytechcc.student.gayj5385.gui.AdminPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class AdminPanelChangeController implements ChangeListener
+public class AdminPanelController implements ChangeListener
 {
     // Fields
     private AdminPanel view;
@@ -24,13 +24,13 @@ public class AdminPanelChangeController implements ChangeListener
         @param v The view
     */
     
-    public AdminPanelChangeController(AdminPanel v)
+    public AdminPanelController(AdminPanel v)
     {
         view = v;
     }
     
     /**
-        StateChanged - Handle the changing of a tab
+        Handle the changing of a tab
     
         @param e The change event
     */
@@ -41,12 +41,25 @@ public class AdminPanelChangeController implements ChangeListener
         switch (view.getActiveTab())
         {
             case "Settings":
-                SMTPProperties adminSMTP = SystemUtil.getAdminSMTPProperties();
-                SMTPProperties guestSMTP = SystemUtil.getGuestSMTPProperties();
-                String adminGet = SystemUtil.getAdminGetAddress();
-                view.setSettingsSecurityOptions(SecurityOption.values());
-                view.setSettingsEmailFields(adminSMTP, guestSMTP, adminGet);
+                setSettingsFields();
                 break;
         }
+    }
+    
+    /**
+        Set the fields for the settings panel
+    */
+    
+    private void setSettingsFields()
+    {
+        SMTPProperties adminSMTP = SystemUtil.getAdminSMTPProperties();
+        SMTPProperties guestSMTP = SystemUtil.getGuestSMTPProperties();
+        String adminGet = SystemUtil.getAdminGetAddress();
+        String dbUser = SystemUtil.getDBUser();
+        String dbPass = SystemUtil.getDBPass();
+        
+        view.setSettingsSecurityOptions(SecurityOption.values());
+        view.setSettingsEmailFields(adminSMTP, guestSMTP, adminGet);
+        view.setSettingsDBFields(dbUser, dbPass);
     }
 }

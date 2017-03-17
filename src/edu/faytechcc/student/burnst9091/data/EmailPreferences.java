@@ -6,7 +6,6 @@
 
 package edu.faytechcc.student.burnst9091.data;
 
-import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 public class EmailPreferences
@@ -34,7 +33,7 @@ public class EmailPreferences
     
     public String getAdminGetAddress()
     {
-        return prefs.get("AdminGetAddress", "");
+        return prefs.get("AdminGetAddress", "foo@bar.com");
     }
     
     /**
@@ -47,15 +46,15 @@ public class EmailPreferences
     public SMTPProperties getAdminSMTPProperties()
     {
         SMTPProperties props = new SMTPProperties();
-        props.setAddress(prefs.get("AdminSendAddress", ""));
-        props.setHost(prefs.get("AdminSMTPHost", ""));
+        props.setAddress(prefs.get("AdminSendAddress", "foo@bar.com"));
+        props.setHost(prefs.get("AdminSMTPHost", "smtp.foo.com"));
         
         props.setSecurity(SecurityOption.valueOf
             (prefs.get("AdminSMTPSecurity", "NONE")));
         
-        props.setPort(prefs.get("AdminSMTPPort", ""));
-        props.setUser(prefs.get("AdminSMTPUser", ""));
-        props.setPassword(prefs.get("AdminSMTPPass", ""));
+        props.setPort(prefs.get("AdminSMTPPort", "587"));
+        props.setUser(prefs.get("AdminSMTPUser", "foobar"));
+        props.setPassword(prefs.get("AdminSMTPPass", "password"));
         return props;
     }
     
@@ -69,62 +68,14 @@ public class EmailPreferences
     public SMTPProperties getGuestSMTPProperties()
     {
         SMTPProperties props = new SMTPProperties();
-        props.setAddress(prefs.get("GuestSendAddress", ""));
-        props.setHost(prefs.get("GuestSMTPHost", ""));
+        props.setAddress(prefs.get("GuestSendAddress", "foo@bar.com"));
+        props.setHost(prefs.get("GuestSMTPHost", "smtp.foo.com"));
         props.setSecurity(SecurityOption.valueOf
             (prefs.get("GuestSMTPSecurity", "NONE")));
-        props.setPort(prefs.get("GuestSMTPPort", ""));
-        props.setUser(prefs.get("GuestSMTPUser", ""));
-        props.setPassword(prefs.get("GuestSMTPPass", ""));
+        props.setPort(prefs.get("GuestSMTPPort", "587"));
+        props.setUser(prefs.get("GuestSMTPUser", "foobar"));
+        props.setPassword(prefs.get("GuestSMTPPass", "password"));
         return props;
-    }
-    
-    /**
-        Init - Initialize the email preferences with default values
-        
-        @throws BackingStoreException Error communicating with preferences
-    */
-    
-    public void init() throws BackingStoreException
-    {
-        if (!prefs.nodeExists("AdminGetAddress"))
-            prefs.put("AdminGetAddress", "foo@bar.com");
-        
-        if (!prefs.nodeExists("AdminSendAddress"))
-            prefs.put("AdminSendAddress", "foo@bar.com");
-        
-        if (!prefs.nodeExists("AdminSMTPHost"))
-            prefs.put("AdminSMTPHost", "smtp.foo.com");
-        
-        if (!prefs.nodeExists("AdminSMTPSecurity"))
-            prefs.put("AdminSMTPSecurity", "NONE");
-        
-        if (!prefs.nodeExists("AdminSMTPPort"))
-            prefs.put("AdminSMTPPort", "587");
-        
-        if (!prefs.nodeExists("AdminSMTPUser"))
-            prefs.put("AdminSMTPUser", "foobar");
-        
-        if (!prefs.nodeExists("AdminSMTPPass"))
-            prefs.put("AdminSMTPPass", "password");
-        
-        if (!prefs.nodeExists("GuestSendAddress"))
-            prefs.put("GuestSendAddress", "foo@bar.com");
-        
-        if (!prefs.nodeExists("GuestSMTPHost"))
-            prefs.put("GuestSMTPHost", "smtp.foo.com");
-        
-        if (!prefs.nodeExists("GuestSMTPSecurity"))
-            prefs.put("GuestSMTPSecurity", "NONE");
-        
-        if (!prefs.nodeExists("GuestSMTPPort"))
-            prefs.put("GuestSMTPPort", "587");
-        
-        if (!prefs.nodeExists("GuestSMTPUser"))
-            prefs.put("GuestSMTPUser", "foobar");
-        
-        if (!prefs.nodeExists("GuestSMTPPass"))
-            prefs.put("GuestSMTPPass", "password");
     }
     
     /**

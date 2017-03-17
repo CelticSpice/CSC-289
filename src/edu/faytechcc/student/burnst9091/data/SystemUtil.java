@@ -156,7 +156,7 @@ public class SystemUtil
     
     public static void initPreferences()
             throws BackingStoreException, NoSuchAlgorithmException
-    {
+    {   
         PREFS.init(SALT_HASHER);
     }
     

@@ -60,7 +60,7 @@ public class SystemPreferences
     
     public String getDBPass()
     {
-        return prefs.get("DBPass", "");
+        return prefs.get("DBPass", "Password");
     }
     
     /**
@@ -71,7 +71,7 @@ public class SystemPreferences
     
     public String getDBUser()
     {
-        return prefs.get("DBUser", "");
+        return prefs.get("DBUser", "Username");
     }
     
     /**
@@ -97,13 +97,8 @@ public class SystemPreferences
     public void init(SHA256SaltHasher saltHasher)
             throws BackingStoreException, NoSuchAlgorithmException
     {
-        if (!prefs.nodeExists("AdminPass"))
-            prefs.put("AdminPass", saltHasher.saltHash(""));
-        if (!prefs.nodeExists("DBUser"))
-            prefs.put("DBUser", "Username");
-        if (!prefs.nodeExists("DBPass"))
-            prefs.put("DBPass", "Password");
-        emailPrefs.init();
+        if (prefs.get("AdminPass", "").equals(""))
+            prefs.put("AdminPass", saltHasher.saltHash(""));            
     }
     
     /**

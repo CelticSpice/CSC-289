@@ -78,6 +78,18 @@ public class AdminPanel extends JPanel
     }
     
     /**
+        Set the database fields for the settings panel
+    
+        @param dbName Database username
+        @param dbPass Database password
+    */
+    
+    public void setSettingsDBFields(String dbName, String dbPass)
+    {
+        settingsPanel.setDatabaseFields(dbName, dbPass);
+    }
+    
+    /**
         SetSettingsEmailFields - Populate the email fields in the settings tab
     
         @param adminSMTP Admin SMTP properties

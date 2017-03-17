@@ -33,6 +33,19 @@ public class ResultSetParser
     }
     
     /**
+        Parse a result set containing a location capacity
+    
+        @param rs The result set to parse
+        @throws SQLException Error parsing the result set
+        @return The location capacity parsed from the result set
+    */
+    
+    public static int parseLocationCapacity(ResultSet rs) throws SQLException
+    {
+        return rs.getInt(1);
+    }
+    
+    /**
         ParseLocationNames - Parse a result set containing the names of
         locations
     

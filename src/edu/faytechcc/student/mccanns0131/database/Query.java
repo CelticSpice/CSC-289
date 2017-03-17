@@ -12,7 +12,10 @@ import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.Reserver;
 import edu.faytechcc.student.burnst9091.data.Timeframe;
 import edu.faytechcc.student.burnst9091.data.TimeframeList;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Query
 {
@@ -29,11 +32,10 @@ public class Query
     }
     
     /**
-        QueryAvailableLocationTimeframes - Query for & return a list of
-        available timeframes at the location specified by the given name
+        Query for & return a list of available timeframes at the location
+        specified by the given name
     
         @param locationName Name of location to get available timeframes of
-                            from the database
         @throws SQLException Error querying the database
         @return A list of available timeframes at the specified location
     */
@@ -51,7 +53,8 @@ public class Query
               "AND Reservables.TimeframeID = Reservations.TimeframeID " +
               "WHERE Reservables.LocationName = '" + locationName + "' " +
               "AND Reservables.LocationName <> Reservations.LocationName " +
-              "ORDER BY StartDate, StartTime, EndDate, EndTime, Cost";
+              "ORDER BY Timeframes.StartDate, Timeframes.StartTime, " +
+              "Timeframes.EndDate, Timeframes.EndTime, Reservables.Cost";
         
         return ResultSetParser.parseTimeframes
             (ReserveDB.getInstance().runQuery(this), false);
@@ -79,43 +82,91 @@ public class Query
     }
     
     /**
-        QueryLocationNames - Return the names of every location in the database
+        Query for & return every location in the database
+    
+        @throws SQLException Error querying the database
+        @return Every location in the database
+    */
+    
+    public Location[] queryLocations() throws SQLException
+    {
+        List<Location> locations = new ArrayList<>();
+        
+        String[] names = queryLocationNames();
+        
+        int capacity;
+        Location location;
+        TimeframeList timeframes;
+        
+        for (String name : names)
+        {
+            capacity = queryLocationCapacity(name);
+            timeframes = queryLocationTimeframes(name);
+            
+            location = new Location(name, capacity, timeframes);
+            
+            locations.add(location);
+        }
+        
+        return locations.toArray(new Location[locations.size()]);
+    }
+    
+    /**
+        Query for & return the capacity of the location with the specified name
+    
+        @param locationName The name of the location to get the capacity of
+        @throws SQLException Error querying the database
+        @return The capacity of the location with the specified name
+    */
+    
+    private int queryLocationCapacity(String locationName) throws SQLException
+    {
+        sql = "SELECT Locations.Capacity " +
+              "FROM Locations " +
+              "WHERE Locations.LocationName = '" + locationName + "'";
+        
+        return ResultSetParser.parseLocationCapacity(
+                ReserveDB.getInstance().runQuery(this));
+    }
+    
+    /**
+        Query for & return the names of every location in the database
     
         @throws SQLException Error querying the database
         @return The names of every location in the database
     */
     
-    public String[] queryLocationNames() throws SQLException
+    private String[] queryLocationNames() throws SQLException
     {
         sql = "SELECT Locations.LocationName " +
               "FROM Locations " +
-              "ORDER BY LocationName";
+              "ORDER BY Locations.LocationName";
         
-        return ResultSetParser.parseLocationNames
-            (ReserveDB.getInstance().runQuery(this));
+        return ResultSetParser.parseLocationNames(
+                ReserveDB.getInstance().runQuery(this));
     }
     
     /**
-        QueryLocationTimeframes - Query for & return the list of
-        timeframes at the location specified by the given name
+        Query for & return a list of timeframes at the location specified by the
+        given name
     
-        @param name Name of location to get timeframes of from the database
+        @param locationName Name of location to get timeframes of
         @throws SQLException Error querying the database
-        @return timeframes A list of timeframes at the specified location
+        @return A list of timeframes at the specified location
     */
     
-    private TimeframeList queryLocationTimeframes(String name)
+    private TimeframeList queryLocationTimeframes(String locationName)
             throws SQLException
     {
-        TimeframeList timeframes =
-                queryReservedLocationTimeframes(name);
+        TimeframeList reservedTimeframes =
+                queryReservedLocationTimeframes(locationName);
         
         TimeframeList availableTimeframes =
-                queryAvailableLocationTimeframes(name);
+                queryAvailableLocationTimeframes(locationName);
         
-        timeframes.addAll(availableTimeframes);
+        reservedTimeframes.addAll(availableTimeframes);
         
-        return timeframes;
+        return reservedTimeframes;
     }
     
     /**
@@ -283,11 +334,10 @@ public class Query
 //    }
 
     /**
-        QueryReservedLocationTimeframes - Query for & return a list of
-        reserved timeframes at the location specified by the given name
+        Query for & return a list of reserved timeframes at the location
+        specified by the given name
     
         @param locationName Name of location to get reserved timeframes of
-                            from the database
         @throws SQLException Error querying the database
         @return A list of reserved timeframes at the specified location
     */
@@ -304,7 +354,8 @@ public class Query
               "ON Reservables.LocationName = Reservations.LocationName " +
               "AND Reservables.TimeframeID = Reservations.TimeframeID " +
               "WHERE Reservations.LocationName = '" + locationName + "' " +
-              "ORDER BY StartDate, StartTime, EndDate, EndTime, Cost";
+              "ORDER BY Timeframes.StartDate, Timeframes.StartTime, " +
+              "Timeframes.EndDate, Timeframes.EndTime, Reservables.Cost";
         
         return ResultSetParser.parseTimeframes
             (ReserveDB.getInstance().runQuery(this), true);

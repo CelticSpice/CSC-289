@@ -281,14 +281,14 @@ public class Query
     }
     
 
-    public boolean queryIfReserverExists(String email) throws SQLException
-    {
-        sql = "SELECT Reservers.email"
-            + "FROM Reservers"
-            + "WHERE email = '" + email + "'";
-        
-        return !ResultSetParser.isEmpty(ReserveDB.getInstance().runQuery(this));
-    }
+//    public boolean queryIfReserverExists(String email) throws SQLException
+//    {
+//        sql = "SELECT Reservers.email"
+//            + "FROM Reservers"
+//            + "WHERE email = '" + email + "'";
+//        
+//        return !ResultSetParser.isEmpty(ReserveDB.getInstance().runQuery(this));
+//    }
 
     /**
         QueryReservedLocationTimeframes - Query for & return a list of

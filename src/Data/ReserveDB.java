@@ -277,4 +277,12 @@ public class ReserveDB
             stmt.executeUpdate(sql);
         }
     }
+    
+    public void modifyRecord(RecordModify recordModify) throws SQLException
+    {
+        Statement stmt = connection.createStatement();
+        stmt.execute("USE " + DB_NAME);
+        
+        stmt.executeUpdate(recordModify.toString());
+    }
 }

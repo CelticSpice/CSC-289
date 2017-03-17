@@ -1,4 +1,0 @@
-How far in advance a reservation can be made is customizable.
-
-How soon a timeframe can be withdrawn from being reserved is customizable.
-

@@ -7,6 +7,7 @@
 
 package edu.faytechcc.student.gayj5385.gui;
 
+import edu.faytechcc.student.burnst9091.data.Location;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -206,5 +207,29 @@ public class ManageReservablePanel extends JPanel
         delBtn.addActionListener(controller);
         exitBtn.addActionListener(controller);
         searchBtn.addActionListener(controller);
+    }
+    
+    /**
+        Register a controller to the locations combo box
+    
+        @param controller The controller to register to the locations combo box
+    */
+    
+    public void registerComboBoxController(ActionListener controller)
+    {
+        locations.addActionListener(controller);
+    }
+    
+    /**
+        Set the locations that can be reserved
+    
+        @param locs Locations that can be reserved
+    */
+    
+    public void setLocations(Location[] locs)
+    {
+        locations.removeAllItems();
+        for (Location loc : locs)
+            locations.addItem(loc);
     }
 }

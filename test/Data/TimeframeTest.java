@@ -6,6 +6,7 @@
 
 package Data;
 
+import edu.faytechcc.student.burnst9091.data.Timeframe;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;

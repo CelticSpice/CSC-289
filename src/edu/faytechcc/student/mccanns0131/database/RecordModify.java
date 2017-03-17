@@ -3,9 +3,13 @@
  * CSC-289 - Group 4
  * @author Shane McCann
  */
-package Data;
+package edu.faytechcc.student.mccanns0131.database;
 
-import Exception.RecordNotExistsException;
+import edu.faytechcc.student.burnst9091.exception.RecordNotExistsException;
+import edu.faytechcc.student.burnst9091.data.Location;
+import edu.faytechcc.student.burnst9091.data.Reservable;
+import edu.faytechcc.student.burnst9091.data.Reservation;
+import edu.faytechcc.student.burnst9091.data.Reserver;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 

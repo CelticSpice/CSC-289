@@ -49,9 +49,9 @@ public class ManageReservablePanel extends JPanel
     }
     
     /**
-        BuildBottomPanel - Build & return the bottom panel of this panel
+        Build & return the bottom panel of this panel
     
-        @return panel The built panel
+        @return The built panel
     */
     
     private JPanel buildBottomPanel()
@@ -78,9 +78,9 @@ public class ManageReservablePanel extends JPanel
     }
     
     /**
-        BuildMidPanel - Build & return the middle panel of this panel
+        Build & return the middle panel of this panel
     
-        @return panel The built panel
+        @return The built panel
     */
     
     private JPanel buildMidPanel()
@@ -122,9 +122,9 @@ public class ManageReservablePanel extends JPanel
     }
     
     /**
-        BuildTopPanel - Build & return the top panel of this panel
+        Build & return the top panel of this panel
     
-        @return panel The built panel
+        @return The built panel
     */
     
     private JPanel buildTopPanel()
@@ -194,7 +194,7 @@ public class ManageReservablePanel extends JPanel
     }
     
     /**
-        RegisterButtonController - Register a button controller to the panel
+        Register a button controller to the panel
     
         @param controller The controller to register to the buttons on the panel
     */

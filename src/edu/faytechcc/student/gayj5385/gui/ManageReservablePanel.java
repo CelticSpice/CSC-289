@@ -74,7 +74,7 @@ public class ManageReservablePanel extends JPanel
         
         // Build exit button panel
         JPanel exitBtnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT,0,0));
-        exitBtnPanel.add(exitBtn = new JButton("Exit"));
+        exitBtnPanel.add(exitBtn = new JButton("Logout"));
         
         panel.add(btnPanel);
         panel.add(Box.createHorizontalGlue());

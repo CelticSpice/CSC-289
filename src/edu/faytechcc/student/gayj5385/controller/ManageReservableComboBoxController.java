@@ -1,6 +1,6 @@
 /**
-    Controller for buttons on the administrator's panel enabling the management
-    of reservables
+    Controller for the locations combo box on the panel enabling the
+    administrator to manage reservables
     CSC-289 - Group 4
     @author Timothy Burns
 */
@@ -11,24 +11,24 @@ import edu.faytechcc.student.gayj5385.gui.ManageReservablePanel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ManageReservableBtnController implements ActionListener
+public class ManageReservableComboBoxController implements ActionListener
 {
     // Fields
     private ManageReservablePanel view;
     
     /**
-        Constructor - Accepts the view to control buttons for
+        Constructor - Accepts the view to manage the combo box of
     
         @param v The view
     */
     
-    public ManageReservableBtnController(ManageReservablePanel v)
+    public ManageReservableComboBoxController(ManageReservablePanel v)
     {
         view = v;
     }
     
     /**
-        Handle the clicking of a button
+        Handle combo box action events
     
         @param e The action event
     */
@@ -36,10 +36,6 @@ public class ManageReservableBtnController implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        switch (e.getActionCommand())
-        {
-            case "Exit":
-                System.exit(0);
-        }
+        
     }
 }

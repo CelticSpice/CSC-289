@@ -8,6 +8,8 @@
 package edu.faytechcc.student.gayj5385.gui;
 
 import edu.faytechcc.student.burnst9091.data.Location;
+import edu.faytechcc.student.burnst9091.data.Timeframe;
+import edu.faytechcc.student.burnst9091.data.TimeframeList;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -19,6 +21,7 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -30,6 +33,7 @@ import javax.swing.JTextField;
 public class ManageReservablePanel extends JPanel
 {
     // Fields
+    private DefaultListModel timeframes;
     private JButton addBtn, modBtn, delBtn, exitBtn, searchBtn;
     private JComboBox locations;
     private JList timeframeList;
@@ -89,7 +93,7 @@ public class ManageReservablePanel extends JPanel
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         panel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
         
-        timeframeList = new JList();
+        timeframeList = new JList(timeframes = new DefaultListModel());
         JScrollPane scrollPane = new JScrollPane(timeframeList);
         scrollPane.setPreferredSize(new Dimension(225, 225));
         
@@ -242,5 +246,18 @@ public class ManageReservablePanel extends JPanel
         locations.removeAllItems();
         for (Location loc : locs)
             locations.addItem(loc);
+    }
+    
+    /**
+        Set the timeframes displayed in the list
+    
+        @param times Timeframes to display in the list
+    */
+    
+    public void setTimeframes(TimeframeList times)
+    {
+        timeframes.removeAllElements();
+        for (Timeframe timeframe : times)
+            timeframes.addElement(timeframe);
     }
 }

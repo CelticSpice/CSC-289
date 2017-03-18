@@ -16,6 +16,8 @@ import java.util.prefs.BackingStoreException;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.swing.JFrame;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 public class Application
 {    
@@ -28,8 +30,11 @@ public class Application
     public static void main(String[] args)
             throws BackingStoreException, SQLException, RecordExistsException,
                    NoSuchAlgorithmException, AddressException, MessagingException,
-                   UnsupportedEncodingException
+                   UnsupportedEncodingException, ClassNotFoundException,
+                   InstantiationException, IllegalAccessException,
+                   UnsupportedLookAndFeelException
     {
+        UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
         SystemUtil.initPreferences();
         JFrame frame = new JFrame();
         AdminPanel panel = new AdminPanel();

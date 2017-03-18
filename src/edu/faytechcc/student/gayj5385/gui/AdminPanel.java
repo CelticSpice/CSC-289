@@ -10,6 +10,7 @@ import edu.faytechcc.student.gayj5385.controller.ManageReservableBtnController;
 import edu.faytechcc.student.gayj5385.controller.SettingsPanelController;
 import edu.faytechcc.student.burnst9091.data.SMTPProperties;
 import edu.faytechcc.student.burnst9091.data.SecurityOption;
+import edu.faytechcc.student.gayj5385.controller.ManageReservableComboBoxController;
 import edu.faytechcc.student.mccanns0131.database.Query;
 import java.awt.BorderLayout;
 import java.sql.SQLException;
@@ -50,8 +51,12 @@ public class AdminPanel extends JPanel
     private ManageReservablePanel buildManageReservablePanel()
     {
         mngReservablePanel = new ManageReservablePanel();
+        
         mngReservablePanel.registerButtonController
             (new ManageReservableBtnController(mngReservablePanel));
+        
+        mngReservablePanel.registerComboBoxController
+            (new ManageReservableComboBoxController(mngReservablePanel));
         
         try
         {

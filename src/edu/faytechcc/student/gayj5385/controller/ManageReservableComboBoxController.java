@@ -7,6 +7,7 @@
 
 package edu.faytechcc.student.gayj5385.controller;
 
+import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.gayj5385.gui.ManageReservablePanel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -36,6 +37,7 @@ public class ManageReservableComboBoxController implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        
+        Location location = view.getSelectedLocation();
+        view.setTimeframes(location.getTimeframes());
     }
 }

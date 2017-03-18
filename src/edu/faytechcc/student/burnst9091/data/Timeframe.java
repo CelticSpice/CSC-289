@@ -346,9 +346,9 @@ public class Timeframe
     public String toString()
     {
         DateTimeFormatter fmt = DateTimeFormatter.
-                ofPattern("yyyy-MM-dd|HH:mm");
+                ofPattern("yyyy-MM-dd,HH:mm");
         
-        return startDateTime.format(fmt) + ", " +
+        return startDateTime.format(fmt) + " - " +
                endDateTime.format(fmt);
     }
 }

@@ -95,7 +95,7 @@ public class ManageReservablePanel extends JPanel
         
         timeframeList = new JList(timeframes = new DefaultListModel());
         JScrollPane scrollPane = new JScrollPane(timeframeList);
-        scrollPane.setPreferredSize(new Dimension(225, 225));
+        scrollPane.setPreferredSize(new Dimension(250, 225));
         
         // Build timeframe detail panel
         JPanel timeframePanel = new JPanel(new GridLayout(6, 2, 5, 10));        

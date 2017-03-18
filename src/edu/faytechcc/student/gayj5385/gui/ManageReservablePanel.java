@@ -18,9 +18,12 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -200,6 +203,24 @@ public class ManageReservablePanel extends JPanel
     }
     
     /**
+        Return the set locations
+    
+        @return The set locations
+    */
+    
+    public Location[] getLocations()
+    {
+        List<Location> locs = new ArrayList<>();
+        
+        ComboBoxModel model = locations.getModel();
+        
+        for (int i = 0; i < model.getSize(); i++)
+            locs.add((Location) model.getElementAt(i));
+        
+        return locs.toArray(new Location[locs.size()]);
+    }
+    
+    /**
         Return the selected location
     
         @return The selected location
@@ -278,9 +299,9 @@ public class ManageReservablePanel extends JPanel
         @param cap Capacity to display
     */
     
-    public void setCapacity(int cap)
+    public void setCapacity(String cap)
     {
-        capacity.setText(String.valueOf(cap));
+        capacity.setText(cap);
     }
     
     /**

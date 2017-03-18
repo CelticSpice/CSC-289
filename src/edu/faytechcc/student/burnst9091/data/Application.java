@@ -35,6 +35,7 @@ public class Application
                    UnsupportedLookAndFeelException
     {
         UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+        
         SystemUtil.initPreferences();
         JFrame frame = new JFrame();
         AdminPanel panel = new AdminPanel();

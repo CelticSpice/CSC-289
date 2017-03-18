@@ -8,6 +8,7 @@
 package edu.faytechcc.student.gayj5385.controller;
 
 import edu.faytechcc.student.gayj5385.gui.ManageReservablePanel;
+import edu.faytechcc.student.gayj5385.gui.ReservableAddDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -38,8 +39,35 @@ public class ManageReservableBtnController implements ActionListener
     {
         switch (e.getActionCommand())
         {
-            case "Exit":
+            case "Add":
+                doAdd();
+                break;
+            case "Modify":
+                //doModify();
+                break;
+            case "Delete":
+                //doDelete();
+                break;
+            case "Logout":
                 System.exit(0);
+                break;
         }
+    }
+    
+    /**
+        Perform an add operation
+    */
+    
+    private void doAdd()
+    {
+        ReservableAddDialog d = new ReservableAddDialog();
+        
+        d.setExistingLocations(view.getLocations());
+        
+        d.registerButtonController(new ReservableAddButtonController(d));
+        d.registerRadioButtonController(new ReservableAddRadioController(d));
+        d.registerComboBoxController(new ReservableAddComboBoxController(d));
+        
+        d.setVisible(true);
     }
 }

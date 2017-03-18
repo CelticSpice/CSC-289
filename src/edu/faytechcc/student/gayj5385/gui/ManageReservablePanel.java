@@ -29,14 +29,15 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.event.ListSelectionListener;
 
 public class ManageReservablePanel extends JPanel
 {
     // Fields
-    private DefaultListModel timeframes;
+    private DefaultListModel<Timeframe> timeframes;
     private JButton addBtn, modBtn, delBtn, exitBtn, searchBtn;
     private JComboBox locations;
-    private JList timeframeList;
+    private JList<Timeframe> timeframeList;
     private JTextField capacity, search, startDate, startTime, endDate, endTime,
                        cost, reserved;
     
@@ -95,7 +96,7 @@ public class ManageReservablePanel extends JPanel
         
         timeframeList = new JList(timeframes = new DefaultListModel());
         JScrollPane scrollPane = new JScrollPane(timeframeList);
-        scrollPane.setPreferredSize(new Dimension(250, 225));
+        scrollPane.setPreferredSize(new Dimension(255, 225));
         
         // Build timeframe detail panel
         JPanel timeframePanel = new JPanel(new GridLayout(6, 2, 5, 10));        
@@ -210,6 +211,17 @@ public class ManageReservablePanel extends JPanel
     }
     
     /**
+        Return the selected timeframe
+    
+        @return The selected timeframe
+    */
+    
+    public Timeframe getSelectedTimeframe()
+    {
+        return timeframeList.getSelectedValue();
+    }
+    
+    /**
         Register a button controller to the panel
     
         @param controller The controller to register to the buttons on the panel
@@ -236,6 +248,18 @@ public class ManageReservablePanel extends JPanel
     }
     
     /**
+        Register a controller to the timeframe list
+    
+        @param controller The controller to register to the timeframe list
+    */
+    
+    public void registerTimeframeListController(
+            ListSelectionListener controller)
+    {
+        timeframeList.addListSelectionListener(controller);
+    }
+    
+    /**
         Set the locations that can be reserved
     
         @param locs Locations that can be reserved
@@ -246,6 +270,83 @@ public class ManageReservablePanel extends JPanel
         locations.removeAllItems();
         for (Location loc : locs)
             locations.addItem(loc);
+    }
+    
+    /**
+        Set the capacity of the selected location
+    
+        @param cap Capacity to display
+    */
+    
+    public void setCapacity(int cap)
+    {
+        capacity.setText(String.valueOf(cap));
+    }
+    
+    /**
+        Set the cost field
+    
+        @param c Cost to set in the cost field
+    */
+    
+    public void setCost(String c)
+    {
+        cost.setText(c);
+    }
+    
+    /**
+        Set the end date field
+    
+        @param date Date to set in the end date field
+    */
+    
+    public void setEndDate(String date)
+    {
+        endDate.setText(date);
+    }
+    
+    /**
+        Set the end time field
+    
+        @param time Time to set in the end time field
+    */
+    
+    public void setEndTime(String time)
+    {
+        endTime.setText(time);
+    }
+    
+    /**
+        Set the reserved field
+    
+        @param reserve Value to set in the reserved field
+    */
+    
+    public void setReserved(String reserve)
+    {
+        reserved.setText(reserve);
+    }
+    
+    /**
+        Set the start date field
+    
+        @param date Date to set in the start date field
+    */
+    
+    public void setStartDate(String date)
+    {
+        startDate.setText(date);
+    }
+    
+    /**
+        Set the start time field
+    
+        @param time Time to set in the start time field
+    */
+    
+    public void setStartTime(String time)
+    {
+        startTime.setText(time);
     }
     
     /**

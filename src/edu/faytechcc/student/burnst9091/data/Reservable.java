@@ -74,6 +74,17 @@ public class Reservable
     }
     
     /**
+        Return the location of the reservable
+    
+        @return The location of the reservable
+    */
+    
+    public Location getLocation()
+    {
+        return location;
+    }
+    
+    /**
         GetName - Return the location name of the reservable
     
         @return The name of the reservable

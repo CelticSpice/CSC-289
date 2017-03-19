@@ -95,6 +95,26 @@ public class Location
     }
     
     /**
+        Return if the location has an allocated timeframe with the same
+        datetimes as another timeframe
+    
+        @param t The timeframe
+        @return If the location has an allocated timeframe with the same
+                datetimes as another timeframe
+    */
+    
+    public boolean hasTimeframe(Timeframe t)
+    {
+        TimeframeList list = timeframes
+                .filterStartDate(t.getStartDate())
+                .filterStartTime(t.getStartTime())
+                .filterEndDate(t.getEndDate())
+                .filterEndTime(t.getEndTime());
+        
+        return !list.isEmpty();
+    }
+    
+    /**
         SetCapacity - Set the location's capacity
     
         @param cap The location's capacity

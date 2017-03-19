@@ -48,11 +48,11 @@ public class Query
               "FROM Timeframes " +
               "INNER JOIN Reservables " +
               "ON Timeframes.TimeframeID = Reservables.TimeframeID " +
-              "INNER JOIN Reservations " +
+              "LEFT JOIN Reservations " +
               "ON Reservables.LocationName = Reservations.LocationName " +
               "AND Reservables.TimeframeID = Reservations.TimeframeID " +
               "WHERE Reservables.LocationName = '" + locationName + "' " +
-              "AND Reservables.LocationName <> Reservations.LocationName " +
+              "AND Reservations.LocationName IS NULL " +
               "ORDER BY Timeframes.StartDate, Timeframes.StartTime, " +
               "Timeframes.EndDate, Timeframes.EndTime, Reservables.Cost";
         

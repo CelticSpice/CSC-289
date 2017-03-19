@@ -18,12 +18,9 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -39,7 +36,7 @@ public class ManageReservablePanel extends JPanel
     // Fields
     private DefaultListModel<Timeframe> timeframes;
     private JButton addBtn, modBtn, delBtn, exitBtn, searchBtn;
-    private JComboBox locations;
+    private JComboBox<Location> locations;
     private JList<Timeframe> timeframeList;
     private JTextField capacity, search, startDate, startTime, endDate, endTime,
                        cost, reserved;
@@ -200,24 +197,6 @@ public class ManageReservablePanel extends JPanel
         panel.add(searchPanel);
         
         return panel;
-    }
-    
-    /**
-        Return the set locations
-    
-        @return The set locations
-    */
-    
-    public Location[] getLocations()
-    {
-        List<Location> locs = new ArrayList<>();
-        
-        ComboBoxModel model = locations.getModel();
-        
-        for (int i = 0; i < model.getSize(); i++)
-            locs.add((Location) model.getElementAt(i));
-        
-        return locs.toArray(new Location[locs.size()]);
     }
     
     /**

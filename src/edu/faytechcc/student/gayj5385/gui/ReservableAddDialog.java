@@ -7,17 +7,15 @@
 package edu.faytechcc.student.gayj5385.gui;
 
 import edu.faytechcc.student.burnst9091.data.Location;
-import edu.faytechcc.student.burnst9091.data.Timeframe;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -52,20 +50,20 @@ public class ReservableAddDialog extends JDialog
         
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.insets = new Insets(5, 5, 15, 5);
+        gbc.insets = new Insets(15, 15, 15, 15);
         gbc.anchor = GridBagConstraints.WEST;
         add(buildTopPanel(), gbc);
         
         gbc.gridy = 1;
-        gbc.insets = new Insets(0, 5, 5, 5);
+        gbc.insets = new Insets(0, 15, 15, 15);
         gbc.anchor = GridBagConstraints.CENTER;
         add(buildMiddlePanel(), gbc);
         
         gbc.gridy = 2;
-        gbc.insets = new Insets(0, 5, 5, 0);
+        gbc.insets = new Insets(0, 15, 0, 15);
         add(buildBottomPanel(), gbc);
         
-        pack();
+        setSize(645, 335);
     }
     
     /**
@@ -169,6 +167,13 @@ public class ReservableAddDialog extends JDialog
         gbc.insets = new Insets(0, 0, 0, 0);
         panel.add(endDay = new JComboBox(), gbc);
         
+        startYear.setActionCommand("Start Year");
+        startMonth.setActionCommand("Start Month");
+        startDay.setActionCommand("Start Day");
+        endYear.setActionCommand("End Year");
+        endMonth.setActionCommand("End Month");
+        endDay.setActionCommand("End Day");
+        
         return panel;
     }
     
@@ -265,14 +270,16 @@ public class ReservableAddDialog extends JDialog
         gbc.gridx = 1;
         gbc.insets = new Insets(0, 0, 0, 0);
         gbc.ipadx = 75;
-        panel.add(existingLocation = new JComboBox(), gbc);
-        
+        DefaultComboBoxModel<Location> model = new DefaultComboBoxModel<>();
+        panel.add(existingLocation = new JComboBox(model), gbc);
+                
         newLocationRadio.setText("New Location");
         existingLocationRadio.setText("Existing Location");
         
         newLocationRadio.setSelected(true);
         
         existingLocation.setEnabled(false);
+        existingLocation.setActionCommand("Existing Location");
         
         ButtonGroup bg = new ButtonGroup();
         bg.add(newLocationRadio);
@@ -325,6 +332,11 @@ public class ReservableAddDialog extends JDialog
         gbc.insets = new Insets(0, 0, 0, 0);
         panel.add(endMinute = new JComboBox(), gbc);
         
+        startHour.setActionCommand("Start Hour");
+        startMinute.setActionCommand("Start Minute");
+        endHour.setActionCommand("End Hour");
+        endMinute.setActionCommand("End Minute");
+        
         return panel;
     }
     
@@ -367,24 +379,67 @@ public class ReservableAddDialog extends JDialog
     }
     
     /**
+        Get input end day
+    
+        @return Input end day
+    */
+    
+    public Integer getEndDay()
+    {
+        return (Integer) endDay.getSelectedItem();
+    }
+    
+    /**
+        Get input end hour
+    
+        @return Input end hour
+    */
+    
+    public Integer getEndHour()
+    {
+        return (Integer) endHour.getSelectedItem();
+    }
+    
+    /**
+        Get input end minute
+    
+        @return Input end minute
+    */
+    
+    public Integer getEndMinute()
+    {
+        return (Integer) endMinute.getSelectedItem();
+    }
+    
+    /**
+        Get input end month
+    
+        @return Input end month
+    */
+    
+    public Integer getEndMonth()
+    {
+        return (Integer) endMonth.getSelectedItem();
+    }
+    
+    /**
+        Get input end year
+    
+        @return Input end year
+    */
+    
+    public Integer getEndYear()
+    {
+        return (Integer) endYear.getSelectedItem();
+    }
+    
+    /**
         Get input location
     
         @return Input location
     */
 
-    public Location getInputLocation()
-    {
-        return new Location(location.getText(),
-                Integer.parseInt(capacity.getText()));
-    }
-    
-    /**
-        Get input location name
-    
-        @return Input location name
-    */
-    
-    public String getLocationName()
+    public String getInputLocation()
     {
         return location.getText();
     }
@@ -397,36 +452,63 @@ public class ReservableAddDialog extends JDialog
     
     public Location getSelectedLocation()
     {
+        
         return (Location) existingLocation.getSelectedItem();
     }
     
     /**
-        Get input timeframe
+        Get input start day
     
-        @return The input timeframe
+        @return Input start day
     */
     
-    public Timeframe getTimeframe()
+    public Integer getStartDay()
     {
-        int y = Integer.parseInt((String)startYear.getSelectedItem());
-        int mon = Integer.parseInt((String)startMonth.getSelectedItem());
-        int d = Integer.parseInt((String)startMinute.getSelectedItem());
-        int h = Integer.parseInt((String)startHour.getSelectedItem());
-        int m = Integer.parseInt((String)startMinute.getSelectedItem());
-        
-        LocalDateTime startDateTime = LocalDateTime.of(y, mon, d, h, m);
-        
-        y = Integer.parseInt((String)endYear.getSelectedItem());
-        mon = Integer.parseInt((String)endMonth.getSelectedItem());
-        d = Integer.parseInt((String)endMinute.getSelectedItem());
-        h = Integer.parseInt((String)endHour.getSelectedItem());
-        m = Integer.parseInt((String)endMinute.getSelectedItem());
-        
-        LocalDateTime endDateTime = LocalDateTime.of(y, mon, d, h, m);
-        
-        BigDecimal c = new BigDecimal(cost.getText());
-        
-        return new Timeframe(startDateTime, endDateTime, c);
+        return (Integer) startDay.getSelectedItem();
+    }
+    
+    /**
+        Get input start hour
+    
+        @return Input start hour
+    */
+    
+    public Integer getStartHour()
+    {
+        return (Integer) startHour.getSelectedItem();
+    }
+    
+    /**
+        Get input start minute
+    
+        @return Input start minute
+    */
+    
+    public Integer getStartMinute()
+    {
+        return (Integer) startMinute.getSelectedItem();
+    }
+    
+    /**
+        Get input start month
+    
+        @return Input start month
+    */
+    
+    public Integer getStartMonth()
+    {
+        return (Integer) startMonth.getSelectedItem();
+    }
+    
+    /**
+        Get input start year
+    
+        @return Input start year
+    */
+    
+    public Integer getStartYear()
+    {
+       return (Integer) startYear.getSelectedItem();
     }
     
     /**
@@ -453,15 +535,24 @@ public class ReservableAddDialog extends JDialog
     }
     
     /**
-        Register a controller to the existing location combo box on the dialog
+        Register a controller to the combo boxes on the dialog
     
-        @param controller The controller to register to the existing location
-                          combo box
+        @param controller The controller to register to the combo boxes
     */
     
     public void registerComboBoxController(ActionListener controller)
     {
         existingLocation.addActionListener(controller);
+        startYear.addActionListener(controller);
+        startMonth.addActionListener(controller);
+        startDay.addActionListener(controller);
+        startHour.addActionListener(controller);
+        startMinute.addActionListener(controller);
+        endYear.addActionListener(controller);
+        endMonth.addActionListener(controller);
+        endDay.addActionListener(controller);
+        endHour.addActionListener(controller);
+        endMinute.addActionListener(controller);
     }
     
     /**
@@ -499,6 +590,106 @@ public class ReservableAddDialog extends JDialog
     }
     
     /**
+        Set available end days to choose from
+    
+        @param days Available days to choose from
+    */
+    
+    public void setEndDays(int[] days)
+    {
+        ActionListener[] als = endDay.getActionListeners();
+        for (ActionListener al : als)
+            endDay.removeActionListener(al);
+        
+        endDay.removeAllItems();
+        for (int day : days)
+            endDay.addItem(day);
+        
+        for (ActionListener al : als)
+            endDay.addActionListener(al);
+    }
+    
+    /**
+        Set available end hours to choose from
+    
+        @param hours Available hours to choose from
+    */
+    
+    public void setEndHours(int[] hours)
+    {
+        ActionListener[] als = endHour.getActionListeners();
+        for (ActionListener al : als)
+            endHour.removeActionListener(al);
+        
+        endHour.removeAllItems();
+        for (int hour : hours)
+            endHour.addItem(hour);
+        
+        for (ActionListener al : als)
+            endHour.addActionListener(al);
+    }
+    
+    /**
+        Set available end minutes to choose from
+    
+        @param minutes Available minutes to choose from
+    */
+    
+    public void setEndMinutes(int[] minutes)
+    {
+        ActionListener[] als = endMinute.getActionListeners();
+        for (ActionListener al : als)
+            endMinute.removeActionListener(al);
+        
+       endMinute.removeAllItems(); 
+       for (int minute : minutes)
+           endMinute.addItem(minute);
+       
+       for (ActionListener al : als)
+           endMinute.addActionListener(al);
+    }
+    
+    /**
+        Set available end months to choose from
+    
+        @param months Available months to choose from
+    */
+    
+    public void setEndMonths(int[] months)
+    {
+        ActionListener[] als = endMonth.getActionListeners();
+        for (ActionListener al : als)
+            endMonth.removeActionListener(al);
+        
+       endMonth.removeAllItems(); 
+       for (int month : months)
+           endMonth.addItem(month);
+       
+       for (ActionListener al : als)
+           endMonth.addActionListener(al);
+    }
+    
+    /**
+        Set available end years to choose from
+    
+        @param years Available years to choose from
+    */
+    
+    public void setEndYears(int[] years)
+    {
+       ActionListener[] als = endYear.getActionListeners();
+        for (ActionListener al : als)
+            endYear.removeActionListener(al);
+        
+       endYear.removeAllItems(); 
+       for (int year : years)
+           endYear.addItem(year);
+       
+       for (ActionListener al : als)
+           endYear.addActionListener(al);
+    }
+    
+    /**
         Set the existing locations available to choose from
     
         @param locs Locations available to choose from
@@ -506,9 +697,16 @@ public class ReservableAddDialog extends JDialog
     
     public void setExistingLocations(Location[] locs)
     {
+        ActionListener[] als = existingLocation.getActionListeners();
+        for (ActionListener al : als)
+            existingLocation.removeActionListener(al);
+        
         existingLocation.removeAllItems();
         for (Location loc : locs)
             existingLocation.addItem(loc);
+        
+        for (ActionListener al : als)
+           existingLocation.addActionListener(al);
     }
     
     /**
@@ -542,5 +740,105 @@ public class ReservableAddDialog extends JDialog
     public void setLocationEnabled(boolean enabled)
     {
         location.setEnabled(enabled);
+    }
+    
+    /**
+        Set available start days to choose from
+    
+        @param days Available days to choose from
+    */
+    
+    public void setStartDays(int[] days)
+    {
+        ActionListener[] als = startDay.getActionListeners();
+        for (ActionListener al : als)
+            startDay.removeActionListener(al);
+        
+       startDay.removeAllItems(); 
+       for (int day : days)
+           startDay.addItem(day);
+       
+       for (ActionListener al : als)
+           startDay.addActionListener(al);
+    }
+    
+    /**
+        Set available start hours to choose from
+    
+        @param hours Available hours to choose from
+    */
+    
+    public void setStartHours(int[] hours)
+    {
+        ActionListener[] als = startHour.getActionListeners();
+        for (ActionListener al : als)
+            startHour.removeActionListener(al);
+        
+       startHour.removeAllItems(); 
+       for (int hour : hours)
+           startHour.addItem(hour);
+       
+       for (ActionListener al : als)
+           startHour.addActionListener(al);
+    }
+    
+    /**
+        Set available start minutes to choose from
+    
+        @param minutes Available minutes to choose from
+    */
+    
+    public void setStartMinutes(int[] minutes)
+    {
+        ActionListener[] als = startMinute.getActionListeners();
+        for (ActionListener al : als)
+            startMinute.removeActionListener(al);
+        
+       startMinute.removeAllItems(); 
+       for (int minute : minutes)
+           startMinute.addItem(minute);
+       
+       for (ActionListener al : als)
+           startMinute.addActionListener(al);
+    }
+    
+    /**
+        Set available start months to choose from
+    
+        @param months Available months to choose from
+    */
+    
+    public void setStartMonths(int[] months)
+    {
+        ActionListener[] als = startMonth.getActionListeners();
+        for (ActionListener al : als)
+            startMonth.removeActionListener(al);
+        
+       startMonth.removeAllItems(); 
+       for (int month : months)
+           startMonth.addItem(month);
+       
+       for (ActionListener al : als)
+           startMonth.addActionListener(al);
+    }
+    
+    /**
+        Set available start years to choose from
+    
+        @param years Available years to choose from
+    */
+    
+    public void setStartYears(int[] years)
+    {
+        ActionListener[] als = startYear.getActionListeners();
+        for (ActionListener al : als)
+            startYear.removeActionListener(al);
+        
+       startYear.removeAllItems(); 
+       for (int year : years)
+           startYear.addItem(year);
+       
+       for (ActionListener al : als)
+           startYear.addActionListener(al);
     }
 }

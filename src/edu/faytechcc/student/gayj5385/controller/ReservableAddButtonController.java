@@ -53,6 +53,5 @@ public class ReservableAddButtonController implements ActionListener
     
     private void doAdd()
     {
-        
     }
 }

@@ -6,7 +6,7 @@
 
 package edu.faytechcc.student.gayj5385.gui;
 
-import edu.faytechcc.student.gayj5385.controller.ManageReservableBtnController;
+import edu.faytechcc.student.gayj5385.controller.ManageReservableButtonController;
 import edu.faytechcc.student.gayj5385.controller.SettingsPanelController;
 import edu.faytechcc.student.burnst9091.data.SMTPProperties;
 import edu.faytechcc.student.burnst9091.data.SecurityOption;
@@ -54,7 +54,7 @@ public class AdminPanel extends JPanel
         mngReservablePanel = new ManageReservablePanel();
         
         mngReservablePanel.registerButtonController
-            (new ManageReservableBtnController(mngReservablePanel));
+            (new ManageReservableButtonController(mngReservablePanel));
         
         mngReservablePanel.registerComboBoxController
             (new ManageReservableComboBoxController(mngReservablePanel));

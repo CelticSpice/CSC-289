@@ -17,6 +17,8 @@ import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Comparator;
 import javax.swing.JOptionPane;
 
 public class ReservableAddButtonController implements ActionListener
@@ -69,45 +71,43 @@ public class ReservableAddButtonController implements ActionListener
         {
             Reservable r = parseReservable();
             
-            if (!isConflicting(r))
+            try
             {
-                try
+                Admin.addReservable(r);
+
+                if (creatingNewLocation())
                 {
-                    Admin.addReservable(r);
-                    
-                    if (creatingNewLocation())
-                        view.addLocation(r.getLocation());
-                    else
-                    {
-                        Location loc = view.getSelectedLocation();
-                        loc.getTimeframes().add(r.getTimeframe());
-                    }
-                    
-                    JOptionPane.showMessageDialog(null, "Reservable created");
+                    Location[] locs = view.getExistingLocations();
+                    locs = Arrays.copyOf(locs, locs.length + 1);
+
+                    locs[locs.length - 1] = r.getLocation();
+
+                    Comparator<Location> c = 
+                            (a, b) -> a.getName().compareTo(b.getName());
+
+                    Arrays.sort(locs, c);
+
+                    view.setExistingLocations(locs);
                 }
-                catch (SQLException ex)
+                else
                 {
-                    JOptionPane.showMessageDialog(null,
-                            "Error adding record to database");
+                    Location loc = view.getSelectedLocation();
+                    loc.getTimeframes().add(r.getTimeframe());
                 }
-                catch (RecordExistsException ex)
-                {
-                    JOptionPane.showMessageDialog(null, ex);
-                }
+
+                view.setIfRecordsAdded(true);
+                JOptionPane.showMessageDialog(view, "Reservable created");
+            }
+            catch (SQLException ex)
+            {
+                JOptionPane.showMessageDialog(view,
+                        "Error adding record to database");
+            }
+            catch (RecordExistsException ex)
+            {
+                JOptionPane.showMessageDialog(view, ex.getMessage());
             }
         }
-    }
-    
-    /**
-        Check if a reservable conflicts with another reservable at the same
-        location; that is, if an identical reservable exists
-    
-        @param r The reservable
-    */
-    
-    private boolean isConflicting(Reservable r)
-    {
-        return r.getLocation().hasTimeframe(r.getTimeframe());
     }
     
     /**
@@ -120,12 +120,14 @@ public class ReservableAddButtonController implements ActionListener
     private boolean isNameMatching()
     {
         String inputName = view.getInputLocation();
-        Location loc = view.getSelectedLocation();
+        Location[] locs = view.getExistingLocations();
         
-        if (loc != null)
-            return loc.getName().equalsIgnoreCase(inputName);
-        else
-            return false;
+        for (Location loc : locs)
+        {
+            if (loc.getName().equalsIgnoreCase(inputName))
+                return true;
+        }
+        return false;
     }
     
     /**
@@ -248,44 +250,44 @@ public class ReservableAddButtonController implements ActionListener
                             !(creatingNewLocation() && isNameMatching());
         
         if (!nameValid)
-            JOptionPane.showMessageDialog(null, "Bad location name entered");
+        {
+            JOptionPane.showMessageDialog(view, "Bad location name entered");
+            return false;
+        }
         
         // Validate capacity input
-        boolean capValid = view.getCapacity().trim().matches("\\b\\d+\\b");
+        boolean capValid = view.getCapacity().trim().matches("\\d+");
         
         // Validate capacity greater than 0
-        if (capValid && nameValid)
+        if (capValid)
             capValid = Integer.parseInt(view.getCapacity()) > 0;
         
-        if (!capValid && nameValid)
-            JOptionPane.showMessageDialog(null,
-                        "Capacity must be greater than 0");
-            
-        
-        // Validate cost
-        boolean costValid;
-        if (capValid && nameValid)
+        if (!capValid)
         {
-            // Is proper number entered?
-            costValid = view.getCost().trim()
-                    .matches("\\b\\$?\\d+(\\.\\d{1,2})?\\b");
-            
-            // Is not less than 0?
-            if (costValid)
-            {
-                String in = view.getCost().trim();
-                in = in.replace("$", "");
-                costValid = Double.parseDouble(in) >= 0;
-            }
-            
-            if (!costValid)
-                JOptionPane.showMessageDialog(null,
-                        "Cost must be at least 0");
+            JOptionPane.showMessageDialog(view,
+                    "Capacity must be a value greater than 0");
+            return false;
         }
-        else
-            costValid = false;
+            
+        // Validate cost - Is proper number entered?
+        boolean costValid = view.getCost().trim()
+                .matches("\\$?(\\d+(\\.\\d{1,2})?)|\\$?(\\.\\d{1,2})");
         
-        return nameValid && capValid && costValid;
+        // Validate cost at least 0
+        if (costValid)
+        {
+            String inputCost = view.getCost();
+            inputCost = inputCost.replace("$", "");
+            costValid = Double.parseDouble(inputCost) >= 0;
+        }
+
+        if (!costValid)
+        {
+            JOptionPane.showMessageDialog(view, "Cost must be at least 0");
+            return false;
+        }
+        
+        return true;
     }
     
     /**

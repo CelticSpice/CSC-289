@@ -34,7 +34,7 @@ import javax.swing.event.ListSelectionListener;
 public class ManageReservablePanel extends JPanel
 {
     // Fields
-    private DefaultListModel<Timeframe> timeframes;
+    private DefaultListModel timeframes;
     private JButton addBtn, modBtn, delBtn, exitBtn, searchBtn;
     private JComboBox<Location> locations;
     private JList<Timeframe> timeframeList;
@@ -267,9 +267,16 @@ public class ManageReservablePanel extends JPanel
     
     public void setLocations(Location[] locs)
     {
+        ActionListener[] als = locations.getActionListeners();
+        for (ActionListener al : als)
+            locations.removeActionListener(al);
+        
         locations.removeAllItems();
         for (Location loc : locs)
             locations.addItem(loc);
+        
+        for (ActionListener al : als)
+            locations.addActionListener(al);
     }
     
     /**

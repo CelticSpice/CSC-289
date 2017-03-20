@@ -72,6 +72,9 @@ public class ManageReservableButtonController implements ActionListener
         setInitialFields(d);
         
         d.setVisible(true);
+        
+        if (d.getIfRecordsAdded())
+            view.setLocations(d.getExistingLocations());
     }
     
     /**

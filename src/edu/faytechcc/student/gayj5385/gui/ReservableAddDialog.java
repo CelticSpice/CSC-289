@@ -27,6 +27,7 @@ import javax.swing.JTextField;
 public class ReservableAddDialog extends JDialog
 {
     // Fields
+    private boolean recordsAdded;
     private JButton add, exit;
     private JComboBox startYear, startMonth, startDay, startHour, startMinute,
                       endYear, endMonth, endDay, endHour, endMinute,
@@ -47,6 +48,8 @@ public class ReservableAddDialog extends JDialog
         setModalityType(ModalityType.APPLICATION_MODAL);
         setResizable(false);
         setLocationRelativeTo(null);
+        
+        recordsAdded = false;
         
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -445,6 +448,31 @@ public class ReservableAddDialog extends JDialog
     }
     
     /**
+        Return the set existing locations
+    
+        @return The set existing locations
+    */
+    
+    public Location[] getExistingLocations()
+    {
+        Location[] locs = new Location[existingLocation.getItemCount()];
+        for (int i = 0; i < locs.length; i++)
+            locs[i] = (Location) existingLocation.getItemAt(i);
+        return locs;
+    }
+    
+    /**
+        Return if records have been added
+    
+        @return If records have been added
+    */
+    
+    public boolean getIfRecordsAdded()
+    {
+        return recordsAdded;
+    }
+    
+    /**
         Get input location
     
         @return Input location
@@ -729,6 +757,17 @@ public class ReservableAddDialog extends JDialog
     public void setExistingLocationEnabled(boolean enabled)
     {
         existingLocation.setEnabled(enabled);
+    }
+    
+    /**
+        Set if records have been added
+    
+        @param added Whether records have been added
+    */
+    
+    public void setIfRecordsAdded(boolean added)
+    {
+        recordsAdded = added;
     }
     
     /**

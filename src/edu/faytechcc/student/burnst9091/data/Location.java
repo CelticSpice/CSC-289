@@ -6,14 +6,17 @@
 
 package edu.faytechcc.student.burnst9091.data;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.function.Predicate;
+import static java.util.stream.Collectors.toList;
 
 public class Location
 {
     // Fields
     private int capacity;
-    private TimeframeList timeframes;
+    private List<Timeframe> timeframes;
     private String name;
     
     /**
@@ -36,7 +39,7 @@ public class Location
         
         name = n;
         capacity = cap;
-        timeframes = new TimeframeList();
+        timeframes = new ArrayList<>();
     }
     
     /**
@@ -49,7 +52,7 @@ public class Location
         @throws IllegalArgumentException Name is empty or capacity 0 or less
     */
     
-    public Location(String n, int cap, TimeframeList times)
+    public Location(String n, int cap, List<Timeframe> times)
     {
         // Check that name is valid
         if (n == null || n.isEmpty())
@@ -109,27 +112,46 @@ public class Location
     }
     
     /**
-        Returns a list of timeframes allocated to the location
+        Returns a list of timeframes allocated to the location. The order
+        in which timeframes will be sorted is unreliable
     
         @return A list of timeframes allocated to the location
     */
     
-    public TimeframeList getTimeframes()
+    public List<Timeframe> getTimeframes()
     {
-        return new TimeframeList(timeframes);
+        return new ArrayList<>(timeframes);
     }
     
     /**
         Returns a list of timeframes allocated to the location matching the
-        specified predicate
+        specified predicate. The order in which timeframes will be sorted
+        is unreliable
     
         @param predicate The predicate which timeframes must match to be listed
         @return A list of timeframes matching the given predicate
     */
     
-    public TimeframeList getTimeframes(Predicate<Timeframe> predicate)
+    public List<Timeframe> getTimeframes(Predicate<Timeframe> predicate)
     {
-        return timeframes.filter(predicate);
+        return new ArrayList<>(timeframes.stream()
+                .filter(predicate)
+                .collect(toList()));
+    }
+    
+    /**
+        Returns a list of timeframes allocated to this location sorted according
+        to the specified comparator
+    
+        @param comparator Comparator to sort the location's timeframes with
+        @return A sorted list of timeframes
+    */
+    
+    public List<Timeframe> getTimeframes(Comparator<Timeframe> comparator)
+    {
+        ArrayList<Timeframe> list = new ArrayList<>(timeframes);
+        list.sort(comparator);
+        return list;
     }
     
     /**
@@ -141,12 +163,12 @@ public class Location
         @return A sorted list of timeframes matching the specified predicate
     */
     
-    public TimeframeList getTimeframes(Predicate<Timeframe> predicate,
-                                       Comparator<Timeframe> comparator)
+    public List<Timeframe> getTimeframes(Predicate<Timeframe> predicate,
+                                         Comparator<Timeframe> comparator)
     {
-        TimeframeList times = timeframes.filter(predicate);
-        times.sort(comparator);
-        return times;
+        List<Timeframe> list = getTimeframes(predicate);
+        list.sort(comparator);
+        return list;
     }
     
     /**
@@ -159,7 +181,7 @@ public class Location
     
     public boolean hasTimeframe(Predicate<Timeframe> predicate)
     {
-        return timeframes.contains(predicate);
+        return !getTimeframes(predicate).isEmpty();
     }
     
     /**
@@ -193,18 +215,6 @@ public class Location
     public void setName(String n)
     {
         name = n;
-    }
-    
-    /**
-        Sorts the timeframes the location can be reserved for according to the
-        specified comparator
-    
-        @param comparator Comparator to sort the location's timeframes with
-    */
-    
-    public void sortTimeframes(Comparator<Timeframe> comparator)
-    {
-        timeframes.sort(comparator);
     }
     
     /**

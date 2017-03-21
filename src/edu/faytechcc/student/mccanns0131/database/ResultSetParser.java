@@ -7,7 +7,6 @@
 package edu.faytechcc.student.mccanns0131.database;
 
 import edu.faytechcc.student.burnst9091.data.Timeframe;
-import edu.faytechcc.student.burnst9091.data.TimeframeList;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -72,10 +71,10 @@ public class ResultSetParser
         @return timeframes A list of timeframes
     */
     
-    public static TimeframeList parseTimeframes(ResultSet rs, boolean reserved)
-            throws SQLException
+    public static List<Timeframe> parseTimeframes(ResultSet rs,
+            boolean reserved) throws SQLException
     {
-        TimeframeList timeframes = new TimeframeList();
+        List<Timeframe> timeframes = new ArrayList<>();
         Timeframe timeframe;
         LocalDate startDate, endDate;
         LocalTime startTime, endTime;
@@ -111,10 +110,10 @@ public class ResultSetParser
      * @return A list of timeframes
      * @throws SQLException Error parsing the result set
      */
-    public static TimeframeList parseTimeframes(ResultSet rs)
+    public static List<Timeframe> parseTimeframes(ResultSet rs)
             throws SQLException
     {
-        TimeframeList timeframes = new TimeframeList();
+        List<Timeframe> timeframes = new ArrayList<>();
         Timeframe timeframe;
         LocalDate startDate, endDate;
         LocalTime startTime, endTime;

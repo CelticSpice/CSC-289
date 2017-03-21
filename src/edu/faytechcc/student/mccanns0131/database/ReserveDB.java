@@ -8,12 +8,12 @@ package edu.faytechcc.student.mccanns0131.database;
 
 import edu.faytechcc.student.burnst9091.data.SystemUtil;
 import edu.faytechcc.student.burnst9091.data.Timeframe;
-import edu.faytechcc.student.burnst9091.data.TimeframeList;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 public class ReserveDB
 {
@@ -59,7 +59,7 @@ public class ReserveDB
         
         ResultSet rs = stmt.executeQuery(sql);
         
-        TimeframeList referenceTimes = ResultSetParser.parseTimeframes(rs);
+        List<Timeframe> referenceTimes = ResultSetParser.parseTimeframes(rs);
         
         for (Timeframe t : referenceTimes)
         {

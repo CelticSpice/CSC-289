@@ -9,7 +9,6 @@ package edu.faytechcc.student.gayj5385.gui;
 
 import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Timeframe;
-import edu.faytechcc.student.burnst9091.data.TimeframeList;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -388,7 +387,7 @@ public class ManageReservablePanel extends JPanel
         @param times Timeframes to display in the list
     */
     
-    public void setTimeframes(TimeframeList times)
+    public void setTimeframes(List<Timeframe> times)
     {
         timeframes.removeAllElements();
         for (Timeframe timeframe : times)

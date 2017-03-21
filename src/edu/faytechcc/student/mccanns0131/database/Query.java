@@ -11,8 +11,6 @@ import edu.faytechcc.student.burnst9091.data.Reservable;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.Reserver;
 import edu.faytechcc.student.burnst9091.data.Timeframe;
-import edu.faytechcc.student.burnst9091.data.TimeframeList;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +38,8 @@ public class Query
         @return A list of available timeframes at the specified location
     */
     
-    private TimeframeList queryAvailableLocationTimeframes(String locationName)
-            throws SQLException
+    private List<Timeframe> queryAvailableLocationTimeframes(
+            String locationName) throws SQLException
     {
         sql = "SELECT Timeframes.StartDate, Timeframes.StartTime, " +
               "Timeframes.EndDate, Timeframes.EndTime, Reservables.Cost " +
@@ -96,7 +94,7 @@ public class Query
         
         int capacity;
         Location location;
-        TimeframeList timeframes;
+        List<Timeframe> timeframes;
         
         for (String name : names)
         {
@@ -155,13 +153,13 @@ public class Query
         @return A list of timeframes at the specified location
     */
     
-    private TimeframeList queryLocationTimeframes(String locationName)
+    private List<Timeframe> queryLocationTimeframes(String locationName)
             throws SQLException
     {
-        TimeframeList reservedTimeframes =
+        List<Timeframe> reservedTimeframes =
                 queryReservedLocationTimeframes(locationName);
         
-        TimeframeList availableTimeframes =
+        List<Timeframe> availableTimeframes =
                 queryAvailableLocationTimeframes(locationName);
         
         reservedTimeframes.addAll(availableTimeframes);
@@ -342,7 +340,7 @@ public class Query
         @return A list of reserved timeframes at the specified location
     */
     
-    private TimeframeList queryReservedLocationTimeframes(String locationName)
+    private List<Timeframe> queryReservedLocationTimeframes(String locationName)
             throws SQLException
     {          
         sql = "SELECT Timeframes.StartDate, Timeframes.StartTime, " +

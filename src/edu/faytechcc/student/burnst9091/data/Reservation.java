@@ -167,6 +167,8 @@ public class Reservation
     
     /**
         GetReserverPhone - Return the phone number of the reserver
+    
+        @return The phone number of the reserver
     */
     
     public String getReserverPhone()

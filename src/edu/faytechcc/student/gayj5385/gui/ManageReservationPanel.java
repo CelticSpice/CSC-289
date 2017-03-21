@@ -15,6 +15,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.event.ActionListener;
+import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -26,6 +28,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.event.ListSelectionListener;
 
 public class ManageReservationPanel extends JPanel
 {
@@ -211,5 +214,198 @@ public class ManageReservationPanel extends JPanel
         panel.add(searchPanel);
         
         return panel;
+    }
+    
+    /**
+        Register a button controller to the panel
+    
+        @param controller The controller to register to the buttons on the panel
+    */
+    
+    public void registerButtonController(ActionListener controller)
+    {
+        update.addActionListener(controller);
+        contact.addActionListener(controller);
+        approve.addActionListener(controller);
+        cancel.addActionListener(controller);
+        logout.addActionListener(controller);
+        searchBtn.addActionListener(controller);
+    }
+    
+    /**
+        Registers a controller to the locations combo box
+    
+        @param controller The controller to register to the locations combo box
+    */
+    
+    public void registerComboBoxController(ActionListener controller)
+    {
+        locations.addActionListener(controller);
+    }
+    
+    /**
+        Registers a controller to the reservation list
+    
+        @param controller The controller to register to the reservation list
+    */
+    
+    public void registerReservationListController(
+            ListSelectionListener controller)
+    {
+        reservationList.addListSelectionListener(controller);
+    }
+    
+    /**
+        Sets the attendees field
+    
+        @param attend The attendees to display
+    */
+    
+    public void setAttendees(String attend)
+    {
+        attendees.setText(attend);
+    }
+    
+    /**
+        Set the capacity of the selected location
+    
+        @param cap Capacity to display
+    */
+    
+    public void setCapacity(String cap)
+    {
+        capacity.setText(cap);
+    }
+    
+    /**
+        Set contact email
+    
+        @param email Contact email
+    */
+    
+    public void setEmail(String email)
+    {
+        contactEmail.setText(email);
+    }
+    
+    /**
+        Set contact name
+    
+        @param name Contact name to set
+    */
+    
+    public void setContactName(String name)
+    {
+        contactName.setText(name);
+    }
+    
+    /**
+        Set contact phone
+    
+        @param phone Contact phone
+    */
+    
+    public void setPhone(String phone)
+    {
+        contactPhone.setText(phone);
+    }
+    
+    /**
+        Set the cost field
+    
+        @param c Cost to set in the cost field
+    */
+    
+    public void setCost(String c)
+    {
+        cost.setText(c);
+    }
+    
+    /**
+        Set the end date field
+    
+        @param date Date to set in the end date field
+    */
+    
+    public void setEndDate(String date)
+    {
+        endDate.setText(date);
+    }
+    
+    /**
+        Set the end time field
+    
+        @param time Time to set in the end time field
+    */
+    
+    public void setEndTime(String time)
+    {
+        endTime.setText(time);
+    }
+    
+    /**
+        Sets the event field
+    
+        @param e The event to set
+    */
+    
+    public void setEvent(String e)
+    {
+        event.setText(e);
+    }
+    
+    /**
+        Set the locations that have been reserved
+    
+        @param locs Locations that have been reserved
+    */
+    
+    public void setLocations(Location[] locs)
+    {
+        ActionListener[] als = locations.getActionListeners();
+        for (ActionListener al : als)
+            locations.removeActionListener(al);
+        
+        locations.removeAllItems();
+        for (Location loc : locs)
+            locations.addItem(loc);
+        
+        for (ActionListener al : als)
+            locations.addActionListener(al);
+    }
+    
+    /**
+        Set the reservations displayed in the list
+    
+        @param reserves Reservations to display in the list
+    */
+    
+    public void setReservations(List<Reservation> reserves)
+    {
+        reservations.removeAllElements();
+        for (Reservation reservation : reserves)
+            reservations.addElement(reservation);
+    }
+    
+    /**
+        Set the start date field
+    
+        @param date Date to set in the start date field
+    */
+    
+    public void setStartDate(String date)
+    {
+        startDate.setText(date);
+    }
+    
+    /**
+        Set the start time field
+    
+        @param time Time to set in the start time field
+    */
+    
+    public void setStartTime(String time)
+    {
+        startTime.setText(time);
     }
 }

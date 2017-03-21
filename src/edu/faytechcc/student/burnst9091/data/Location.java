@@ -6,6 +6,9 @@
 
 package edu.faytechcc.student.burnst9091.data;
 
+import java.util.Comparator;
+import java.util.function.Predicate;
+
 public class Location
 {
     // Fields
@@ -62,7 +65,18 @@ public class Location
     }
     
     /**
-        GetCapacity - Return the location's capacity
+        Adds a timeframe that this location can be reserved for
+    
+        @param timeframe The timeframe to add
+    */
+    
+    public void addTimeframe(Timeframe timeframe)
+    {
+        timeframes.add(timeframe);
+    }
+    
+    /**
+        Returns the location's capacity
     
         @return The location's capacity
     */
@@ -73,7 +87,7 @@ public class Location
     }
     
     /**
-        GetName - Return the location's name
+        Returns the location's name
     
         @return The location's name
     */
@@ -84,38 +98,72 @@ public class Location
     }
     
     /**
-        GetTimeframes - Return the list of timeframes allocated to the location
+        Returns a list of timeframes allocated to the location
     
-        @return The list of timeframes allocated to the location
+        @return A list of timeframes allocated to the location
     */
     
     public TimeframeList getTimeframes()
     {
-        return timeframes;
+        return new TimeframeList(timeframes);
     }
     
     /**
-        Return if the location has an allocated timeframe with the same
-        datetimes as another timeframe
+        Returns a list of timeframes allocated to the location matching the
+        specified predicate
     
-        @param t The timeframe
-        @return If the location has an allocated timeframe with the same
-                datetimes as another timeframe
+        @param predicate The predicate which timeframes must match to be listed
+        @return A list of timeframes matching the given predicate
     */
     
-    public boolean hasTimeframe(Timeframe t)
+    public TimeframeList getTimeframes(Predicate<Timeframe> predicate)
     {
-        TimeframeList list = timeframes
-                .filterStartDate(t.getStartDate())
-                .filterStartTime(t.getStartTime())
-                .filterEndDate(t.getEndDate())
-                .filterEndTime(t.getEndTime());
-        
-        return !list.isEmpty();
+        return timeframes.filter(predicate);
     }
     
     /**
-        SetCapacity - Set the location's capacity
+        Returns a list of timeframes allocated to the location matching the
+        specified predicate & sorted according to the specified comparator
+    
+        @param predicate The predicate which timeframes must match to be listed
+        @param comparator Comparator to sort the location's timeframes with
+        @return A sorted list of timeframes matching the specified predicate
+    */
+    
+    public TimeframeList getTimeframes(Predicate<Timeframe> predicate,
+                                       Comparator<Timeframe> comparator)
+    {
+        TimeframeList times = timeframes.filter(predicate);
+        times.sort(comparator);
+        return times;
+    }
+    
+    /**
+        Returns if the location has a timeframe or timeframes matching the
+        specified predicate
+    
+        @param predicate Predicate that timeframes must match
+        @return If location has a timeframe or timeframes matching the predicate
+    */
+    
+    public boolean hasTimeframe(Predicate<Timeframe> predicate)
+    {
+        return timeframes.contains(predicate);
+    }
+    
+    /**
+        Removes a timeframe that this location can be reserved for
+    
+        @param timeframe The timeframe to remove
+    */
+    
+    public void removeTimeframe(Timeframe timeframe)
+    {
+        timeframes.remove(timeframe);
+    }
+    
+    /**
+        Sets the location's capacity
     
         @param cap The location's capacity
     */
@@ -126,7 +174,7 @@ public class Location
     }
     
     /**
-        SetName - Set the name of the location
+        Sets the name of the location
     
         @param n The name of the location
     */
@@ -137,7 +185,19 @@ public class Location
     }
     
     /**
-        Return a string representation of the object
+        Sorts the timeframes the location can be reserved for according to the
+        specified comparator
+    
+        @param comparator Comparator to sort the location's timeframes with
+    */
+    
+    public void sortTimeframes(Comparator<Timeframe> comparator)
+    {
+        timeframes.sort(comparator);
+    }
+    
+    /**
+        Returns a string representation of the object
     
         @return A string representation of the object
     */

@@ -7,15 +7,11 @@
 
 package edu.faytechcc.student.gayj5385.controller;
 
-import edu.faytechcc.student.burnst9091.data.DateTimeParser;
 import edu.faytechcc.student.gayj5385.gui.ManageReservablePanel;
 import edu.faytechcc.student.gayj5385.gui.ReservableAddDialog;
-import edu.faytechcc.student.mccanns0131.database.Query;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
-import javax.swing.JOptionPane;
 
 public class ManageReservableButtonController implements ActionListener
 {
@@ -67,9 +63,13 @@ public class ManageReservableButtonController implements ActionListener
     {        
         ReservableAddDialog d = new ReservableAddDialog();
         
-        registerDialogControllers(d);
-        setExistingLocations(d);
-        setInitialFields(d);
+        d.registerButtonController(new ReservableAddButtonController(d));
+        d.registerRadioButtonController(new ReservableAddRadioController(d));
+        d.registerComboBoxController(new ReservableAddComboBoxController(d));
+        
+        d.setExistingLocations(view.getLocations());
+        
+        setInitialDatetimeFields(d);
         
         d.setVisible(true);
         
@@ -78,53 +78,40 @@ public class ManageReservableButtonController implements ActionListener
     }
     
     /**
-        Register controllers to a dialog
-    
-        @param d The dialog
-    */
-    
-    private void registerDialogControllers(ReservableAddDialog d)
-    {
-        d.registerButtonController(new ReservableAddButtonController(d));
-        d.registerRadioButtonController(new ReservableAddRadioController(d));
-        d.registerComboBoxController(new ReservableAddComboBoxController(d));
-    }
-    
-    /**
-        Set the existing locations on a dialog to add a reservable
+        Set the initial datetime fields on a dialog
     
         @param dialog The dialog
     */
     
-    private void setExistingLocations(ReservableAddDialog dialog)
+    private void setInitialDatetimeFields(ReservableAddDialog dialog)
     {
-        try
-        {
-            Query query = new Query();
-            dialog.setExistingLocations(query.queryLocations());
-        }
-        catch (SQLException ex)
-        {
-            JOptionPane.showMessageDialog(view, "Failed loading existing " +
-                    "locations", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    
-    /**
-        Set the initial fields on a dialog
-    
-        @param dialog The dialog
-    */
-    
-    private void setInitialFields(ReservableAddDialog dialog)
-    {
-        DateTimeParser parser = new DateTimeParser(LocalDateTime.now());
+        final int HOURS = 24;
+        final int MAX_YEAR = 2099;
+        final int MINUTES = 60;
+        final int MONTHS = 12;
         
-        int[] years = parser.getYears();
-        int[] months = parser.getMonths();
-        int[] days = parser.getDays();
-        int[] hours = parser.getHours();
-        int[] minutes = parser.getMinutes();
+        LocalDateTime datetime = LocalDateTime.now();
+        
+        int[] years = new int[MAX_YEAR + 1 - datetime.getYear()];
+        for (int i = 0; i < years.length; i++)
+            years[i] = datetime.getYear() + i;
+        
+        int[] months = new int[MONTHS + 1 - datetime.getMonthValue()];
+        for (int i = 0; i < months.length; i++)
+            months[i] = datetime.getMonthValue() + i;
+        
+        int monthDays = datetime.toLocalDate().lengthOfMonth();
+        int[] days = new int[monthDays + 1 - datetime.getDayOfMonth()];
+        for (int i = 0; i < days.length; i++)
+            days[i] = datetime.getDayOfMonth() + i;
+        
+        int[] hours = new int[HOURS - datetime.getHour()];
+        for (int i = 0; i < hours.length; i++)
+            hours[i] = datetime.getHour() + i;
+        
+        int[] minutes = new int[MINUTES - datetime.getMinute()];
+        for (int i = 0; i < minutes.length; i++)
+            minutes[i] = datetime.getMinute() + i;
         
         dialog.setStartYears(years);
         dialog.setStartMonths(months);

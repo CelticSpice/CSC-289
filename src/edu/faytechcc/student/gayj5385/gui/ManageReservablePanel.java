@@ -200,6 +200,20 @@ public class ManageReservablePanel extends JPanel
     }
     
     /**
+        Return the set locations
+    
+        @return The set locations
+    */
+    
+    public Location[] getLocations()
+    {
+        Location[] locs = new Location[locations.getItemCount()];
+        for (int i = 0; i < locs.length; i++)
+            locs[i] = locations.getItemAt(i);
+        return locs;
+    }
+    
+    /**
         Return the selected location
     
         @return The selected location

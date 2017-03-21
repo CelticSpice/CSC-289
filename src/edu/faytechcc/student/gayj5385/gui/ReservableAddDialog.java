@@ -70,17 +70,6 @@ public class ReservableAddDialog extends JDialog
     }
     
     /**
-        Add a location to the list of existing locations
-    
-        @param loc The location to add
-    */
-    
-    public void addLocation(Location loc)
-    {
-        existingLocation.addItem(loc);
-    }
-    
-    /**
         Build & return the bottom panel of this panel
     
         @return The built panel

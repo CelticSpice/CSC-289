@@ -6,7 +6,6 @@
 
 package edu.faytechcc.student.gayj5385.controller;
 
-import edu.faytechcc.student.burnst9091.data.DateTimeParser;
 import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.gayj5385.gui.ReservableAddDialog;
 import java.awt.event.ActionEvent;
@@ -90,16 +89,26 @@ public class ReservableAddComboBoxController implements ActionListener
         LocalDateTime datetime = LocalDateTime
                 .now()
                 .withYear(year)
-                .withMonth(month);
-        datetime = datetime.withNano(0).withSecond(0);
+                .withMonth(month)
+                .withSecond(0)
+                .withNano(0);
 
-        DateTimeParser parser;
-        if (datetime.equals(LocalDateTime.now().withNano(0).withSecond(0)))
-            parser = new DateTimeParser(datetime);
-        else
-            parser = new DateTimeParser(datetime.withDayOfMonth(1));
+        int[] days;
+        int day;
         
-        int[] days = parser.getDays();
+        if (datetime.equals(LocalDateTime.now().withNano(0).withSecond(0)))
+        {
+            day = datetime.getDayOfMonth();
+            days = new int[datetime.toLocalDate().lengthOfMonth() + 1 - day];
+        }
+        else
+        {
+            day = 1;
+            days = new int[datetime.toLocalDate().lengthOfMonth()];
+        }
+        
+        for (int i = 0; i < days.length; i++)
+            days[i] = day++;
 
         if (startOrEnd == START)
             view.setStartDays(days);
@@ -113,12 +122,9 @@ public class ReservableAddComboBoxController implements ActionListener
     
     private void setExistingLocationFields()
     {
-        if (view.isExistingLocationRadioSelected())
-        {
-            Location loc = view.getSelectedLocation();
-            view.setLocation(loc.getName());
-            view.setCapacity(String.valueOf(loc.getCapacity()));
-        }
+        Location loc = view.getSelectedLocation();
+        view.setLocation(loc.getName());
+        view.setCapacity(String.valueOf(loc.getCapacity()));
     }
     
     /**
@@ -128,7 +134,9 @@ public class ReservableAddComboBoxController implements ActionListener
     */
     
     private void setHours(int startOrEnd)
-    {        
+    {   
+        final int HOURS = 24;
+        
         int year, month, day;
         if (startOrEnd == START)
         {
@@ -143,16 +151,30 @@ public class ReservableAddComboBoxController implements ActionListener
             day = view.getEndDay();
         }
         
-        LocalDateTime datetime = LocalDateTime.now().withNano(0).withSecond(0);
-        datetime = datetime.withYear(year).withMonth(month).withDayOfMonth(day);
+        LocalDateTime datetime = LocalDateTime
+                .now()
+                .withYear(year)
+                .withMonth(month)
+                .withDayOfMonth(day)
+                .withSecond(0)
+                .withNano(0);
+
+        int[] hours;
+        int hour;
         
-        DateTimeParser parser;
         if (datetime.equals(LocalDateTime.now().withNano(0).withSecond(0)))
-            parser = new DateTimeParser(datetime);
+        {
+            hour = datetime.getHour();
+            hours = new int[HOURS + 1 - hour];
+        }
         else
-            parser = new DateTimeParser(datetime.withHour(0));
+        {
+            hour = 0;
+            hours = new int[HOURS];
+        }
         
-        int[] hours = parser.getHours();
+        for (int i = 0; i < hours.length; i++)
+            hours[i] = hour++;
         
         if (startOrEnd == START)
             view.setStartHours(hours);
@@ -168,6 +190,8 @@ public class ReservableAddComboBoxController implements ActionListener
     
     private void setMinutes(int startOrEnd)
     {
+        final int MINUTES = 60;
+        
         int year, month, day, hour;
         if (startOrEnd == START)
         {
@@ -184,17 +208,31 @@ public class ReservableAddComboBoxController implements ActionListener
             hour = view.getEndHour();
         }
         
-        LocalDateTime datetime = LocalDateTime.now().withNano(0).withSecond(0);
-        datetime = datetime.withYear(year).withMonth(month).withDayOfMonth(day);
-        datetime = datetime.withHour(hour);
+       LocalDateTime datetime = LocalDateTime
+                .now()
+                .withYear(year)
+                .withMonth(month)
+                .withDayOfMonth(day)
+                .withHour(hour)
+                .withSecond(0)
+                .withNano(0);
+
+        int[] minutes;
+        int minute;
         
-        DateTimeParser parser;
         if (datetime.equals(LocalDateTime.now().withNano(0).withSecond(0)))
-            parser = new DateTimeParser(datetime);
+        {
+            minute = datetime.getMinute();
+            minutes = new int[MINUTES + 1 - minute];
+        }
         else
-            parser = new DateTimeParser(datetime.withMinute(0));
+        {
+            minute = 0;
+            minutes = new int[MINUTES];
+        }
         
-        int[] minutes = parser.getMinutes();
+        for (int i = 0; i < minutes.length; i++)
+            minutes[i] = minute++;
         
         if (startOrEnd == START)
             view.setStartMinutes(minutes);
@@ -210,22 +248,36 @@ public class ReservableAddComboBoxController implements ActionListener
     
     private void setMonths(int startOrEnd)
     {
+        final int MONTHS = 12;
+        
         int year;
         if (startOrEnd == START)
             year = view.getStartYear();
         else
             year = view.getEndYear();
         
-        LocalDateTime datetime = LocalDateTime.now().withYear(year);
-        datetime = datetime.withNano(0).withSecond(0);
+        LocalDateTime datetime = LocalDateTime
+                .now()
+                .withYear(year)
+                .withSecond(0)
+                .withNano(0);
+
+        int[] months;
+        int month;
         
-        DateTimeParser parser;
         if (datetime.equals(LocalDateTime.now().withNano(0).withSecond(0)))
-            parser = new DateTimeParser(datetime);
+        {
+            month = datetime.getMonthValue();
+            months = new int[MONTHS + 1 - month];
+        }
         else
-            parser = new DateTimeParser(datetime.withMonth(1));
+        {
+            month = 1;
+            months = new int[MONTHS];
+        }
         
-        int[] months = parser.getMonths();
+        for (int i = 0; i < months.length; i++)
+            months[i] = month++;
         
         if (startOrEnd == START)
             view.setStartMonths(months);

@@ -168,6 +168,18 @@ public class Timeframe
     }
     
     /**
+        Returns whether the timeframe ends on the given datetime
+    
+        @param datetime Datetime to check if timeframe ends on
+        @return If timeframe ends on given datetime
+    */
+    
+    public boolean endsOnDatetime(LocalDateTime datetime)
+    {
+        return endDateTime.equals(datetime);
+    }
+    
+    /**
         EndsOnTime - Return whether the timeframe ends on the given time
     
         @param time Time to check if the timeframe ends on
@@ -319,6 +331,18 @@ public class Timeframe
     public boolean startsOnDate(LocalDate date)
     {
         return startDateTime.toLocalDate().equals(date);
+    }
+    
+    /**
+        Returns whether the timeframe starts on the given datetime
+    
+        @param datetime Datetime to check if timeframe starts on
+        @return If timeframe starts on given datetime
+    */
+    
+    public boolean startsOnDatetime(LocalDateTime datetime)
+    {
+        return startDateTime.equals(datetime);
     }
     
     /**

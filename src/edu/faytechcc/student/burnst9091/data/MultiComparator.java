@@ -26,12 +26,24 @@ public class MultiComparator<T> implements Comparator<T>
     }
     
     /**
+        Constructor - Accepts a list of comparators
+    
+        @param cmprtrs List of comparators
+    */
+    
+    public MultiComparator(List<Comparator<T>> cmprtrs)
+    {
+        comparators = cmprtrs;
+    }
+    
+    /**
         Compare - Compare one object to another object
     
-        @param o1 Object to compare with object 2
-        @param o2 Object to compare with object 1
-        @return 1 if object 1 is greater than object 2; 0 if object 1 & 2 are
-                equal; else, -1 if object 1 is less than object 2
+        @param o1 First object to compare
+        @param o2 Second object to compare
+        @return 1 if first object is greater than second object; 0 if first
+                object & second object are equal; else, -1 if first object is
+                less than second object
     */
 
     @Override

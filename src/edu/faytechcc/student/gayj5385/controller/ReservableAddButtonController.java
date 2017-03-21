@@ -18,7 +18,6 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Comparator;
 import javax.swing.JOptionPane;
 
 public class ReservableAddButtonController implements ActionListener
@@ -67,35 +66,22 @@ public class ReservableAddButtonController implements ActionListener
     
     private void addReservable()
     {
-        if (validateFields())
+        if (validateInput())
         {
-            Reservable r = parseReservable();
-            
             try
             {
-                Admin.addReservable(r);
+                Location loc = parseLocation();
+                Timeframe timeframe = parseTimeframe();
+                
+                Admin.addReservable(new Reservable(loc, timeframe));
+                
+                loc.addTimeframe(timeframe);
 
                 if (creatingNewLocation())
-                {
-                    Location[] locs = view.getExistingLocations();
-                    locs = Arrays.copyOf(locs, locs.length + 1);
-
-                    locs[locs.length - 1] = r.getLocation();
-
-                    Comparator<Location> c = 
-                            (a, b) -> a.getName().compareTo(b.getName());
-
-                    Arrays.sort(locs, c);
-
-                    view.setExistingLocations(locs);
-                }
-                else
-                {
-                    Location loc = view.getSelectedLocation();
-                    loc.getTimeframes().add(r.getTimeframe());
-                }
-
+                    addLocation(loc);
+                
                 view.setIfRecordsAdded(true);
+                
                 JOptionPane.showMessageDialog(view, "Reservable created");
             }
             catch (SQLException ex)
@@ -111,15 +97,32 @@ public class ReservableAddButtonController implements ActionListener
     }
     
     /**
-        Check if input location name matches that of an existing one
+        Add a location to the dialog's list of existing locations
     
-        @return Whether the input location name matches that of an existing
-                location
+        @param loc The location to add
+    */
+    
+    private void addLocation(Location loc)
+    {
+        Location[] locs = view.getExistingLocations();
+        locs = Arrays.copyOf(locs, locs.length + 1);
+
+        locs[locs.length - 1] = loc;
+
+        Arrays.sort(locs, (l1, l2) -> l1.getName().compareTo(l2.getName()));
+
+        view.setExistingLocations(locs);
+    }
+    
+    /**
+        Return if input location name matches that of an existing location
+    
+        @return If input location name matches that of an existing location
     */
     
     private boolean isNameMatching()
     {
-        String inputName = view.getInputLocation();
+        String inputName = view.getInputLocation().trim();
         Location[] locs = view.getExistingLocations();
         
         for (Location loc : locs)
@@ -140,27 +143,13 @@ public class ReservableAddButtonController implements ActionListener
     {
         if (creatingNewLocation())
         {
-            String locName = view.getInputLocation();
+            String locName = view.getInputLocation().trim();
             int capacity = Integer.parseInt(view.getCapacity());
             
             return new Location(locName, capacity);
         }
         else
             return view.getSelectedLocation();
-    }
-    
-    /**
-        Parse a reservable with data input on the dialog
-    
-        @return Parsed reservable
-    */
-    
-    private Reservable parseReservable()
-    {
-        Location loc = parseLocation();
-        Timeframe timeframe = parseTimeframe();
-        
-        return new Reservable(loc, timeframe);
     }
     
     /**
@@ -218,12 +207,58 @@ public class ReservableAddButtonController implements ActionListener
     
     private boolean creatingNewLocation()
     {
-        Location loc = view.getSelectedLocation();
+        return !view.isExistingLocationRadioSelected();
+    }
+    
+    /**
+        Validate the capacity input field
+    
+        @return If the capacity input field is valid
+    */
+    
+    private boolean validateCapacity()
+    {
+        boolean valid = view.getCapacity().trim().matches("\\d+");
         
-        if (loc != null)
-            return !loc.getName().equalsIgnoreCase(view.getInputLocation());
+        if (valid)
+        {
+            valid = Integer.parseInt(view.getCapacity()) > 0;
+            
+            if (!valid)
+                JOptionPane.showMessageDialog(view,
+                    "Capacity must be greater than 0");
+        }
         else
-            return true;
+            JOptionPane.showMessageDialog(view, "Invalid input for capacity");
+        
+        return valid;
+    }
+    
+    /**
+        Validate the cost input field
+    
+        @return If the cost input field is valid
+    */
+    
+    private boolean validateCost()
+    {
+        // Is a currency amount entered?
+        boolean valid = view.getCost().trim()
+                .matches("\\$?(\\d+(\\.\\d{1,2})?)|\\$?(\\.\\d{1,2})");
+        
+        if (valid)
+        {
+            String input = view.getCost().trim();
+            input = input.replace("$", "");
+            valid = Double.parseDouble(input) >= 0.0;
+            
+            if (!valid)
+                JOptionPane.showMessageDialog(view, "Cost must be at least $0");
+        }
+        else
+            JOptionPane.showMessageDialog(view, "Invalid input for cost");
+        
+        return valid;
     }
     
     /**
@@ -232,62 +267,30 @@ public class ReservableAddButtonController implements ActionListener
         @return If the input fields are valid
     */
     
-    private boolean validateFields()
+    private boolean validateInput()
     {
-        return validateLocationAndCost() && validateTimeframe();
+        return validateLocation() && validateCapacity() && validateCost() &&
+                validateTimeframe();
     }
     
     /**
-        Validate the location & cost data fields
+        Validate the location input field
     
-        @return If the location & cost data fields are valid
+        @return If the location input field is valid
     */
     
-    private boolean validateLocationAndCost()
+    private boolean validateLocation()
     {
-        // Validate location name
-        boolean nameValid = !view.getInputLocation().isEmpty() &&
-                            !(creatingNewLocation() && isNameMatching());
-        
-        if (!nameValid)
+        if (!view.getInputLocation().isEmpty() && 
+                !(creatingNewLocation() && isNameMatching()))
+        {
+            return true;
+        }
+        else
         {
             JOptionPane.showMessageDialog(view, "Bad location name entered");
             return false;
         }
-        
-        // Validate capacity input
-        boolean capValid = view.getCapacity().trim().matches("\\d+");
-        
-        // Validate capacity greater than 0
-        if (capValid)
-            capValid = Integer.parseInt(view.getCapacity()) > 0;
-        
-        if (!capValid)
-        {
-            JOptionPane.showMessageDialog(view,
-                    "Capacity must be a value greater than 0");
-            return false;
-        }
-            
-        // Validate cost - Is proper number entered?
-        boolean costValid = view.getCost().trim()
-                .matches("\\$?(\\d+(\\.\\d{1,2})?)|\\$?(\\.\\d{1,2})");
-        
-        // Validate cost at least 0
-        if (costValid)
-        {
-            String inputCost = view.getCost();
-            inputCost = inputCost.replace("$", "");
-            costValid = Double.parseDouble(inputCost) >= 0;
-        }
-
-        if (!costValid)
-        {
-            JOptionPane.showMessageDialog(view, "Cost must be at least 0");
-            return false;
-        }
-        
-        return true;
     }
     
     /**
@@ -301,14 +304,27 @@ public class ReservableAddButtonController implements ActionListener
         LocalDateTime startDateTime = parseDateTime(START);
         LocalDateTime endDateTime = parseDateTime(END);
         
-        // Is start before end?
-        if (startDateTime.isBefore(endDateTime))
-            return true;
-        else
+        boolean valid = startDateTime.isBefore(endDateTime);
+        
+        if (valid)
         {
-            JOptionPane.showMessageDialog(null,
-                    "Start datetime must be before end datetime");
-            return false;
+            if (!creatingNewLocation())
+            {
+                Location loc = view.getSelectedLocation();
+                
+                valid = !loc.hasTimeframe(
+                        t -> t.startsOnDatetime(startDateTime) &&
+                             t.endsOnDatetime(endDateTime));
+                
+                if (!valid)
+                    JOptionPane.showMessageDialog(view,
+                            "Location has an identical timeframe");
+            }
         }
+        else
+            JOptionPane.showMessageDialog(view,
+                    "Start datetime must be before end datetime");
+        
+        return valid;
     }
 }

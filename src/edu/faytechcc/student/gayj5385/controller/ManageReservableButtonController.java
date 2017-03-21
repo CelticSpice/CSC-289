@@ -7,11 +7,19 @@
 
 package edu.faytechcc.student.gayj5385.controller;
 
+import edu.faytechcc.student.burnst9091.data.Admin;
+import edu.faytechcc.student.burnst9091.data.Location;
+import edu.faytechcc.student.burnst9091.data.Reservable;
+import edu.faytechcc.student.burnst9091.data.Timeframe;
+import edu.faytechcc.student.burnst9091.data.TimeframeList;
 import edu.faytechcc.student.gayj5385.gui.ManageReservablePanel;
 import edu.faytechcc.student.gayj5385.gui.ReservableAddDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.List;
+import javax.swing.JOptionPane;
 
 public class ManageReservableButtonController implements ActionListener
 {
@@ -47,11 +55,87 @@ public class ManageReservableButtonController implements ActionListener
                 //doModify();
                 break;
             case "Delete":
-                //doDelete();
+                doDelete();
                 break;
             case "Logout":
                 System.exit(0);
                 break;
+        }
+    }
+    
+    /**
+        Return if any timeframe within a list of timeframes is reserved
+    
+        @param timeframes Timeframe list to check for any reserved timeframes
+        @return If any timeframe in the list is reserved
+    */
+    
+    private boolean areTimeframesReserved(List<Timeframe> timeframes)
+    {
+        boolean reserved = false;
+        for (Timeframe timeframe : timeframes)
+            if (timeframe.isReserved())
+            {
+                reserved = true;
+                break;
+            }
+        return reserved;
+    }
+    
+    /**
+        Delete timeframes given in a list
+    
+        @param timeframes Timeframes to delete
+    */
+    
+    private void deleteTimeframes(List<Timeframe> timeframes)
+    {
+        Location loc = view.getSelectedLocation();
+        
+        try
+        {
+            for (Timeframe timeframe : timeframes)
+            {
+                Admin.removeReservable(new Reservable(loc, timeframe));
+                loc.removeTimeframe(timeframe);
+            }
+            
+            view.setTimeframes(loc.getTimeframes());
+            
+            if (loc.getNumTimeframes() == 0)
+                view.removeLocation(loc);
+        }
+        catch (SQLException ex)
+        {
+            
+        }
+    }
+    
+    /**
+        Respond to the "Delete" button being clicked
+    */
+    
+    private void doDelete()
+    {
+        List<Timeframe> timeframes = view.getSelectedTimeframes();
+        
+        if (!timeframes.isEmpty())
+        {
+            if (areTimeframesReserved(timeframes))
+            {
+                JOptionPane.showMessageDialog(view,
+                    "Cannot remove reserved timeframes : Cancel reservations " +
+                    "first");
+            }
+            else
+            {
+                // Confirm deletion
+                int choice = JOptionPane.showConfirmDialog(view,
+                    "Are you sure you want to delete the selected timeframes?");
+
+                if (choice == JOptionPane.YES_OPTION)
+                    deleteTimeframes(timeframes);
+            }   
         }
     }
     

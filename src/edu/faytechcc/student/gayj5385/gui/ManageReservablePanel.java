@@ -18,6 +18,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
+import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -225,14 +226,14 @@ public class ManageReservablePanel extends JPanel
     }
     
     /**
-        Return the selected timeframe
+        Return the selected timeframes
     
-        @return The selected timeframe
+        @return The selected timeframes
     */
     
-    public Timeframe getSelectedTimeframe()
+    public List<Timeframe> getSelectedTimeframes()
     {
-        return timeframeList.getSelectedValue();
+        return timeframeList.getSelectedValuesList();
     }
     
     /**
@@ -271,6 +272,17 @@ public class ManageReservablePanel extends JPanel
             ListSelectionListener controller)
     {
         timeframeList.addListSelectionListener(controller);
+    }
+    
+    /**
+        Removes the specified location from the locations combo box
+    
+        @param loc Location to remove
+    */
+    
+    public void removeLocation(Location loc)
+    {
+        locations.removeItem(loc);
     }
     
     /**

@@ -9,7 +9,7 @@ package edu.faytechcc.student.gayj5385.controller;
 
 import edu.faytechcc.student.burnst9091.data.Timeframe;
 import edu.faytechcc.student.gayj5385.gui.ManageReservablePanel;
-import java.time.format.DateTimeFormatter;
+import java.util.List;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -38,17 +38,17 @@ public class ManageReservableListController implements ListSelectionListener
     @Override
     public void valueChanged(ListSelectionEvent e)
     {
-        Timeframe timeframe = view.getSelectedTimeframe();
+        List<Timeframe> timeframes = view.getSelectedTimeframes();
         
-        if (timeframe != null)
+        if (timeframes.size() == 1)
         {
-            view.setStartDate(timeframe.getStartDate().toString());
-            view.setStartTime(timeframe.getStartTime().toString());
-            view.setEndDate(timeframe.getEndDate().toString());
-            view.setEndTime(timeframe.getEndTime().toString());
-            view.setCost(timeframe.getCostString());
-            view.setReserved((timeframe.isReserved()) ? "Reserved" :
-                                                        "Available");
+            view.setStartDate(timeframes.get(0).getStartDate().toString());
+            view.setStartTime(timeframes.get(0).getStartTime().toString());
+            view.setEndDate(timeframes.get(0).getEndDate().toString());
+            view.setEndTime(timeframes.get(0).getEndTime().toString());
+            view.setCost(timeframes.get(0).getCostString());
+            view.setReserved((timeframes.get(0).isReserved()) ? "Reserved" :
+                                                                "Available");
         }
         else
         {

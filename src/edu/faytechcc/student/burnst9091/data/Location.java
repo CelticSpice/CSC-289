@@ -98,6 +98,17 @@ public class Location
     }
     
     /**
+        Return the number of timeframes allocated to the location
+    
+        @return The number of timeframes allocated to the location
+    */
+    
+    public int getNumTimeframes()
+    {
+        return timeframes.size();
+    }
+    
+    /**
         Returns a list of timeframes allocated to the location
     
         @return A list of timeframes allocated to the location

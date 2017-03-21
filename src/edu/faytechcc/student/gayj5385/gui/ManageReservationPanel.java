@@ -35,7 +35,8 @@ public class ManageReservationPanel extends JPanel
     private JComboBox<Location> locations;
     private JList<Reservation> reservationList;
     private JTextField capacity, search, startDate, startTime, endDate, endTime,
-                       cost, attendees, contactName, contactEmail, contactPhone;
+                       cost, attendees, event, contactName, contactEmail,
+                       contactPhone;
     
     /**
         Constructor
@@ -108,9 +109,11 @@ public class ManageReservationPanel extends JPanel
         reservationPanel1.add(new JLabel("Cost:"));
         reservationPanel1.add(cost = new JTextField());
         
-        JPanel reservationPanel2 = new JPanel(new GridLayout(4, 2, 5, 10));
+        JPanel reservationPanel2 = new JPanel(new GridLayout(5, 2, 5, 10));
         reservationPanel2.add(new JLabel("Attendees:"));
         reservationPanel2.add(attendees = new JTextField());
+        reservationPanel2.add(new JLabel("Event:"));
+        reservationPanel2.add(event = new JTextField());
         reservationPanel2.add(new JLabel("Contact Name:"));
         reservationPanel2.add(contactName = new JTextField());
         reservationPanel2.add(new JLabel("Contact Email:"));
@@ -124,6 +127,7 @@ public class ManageReservationPanel extends JPanel
         endTime.setEditable(false);
         cost.setEditable(false);
         attendees.setEditable(false);
+        event.setEditable(false);
         contactName.setEditable(false);
         contactEmail.setEditable(false);
         contactPhone.setEditable(false);

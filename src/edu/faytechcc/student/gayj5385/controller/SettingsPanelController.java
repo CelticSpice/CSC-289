@@ -50,6 +50,8 @@ public class SettingsPanelController implements ActionListener
             case "Cancel":
                 cancelChanges();
                 break;
+            case "Logout":
+                System.exit(0);
         }
     }
     

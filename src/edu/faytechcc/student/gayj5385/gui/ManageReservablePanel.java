@@ -36,7 +36,7 @@ public class ManageReservablePanel extends JPanel
 {
     // Fields
     private DefaultListModel timeframes;
-    private JButton addBtn, modBtn, delBtn, exitBtn, searchBtn;
+    private JButton addBtn, updateBtn, delBtn, exitBtn, searchBtn;
     private JComboBox<Location> locations;
     private JList<Timeframe> timeframeList;
     private JTextField capacity, search, startDate, startTime, endDate, endTime,
@@ -70,7 +70,7 @@ public class ManageReservablePanel extends JPanel
         // Build main button panel
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
         btnPanel.add(addBtn = new JButton("Add"));
-        btnPanel.add(modBtn = new JButton("Modify"));
+        btnPanel.add(updateBtn = new JButton("Update"));
         btnPanel.add(delBtn = new JButton("Delete"));
         
         // Build exit button panel
@@ -245,7 +245,7 @@ public class ManageReservablePanel extends JPanel
     public void registerButtonController(ActionListener controller)
     {
         addBtn.addActionListener(controller);
-        modBtn.addActionListener(controller);
+        updateBtn.addActionListener(controller);
         delBtn.addActionListener(controller);
         exitBtn.addActionListener(controller);
         searchBtn.addActionListener(controller);

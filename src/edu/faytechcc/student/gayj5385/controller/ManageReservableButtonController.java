@@ -10,10 +10,11 @@ package edu.faytechcc.student.gayj5385.controller;
 import edu.faytechcc.student.burnst9091.data.Admin;
 import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reservable;
+import edu.faytechcc.student.burnst9091.data.search.SearchActualizer;
 import edu.faytechcc.student.burnst9091.data.Timeframe;
-import edu.faytechcc.student.burnst9091.data.TimeframeList;
 import edu.faytechcc.student.gayj5385.gui.ManageReservablePanel;
 import edu.faytechcc.student.gayj5385.gui.ReservableAddDialog;
+import edu.faytechcc.student.mccanns0131.database.Query;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -59,6 +60,19 @@ public class ManageReservableButtonController implements ActionListener
                 break;
             case "Logout":
                 System.exit(0);
+                break;
+            case "Search":
+                doSearch(view.getSearchCriteria());
+                break;
+            case "Clear":
+                try
+                {
+                    doClear();
+                    view.clearSearch();
+                }
+                catch (SQLException ex)
+                {
+                }
                 break;
         }
     }
@@ -111,6 +125,15 @@ public class ManageReservableButtonController implements ActionListener
         }
     }
     
+    private void doClear() throws SQLException
+    {
+        Query query = new Query();
+        
+        Location[] allLocations = query.queryLocations();
+        
+        view.setLocations(allLocations);
+    }
+    
     /**
         Respond to the "Delete" button being clicked
     */
@@ -136,6 +159,24 @@ public class ManageReservableButtonController implements ActionListener
                 if (choice == JOptionPane.YES_OPTION)
                     deleteTimeframes(timeframes);
             }   
+        }
+    }
+    
+    /**
+     * DoSearch - Perform a search for reservables based on search criteria
+     * 
+     * @param criteria The search criteria
+     */
+    private void doSearch(String criteria)
+    {
+        try
+        {
+            SearchActualizer search = new SearchActualizer(view);
+
+            search.searchReservables(view, criteria);
+        }
+        catch (SQLException ex)
+        {
         }
     }
     

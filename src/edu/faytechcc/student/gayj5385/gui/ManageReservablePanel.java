@@ -36,7 +36,7 @@ public class ManageReservablePanel extends JPanel
 {
     // Fields
     private DefaultListModel timeframes;
-    private JButton addBtn, modBtn, delBtn, exitBtn, searchBtn;
+    private JButton addBtn, modBtn, delBtn, exitBtn, searchBtn, clearBtn;
     private JComboBox<Location> locations;
     private JList<Timeframe> timeframeList;
     private JTextField capacity, search, startDate, startTime, endDate, endTime,
@@ -177,6 +177,8 @@ public class ManageReservablePanel extends JPanel
         
         JPanel searchComponentPanel = new JPanel(new GridBagLayout());
         
+        JPanel searchButtonsPanel = new JPanel(new FlowLayout());
+        
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(0, 0, 5, 0);
@@ -185,11 +187,14 @@ public class ManageReservablePanel extends JPanel
         gbc.anchor = GridBagConstraints.CENTER;
         searchComponentPanel.add(search = new JTextField(), gbc);
         
+        searchButtonsPanel.add(searchBtn = new JButton("Search"));
+        searchButtonsPanel.add(clearBtn = new JButton("Clear"));
+        
         gbc.gridy = 1;
         gbc.insets = new Insets(0, 0, 0, 0);
         gbc.ipadx = 0;
         gbc.ipady = 0;
-        searchComponentPanel.add(searchBtn = new JButton("Search"), gbc);
+        searchComponentPanel.add(searchButtonsPanel, gbc);
         
         searchPanel.add(searchComponentPanel);
                 
@@ -198,6 +203,22 @@ public class ManageReservablePanel extends JPanel
         panel.add(searchPanel);
         
         return panel;
+    }
+    
+    /**
+     * ClearSearch - Clears search results
+     */
+    public void clearSearch()
+    {
+        search.setText("");
+        timeframeList.setModel(timeframes = new DefaultListModel());
+        capacity.setText("");
+        startTime.setText("");
+        endTime.setText("");
+        startDate.setText("");
+        endDate.setText("");
+        reserved.setText("");
+        cost.setText("");
     }
     
     /**
@@ -212,6 +233,25 @@ public class ManageReservablePanel extends JPanel
         for (int i = 0; i < locs.length; i++)
             locs[i] = locations.getItemAt(i);
         return locs;
+    }
+    
+    /**
+     * GetSearchCriteria - Get the search criteria within the search text field
+     * 
+     * @return The text within the search text field
+     */
+    public String getSearchCriteria()
+    {
+        
+        timeframeList.setModel(timeframes = new DefaultListModel());
+        capacity.setText("");
+        startTime.setText("");
+        endTime.setText("");
+        startDate.setText("");
+        endDate.setText("");
+        reserved.setText("");
+        cost.setText("");
+        return search.getText();
     }
     
     /**
@@ -249,6 +289,7 @@ public class ManageReservablePanel extends JPanel
         delBtn.addActionListener(controller);
         exitBtn.addActionListener(controller);
         searchBtn.addActionListener(controller);
+        clearBtn.addActionListener(controller);
     }
     
     /**

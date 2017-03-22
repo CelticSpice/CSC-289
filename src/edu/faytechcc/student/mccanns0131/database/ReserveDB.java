@@ -14,6 +14,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.time.Month;
 
 public class ReserveDB
 {
@@ -36,41 +38,6 @@ public class ReserveDB
              "&password=" + SystemUtil.getDBPass();
         
         connection = DriverManager.getConnection(dbOptions);
-    }
-    
-    /**
-     * AddFutureTimeframes - Add timeframes a set time into the future
-     * 
-     * @throws SQLException Error inserting timeframes
-     */
-    public void addFutureTimeframes() throws SQLException
-    {
-        /*
-        This is incomplete; by no means is it near finished. Just laying some
-        foundational work.
-        */
-        Statement stmt = connection.createStatement();
-        stmt.execute("USE " + DB_NAME);
-        
-        String sql = "SELECT Timeframes.StartDate, Timeframes.EndDate, " +
-                     "Timeframes.StartTime, Timeframes.EndTime" +
-                     "FROM Timeframes" +
-                     "WHERE StartDate = CURDATE()";
-        
-        ResultSet rs = stmt.executeQuery(sql);
-        
-        TimeframeList referenceTimes = ResultSetParser.parseTimeframes(rs);
-        
-        for (Timeframe t : referenceTimes)
-        {
-            sql = "INSERT INTO Timeframes(StartDate, EndDate, StartTime, " +
-                  "EndTime)" +
-                  "VALUES('" + t.getStartDate().plusYears(1) + "', " +
-                  "'" + t.getEndDate().plusYears(1) + "', " +
-                  "'" + t.getStartTime() + "', '" + t.getEndTime() + "')";
-            
-            stmt.executeUpdate(sql);
-        }
     }
     
     /**
@@ -113,7 +80,7 @@ public class ReserveDB
     public void createTables(Statement statement) throws SQLException
     {        
         // Create Locations table
-        String sql = "CREATE TABLE Locations(\n" +
+        String sql = "CREATE TABLE Locations(" +
                      "locationName VARCHAR(20) NOT NULL," +
                      "capacity INT NOT NULL," +
                      "PRIMARY KEY (locationName)" +
@@ -140,8 +107,10 @@ public class ReserveDB
               "locationName VARCHAR(20) NOT NULL," +
               "timeframeID INT NOT NULL," +
               "cost DECIMAL(7,2) NOT NULL," +
-              "FOREIGN KEY (locationName) REFERENCES Locations(locationName)," +
-              "FOREIGN KEY (timeframeID) REFERENCES Timeframes(timeframeID)," +
+              "FOREIGN KEY (locationName) REFERENCES Locations(locationName) " +
+              "ON UPDATE ON DELETE CASCADE," +
+              "FOREIGN KEY (timeframeID) REFERENCES Timeframes(timeframeID) " +
+              "ON DELETE CASCADE," +
               "CONSTRAINT locTime PRIMARY KEY (locationName, timeframeID)" +
               ")";
         
@@ -153,7 +122,7 @@ public class ReserveDB
               "reserverID INT NOT NULL AUTO_INCREMENT," +
               "firstName VARCHAR(35) NOT NULL," +
               "lastName VARCHAR(35) NOT NULL," +
-              "email VARCHAR(255) NOT NULL," +
+              "email VARCHAR(75) NOT NULL," +
               "phone VARCHAR(16) NOT NULL," +
               "PRIMARY KEY (reserverID)" +
               ")";
@@ -169,9 +138,12 @@ public class ReserveDB
               "eventType VARCHAR(35) NOT NULL," +
               "numberAttending INT NOT NULL," +
               "approved BOOLEAN NOT NULL DEFAULT 0," +
-              "FOREIGN KEY (locationName) REFERENCES Locations(locationName)," +
-              "FOREIGN KEY (timeframeID) REFERENCES Timeframes(timeframeID)," +
-              "FOREIGN KEY (reserverID) REFERENCES Reservers(reserverID)," +
+              "FOREIGN KEY (locationName) REFERENCES Locations(locationName) " +
+              "ON UPDATE ON DELETE CASCADE," +
+              "FOREIGN KEY (timeframeID) REFERENCES Timeframes(timeframeID) " +
+              "ON DELETE CASCADE," +
+              "FOREIGN KEY (reserverID) REFERENCES Reservers(reserverID) " +
+              "ON DELETE CASCADE," +
               "CONSTRAINT locTime PRIMARY KEY (locationName, timeframeID)" +
               ")";
         
@@ -230,6 +202,12 @@ public class ReserveDB
         return db;
     }
     
+    /**
+     * ModifyRecord - Modify a record in the database
+     * 
+     * @param recordModify The modification of the record
+     * @throws SQLException Error modify record in the database
+     */
     public void modifyRecord(RecordModify recordModify) throws SQLException
     {
         Statement stmt = connection.createStatement();

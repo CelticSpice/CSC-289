@@ -8,14 +8,12 @@ package edu.faytechcc.student.mccanns0131.database;
 
 import edu.faytechcc.student.burnst9091.data.SystemUtil;
 import edu.faytechcc.student.burnst9091.data.Timeframe;
-import edu.faytechcc.student.burnst9091.data.TimeframeList;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
-import java.time.Month;
+import java.util.List;
 
 public class ReserveDB
 {
@@ -38,6 +36,41 @@ public class ReserveDB
              "&password=" + SystemUtil.getDBPass();
         
         connection = DriverManager.getConnection(dbOptions);
+    }
+    
+    /**
+     * AddFutureTimeframes - Add timeframes a set time into the future
+     * 
+     * @throws SQLException Error inserting timeframes
+     */
+    public void addFutureTimeframes() throws SQLException
+    {
+        /*
+        This is incomplete; by no means is it near finished. Just laying some
+        foundational work.
+        */
+        Statement stmt = connection.createStatement();
+        stmt.execute("USE " + DB_NAME);
+        
+        String sql = "SELECT Timeframes.StartDate, Timeframes.EndDate, " +
+                     "Timeframes.StartTime, Timeframes.EndTime" +
+                     "FROM Timeframes" +
+                     "WHERE StartDate = CURDATE()";
+        
+        ResultSet rs = stmt.executeQuery(sql);
+        
+        List<Timeframe> referenceTimes = ResultSetParser.parseTimeframes(rs);
+        
+        for (Timeframe t : referenceTimes)
+        {
+            sql = "INSERT INTO Timeframes(StartDate, EndDate, StartTime, " +
+                  "EndTime)" +
+                  "VALUES('" + t.getStartDate().plusYears(1) + "', " +
+                  "'" + t.getEndDate().plusYears(1) + "', " +
+                  "'" + t.getStartTime() + "', '" + t.getEndTime() + "')";
+            
+            stmt.executeUpdate(sql);
+        }
     }
     
     /**

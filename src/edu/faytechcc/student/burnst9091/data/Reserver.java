@@ -6,35 +6,38 @@
 
 package edu.faytechcc.student.burnst9091.data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Reserver
 {
     // Fields
-    private ContactInfo contactInfo;
-    private ReservationList reservations;
+    private ContactInfo contact;
+    private List<Reservation> reservations;
     
     /**
         Constructor - Accepts the contact information of the reserver
     
-        @param contact Contact info
+        @param c Contact info
     */
     
-    public Reserver(ContactInfo contact)
+    public Reserver(ContactInfo c)
     {
-        contactInfo = contact;
-        reservations = new ReservationList();
+        contact = c;
+        reservations = new ArrayList<>();
     }
     
     /**
         Constructor - Accepts the contact information of the reserver & a
         list of reservations that the reserver has made
     
-        @param contact Contact info
+        @param c Contact info
         @param reservationList Reservations that the reserver has made
     */
     
-    public Reserver(ContactInfo contact, ReservationList reservationList)
+    public Reserver(ContactInfo c, List<Reservation> reservationList)
     {
-        contactInfo = contact;
+        contact = c;
         reservations = reservationList;
     }
     
@@ -46,7 +49,7 @@ public class Reserver
     
     public String getEmailAddress()
     {
-        return contactInfo.getEmail();
+        return contact.getEmail();
     }
     
     /**
@@ -57,7 +60,7 @@ public class Reserver
     
     public String getFirstName()
     {
-        return contactInfo.getFirstName();
+        return contact.getFirstName();
     }
     
     /**
@@ -68,7 +71,7 @@ public class Reserver
     
     public String getName()
     {
-        return contactInfo.getFullName(false);
+        return contact.getFullName(false);
     }
     
     /**
@@ -79,7 +82,7 @@ public class Reserver
     
     public String getLastName()
     {
-        return contactInfo.getLastName();
+        return contact.getLastName();
     }
     
     /**
@@ -90,7 +93,7 @@ public class Reserver
     
     public String getPhoneNumber()
     {
-        return contactInfo.getPhoneNumber();
+        return contact.getPhoneNumber();
     }
     
     /**
@@ -99,8 +102,8 @@ public class Reserver
         @return The reservations the reserver made
     */
     
-    public ReservationList getReservations()
+    public List<Reservation> getReservations()
     {
-        return reservations;
+        return new ArrayList<>(reservations);
     }
 }

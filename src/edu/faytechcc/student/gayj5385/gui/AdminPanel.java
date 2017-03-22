@@ -25,6 +25,7 @@ public class AdminPanel extends JPanel
     // Fields
     private JTabbedPane tabbedPane;
     private ManageReservablePanel mngReservablePanel;
+    private ManageReservationPanel mngReservationPanel;
     private SettingsPanel settingsPanel;
     
     /**
@@ -38,6 +39,7 @@ public class AdminPanel extends JPanel
         tabbedPane = new JTabbedPane();
         
         tabbedPane.add("Manage Reservables", buildManageReservablePanel());
+        tabbedPane.add("Manage Reservations", buildManageReservationPanel());
         tabbedPane.add("Settings", buildSettingsPanel());
         
         add(tabbedPane);
@@ -74,6 +76,18 @@ public class AdminPanel extends JPanel
         }
         
         return mngReservablePanel;
+    }
+    
+    /**
+        Builds & returns the panel to manage reservations on
+    
+        @return The built panel
+    */
+    
+    private ManageReservationPanel buildManageReservationPanel()
+    {
+        mngReservationPanel = new ManageReservationPanel();
+        return mngReservationPanel;
     }
     
     /**

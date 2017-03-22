@@ -127,4 +127,15 @@ public class Reservable
     {
         return timeframe;
     }
+    
+    /**
+        Returns if the reservable is reserved
+    
+        @return If the reservable is reserved
+    */
+    
+    public boolean isReserved()
+    {
+        return timeframe.isReserved();
+    }
 }

@@ -6,6 +6,8 @@
 
 package edu.faytechcc.student.mccanns0131.database;
 
+import edu.faytechcc.student.burnst9091.data.ContactInfo;
+import edu.faytechcc.student.burnst9091.data.Reserver;
 import edu.faytechcc.student.burnst9091.data.Timeframe;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
@@ -60,6 +62,28 @@ public class ResultSetParser
         while (rs.next())
             names.add(rs.getString(1));
         return names.toArray(new String[names.size()]);
+    }
+    
+    /**
+        Parses a reserver from a result set
+    
+        @param rs The result set
+        @throws SQLException Error parsing the result set
+        @return The parsed reserver
+    */
+    
+    public static Reserver parseReserver(ResultSet rs) throws SQLException
+    {
+        rs.next();
+        
+        String firstName = rs.getString("FirstName");
+        String lastName = rs.getString("LastName");
+        String email = rs.getString("Email");
+        String phone = rs.getString("Phone");
+        
+        ContactInfo cont = new ContactInfo(firstName, lastName, email, phone);
+        
+        return new Reserver(cont);
     }
     
     /**

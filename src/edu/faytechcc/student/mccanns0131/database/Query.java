@@ -359,6 +359,40 @@ public class Query
     public List<Reservation> queryReservations(Location loc) throws SQLException
     {
         List<Reservation> reservations = new ArrayList<>();
+        
+        
+    }
+    
+    /**
+        Queries for & returns the reserver of a reservable
+    
+        @param reservable The reservable
+        @throws SQLException Error querying the database
+        @return Who reserved the reservable
+    */
+    
+    private Reserver queryReserver(Reservable reservable) throws SQLException
+    {
+        sql = "SELECT Reservers.FirstName, Reservers.LastName, " +
+              "Reservers.Email, Reservers.Phone " +
+              "FROM Reservers " +
+              "INNER JOIN Reservations " +
+              "ON Reservers.ReserverID = Reservations.ReserverID " +
+              "INNER JOIN Timeframes " +
+              "ON Reservations.TimeframeID = Timeframes.TimeframeID " +
+              "WHERE Reservations.LocationName = '" +
+                reservable.getName() + "' " +
+              "AND Timeframes.StartDate = '" +
+                reservable.getStartDate() + "' " +
+              "AND Timeframes.StartTime = '" +
+                reservable.getStartTime() + "' " +
+              "AND Timeframes.EndDate = '" +
+                reservable.getEndDate() + "' " +
+              "AND Timeframes.EndTime = '" +
+                reservable.getEndTime() + "'";
+        
+        return ResultSetParser.parseReserver
+            (ReserveDB.getInstance().runQuery(this));
     }
     
     /**

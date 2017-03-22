@@ -6,7 +6,6 @@
 
 package edu.faytechcc.student.gayj5385.controller;
 
-import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.search.Filter;
 import edu.faytechcc.student.gayj5385.gui.ManageReservationPanel;

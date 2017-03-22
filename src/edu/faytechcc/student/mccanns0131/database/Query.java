@@ -349,6 +349,19 @@ public class Query
     }
     
     /**
+        Queries for & returns a list of reservations at the specified location
+    
+        @param loc The location
+        @throws SQLException Error querying the database
+        @return List of reservations
+    */
+    
+    public List<Reservation> queryReservations(Location loc) throws SQLException
+    {
+        List<Reservation> reservations = new ArrayList<>();
+    }
+    
+    /**
         ToString - Return a string representation of the object
     
         @return A string representation of the object

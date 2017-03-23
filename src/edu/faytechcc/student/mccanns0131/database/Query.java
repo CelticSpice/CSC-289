@@ -6,16 +6,13 @@
 
 package edu.faytechcc.student.mccanns0131.database;
 
-import edu.faytechcc.student.burnst9091.data.ContactInfo;
 import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reservable;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.Reserver;
 import edu.faytechcc.student.burnst9091.data.Timeframe;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class Query
@@ -89,7 +86,7 @@ public class Query
         @return Every location in the database
     */
     
-    public Location[] queryLocations() throws SQLException
+    public List<Location> queryLocations() throws SQLException
     {
         List<Location> locations = new ArrayList<>();
         
@@ -109,7 +106,7 @@ public class Query
             locations.add(location);
         }
         
-        return locations.toArray(new Location[locations.size()]);
+        return locations;
     }
     
     /**
@@ -352,16 +349,13 @@ public class Query
     }
     
     /**
-        Queries for & returns a list of reservations made at the location with
-        the specified name
+        Queries for & returns a list of reservations made
     
-        @param locationName The location name
         @throws SQLException Error querying the database
         @return List of reservations
     */
     
-    public List<Reservation> queryReservations(String locationName)
-            throws SQLException
+    public List<Reservation> queryReservations() throws SQLException
     {
         sql = "SELECT Locations.LocationName, Locations.Capacity, " +
               "Timeframes.StartDate, Timeframes.StartTime, " +
@@ -379,7 +373,6 @@ public class Query
               "AND Reservables.TimeframeID = Reservations.TimeframeID " +
               "INNER JOIN Reservers " +
               "ON Reservers.ReserverID = Reservations.ReserverID " +
-              "WHERE Locations.LocationName = '" + locationName + "' " +
               "ORDER BY Reservations.Approved, Timeframes.StartDate, " +
               "Timeframes.StartTime, Timeframes.EndDate, " +
               "Timeframes.EndTime, Reservers.FirstName, Reservers.LastName, " +

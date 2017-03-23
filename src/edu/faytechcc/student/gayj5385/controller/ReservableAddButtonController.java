@@ -17,7 +17,6 @@ import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -28,17 +27,21 @@ public class ReservableAddButtonController implements ActionListener
     private static final int START = 0;
     private static final int END = 1;
     
+    private List<Location> locations;
     private ReservableAddDialog view;
     
     /**
-        Constructor - Accepts the view
+        Constructor - Accepts the view & a list of locations
     
         @param v The view
+        @param locs The locations
     */
     
-    public ReservableAddButtonController(ReservableAddDialog v)
+    public ReservableAddButtonController(ReservableAddDialog v,
+            List<Location> locs)
     {
         view = v;
+        locations = locs;
     }
     
     /**
@@ -99,21 +102,16 @@ public class ReservableAddButtonController implements ActionListener
     }
     
     /**
-        Add a location to the dialog's list of existing locations
+        Add a location to the model
     
         @param loc The location to add
     */
     
     private void addLocation(Location loc)
     {
-        List<Location> locs = view.getExistingLocations();
-
-        locs.add(loc);
-
-        Collections.sort(locs, (a,b) -> a.getName().compareTo(b.getName()));
-//        Arrays.sort(locs, (l1, l2) -> l1.getName().compareTo(l2.getName()));
-
-        view.setExistingLocations(locs);
+        locations.add(loc);
+        locations.sort((l1, l2) -> l1.getName().compareTo(l2.getName()));
+        view.setExistingLocations(locations);
     }
     
     /**
@@ -125,9 +123,8 @@ public class ReservableAddButtonController implements ActionListener
     private boolean isNameMatching()
     {
         String inputName = view.getInputLocation().trim();
-        List<Location> locs = view.getExistingLocations();
         
-        for (Location loc : locs)
+        for (Location loc : locations)
         {
             if (loc.getName().equalsIgnoreCase(inputName))
                 return true;

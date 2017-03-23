@@ -9,9 +9,11 @@ package edu.faytechcc.student.burnst9091.data;
 import edu.faytechcc.student.burnst9091.exception.RecordExistsException;
 import edu.faytechcc.student.gayj5385.controller.AdminPanelController;
 import edu.faytechcc.student.gayj5385.gui.AdminPanel;
+import edu.faytechcc.student.mccanns0131.database.Query;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.prefs.BackingStoreException;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
@@ -38,7 +40,12 @@ public class Application
         
         SystemUtil.initPreferences();
         JFrame frame = new JFrame();
-        AdminPanel panel = new AdminPanel();
+        
+        Query q = new Query();
+        List<Location> locations = q.queryLocations();
+        List<Reservation> reservations = q.queryReservations();
+        
+        AdminPanel panel = new AdminPanel(locations, reservations);
         panel.registerChangeController(new AdminPanelController(panel));
         frame.add(panel);
         frame.pack();

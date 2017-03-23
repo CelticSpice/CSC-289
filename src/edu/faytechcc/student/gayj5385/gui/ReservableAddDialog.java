@@ -13,11 +13,11 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -38,10 +38,12 @@ public class ReservableAddDialog extends JDialog
     private JTextField location, capacity, cost;
     
     /**
-        Constructor
+        Constructor - Accepts a list of existing locations
+    
+        @param locs The locations
     */
     
-    public ReservableAddDialog()
+    public ReservableAddDialog(List<Location> locs)
     {
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -53,11 +55,13 @@ public class ReservableAddDialog extends JDialog
         
         recordsAdded = false;
         
+        Location[] locArray = locs.toArray(new Location[locs.size()]);
+        
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(15, 15, 15, 15);
         gbc.anchor = GridBagConstraints.WEST;
-        add(buildTopPanel(), gbc);
+        add(buildTopPanel(locArray), gbc);
         
         gbc.gridy = 1;
         gbc.insets = new Insets(0, 15, 15, 15);
@@ -195,6 +199,8 @@ public class ReservableAddDialog extends JDialog
         panel.add(buildDatePanel());
         panel.add(buildTimePanel());
         
+        initDatetimes();
+        
         return panel;
     }
     
@@ -251,10 +257,11 @@ public class ReservableAddDialog extends JDialog
     /**
         Build & return the panel containing radio buttons
     
+        @param locs The locations
         @return The built panel
     */
     
-    private JPanel buildRadioPanel()
+    private JPanel buildRadioPanel(Location[] locs)
     {
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -275,8 +282,7 @@ public class ReservableAddDialog extends JDialog
         gbc.gridx = 1;
         gbc.insets = new Insets(0, 0, 0, 0);
         gbc.ipadx = 75;
-        DefaultComboBoxModel<Location> model = new DefaultComboBoxModel<>();
-        panel.add(existingLocation = new JComboBox(model), gbc);
+        panel.add(existingLocation = new JComboBox(locs), gbc);
                 
         newLocationRadio.setText("New Location");
         existingLocationRadio.setText("Existing Location");
@@ -348,15 +354,16 @@ public class ReservableAddDialog extends JDialog
     /**
         Build & return the top panel of this panel
     
+        @param locs The locations
         @return The built panel
     */
     
-    private JPanel buildTopPanel()
+    private JPanel buildTopPanel(Location[] locs)
     {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         panel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         
-        panel.add(buildRadioPanel());
+        panel.add(buildRadioPanel(locs));
         
         return panel;
     }
@@ -436,20 +443,6 @@ public class ReservableAddDialog extends JDialog
     public Integer getEndYear()
     {
         return (Integer) endYear.getSelectedItem();
-    }
-    
-    /**
-        Return the set existing locations
-    
-        @return The set existing locations
-    */
-    
-    public List<Location> getExistingLocations()
-    {
-        List<Location> locs = new ArrayList();
-        for (int i = 0; i < locs.size(); i++)
-            locs.set(i, (Location) existingLocation.getItemAt(i));
-        return locs;
     }
     
     /**
@@ -539,6 +532,53 @@ public class ReservableAddDialog extends JDialog
     public Integer getStartYear()
     {
        return (Integer) startYear.getSelectedItem();
+    }
+    
+    /**
+        Initial the datetime fields on the dialog
+    */
+    
+    private void initDatetimes()
+    {
+        final int HOURS = 24;
+        final int MAX_YEAR = 2099;
+        final int MINUTES = 60;
+        final int MONTHS = 12;
+        
+        LocalDateTime datetime = LocalDateTime.now();
+        
+        int[] years = new int[MAX_YEAR + 1 - datetime.getYear()];
+        for (int i = 0; i < years.length; i++)
+            years[i] = datetime.getYear() + i;
+        
+        int[] months = new int[MONTHS + 1 - datetime.getMonthValue()];
+        for (int i = 0; i < months.length; i++)
+            months[i] = datetime.getMonthValue() + i;
+        
+        int monthDays = datetime.toLocalDate().lengthOfMonth();
+        int[] days = new int[monthDays + 1 - datetime.getDayOfMonth()];
+        for (int i = 0; i < days.length; i++)
+            days[i] = datetime.getDayOfMonth() + i;
+        
+        int[] hours = new int[HOURS - datetime.getHour()];
+        for (int i = 0; i < hours.length; i++)
+            hours[i] = datetime.getHour() + i;
+        
+        int[] minutes = new int[MINUTES - datetime.getMinute()];
+        for (int i = 0; i < minutes.length; i++)
+            minutes[i] = datetime.getMinute() + i;
+        
+        setStartYears(years);
+        setStartMonths(months);
+        setStartDays(days);
+        setStartHours(hours);
+        setStartMinutes(minutes);
+        
+        setEndYears(years);
+        setEndMonths(months);
+        setEndDays(days);
+        setEndHours(hours);
+        setEndMinutes(minutes);
     }
     
     /**

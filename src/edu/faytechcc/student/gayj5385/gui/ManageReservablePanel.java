@@ -17,7 +17,6 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -37,20 +36,23 @@ public class ManageReservablePanel extends JPanel
     // Fields
     private DefaultListModel timeframes;
     private JButton addBtn, updateBtn, delBtn, exitBtn, searchBtn, clearBtn;
-    private JComboBox<Location> locations;
+    private JComboBox<Location> locationsBox;
     private JList<Timeframe> timeframeList;
     private JTextField capacity, search, startDate, startTime, endDate, endTime,
                        cost, reserved;
     
     /**
-        Constructor
+        Constructs a ManageReservablePanel initialized with the given locations
+        
+        @param locs The locations
     */
     
-    public ManageReservablePanel()
+    public ManageReservablePanel(List<Location> locs)
     {
         super(new BorderLayout());
         
-        add(buildTopPanel(), BorderLayout.NORTH);
+        Location[] locArray = locs.toArray(new Location[locs.size()]);
+        add(buildTopPanel(locArray), BorderLayout.NORTH);
         add(buildMidPanel(), BorderLayout.CENTER);
         add(buildBottomPanel(), BorderLayout.SOUTH);
     }
@@ -99,6 +101,13 @@ public class ManageReservablePanel extends JPanel
         JScrollPane scrollPane = new JScrollPane(timeframeList);
         scrollPane.setPreferredSize(new Dimension(255, 225));
         
+        Location loc = (Location) locationsBox.getSelectedItem();
+        if (loc != null)
+        {
+            for (Timeframe timeframe : loc.getTimeframes())
+                timeframes.addElement(timeframe);
+        }
+        
         // Build timeframe detail panel
         JPanel timeframePanel = new JPanel(new GridLayout(6, 2, 5, 10));        
         timeframePanel.add(new JLabel("Start Date:"));
@@ -129,12 +138,14 @@ public class ManageReservablePanel extends JPanel
     }
     
     /**
-        Build & return the top panel of this panel
+        Builds & returns the top panel of this panel, initialized with 
+        the given location data
     
+        @param locs The locations
         @return The built panel
     */
     
-    private JPanel buildTopPanel()
+    private JPanel buildTopPanel(Location[] locs)
     {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
@@ -154,7 +165,7 @@ public class ManageReservablePanel extends JPanel
         gbc.gridx = 1;
         gbc.insets = new Insets(0, 0, 10, 0);
         gbc.ipadx = 125;
-        locationComponentPanel.add(locations = new JComboBox(), gbc);
+        locationComponentPanel.add(locationsBox = new JComboBox(locs), gbc);
         
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -226,20 +237,6 @@ public class ManageReservablePanel extends JPanel
     }
     
     /**
-        Return the set locations
-    
-        @return The set locations
-    */
-    
-    public List<Location> getLocations()
-    {
-        List<Location> locs = new ArrayList();
-        for (int i = 0; i < locs.size(); i++)
-            locs.set(i, (Location) locations.getItemAt(i));
-        return locs;
-    }
-    
-    /**
      * GetSearchCriteria - Get the search criteria within the search text field
      * 
      * @return The text within the search text field
@@ -266,7 +263,7 @@ public class ManageReservablePanel extends JPanel
     
     public Location getSelectedLocation()
     {
-        return (Location) locations.getSelectedItem();
+        return (Location) locationsBox.getSelectedItem();
     }
     
     /**
@@ -304,7 +301,7 @@ public class ManageReservablePanel extends JPanel
     
     public void registerComboBoxController(ActionListener controller)
     {
-        locations.addActionListener(controller);
+        locationsBox.addActionListener(controller);
     }
     
     /**
@@ -320,17 +317,6 @@ public class ManageReservablePanel extends JPanel
     }
     
     /**
-        Removes the specified location from the locations combo box
-    
-        @param loc Location to remove
-    */
-    
-    public void removeLocation(Location loc)
-    {
-        locations.removeItem(loc);
-    }
-    
-    /**
         Set the locations that can be reserved
     
         @param locs Locations that can be reserved
@@ -338,16 +324,23 @@ public class ManageReservablePanel extends JPanel
     
     public void setLocations(List<Location> locs)
     {
-        ActionListener[] als = locations.getActionListeners();
+        ActionListener[] als = locationsBox.getActionListeners();
         for (ActionListener al : als)
-            locations.removeActionListener(al);
+            locationsBox.removeActionListener(al);
         
-        locations.removeAllItems();
+        locationsBox.removeAllItems();
         for (Location loc : locs)
-            locations.addItem(loc);
+            locationsBox.addItem(loc);
+        
+        Location loc = (Location) locationsBox.getSelectedItem();
+        if (loc != null)
+        {
+            for (Timeframe timeframe : loc.getTimeframes())
+                timeframes.addElement(timeframe);
+        }
         
         for (ActionListener al : als)
-            locations.addActionListener(al);
+            locationsBox.addActionListener(al);
     }
     
     /**

@@ -42,6 +42,28 @@ public class Reserver
     }
     
     /**
+        Adds a reservation to that this reserver has made
+    
+        @param reservation The reservation
+    */
+    
+    public void addReservation(Reservation reservation)
+    {
+        reservations.add(reservation);
+    }
+    
+    /**
+        Returns the reserver's contact information
+    
+        @return The reserver's contact information
+    */
+    
+    public ContactInfo getContactInfo()
+    {
+        return contact;
+    }
+    
+    /**
         GetEmailAddress - Return the email address of the reserver
     
         @return The email address of the reserver

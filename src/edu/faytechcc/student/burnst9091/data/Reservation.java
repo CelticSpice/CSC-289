@@ -20,40 +20,64 @@ public class Reservation
     private String eventType;
     
     /**
-        Constructor - Accepts the reserver, reservable & the expected number of
-        attendees
+        Constructs a new Reservation with the specified reserver, the reservable
+        that is reserved, & the estimated number of attendees. The event type of
+        the reservation will default to "General"
     
-        @param rver The reserver
+        @param rsver The reserver
         @param rble The reservable
-        @param numAttending Expected number of attendees
+        @param attendence Estimated number of attendees
     */
     
-    public Reservation(Reserver rver, Reservable rble, int numAttending)
+    public Reservation(Reserver rsver, Reservable rble, int attendence)
     {
         approved = false;
-        numberAttending = numAttending;
+        reserver = rsver;
+        numberAttending = attendence;
         reservable = rble;
-        reserver = rver;
         eventType = "General";
     }
     
    /**
-        Constructor - Accepts the reserver, reservable, expected number of
-        attendees, & the event type
+        Constructs a new Reservation with the specified reserver, the reservable
+        that is reserved, the estimated number of attendees, & the type of event
+        the reservation entails
     
-        @param rver The reserver
+        @param rsver The reserver
         @param rble The reservable
-        @param numAttending Expected number of attendees
-        @param type The event type
+        @param attendence Estimated number of attendees
+        @param type Type of event the reservation entails
     */
     
-    public Reservation(Reserver rver, Reservable rble, int numAttending,
-                       String type)
+    public Reservation(Reserver rsver, Reservable rble, int attendence,
+            String type)
     {
         approved = false;
-        numberAttending = numAttending;
+        reserver = rsver;
+        numberAttending = attendence;
         reservable = rble;
-        reserver = rver;
+        eventType = type;
+    }
+    
+    /**
+        Constructs a new Reservation with the specified reserver, the reservable
+        that is reserved, the estimated number of attendees, the type of event
+        the reservation entails, & whether the reservation is approved
+    
+        @param rsver The reserver
+        @param rble The reservable
+        @param attendence Estimated number of attendees
+        @param type Type of event the reservation entails
+        @param proved If the reservation is approved
+    */
+    
+    public Reservation(Reserver rsver, Reservable rble, int attendence,
+            String type, boolean proved)
+    {
+        approved = proved;
+        reserver = rsver;
+        numberAttending = attendence;
+        reservable = rble;
         eventType = type;
     }
     
@@ -133,7 +157,7 @@ public class Reservation
     }
     
     /**
-        GetReserver - Return the reserver of the reservation
+        Returns the who made the reservation
     
         @return The reserver
     */

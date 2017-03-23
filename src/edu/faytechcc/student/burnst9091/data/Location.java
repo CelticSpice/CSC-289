@@ -79,6 +79,35 @@ public class Location
     }
     
     /**
+        Derives a list of reservables at this location
+    
+        @return A list of reservables
+    */
+    
+    public List<Reservable> deriveReservables()
+    {
+        List<Reservable> reservables = new ArrayList<>();
+        for (Timeframe timeframe : timeframes)
+            reservables.add(new Reservable(this, timeframe));
+        return reservables;
+    }
+    
+    /**
+        Derives a list of reservables at this location matching the given
+        predicate
+    
+        @param predicate Predicate that reservables must match
+        @return A list of reservables
+    */
+    
+    public List<Reservable> deriveReservables(Predicate<Reservable> predicate)
+    {
+        List<Reservable> reservables = deriveReservables();
+        reservables = reservables.stream().filter(predicate).collect(toList());
+        return reservables;
+    }
+    
+    /**
         Returns the location's capacity
     
         @return The location's capacity

@@ -13,6 +13,8 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
@@ -442,11 +444,11 @@ public class ReservableAddDialog extends JDialog
         @return The set existing locations
     */
     
-    public Location[] getExistingLocations()
+    public List<Location> getExistingLocations()
     {
-        Location[] locs = new Location[existingLocation.getItemCount()];
-        for (int i = 0; i < locs.length; i++)
-            locs[i] = (Location) existingLocation.getItemAt(i);
+        List<Location> locs = new ArrayList();
+        for (int i = 0; i < locs.size(); i++)
+            locs.set(i, (Location) existingLocation.getItemAt(i));
         return locs;
     }
     
@@ -723,7 +725,7 @@ public class ReservableAddDialog extends JDialog
         @param locs Locations available to choose from
     */
     
-    public void setExistingLocations(Location[] locs)
+    public void setExistingLocations(List<Location> locs)
     {
         ActionListener[] als = existingLocation.getActionListeners();
         for (ActionListener al : als)

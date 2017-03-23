@@ -12,6 +12,7 @@ import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reservable;
 import edu.faytechcc.student.burnst9091.data.search.SearchActualizer;
 import edu.faytechcc.student.burnst9091.data.Timeframe;
+import edu.faytechcc.student.burnst9091.data.search.Filter;
 import edu.faytechcc.student.gayj5385.gui.ManageReservablePanel;
 import edu.faytechcc.student.gayj5385.gui.ReservableAddDialog;
 import edu.faytechcc.student.mccanns0131.database.Query;
@@ -19,7 +20,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 
 public class ManageReservableButtonController implements ActionListener
@@ -70,9 +73,7 @@ public class ManageReservableButtonController implements ActionListener
                     doClear();
                     view.clearSearch();
                 }
-                catch (SQLException ex)
-                {
-                }
+                catch (SQLException ex){}
                 break;
         }
     }
@@ -129,9 +130,15 @@ public class ManageReservableButtonController implements ActionListener
     {
         Query query = new Query();
         
-        Location[] allLocations = query.queryLocations();
+        Location[] locationsArray = query.queryLocations();
+        List<Location> locationsList = new ArrayList();
         
-        view.setLocations(allLocations);
+        for (Location loc : locationsArray)
+        {
+            locationsList.add(loc);
+        }
+        
+        view.setLocations(locationsList);
     }
     
     /**
@@ -171,9 +178,32 @@ public class ManageReservableButtonController implements ActionListener
     {
         try
         {
-            SearchActualizer search = new SearchActualizer(view);
-
-            search.searchReservables(view, criteria);
+            SearchActualizer search = new SearchActualizer();
+            
+            Filter<Reservable> f = new Filter();
+            f.setPredicate(search.searchReservables(criteria));
+            
+            List<Reservable> reservables = ;
+            
+            JOptionPane.showMessageDialog(view, reservables.size());
+                        
+            List<Reservable> filteredReservables = reservables.stream().filter
+                (f.getPredicate()).collect(Collectors.<Reservable>toList());
+            
+            JOptionPane.showMessageDialog(view, f.getPredicate());
+            
+            List<Location> locations = new ArrayList();
+            
+            for (Reservable r : filteredReservables)
+            {
+                locations.add(r.getLocation());
+            }
+            
+//            Location[] locsToAdd = new Location[locations.size()];
+            
+            view.setLocations(locations);
+            
+            // location=cabin 01; cap=15; startdate=2017-03-23; starttime=00:00; enddate=2017-03-23; endtime=01:00; cost=325
         }
         catch (SQLException ex)
         {
@@ -249,5 +279,28 @@ public class ManageReservableButtonController implements ActionListener
         dialog.setEndDays(days);
         dialog.setEndHours(hours);
         dialog.setEndMinutes(minutes);
+    }
+    
+    /**
+     * Validate the capacity input
+     *
+     * @return If the capacity input is valid
+     */
+    private boolean validateCapacity(String cap)
+    {
+        boolean valid = cap.matches("\\d+");
+        
+        if (valid)
+        {
+            valid = Integer.parseInt(cap) > 0;
+            
+            if (!valid)
+                JOptionPane.showMessageDialog(view,
+                    "Capacity must be greater than 0");
+        }
+        else
+            JOptionPane.showMessageDialog(view, "Invalid input for capacity");
+        
+        return valid;
     }
 }

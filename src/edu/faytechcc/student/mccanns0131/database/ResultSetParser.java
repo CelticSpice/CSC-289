@@ -6,6 +6,7 @@
 
 package edu.faytechcc.student.mccanns0131.database;
 
+import edu.faytechcc.student.burnst9091.data.Reservable;
 import edu.faytechcc.student.burnst9091.data.Timeframe;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
@@ -61,6 +62,40 @@ public class ResultSetParser
             names.add(rs.getString(1));
         return names.toArray(new String[names.size()]);
     }
+    
+//    public static List<Reservable> parseReservables(ResultSet rs)
+//            throws SQLException
+//    {
+//        List<Reservable> reservables = new ArrayList<>();
+//        String locationName;
+//        int capacity;
+//        Timeframe timeframe;
+//        LocalDate startDate, endDate;
+//        LocalTime startTime, endTime;
+//        LocalDateTime start, end;
+//        Reservable reservable;
+//        
+//        while (rs.next())
+//        {
+//            locationName = rs.getString("LocationName");
+//            capacity = rs.getInt("Capacity");
+//            startDate = rs.getDate("StartDate").toLocalDate();
+//            startTime = rs.getTime("StartTime").toLocalTime();
+//            endDate = rs.getDate("EndDate").toLocalDate();
+//            endTime = rs.getTime("EndTime").toLocalTime();
+//            
+//            start = LocalDateTime.of(startDate, startTime);
+//            end = LocalDateTime.of(endDate, endTime);
+//            
+//            timeframe = new Timeframe(start, end);
+//            
+//            reservable = new Reservable(, timeframe)
+//            
+//            reservables.add(reservable);
+//        }
+//        
+//        return reservables;
+//    }
     
     /**
         ParseTimeframes - Parse a result set containing timeframes

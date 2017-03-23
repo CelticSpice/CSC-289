@@ -17,6 +17,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -184,7 +185,11 @@ public class ManageReservablePanel extends JPanel
         gbc.ipadx = 225;
         gbc.ipady = 5;
         gbc.anchor = GridBagConstraints.CENTER;
-        searchComponentPanel.add(search = new JTextField(), gbc);
+        
+        search = new JTextField();
+        search.setMaximumSize(search.getSize());
+        
+        searchComponentPanel.add(search, gbc);
         
         searchButtonsPanel.add(searchBtn = new JButton("Search"));
         searchButtonsPanel.add(clearBtn = new JButton("Clear"));
@@ -226,11 +231,11 @@ public class ManageReservablePanel extends JPanel
         @return The set locations
     */
     
-    public Location[] getLocations()
+    public List<Location> getLocations()
     {
-        Location[] locs = new Location[locations.getItemCount()];
-        for (int i = 0; i < locs.length; i++)
-            locs[i] = locations.getItemAt(i);
+        List<Location> locs = new ArrayList();
+        for (int i = 0; i < locs.size(); i++)
+            locs.set(i, (Location) locations.getItemAt(i));
         return locs;
     }
     
@@ -331,7 +336,7 @@ public class ManageReservablePanel extends JPanel
         @param locs Locations that can be reserved
     */
     
-    public void setLocations(Location[] locs)
+    public void setLocations(List<Location> locs)
     {
         ActionListener[] als = locations.getActionListeners();
         for (ActionListener al : als)

@@ -17,10 +17,10 @@ public class ScreenCards extends JPanel
         setLayout(new CardLayout());
         
         OpenScreen open = new OpenScreen();
-        GuestReservations guest = new GuestReservations();
+        //GuestReservations guest = new GuestReservations();
         LogOnScreen log = new LogOnScreen();
         
-        add(guest,"guestReservations");
+        //add(guest,"guestReservations");
         add(open,"openScreen");
         add(log,"logOnScreen");
     }

@@ -6,13 +6,16 @@
 
 package edu.faytechcc.student.mccanns0131.database;
 
+import edu.faytechcc.student.burnst9091.data.ContactInfo;
 import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reservable;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.Reserver;
 import edu.faytechcc.student.burnst9091.data.Timeframe;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Query
@@ -349,49 +352,40 @@ public class Query
     }
     
     /**
-        Queries for & returns a list of reservations at the specified location
+        Queries for & returns a list of reservations made at the location with
+        the specified name
     
-        @param loc The location
+        @param locationName The location name
         @throws SQLException Error querying the database
         @return List of reservations
     */
     
-    public List<Reservation> queryReservations(Location loc) throws SQLException
+    public List<Reservation> queryReservations(String locationName)
+            throws SQLException
     {
-        List<Reservation> reservations = new ArrayList<>();
-        
-        
-    }
-    
-    /**
-        Queries for & returns the reserver of a reservable
-    
-        @param reservable The reservable
-        @throws SQLException Error querying the database
-        @return Who reserved the reservable
-    */
-    
-    private Reserver queryReserver(Reservable reservable) throws SQLException
-    {
-        sql = "SELECT Reservers.FirstName, Reservers.LastName, " +
-              "Reservers.Email, Reservers.Phone " +
-              "FROM Reservers " +
-              "INNER JOIN Reservations " +
-              "ON Reservers.ReserverID = Reservations.ReserverID " +
+        sql = "SELECT Locations.LocationName, Locations.Capacity, " +
+              "Timeframes.StartDate, Timeframes.StartTime, " +
+              "Timeframes.EndDate, Timeframes.EndTime, " +
+              "Reservables.Cost, Reservers.FirstName, Reservers.LastName, " +
+              "Reservers.Email, Reservers.Phone, Reservations.EventType, " +
+              "Reservations.NumberAttending, Reservations.Approved " +
+              "FROM Locations " +
+              "INNER JOIN Reservables " +
+              "ON Locations.LocationName = Reservables.LocationName " +
               "INNER JOIN Timeframes " +
-              "ON Reservations.TimeframeID = Timeframes.TimeframeID " +
-              "WHERE Reservations.LocationName = '" +
-                reservable.getName() + "' " +
-              "AND Timeframes.StartDate = '" +
-                reservable.getStartDate() + "' " +
-              "AND Timeframes.StartTime = '" +
-                reservable.getStartTime() + "' " +
-              "AND Timeframes.EndDate = '" +
-                reservable.getEndDate() + "' " +
-              "AND Timeframes.EndTime = '" +
-                reservable.getEndTime() + "'";
+              "ON Timeframes.TimeframeID = Reservables.TimeframeID " +
+              "INNER JOIN Reservations " +
+              "ON Reservables.LocationName = Reservations.LocationName " +
+              "AND Reservables.TimeframeID = Reservations.TimeframeID " +
+              "INNER JOIN Reservers " +
+              "ON Reservers.ReserverID = Reservations.ReserverID " +
+              "WHERE Locations.LocationName = '" + locationName + "' " +
+              "ORDER BY Reservations.Approved, Timeframes.StartDate, " +
+              "Timeframes.StartTime, Timeframes.EndDate, " +
+              "Timeframes.EndTime, Reservers.FirstName, Reservers.LastName, " +
+              "Reservations.NumberAttending";
         
-        return ResultSetParser.parseReserver
+        return ResultSetParser.parseReservations
             (ReserveDB.getInstance().runQuery(this));
     }
     

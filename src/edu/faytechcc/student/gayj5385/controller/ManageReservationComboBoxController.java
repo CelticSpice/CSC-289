@@ -9,10 +9,13 @@ package edu.faytechcc.student.gayj5385.controller;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.search.Filter;
 import edu.faytechcc.student.gayj5385.gui.ManageReservationPanel;
+import edu.faytechcc.student.mccanns0131.database.Query;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 public class ManageReservationComboBoxController implements ActionListener
 {
@@ -45,6 +48,24 @@ public class ManageReservationComboBoxController implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e)
     {
+        String locName = view.getSelectedLocation().getName();
         
+        if (reservations.containsKey(locName))
+            view.setReservations(reservations.get(locName));
+        else
+        {
+            try
+            {
+                Query query = new Query();
+                List<Reservation> reserves = query.queryReservations(locName);
+                reservations.put(locName, reserves);
+                view.setReservations(reserves);
+            }
+            catch (SQLException ex)
+            {
+                JOptionPane.showMessageDialog(view,
+                        "Failed loading reservation information");
+            }
+        }
     }
 }

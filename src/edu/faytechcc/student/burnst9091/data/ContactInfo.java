@@ -6,6 +6,8 @@
 
 package edu.faytechcc.student.burnst9091.data;
 
+import java.util.Objects;
+
 public class ContactInfo
 {
     // Fields
@@ -27,6 +29,27 @@ public class ContactInfo
         lastName = lName;
         email = e;
         phone = p;
+    }
+    
+    /**
+        Returns if this object is equal to another object
+    
+        @param o The object to test for equality with
+        @return If the two objects are equals
+    */
+    
+    @Override
+    public boolean equals(Object o)
+    {
+        if (!(o instanceof ContactInfo))
+            return false;
+        
+        final ContactInfo other = (ContactInfo) o;
+        
+        return firstName.equals(other.firstName) &&
+               lastName.equals(other.lastName)   &&
+               email.equals(other.email)         &&
+               phone.equals(other.phone);
     }
     
     /**
@@ -86,5 +109,22 @@ public class ContactInfo
     public String getPhoneNumber()
     {
         return phone;
+    }
+    
+    /**
+        Returns the hash code for the object
+    
+        @return The object's hash code
+    */
+    
+    @Override
+    public int hashCode()
+    {
+        int hash = 7;
+        hash = 59 * hash + Objects.hashCode(this.firstName);
+        hash = 59 * hash + Objects.hashCode(this.lastName);
+        hash = 59 * hash + Objects.hashCode(this.email);
+        hash = 59 * hash + Objects.hashCode(this.phone);
+        return hash;
     }
 }

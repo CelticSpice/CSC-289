@@ -7,6 +7,9 @@
 package edu.faytechcc.student.mccanns0131.database;
 
 import edu.faytechcc.student.burnst9091.data.ContactInfo;
+import edu.faytechcc.student.burnst9091.data.Location;
+import edu.faytechcc.student.burnst9091.data.Reservable;
+import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.Reserver;
 import edu.faytechcc.student.burnst9091.data.Timeframe;
 import java.math.BigDecimal;
@@ -16,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ResultSetParser
@@ -65,25 +69,89 @@ public class ResultSetParser
     }
     
     /**
-        Parses a reserver from a result set
+        Parse reservations from a result set
     
         @param rs The result set
         @throws SQLException Error parsing the result set
-        @return The parsed reserver
+        @return List of reservations
     */
     
-    public static Reserver parseReserver(ResultSet rs) throws SQLException
+    public static List<Reservation> parseReservations(ResultSet rs)
+            throws SQLException
     {
-        rs.next();
+        List<Reservation> reservations = new ArrayList<>();
+        HashMap<String, Location> locations = new HashMap<>();
+        HashMap<ContactInfo, Reserver> reservers = new HashMap<>();
         
-        String firstName = rs.getString("FirstName");
-        String lastName = rs.getString("LastName");
-        String email = rs.getString("Email");
-        String phone = rs.getString("Phone");
+        Location loc;
+        Timeframe timeframe;
+        Reservable reservable;
+        Reserver reserver;
+        Reservation reservation;
         
-        ContactInfo cont = new ContactInfo(firstName, lastName, email, phone);
+        boolean approved;
+        String locName, firstName, lastName, email, phone, eventType;
+        int capacity, numAttending;
+        LocalDate startDate, endDate;
+        LocalTime startTime, endTime;
+        BigDecimal cost;
+        LocalDateTime sDateTime, eDateTime;
+        ContactInfo contact;
         
-        return new Reserver(cont);
+        while (rs.next())
+        {
+            locName = rs.getString("LocationName");
+            capacity = rs.getInt("Capacity");
+            
+            if (!locations.containsKey(locName))
+            {
+                loc = new Location(locName, capacity);
+                locations.put(locName, loc);
+            }
+            else
+                loc = locations.get(locName);
+            
+            startDate = rs.getDate("StartDate").toLocalDate();
+            startTime = rs.getTime("StartTime").toLocalTime();
+            endDate = rs.getDate("EndDate").toLocalDate();
+            endTime = rs.getTime("EndTime").toLocalTime();
+            cost = rs.getBigDecimal("Cost");
+            
+            sDateTime = LocalDateTime.of(startDate, startTime);
+            eDateTime = LocalDateTime.of(endDate, endTime);
+            
+            timeframe = new Timeframe(sDateTime, eDateTime, cost, true);
+            loc.addTimeframe(timeframe);
+            
+            reservable = new Reservable(loc, timeframe);
+            
+            firstName = rs.getString("FirstName");
+            lastName = rs.getString("LastName");
+            email = rs.getString("Email");
+            phone = rs.getString("Phone");
+            contact = new ContactInfo(firstName, lastName, email, phone);
+            
+            if (!reservers.containsKey(contact))
+            {
+                reserver = new Reserver(contact);
+                reservers.put(contact, reserver);
+            }
+            else
+                reserver = reservers.get(contact);
+            
+            eventType = rs.getString("EventType");
+            numAttending = rs.getInt("NumberAttending");
+            approved = rs.getBoolean("Approved");
+            
+            reservation = new Reservation(reserver, reservable, numAttending,
+                eventType, approved);
+            
+            reserver.addReservation(reservation);
+            
+            reservations.add(reservation);
+        }
+        
+        return reservations;
     }
     
     /**

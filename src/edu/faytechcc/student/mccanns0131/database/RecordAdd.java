@@ -110,9 +110,8 @@ public class RecordAdd
         {   
             // Check valid Reservable????
             
-            // Make sure Reserver is not a duplicate
+            // Make sure reserver is not a duplicate
             Reserver reserver = reservation.getReserver();
-            
             if (!query.queryIfReserverExists(reserver))
                 addReserver(reserver);
             

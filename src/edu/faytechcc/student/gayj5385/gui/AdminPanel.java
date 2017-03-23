@@ -10,8 +10,10 @@ import edu.faytechcc.student.gayj5385.controller.ManageReservableButtonControlle
 import edu.faytechcc.student.gayj5385.controller.SettingsPanelController;
 import edu.faytechcc.student.burnst9091.data.SMTPProperties;
 import edu.faytechcc.student.burnst9091.data.SecurityOption;
+import edu.faytechcc.student.burnst9091.data.search.Filter;
 import edu.faytechcc.student.gayj5385.controller.ManageReservableComboBoxController;
 import edu.faytechcc.student.gayj5385.controller.ManageReservableListController;
+import edu.faytechcc.student.gayj5385.controller.ManageReservationComboBoxController;
 import edu.faytechcc.student.mccanns0131.database.Query;
 import java.awt.BorderLayout;
 import java.sql.SQLException;
@@ -87,6 +89,20 @@ public class AdminPanel extends JPanel
     private ManageReservationPanel buildManageReservationPanel()
     {
         mngReservationPanel = new ManageReservationPanel();
+        mngReservationPanel.registerComboBoxController
+            (new ManageReservationComboBoxController(mngReservationPanel, new Filter()));
+        
+        try
+        {
+            Query q = new Query();
+            mngReservationPanel.setLocations(q.queryLocations());
+        }
+        catch (SQLException ex)
+        {
+            JOptionPane.showMessageDialog(this, "Error loading location data",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        
         return mngReservationPanel;
     }
     

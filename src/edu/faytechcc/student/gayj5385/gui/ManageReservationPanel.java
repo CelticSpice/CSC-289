@@ -217,6 +217,17 @@ public class ManageReservationPanel extends JPanel
     }
     
     /**
+        Return the selected location
+    
+        @return The selected location
+    */
+    
+    public Location getSelectedLocation()
+    {
+        return (Location) locations.getSelectedItem();
+    }
+    
+    /**
         Register a button controller to the panel
     
         @param controller The controller to register to the buttons on the panel

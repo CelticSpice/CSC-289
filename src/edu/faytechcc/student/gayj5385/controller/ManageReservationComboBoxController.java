@@ -9,13 +9,11 @@ package edu.faytechcc.student.gayj5385.controller;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.search.Filter;
 import edu.faytechcc.student.gayj5385.gui.ManageReservationPanel;
-import edu.faytechcc.student.mccanns0131.database.Query;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
-import javax.swing.JOptionPane;
+import static java.util.stream.Collectors.toList;
 
 public class ManageReservationComboBoxController implements ActionListener
 {
@@ -25,18 +23,22 @@ public class ManageReservationComboBoxController implements ActionListener
     private ManageReservationPanel view;
     
     /**
-        Constructor - Accepts the view & a filter object
+        Constructs a new ManageReservationComboBoxController with the given
+        view to manage, a mapping of reservations, & a filter object to apply
+        filtering
     
         @param v The view
+        @param reserves The reservations
         @param f The filter object
     */
     
     public ManageReservationComboBoxController(ManageReservationPanel v,
-                                               Filter<Reservation> f)
+                                    HashMap<String, List<Reservation>> reserves,
+                                    Filter<Reservation> f)
     {
         view = v;
+        reservations = reserves;
         filter = f;
-        reservations = new HashMap<>();
     }
     
     /**
@@ -49,23 +51,13 @@ public class ManageReservationComboBoxController implements ActionListener
     public void actionPerformed(ActionEvent e)
     {
         String locName = view.getSelectedLocation().getName();
-        
-        if (reservations.containsKey(locName))
-            view.setReservations(reservations.get(locName));
-        else
+        List<Reservation> reserves = reservations.get(locName);
+        if (filter.getPredicate() != null)
         {
-            try
-            {
-                Query query = new Query();
-                List<Reservation> reserves = query.queryReservations(locName);
-                reservations.put(locName, reserves);
-                view.setReservations(reserves);
-            }
-            catch (SQLException ex)
-            {
-                JOptionPane.showMessageDialog(view,
-                        "Failed loading reservation information");
-            }
+            reserves = reserves.stream()
+                    .filter(filter.getPredicate())
+                    .collect(toList());
         }
+        view.setReservations(reserves);
     }
 }

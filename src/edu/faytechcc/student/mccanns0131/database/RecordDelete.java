@@ -6,8 +6,10 @@
 
 package edu.faytechcc.student.mccanns0131.database;
 
+import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reservable;
 import edu.faytechcc.student.burnst9091.data.Timeframe;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class RecordDelete
@@ -25,23 +27,22 @@ public class RecordDelete
     }
     
     /**
-        DeleteLocation - Remove a record of a location with the given name
-        from the database
+        Removes a record of a location from the database
     
-        @param locationName The name of the location to remove from the database
+        @param loc The location to remove
         @throws SQLException Error removing record from database
     */
     
-    private void deleteLocation(String locationName) throws SQLException
+    private void deleteLocation(Location loc) throws SQLException
     {
         sql = "DELETE FROM Locations " +
-              "WHERE Locations.LocationName = '" + locationName + "'";
+              "WHERE Locations.LocationName = '" + loc.getName() + "'";
         
         ReserveDB.getInstance().deleteRecord(this);
     }
     
     /**
-        DeleteReservable - Remove a record of a reservable from the database
+        Removes a record of a reservable from the database
     
         @param reservable The reservable to remove
         @throws SQLException Error removing record from database
@@ -70,13 +71,18 @@ public class RecordDelete
         
         // Check if we should delete a record of a location with the same name
         // as the reservable
-        Query query = new Query();
-        if (!query.queryIfReservableExists(reservable.getName()))
-            deleteLocation(reservable.getName());
+        ReservableQuery q = new ReservableQuery();
+        ResultSet rs = q.queryReservableName(reservable.getName());
+        ResultSetParser parser = new ResultSetParser(rs);
+        
+        if (parser.isEmpty())
+            deleteLocation(reservable.getLocation());
         
         // Check if we should delete a record of a timeframe with the same
         // timeframe as the reservable
-        if (!query.queryIfReservableExists(reservable.getTimeframe()))
+        parser.setResultSet(
+                q.queryReservableTimeframe(reservable.getTimeframe()));
+        if (parser.isEmpty())
             deleteTimeframe(reservable.getTimeframe());
     }
     

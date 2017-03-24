@@ -79,6 +79,23 @@ public class Location
     }
     
     /**
+        Derives a Reservable from this Location matching the given Predicate
+    
+        @param predicate Predicate Reservable must match
+        @return The derived Reservable; else, if Predicate cannot be matched,
+                null
+    */
+    
+    public Reservable deriveReservable(Predicate<Reservable> predicate)
+    {
+        Reservable reservable = null;
+        List<Reservable> reservables = deriveReservables(predicate);
+        if (!reservables.isEmpty())
+            reservable = reservables.get(0);
+        return reservable;
+    }
+    
+    /**
         Derives a list of reservables at this location
     
         @return A list of reservables
@@ -211,6 +228,22 @@ public class Location
     public boolean hasTimeframe(Predicate<Timeframe> predicate)
     {
         return !getTimeframes(predicate).isEmpty();
+    }
+    
+    /**
+        Returns if the location is reserved
+    
+        @return If the location is reserved
+    */
+    
+    public boolean isReserved()
+    {
+        for (Timeframe timeframe : timeframes)
+        {
+            if (timeframe.isReserved())
+                return true;
+        }
+        return false;
     }
     
     /**

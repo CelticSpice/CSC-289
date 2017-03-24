@@ -8,6 +8,7 @@ package edu.faytechcc.student.burnst9091.data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class Reservable
@@ -17,7 +18,7 @@ public class Reservable
     private Timeframe timeframe;
     
     /**
-        Constructor - Accepts the location & timeframe of the reservable
+        Constructs a new Reservable with the given location & timeframe
     
         @param loc The location
         @param time The timeframe
@@ -30,9 +31,9 @@ public class Reservable
     }
     
     /**
-        GetCapacity - Return the capacity of the reservable
+        Returns the capacity of the Reservable
     
-        @return The capacity of the reservable
+        @return The capacity of the Reservable
     */
     
     public int getCapacity()
@@ -41,9 +42,9 @@ public class Reservable
     }
     
     /**
-        GetCost - Return the cost of the reservable
+        Returns the cost of the Reservable
     
-        @return The cost of the reservable
+        @return The cost of the Reservable
     */
     
     public BigDecimal getCost()
@@ -137,5 +138,29 @@ public class Reservable
     public boolean isReserved()
     {
         return timeframe.isReserved();
+    }
+    
+    /**
+        Returns if the Reservable ends on the given datetime
+    
+        @param datetime Datetime to check if Reservable ends on
+        @return If the Reservable ends on the given datetime
+    */
+    
+    public boolean endsOnDatetime(LocalDateTime datetime)
+    {
+        return timeframe.endsOnDatetime(datetime);
+    }
+    
+    /**
+        Returns if the Reservable starts on the given datetime
+    
+        @param datetime Datetime to check if Reservable starts on
+        @return If the Reservable starts on the given datetime
+    */
+    
+    public boolean startsOnDatetime(LocalDateTime datetime)
+    {
+        return timeframe.startsOnDatetime(datetime);
     }
 }

@@ -56,7 +56,7 @@ public class ReservableAddRadioController implements ActionListener
     
     private void doSwitch(boolean enabled)
     {
-        view.setExistingLocationEnabled(enabled);
+        view.setExistingLocationsEnabled(enabled);
         view.setLocationEnabled(!enabled);
         view.setCapacityEnabled(!enabled);
         

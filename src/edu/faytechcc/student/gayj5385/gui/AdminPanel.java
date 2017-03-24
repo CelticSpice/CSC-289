@@ -16,11 +16,10 @@ import edu.faytechcc.student.gayj5385.controller.ManageReservableButtonControlle
 import edu.faytechcc.student.gayj5385.controller.ManageReservableComboBoxController;
 import edu.faytechcc.student.gayj5385.controller.ManageReservableListController;
 import edu.faytechcc.student.gayj5385.controller.ManageReservationComboBoxController;
-import edu.faytechcc.student.mccanns0131.database.Query;
 import java.awt.BorderLayout;
-import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
-import javax.swing.JOptionPane;
+import static java.util.stream.Collectors.toList;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeListener;
@@ -40,14 +39,16 @@ public class AdminPanel extends JPanel
         @param reserves The reservations
     */
     
-    public AdminPanel(List<Location> locs, List<Reservation> reserves)
+    public AdminPanel(List<Location> locs,
+            HashMap<String, List<Reservation>> reserves)
     {
         super(new BorderLayout());
         
         tabbedPane = new JTabbedPane();
         
         tabbedPane.add("Manage Reservables", buildManageReservablePanel(locs));
-        //tabbedPane.add("Manage Reservations", buildManageReservationPanel(locs, reserves));
+        tabbedPane.add("Manage Reservations",
+                buildManageReservationPanel(locs, reserves));
         tabbedPane.add("Settings", buildSettingsPanel());
         
         add(tabbedPane);
@@ -77,27 +78,26 @@ public class AdminPanel extends JPanel
     }
     
     /**
-        Builds & returns the panel to manage reservations on
+        Builds & returns the panel to manage reservations on, initialized with
+        the given list of locations & mapping of reservations
     
         @return The built panel
     */
     
-    private ManageReservationPanel buildManageReservationPanel(List<Location> locs)
+    private ManageReservationPanel buildManageReservationPanel(
+            List<Location> locs, HashMap<String, List<Reservation>> reserves)
     {
-        mngReservationPanel = new ManageReservationPanel();
-        mngReservationPanel.registerComboBoxController
-            (new ManageReservationComboBoxController(mngReservationPanel, new Filter()));
+        List<Location> reservedLocs = locs.stream()
+                .filter(l -> l.isReserved())
+                .collect(toList());
         
-        try
-        {
-            Query q = new Query();
-            mngReservationPanel.setLocations(q.queryLocations());
-        }
-        catch (SQLException ex)
-        {
-            JOptionPane.showMessageDialog(this, "Error loading location data",
-                    "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        Filter<Reservation> filter = new Filter<>();
+        
+        mngReservationPanel = new ManageReservationPanel(reservedLocs);
+        
+        mngReservationPanel.registerComboBoxController(
+                new ManageReservationComboBoxController(mngReservationPanel,
+                    reserves, filter));
         
         return mngReservationPanel;
     }

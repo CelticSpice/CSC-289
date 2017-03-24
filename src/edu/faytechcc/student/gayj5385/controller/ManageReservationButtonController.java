@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 public class ManageReservationButtonController implements ActionListener
 {
@@ -51,6 +52,43 @@ public class ManageReservationButtonController implements ActionListener
         switch (e.getActionCommand())
         {
             case "Update":
+                // Do this
+                break;
+            case "Contact":
+                // Do this
+                break;
+            case "Reviewed":
+                // Do this
+                break;
+            case "Cancel":
+                doCancel();
+                break;
+            case "Logout":
+                System.exit(0);
+                break;
         }
+    }
+    
+    /**
+        Respond to the "Cancel" button being clicked
+    */
+    
+    private void doCancel()
+    {
+        List<Reservation> selectedReservations = view.getSelectedReservations();
+        
+        if (selectedReservations.size() == 1)
+        {
+            // Confirm cancellation
+            int choice = JOptionPane.showConfirmDialog(view,
+                    "Cancel this reservation?");
+            
+            if (choice == JOptionPane.YES_OPTION)
+                cancelReservation(selectedReservations.get(1));
+        }
+        
+        if (selectedReservations.size() > 1)
+            JOptionPane.showMessageDialog(view, 
+                "Cannot cancel multiple reservations");
     }
 }

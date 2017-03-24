@@ -35,13 +35,8 @@ public class Guest
     
     /**
         MakeReservation - Guest makes a reservation at the given reservable
-        & provides contact information, an expected number of attendees, &
-        the type of event the reservation entails
     
-        @param reservable The reservable the guest reserves
-        @param contactInfo The guest's provided contact information
-        @param attendence The expected number of attendees
-        @param type The event type
+        @param reservation The reservation being made
         @throws SQLException Error adding the record of the reservation to the
                              database
         @throws RecordExistsException A record of an identical reservation
@@ -49,13 +44,9 @@ public class Guest
         @return reservation The reservation made
     */
     
-    public static Reservation makeReservation(Reservable reservable,
-            ContactInfo contactInfo, int attendence, String type)
+    public static Reservation makeReservation(Reservation reservation)
             throws SQLException, RecordExistsException
     {
-        Reserver reserver = new Reserver(contactInfo);
-        Reservation reservation = new Reservation(reserver, reservable,
-                                                  attendence, type);
         new RecordAdd().addReservation(reservation);
         return reservation;
     }

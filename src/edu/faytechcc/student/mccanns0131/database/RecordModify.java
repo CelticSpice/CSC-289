@@ -10,8 +10,10 @@ import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reservable;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.Reserver;
+import edu.faytechcc.student.burnst9091.data.Timeframe;
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 public class RecordModify
 {
@@ -39,9 +41,12 @@ public class RecordModify
             int newCapacity) throws SQLException, RecordNotExistsException
     {
         // Ensure that the record exists.
-        Query query = new Query();
+        ReservableQuery q = new ReservableQuery();
         
-        if (query.queryIfLocationExists(location.getName()))
+        ResultSetParser rsp = new ResultSetParser(q.queryReservableName(
+                location.getName()));
+        
+        if (!rsp.isEmpty())
         {
             sql = "UPDATE Locations" +
                   "SET locationName = '" + newLocationName + "'," +
@@ -66,9 +71,12 @@ public class RecordModify
             throws SQLException, RecordNotExistsException
     {
         // Ensure that the record exists.
-        Query query = new Query();
+        LocationQuery q = new LocationQuery();
         
-        if (query.queryIfLocationExists(location.getName()))
+        ResultSetParser rsp = new ResultSetParser(q.queryLocationCapacity(
+                location.getName()));
+        
+        if (!rsp.isEmpty())
         {
             sql = "UPDATE Locations" +
                   "SET capacity = " + newCapacity +
@@ -92,9 +100,12 @@ public class RecordModify
             throws SQLException, RecordNotExistsException
     {
         // Ensure that the record exists.
-        Query query = new Query();
+        ReservableQuery q = new ReservableQuery();
         
-        if (query.queryIfLocationExists(location.getName()))
+        ResultSetParser rsp = new ResultSetParser(q.queryReservableName(
+                location.getName()));
+        
+        if (!rsp.isEmpty())
         {
             sql = "UPDATE Locations" +
                   "SET locationName = '" + newLocationName + "'" +
@@ -118,9 +129,12 @@ public class RecordModify
             BigDecimal newCost) throws SQLException, RecordNotExistsException
     {
         // Ensure that the record exists.
-        Query query = new Query();
+        ReservableQuery q = new ReservableQuery();
         
-        if (query.queryIfReservableExists(reservable.getName()))
+        ResultSetParser rsp = new ResultSetParser(q.queryReservableName(
+                reservable.getName()));
+        
+        if (!rsp.isEmpty())
         {
             sql = "UPDATE Reservables" +
                   "SET cost = " + newCost +
@@ -144,9 +158,12 @@ public class RecordModify
             BigDecimal newCost) throws SQLException, RecordNotExistsException
     {
         // Ensure that the record exists.
-        Query query = new Query();
+        ReservableQuery q = new ReservableQuery();
         
-        if (query.queryIfReservableExists(reservable.getName()))
+        ResultSetParser rsp = new ResultSetParser(q.queryReservableName(
+                reservable.getName()));
+        
+        if (!rsp.isEmpty())
         {
             sql = "UPDATE Reservables" +
                   "SET cost = " + newCost +
@@ -175,9 +192,19 @@ public class RecordModify
             boolean approved) throws SQLException, RecordNotExistsException
     {
         // Ensure that the record exists.
-        Query query = new Query();
+        ReservationQuery q = new ReservationQuery();
         
-        if (query.queryIfReservationExists(reservation))
+        LocalDateTime s = LocalDateTime.of(reservation.getStartDate(),
+                reservation.getStartTime());
+        LocalDateTime e = LocalDateTime.of(reservation.getEndDate(),
+                reservation.getEndTime());
+        
+        Timeframe time = new Timeframe(s, e);
+        
+        ResultSetParser rsp = new ResultSetParser(q.queryReservation(
+                reservation.getLocationName(), time));
+        
+        if (!rsp.isEmpty())
         {
             sql = "UPDATE Reservations" +
                   "SET approved = " + approved +
@@ -207,9 +234,19 @@ public class RecordModify
             int newNumAttending) throws SQLException, RecordNotExistsException
     {
         // Ensure that the record exists.
-        Query query = new Query();
+        ReservationQuery q = new ReservationQuery();
         
-        if (query.queryIfReservationExists(reservation))
+        LocalDateTime s = LocalDateTime.of(reservation.getStartDate(),
+                reservation.getStartTime());
+        LocalDateTime e = LocalDateTime.of(reservation.getEndDate(),
+                reservation.getEndTime());
+        
+        Timeframe time = new Timeframe(s, e);
+        
+        ResultSetParser rsp = new ResultSetParser(q.queryReservation(
+                reservation.getLocationName(), time));
+        
+        if (!rsp.isEmpty())
         {
             sql = "UPDATE Reservations" +
                   "SET numberAttending = " + newNumAttending +
@@ -238,9 +275,12 @@ public class RecordModify
             throws SQLException, RecordNotExistsException
     {
         // Ensure that the record exists.
-        Query query = new Query();
+        ReservationQuery q = new ReservationQuery();
         
-        if (query.queryIfReserverExists(reserver))
+        ResultSetParser rsp = new ResultSetParser(
+                q.queryReservationReserver(reserver));
+        
+        if (!rsp.isEmpty())
         {
             sql = "UPDATE Reservers" +
                   "SET email = '" + newEmail + "'" +
@@ -264,9 +304,12 @@ public class RecordModify
             throws SQLException, RecordNotExistsException
     {
         // Ensure that the record exists.
-        Query query = new Query();
+        ReservationQuery q = new ReservationQuery();
         
-        if (query.queryIfReserverExists(reserver))
+        ResultSetParser rsp = new ResultSetParser(
+                q.queryReservationReserver(reserver));
+        
+        if (!rsp.isEmpty())
         {
             sql = "UPDATE Reservers" +
                   "SET firstName = '" + newFirstName + "'" +
@@ -290,9 +333,12 @@ public class RecordModify
             throws SQLException, RecordNotExistsException
     {
         // Ensure that the record exists.
-        Query query = new Query();
+        ReservationQuery q = new ReservationQuery();
         
-        if (query.queryIfReserverExists(reserver))
+        ResultSetParser rsp = new ResultSetParser(
+                q.queryReservationReserver(reserver));
+        
+        if (!rsp.isEmpty())
         {
             sql = "UPDATE Reservers" +
                   "SET lastName = '" + newLastName + "'" +
@@ -316,9 +362,12 @@ public class RecordModify
             throws SQLException, RecordNotExistsException
     {
         // Ensure that the record exists.
-        Query query = new Query();
+        ReservationQuery q = new ReservationQuery();
         
-        if (query.queryIfReserverExists(reserver))
+        ResultSetParser rsp = new ResultSetParser(
+                q.queryReservationReserver(reserver));
+        
+        if (!rsp.isEmpty())
         {
             sql = "UPDATE Reservers" +
                   "SET phoneNumber = '" + newPhone + "'" +

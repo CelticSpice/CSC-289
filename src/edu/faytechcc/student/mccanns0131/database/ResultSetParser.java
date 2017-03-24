@@ -1,13 +1,11 @@
 /**
-    A result set parser
+    A parser for ResultSet objects
     CSC-289 - Group 4
     @author Timothy Burns
 */
 
 package edu.faytechcc.student.mccanns0131.database;
 
-import edu.faytechcc.student.burnst9091.data.Reservable;
-import edu.faytechcc.student.burnst9091.data.ContactInfo;
 import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reservable;
 import edu.faytechcc.student.burnst9091.data.Reservation;
@@ -20,168 +18,135 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class ResultSetParser
 {  
-    /**
-        IsEmpty - Return whether a result set is empty
+    // Fields
+    private ResultSet rs;
     
-        @param rs The result set to parse
-        @throws SQLException Error parsing the result set
-        @return Whether the result set is empty
+    /**
+        Constructs a new ResultSetParser
     */
     
-    public static boolean isEmpty(ResultSet rs) throws SQLException
+    public ResultSetParser()
+    {
+        rs = null;
+    }
+    
+    /**
+        Constructs a new ResultSetParser initialized with the given ResultSet
+    
+        @param resultSet The ResultSet
+    */
+    
+    public ResultSetParser(ResultSet resultSet)
+    {
+        rs = resultSet;
+    }
+    
+    /**
+        Returns whether the parser has a ResultSet
+    
+        @return If the parser has a ResultSet
+    */
+    
+    public boolean hasResultSet()
+    {
+        return rs != null;
+    }
+    
+    /**
+        Returns whether the parser's ResultSet is empty
+    
+        @throws SQLException Error parsing the result set
+        @return If the parser's ResultSet is empty
+    */
+    
+    public boolean isEmpty() throws SQLException
     {
         return !rs.isBeforeFirst();
     }
     
     /**
-        Parse a result set containing a location capacity
+        Parses data on a location's capacity
     
-        @param rs The result set to parse
         @throws SQLException Error parsing the result set
-        @return The location capacity parsed from the result set
+        @return The location capacity
     */
     
-    public static int parseLocationCapacity(ResultSet rs) throws SQLException
+    public int parseLocationCapacity() throws SQLException
     {
         rs.next();
         return rs.getInt(1);
     }
     
     /**
-        ParseLocationNames - Parse a result set containing the names of
-        locations
+        Parses data on location names
     
-        @param rs The result set to parse
         @throws SQLException Error parsing the result set
-        @return The location names parsed from the result set
+        @return List of location names
     */
     
-    public static String[] parseLocationNames(ResultSet rs) throws SQLException
+    public List<String> parseLocationNames() throws SQLException
     {
         List<String> names = new ArrayList<>();
         while (rs.next())
             names.add(rs.getString(1));
-        return names.toArray(new String[names.size()]);
+        return names;
     }
     
-//    public static List<Reservable> parseReservables(ResultSet rs)
-//            throws SQLException
-//    {
-//        List<Reservable> reservables = new ArrayList<>();
-//        String locationName;
-//        int capacity;
-//        Timeframe timeframe;
-//        LocalDate startDate, endDate;
-//        LocalTime startTime, endTime;
-//        LocalDateTime start, end;
-//        Reservable reservable;
-//        
-//        while (rs.next())
-//        {
-//            locationName = rs.getString("LocationName");
-//            capacity = rs.getInt("Capacity");
-//            startDate = rs.getDate("StartDate").toLocalDate();
-//            startTime = rs.getTime("StartTime").toLocalTime();
-//            endDate = rs.getDate("EndDate").toLocalDate();
-//            endTime = rs.getTime("EndTime").toLocalTime();
-//            
-//            start = LocalDateTime.of(startDate, startTime);
-//            end = LocalDateTime.of(endDate, endTime);
-//            
-//            timeframe = new Timeframe(start, end);
-//            
-//            reservable = new Reservable(, timeframe)
-//            
-//            reservables.add(reservable);
-//        }
-//        
-//        return reservables;
-//    }
-    
     /**
-        Parse reservations from a result set
+        Parses data on reservations made at the given location
     
-        @param rs The result set
+        @param loc The location
         @throws SQLException Error parsing the result set
         @return List of reservations
     */
     
-    public static List<Reservation> parseReservations(ResultSet rs)
-            throws SQLException
+    public List<Reservation> parseReservations(Location loc) throws SQLException
     {
         List<Reservation> reservations = new ArrayList<>();
-        HashMap<String, Location> locations = new HashMap<>();
-        HashMap<ContactInfo, Reserver> reservers = new HashMap<>();
         
-        Location loc;
-        Timeframe timeframe;
         Reservable reservable;
         Reserver reserver;
         Reservation reservation;
         
         boolean approved;
-        String locName, firstName, lastName, email, phone, eventType;
-        int capacity, numAttending;
+        String firstName, lastName, email, phone, eventType;
+        int numAttending;
         LocalDate startDate, endDate;
         LocalTime startTime, endTime;
-        BigDecimal cost;
-        LocalDateTime sDateTime, eDateTime;
-        ContactInfo contact;
         
         while (rs.next())
-        {
-            locName = rs.getString("LocationName");
-            capacity = rs.getInt("Capacity");
-            
-            if (!locations.containsKey(locName))
-            {
-                loc = new Location(locName, capacity);
-                locations.put(locName, loc);
-            }
-            else
-                loc = locations.get(locName);
-            
-            startDate = rs.getDate("StartDate").toLocalDate();
-            startTime = rs.getTime("StartTime").toLocalTime();
-            endDate = rs.getDate("EndDate").toLocalDate();
-            endTime = rs.getTime("EndTime").toLocalTime();
-            cost = rs.getBigDecimal("Cost");
-            
-            sDateTime = LocalDateTime.of(startDate, startTime);
-            eDateTime = LocalDateTime.of(endDate, endTime);
-            
-            timeframe = new Timeframe(sDateTime, eDateTime, cost, true);
-            loc.addTimeframe(timeframe);
-            
-            reservable = new Reservable(loc, timeframe);
-            
+        {  
+            // Build Reserver
             firstName = rs.getString("FirstName");
             lastName = rs.getString("LastName");
             email = rs.getString("Email");
             phone = rs.getString("Phone");
-            contact = new ContactInfo(firstName, lastName, email, phone);
+            reserver = new Reserver(firstName, lastName, email, phone);
             
-            if (!reservers.containsKey(contact))
-            {
-                reserver = new Reserver(contact);
-                reservers.put(contact, reserver);
-            }
-            else
-                reserver = reservers.get(contact);
+            // Get Reservable from Location with matching datetimes
+            startDate = rs.getDate("StartDate").toLocalDate();
+            startTime = rs.getTime("StartTime").toLocalTime();
+            endDate = rs.getDate("EndDate").toLocalDate();
+            endTime = rs.getTime("EndTime").toLocalTime();
             
+            LocalDateTime sDateTime = LocalDateTime.of(startDate, startTime);
+            LocalDateTime eDateTime = LocalDateTime.of(endDate, endTime);
+            
+            reservable = loc.deriveReservable(
+                    r -> r.startsOnDatetime(sDateTime) &&
+                         r.endsOnDatetime(eDateTime));
+            
+            // Build Reservation
             eventType = rs.getString("EventType");
             numAttending = rs.getInt("NumberAttending");
             approved = rs.getBoolean("Approved");
             
             reservation = new Reservation(reserver, reservable, numAttending,
-                eventType, approved);
-            
-            reserver.addReservation(reservation);
+                    eventType, approved);
             
             reservations.add(reservation);
         }
@@ -190,19 +155,16 @@ public class ResultSetParser
     }
     
     /**
-        ParseTimeframes - Parse a result set containing timeframes
+        Parses data on a location's timeframes
     
-        @param rs The result set to parse
-        @param reserved Whether the parser should mark timeframes as reserved
         @throws SQLException Error parsing the result set
-        @return timeframes A list of timeframes
+        @return List of timeframes
     */
     
-    public static List<Timeframe> parseTimeframes(ResultSet rs,
-            boolean reserved) throws SQLException
+    public List<Timeframe> parseTimeframes() throws SQLException
     {
         List<Timeframe> timeframes = new ArrayList<>();
-        Timeframe timeframe;
+        
         LocalDate startDate, endDate;
         LocalTime startTime, endTime;
         BigDecimal cost;
@@ -219,48 +181,26 @@ public class ResultSetParser
             start = LocalDateTime.of(startDate, startTime);
             end = LocalDateTime.of(endDate, endTime);
             
-            if (reserved)
-                timeframe = new Timeframe(start, end, cost, true);
-            else
-                timeframe = new Timeframe(start, end, cost);
+            // Check if the location's name appears as reserved
+            rs.getString("ReservedLocationName");
             
-            timeframes.add(timeframe);
+            if (rs.wasNull())
+                timeframes.add(new Timeframe(start, end, cost, false));
+            else
+                timeframes.add(new Timeframe(start, end, cost, true));
         }
         
         return timeframes;
     }
     
     /**
-     * ParseTimeframes - Parse a result set containing timeframes
-     * 
-     * @param rs The result set to parse
-     * @return A list of timeframes
-     * @throws SQLException Error parsing the result set
-     */
-    public static List<Timeframe> parseTimeframes(ResultSet rs)
-            throws SQLException
+        Sets the ResultSet for the parser to parse
+    
+        @param resultSet The ResultSet for the parser to parse
+    */
+    
+    public void setResultSet(ResultSet resultSet)
     {
-        List<Timeframe> timeframes = new ArrayList<>();
-        Timeframe timeframe;
-        LocalDate startDate, endDate;
-        LocalTime startTime, endTime;
-        LocalDateTime start, end;
-        
-        while (rs.next())
-        {
-            startDate = rs.getDate("StartDate").toLocalDate();
-            startTime = rs.getTime("StartTime").toLocalTime();
-            endDate = rs.getDate("EndDate").toLocalDate();
-            endTime = rs.getTime("EndTime").toLocalTime();
-            
-            start = LocalDateTime.of(startDate, startTime);
-            end = LocalDateTime.of(endDate, endTime);
-            
-            timeframe = new Timeframe(start, end);
-            
-            timeframes.add(timeframe);
-        }
-        
-        return timeframes;
+        rs = resultSet;
     }
 }

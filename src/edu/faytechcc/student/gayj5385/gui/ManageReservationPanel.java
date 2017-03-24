@@ -42,14 +42,18 @@ public class ManageReservationPanel extends JPanel
                        contactPhone;
     
     /**
-        Constructor
+        Constructs a new ManageReservationPanel initialized with the given
+        list of locations
+    
+        @param locs The locations
     */
     
-    public ManageReservationPanel()
+    public ManageReservationPanel(List<Location> locs)
     {
         super(new BorderLayout());
         
-        add(buildTopPanel(), BorderLayout.NORTH);
+        Location[] locArray = locs.toArray(new Location[locs.size()]);
+        add(buildTopPanel(locArray), BorderLayout.NORTH);
         add(buildMidPanel(), BorderLayout.CENTER);
         add(buildBottomPanel(), BorderLayout.SOUTH);
     }
@@ -145,12 +149,14 @@ public class ManageReservationPanel extends JPanel
     }
     
     /**
-        Build & return the top panel of this panel
+        Builds & return the top panel of this panel, initialized with the
+        given array of locations
     
+        @param locs The locations
         @return The built panel
     */
     
-    private JPanel buildTopPanel()
+    private JPanel buildTopPanel(Location[] locs)
     {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
@@ -170,7 +176,7 @@ public class ManageReservationPanel extends JPanel
         gbc.gridx = 1;
         gbc.insets = new Insets(0, 0, 10, 0);
         gbc.ipadx = 125;
-        locationComponentPanel.add(locations = new JComboBox(), gbc);
+        locationComponentPanel.add(locations = new JComboBox(locs), gbc);
         
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -225,6 +231,17 @@ public class ManageReservationPanel extends JPanel
     public Location getSelectedLocation()
     {
         return (Location) locations.getSelectedItem();
+    }
+    
+    /**
+        Returns the selected reservations
+    
+        @return Selected reservations
+    */
+    
+    public List<Reservation> getSelectedReservations()
+    {
+        return reservationList.getSelectedValuesList();
     }
     
     /**
@@ -371,7 +388,7 @@ public class ManageReservationPanel extends JPanel
         @param locs Locations that have been reserved
     */
     
-    public void setLocations(Location[] locs)
+    public void setLocations(List<Location> locs)
     {
         ActionListener[] als = locations.getActionListeners();
         for (ActionListener al : als)

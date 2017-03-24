@@ -11,7 +11,6 @@ import edu.faytechcc.student.burnst9091.data.Reservable;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.Reserver;
 import edu.faytechcc.student.burnst9091.data.Timeframe;
-import edu.faytechcc.student.burnst9091.exception.RecordExistsException;
 import java.sql.SQLException;
 
 public class RecordAdd
@@ -20,7 +19,7 @@ public class RecordAdd
     private String sql;
     
     /**
-        Constructor
+        Constructs a new RecordAdd
     */
     
     public RecordAdd()
@@ -29,7 +28,7 @@ public class RecordAdd
     }
     
     /**
-        AddLocation - Add a record of a location to the database
+        Adds a record of a location to the database
     
         @param location The location to add
         @throws SQLException Error adding record to the database
@@ -45,132 +44,122 @@ public class RecordAdd
     }
     
     /**
-        AddReservable - Add a record of a reservable to the database
+        Adds a record of a reservable to the database
     
         @param reservable The reservable to add
         @throws SQLException Error adding record to the database
-        @throws RecordExistsException Identical record exists in the database
     */
     
-    public void addReservable(Reservable reservable)
-            throws SQLException, RecordExistsException
+    public void addReservable(Reservable reservable) throws SQLException
     {
-        // Ensure that the record does not already exist
-        Query query = new Query();
+        // Check if a record of a location should be added
+        ResultSetParser parser = new ResultSetParser();
+        ReservableQuery q = new ReservableQuery();
+        parser.setResultSet(q.queryReservableName(reservable.getName()));
         
-        if (!query.queryIfReservableExists(reservable))
-        {
-            // Avoid duplicating a record of a location
-            if (!query.queryIfLocationExists(reservable.getName()))
-                addLocation(new Location(reservable.getName(),
-                                         reservable.getCapacity()));
-            
-            // Avoid duplicating a record of a timeframe
-            if (!query.queryIfTimeframeExists(reservable.getTimeframe()))
-                addTimeframe(reservable.getTimeframe());
-            
-            String timeframeID = "(SELECT Timeframes.TimeframeID " +
-                                 "FROM Timeframes " +
-                                 "WHERE Timeframes.StartDate = '" +
-                                    reservable.getStartDate() + "' " +
-                                 "AND Timeframes.StartTime = '" +
-                                    reservable.getStartTime() + "' " +
-                                 "AND Timeframes.EndDate = '" +
-                                    reservable.getEndDate() + "' " +
-                                 "AND Timeframes.EndTime = '" +
-                                    reservable.getEndTime() + "')";
-            
-            sql = "INSERT INTO Reservables " +
-                  "VALUES ('" + reservable.getName() + "', " +
-                                timeframeID + ", " +
-                                reservable.getCost().doubleValue() + ")";
-          
+        if (parser.isEmpty())
+            addLocation(reservable.getLocation());
+        
+        // Check if a record of a timeframe should be added
+        parser.setResultSet(q.queryReservableTimeframe(
+                reservable.getTimeframe()));
+        
+        if (parser.isEmpty())
+            addTimeframe(reservable.getTimeframe());
+        
+        String timeframeID = "(SELECT Timeframes.TimeframeID " +
+                             "FROM Timeframes " +
+                             "WHERE Timeframes.StartDate = '" +
+                                reservable.getStartDate() + "' " +
+                             "AND Timeframes.StartTime = '" +
+                                reservable.getStartTime() + "' " +
+                             "AND Timeframes.EndDate = '" +
+                                reservable.getEndDate() + "' " +
+                             "AND Timeframes.EndTime = '" +
+                                reservable.getEndTime() + "')";
 
-            ReserveDB.getInstance().addRecord(this);
-        }
-        else
-            throw new RecordExistsException();
+        sql = "INSERT INTO Reservables " +
+              "VALUES ('" + reservable.getName() + "', " +
+                            timeframeID + ", " +
+                            reservable.getCost() + ")";
+
+
+        ReserveDB.getInstance().addRecord(this);
     }
     
     /**
-        AddReservation - Add a record of a reservation to the database
+        Adds a record of a reservation to the database
     
         @param reservation The reservation to add
         @throws SQLException Error adding record to the database
-        @throws RecordExistsException Identical record exists in the database
     */
     
-    public void addReservation(Reservation reservation)
-            throws SQLException, RecordExistsException
+    public void addReservation(Reservation reservation) throws SQLException
     {
-        // Ensure that the record does not already exist
-        Query query = new Query();
+        // Check if a record of a reserver should be added
+        ResultSetParser parser = new ResultSetParser();
+        ReservationQuery q = new ReservationQuery();
+        parser.setResultSet(q.queryReservationReserver(
+                reservation.getReserver()));
         
-        if (!query.queryIfReservationExists(reservation))
-        {   
-            // Check valid Reservable????
+        if (parser.isEmpty())
+            addReserver(reservation.getReserver());
+        
+        String reserverID = "(SELECT Reservers.ReserverID " +
+                            "FROM Reservers " +
+                            "WHERE Reservers,FirstName = '" +
+                                reservation.getReserverFirstName() + "' " +
+                            "AND Reservers.LastName = '" +
+                                reservation.getReserverLastName() + "' " +
+                            "AND Reservers.Email = '" +
+                                reservation.getReserverEmail() + "' " +
+                            "AND Reservers.Phone = '" +
+                                reservation.getReserverPhone() + "')";
             
-            // Make sure reserver is not a duplicate
-            Reserver reserver = reservation.getReserver();
-            if (!query.queryIfReserverExists(reserver))
-                addReserver(reserver);
-            
-            String reserverID = "(SELECT Reservers.ReserverID " +
-                                "FROM Reservers " +
-                                "WHERE Reservers,FirstName = '" +
-                                    reserver.getFirstName() + "' " +
-                                "AND Reservers.LastName = '" +
-                                    reserver.getLastName() + "' " +
-                                "AND Reservers.Email = '" +
-                                    reserver.getEmailAddress() + "' " +
-                                "AND Reservers.Phone = '" +
-                                    reserver.getPhoneNumber() + "')";
-            
-            String timeframeID = "(SELECT Timeframes.TimeframeID " +
-                                 "FROM Timeframes " +
-                                 "WHERE Timeframes.StartDate = '" +
-                                    reservation.getStartDate() + "' " +
-                                 "AND Timeframes.StartTime = '" +
-                                    reservation.getStartTime() + "' " +
-                                 "AND Timeframes.EndDate = '" +
-                                    reservation.getEndDate() + "' " +
-                                 "AND Timeframes.EndTime = '" +
-                                    reservation.getEndTime() + "')";
-            
-            sql = "INSERT INTO Reservations " +
-                  "VALUES ('" + reservation.getLocationName() + "', " +
-                                timeframeID + ", " +
-                                reserverID + ", '" +
-                                reservation.getEventType() + "', " +
-                                reservation.getNumberAttending() + ", " +
-                                false + ")";
-            
-            ReserveDB.getInstance().addRecord(this);
-        }
-        else
-            throw new RecordExistsException();
+        String timeframeID = "(SELECT Timeframes.TimeframeID " +
+                             "FROM Timeframes " +
+                             "WHERE Timeframes.StartDate = '" +
+                                reservation.getStartDate() + "' " +
+                             "AND Timeframes.StartTime = '" +
+                                reservation.getStartTime() + "' " +
+                             "AND Timeframes.EndDate = '" +
+                                reservation.getEndDate() + "' " +
+                             "AND Timeframes.EndTime = '" +
+                                reservation.getEndTime() + "')";
+
+        sql = "INSERT INTO Reservations " +
+              "VALUES ('" + reservation.getLocationName() + "', " +
+                            timeframeID + ", " +
+                            reserverID + ", '" +
+                            reservation.getEventType() + "', " +
+                            reservation.getNumberAttending() + ", " +
+                            false + ")";
+
+        ReserveDB.getInstance().addRecord(this);
     }
     
     /**
-       AddReserver - Add a record of a reserver to the database
+       Adds a record of a reserver to the database
        
-       @param r The reserver to add
+       @param reserver The reserver to add
        @throws SQLException Error adding record to the database
      */
     
-    private void addReserver(Reserver r) throws SQLException
+    private void addReserver(Reserver reserver) throws SQLException
     {
-        sql = "INSERT INTO Reservers (FirstName, LastName, Email, Phone" +
-              "VALUES ('" + r.getFirstName() + "', " +
-              "'" + r.getLastName() + "', " +
-              "'" + r.getEmailAddress() + "', " +
-              "'" + r.getPhoneNumber() + "')";
+        String fields = "(FirstName, LastName, Email, Phone)";
+        
+        sql = "INSERT INTO Reservers " + fields + " "     +
+              "VALUES ('" + reserver.getFirstName()     + "', '" +
+                            reserver.getLastName()      + "', '" +
+                            reserver.getEmailAddress()  + "', '" +
+                            reserver.getPhoneNumber()   + "')";
             
         ReserveDB.getInstance().addRecord(this);
     }
     
     /**
-        AddTimeframe - Add a record of a timeframe to the database
+        Adds a record of a timeframe to the database
     
         @param timeframe The timeframe to add
         @throws SQLException Error adding record to database
@@ -190,7 +179,7 @@ public class RecordAdd
     }
     
     /**
-        ToString - Return a string representation of the object
+        Returns a string representation of the object
     
         @return A string representation of the object
     */

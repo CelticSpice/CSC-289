@@ -9,6 +9,7 @@ package edu.faytechcc.student.gayj5385.controller;
 
 import edu.faytechcc.student.burnst9091.data.Timeframe;
 import edu.faytechcc.student.gayj5385.gui.ManageReservablePanel;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -17,35 +18,40 @@ public class ManageReservableListController implements ListSelectionListener
 {
     // Fields
     private ManageReservablePanel view;
-    
+
     /**
         Constructor - Accepts the view to manage the list of
-    
+
         @param v The view
     */
-    
+
     public ManageReservableListController(ManageReservablePanel v)
     {
         view = v;
     }
-    
+
     /**
         Handle when the selected value in the list changes
-    
+
         @param e The value changed event
     */
-    
+
     @Override
     public void valueChanged(ListSelectionEvent e)
     {
         List<Timeframe> timeframes = view.getSelectedTimeframes();
-        
+
         if (timeframes.size() == 1)
         {
-            view.setStartDate(timeframes.get(0).getStartDate().toString());
-            view.setStartTime(timeframes.get(0).getStartTime().toString());
-            view.setEndDate(timeframes.get(0).getEndDate().toString());
-            view.setEndTime(timeframes.get(0).getEndTime().toString());
+            DateTimeFormatter dFmt = DateTimeFormatter.ofPattern(
+                "y-MMM-d");
+            DateTimeFormatter tFmt = DateTimeFormatter.ofPattern(
+                "H:mm");
+
+            view.setStartDate(timeframes.get(0).getStartDateTimeString(dFmt));
+            view.setStartTime(timeframes.get(0).getStartDateTimeString(tFmt));
+            view.setEndDate(timeframes.get(0).getEndDateTimeString(dFmt));
+            view.setEndTime(timeframes.get(0).getEndDateTimeString(tFmt));
             view.setCost(timeframes.get(0).getCostString());
             view.setReserved((timeframes.get(0).isReserved()) ? "Reserved" :
                                                                 "Available");

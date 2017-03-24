@@ -9,19 +9,19 @@ package edu.faytechcc.student.gayj5385.gui;
 import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reservable;
 import edu.faytechcc.student.gayj5385.controller.ManageReservableButtonController;
+import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.gayj5385.controller.SettingsPanelController;
 import edu.faytechcc.student.burnst9091.data.SMTPProperties;
 import edu.faytechcc.student.burnst9091.data.SecurityOption;
 import edu.faytechcc.student.burnst9091.data.search.Filter;
+import edu.faytechcc.student.gayj5385.controller.ManageReservableButtonController;
 import edu.faytechcc.student.gayj5385.controller.ManageReservableComboBoxController;
 import edu.faytechcc.student.gayj5385.controller.ManageReservableListController;
 import edu.faytechcc.student.gayj5385.controller.ManageReservationComboBoxController;
-import edu.faytechcc.student.mccanns0131.database.Query;
 import java.awt.BorderLayout;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import javax.swing.JOptionPane;
+import static java.util.stream.Collectors.toList;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeListener;
@@ -33,88 +33,78 @@ public class AdminPanel extends JPanel
     private ManageReservablePanel mngReservablePanel;
     private ManageReservationPanel mngReservationPanel;
     private SettingsPanel settingsPanel;
+    private Filter filter;
     
     /**
-        Constructor
+        Constructs a new AdminPanel with the given location & reservation data
+    
+        @param locs The locations
+        @param reserves The reservations
     */
     
-    public AdminPanel()
+    public AdminPanel(List<Location> locs,
+            HashMap<String, List<Reservation>> reserves)
     {
         super(new BorderLayout());
         
         tabbedPane = new JTabbedPane();
         
-        tabbedPane.add("Manage Reservables", buildManageReservablePanel());
-        tabbedPane.add("Manage Reservations", buildManageReservationPanel());
+        tabbedPane.add("Manage Reservables", buildManageReservablePanel(locs));
+        tabbedPane.add("Manage Reservations",
+                buildManageReservationPanel(locs, reserves));
         tabbedPane.add("Settings", buildSettingsPanel());
         
         add(tabbedPane);
     }
     
     /**
-        Build & return the panel to manage reservables on
+        Builds & returns the panel to manage reservables on, initialized with
+        the given list of locations
     
+        @param locs The locations
         @return The built panel
     */
     
-    private ManageReservablePanel buildManageReservablePanel()
+    private ManageReservablePanel buildManageReservablePanel(
+            List<Location> locs)
     {
-        mngReservablePanel = new ManageReservablePanel();
+        mngReservablePanel = new ManageReservablePanel(locs);
         
-        try
-        {
-            Query q = new Query();
-            Location[] locationsArray = q.queryLocations();
-            List<Location> locationsList = new ArrayList();
-            
-            for (Location loc : locationsArray)
-            {
-                locationsList.add(loc);
-            }
-            mngReservablePanel.setLocations(locationsList);
-        }
-        catch (SQLException ex)
-        {
-            JOptionPane.showMessageDialog(this, "Error loading location data",
-                    "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        mngReservablePanel.registerButtonController(
+                new ManageReservableButtonController(mngReservablePanel, filter,
+                        locs));
         
-        Filter<Reservable> filter = new Filter();
+        mngReservablePanel.registerComboBoxController(
+                new ManageReservableComboBoxController(mngReservablePanel,
+                        filter));
         
-        mngReservablePanel.registerButtonController
-            (new ManageReservableButtonController(mngReservablePanel, filter));
-        
-        mngReservablePanel.registerComboBoxController
-            (new ManageReservableComboBoxController(mngReservablePanel, filter));
-        
-        mngReservablePanel.registerTimeframeListController
-            (new ManageReservableListController(mngReservablePanel));
+        mngReservablePanel.registerTimeframeListController(
+                new ManageReservableListController(mngReservablePanel));
         
         return mngReservablePanel;
     }
     
     /**
-        Builds & returns the panel to manage reservations on
+        Builds & returns the panel to manage reservations on, initialized with
+        the given list of locations & mapping of reservations
     
         @return The built panel
     */
     
-    private ManageReservationPanel buildManageReservationPanel()
+    private ManageReservationPanel buildManageReservationPanel(
+            List<Location> locs, HashMap<String, List<Reservation>> reserves)
     {
-        mngReservationPanel = new ManageReservationPanel();
-        mngReservationPanel.registerComboBoxController
-            (new ManageReservationComboBoxController(mngReservationPanel, new Filter()));
+        List<Location> reservedLocs = locs.stream()
+                .filter(l -> l.isReserved())
+                .collect(toList());
         
-        try
-        {
-            Query q = new Query();
-            mngReservationPanel.setLocations(q.queryLocations());
-        }
-        catch (SQLException ex)
-        {
-            JOptionPane.showMessageDialog(this, "Error loading location data",
-                    "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        Filter<Reservation> filter = new Filter<>();
+        
+        mngReservationPanel = new ManageReservationPanel(reservedLocs);
+        
+        mngReservationPanel.registerComboBoxController(
+                new ManageReservationComboBoxController(mngReservationPanel,
+                    reserves, filter));
         
         return mngReservationPanel;
     }

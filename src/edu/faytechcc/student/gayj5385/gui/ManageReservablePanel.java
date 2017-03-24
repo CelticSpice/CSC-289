@@ -17,7 +17,6 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -41,66 +40,76 @@ public class ManageReservablePanel extends JPanel
     private JList<Timeframe> timeframeList;
     private JTextField capacity, search, startDate, startTime, endDate, endTime,
                        cost, reserved;
-    
+
     /**
-        Constructor
+        Constructs a ManageReservablePanel initialized with the given locations
+
+        @param locs The locations
     */
-    
-    public ManageReservablePanel()
+
+    public ManageReservablePanel(List<Location> locs)
     {
         super(new BorderLayout());
-        
-        add(buildTopPanel(), BorderLayout.NORTH);
+
+        Location[] locArray = locs.toArray(new Location[locs.size()]);
+        add(buildTopPanel(locArray), BorderLayout.NORTH);
         add(buildMidPanel(), BorderLayout.CENTER);
         add(buildBottomPanel(), BorderLayout.SOUTH);
     }
-    
+
     /**
         Build & return the bottom panel of this panel
-    
+
         @return The built panel
     */
-    
+
     private JPanel buildBottomPanel()
     {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        
+
         // Build main button panel
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
         btnPanel.add(addBtn = new JButton("Add"));
         btnPanel.add(updateBtn = new JButton("Update"));
         btnPanel.add(delBtn = new JButton("Delete"));
-        
+
         // Build exit button panel
         JPanel exitBtnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT,0,0));
         exitBtnPanel.add(exitBtn = new JButton("Logout"));
-        
+
         panel.add(btnPanel);
         panel.add(Box.createHorizontalGlue());
         panel.add(exitBtnPanel);
-        
+
         return panel;
     }
-    
+
     /**
         Build & return the middle panel of this panel
-    
+
         @return The built panel
     */
-    
+
     private JPanel buildMidPanel()
     {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         panel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
-        
+
         timeframeList = new JList(timeframes = new DefaultListModel());
         JScrollPane scrollPane = new JScrollPane(timeframeList);
         scrollPane.setPreferredSize(new Dimension(255, 225));
-        
+
+        Location loc = (Location) locations.getSelectedItem();
+        if (loc != null)
+        {
+            for (Timeframe timeframe : loc.getTimeframes())
+                timeframes.addElement(timeframe);
+        }
+
         // Build timeframe detail panel
-        JPanel timeframePanel = new JPanel(new GridLayout(6, 2, 5, 10));        
+        JPanel timeframePanel = new JPanel(new GridLayout(6, 2, 5, 10));
         timeframePanel.add(new JLabel("Start Date:"));
         timeframePanel.add(startDate = new JTextField());
         timeframePanel.add(new JLabel("Start Time:"));
@@ -113,102 +122,104 @@ public class ManageReservablePanel extends JPanel
         timeframePanel.add(cost = new JTextField());
         timeframePanel.add(new JLabel("Reserved:"));
         timeframePanel.add(reserved = new JTextField());
-        
+
         startDate.setEditable(false);
         startTime.setEditable(false);
         endDate.setEditable(false);
         endTime.setEditable(false);
         cost.setEditable(false);
         reserved.setEditable(false);
-        
+
         panel.add(scrollPane);
         panel.add(Box.createRigidArea(new Dimension(15, 0)));
         panel.add(timeframePanel);
-        
+
         return panel;
     }
-    
+
     /**
-        Build & return the top panel of this panel
-    
+        Builds & returns the top panel of this panel, initialized with
+        the given location data
+
+        @param locs The locations
         @return The built panel
     */
-    
-    private JPanel buildTopPanel()
+
+    private JPanel buildTopPanel(Location[] locs)
     {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        
+
         // Build location selection panel
         JPanel locationPanel = new JPanel(new FlowLayout(FlowLayout.LEFT,0,0));
-        
+
         JPanel locationComponentPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        
+
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(0, 0, 10, 5);
         locationComponentPanel.add(new JLabel("Location:"), gbc);
-        
+
         gbc.gridx = 1;
         gbc.insets = new Insets(0, 0, 10, 0);
         gbc.ipadx = 125;
-        locationComponentPanel.add(locations = new JComboBox(), gbc);
-        
+        locationComponentPanel.add(locations = new JComboBox(locs), gbc);
+
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.insets = new Insets(0, 0, 0, 5);
         gbc.ipadx = 0;
         locationComponentPanel.add(new JLabel("Capacity:"), gbc);
-        
+
         gbc.gridx = 1;
         gbc.insets = new Insets(0, 0, 0, 0);
         gbc.ipadx = 55;
         gbc.anchor = GridBagConstraints.WEST;
         locationComponentPanel.add(capacity = new JTextField(), gbc);
-        
+
         capacity.setEditable(false);
-        
+
         locationPanel.add(locationComponentPanel);
-        
+
         // Build search panel
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
-        
+
         JPanel searchComponentPanel = new JPanel(new GridBagLayout());
-        
+
         JPanel searchButtonsPanel = new JPanel(new FlowLayout());
-        
+
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(0, 0, 5, 0);
         gbc.ipadx = 225;
         gbc.ipady = 5;
         gbc.anchor = GridBagConstraints.CENTER;
-        
+
         search = new JTextField();
         search.setMaximumSize(search.getSize());
-        
+
         searchComponentPanel.add(search, gbc);
-        
+
         searchButtonsPanel.add(searchBtn = new JButton("Search"));
         searchButtonsPanel.add(clearBtn = new JButton("Clear"));
-        
+
         gbc.gridy = 1;
         gbc.insets = new Insets(0, 0, 0, 0);
         gbc.ipadx = 0;
         gbc.ipady = 0;
         searchComponentPanel.add(searchButtonsPanel, gbc);
-        
+
         searchPanel.add(searchComponentPanel);
-                
+
         panel.add(locationPanel);
         panel.add(Box.createHorizontalGlue());
         panel.add(searchPanel);
-        
+
         return panel;
     }
-    
+
     /**
      * ClearSearch - Clears search results
      */
@@ -225,30 +236,14 @@ public class ManageReservablePanel extends JPanel
         cost.setText("");
         
     }
-    
-    /**
-        Return the set locations
-    
-        @return The set locations
-    */
-    
-    public List<Location> getLocations()
-    {
-        List<Location> locs = new ArrayList();
-        for (int i = 0; i < locs.size(); i++)
-            locs.set(i, (Location) locations.getItemAt(i));
-        return locs;
-    }
-    
+
     /**
      * GetSearchCriteria - Get the search criteria within the search text field
-     * 
+     *
      * @return The text within the search text field
      */
     public String getSearchCriteria()
     {
-        
-//        timeframeList.setModel(timeframes = new DefaultListModel());
         capacity.setText("");
         startTime.setText("");
         endTime.setText("");
@@ -258,35 +253,35 @@ public class ManageReservablePanel extends JPanel
         cost.setText("");
         return search.getText();
     }
-    
+
     /**
         Return the selected location
-    
+
         @return The selected location
     */
-    
+
     public Location getSelectedLocation()
     {
         return (Location) locations.getSelectedItem();
     }
-    
+
     /**
         Return the selected timeframes
-    
+
         @return The selected timeframes
     */
-    
+
     public List<Timeframe> getSelectedTimeframes()
     {
         return timeframeList.getSelectedValuesList();
     }
-    
+
     /**
         Register a button controller to the panel
-    
+
         @param controller The controller to register to the buttons on the panel
     */
-    
+
     public void registerButtonController(ActionListener controller)
     {
         addBtn.addActionListener(controller);
@@ -296,144 +291,140 @@ public class ManageReservablePanel extends JPanel
         searchBtn.addActionListener(controller);
         clearBtn.addActionListener(controller);
     }
-    
+
     /**
         Register a controller to the locations combo box
-    
+
         @param controller The controller to register to the locations combo box
     */
-    
+
     public void registerComboBoxController(ActionListener controller)
     {
         locations.addActionListener(controller);
     }
-    
+
     /**
         Register a controller to the timeframe list
-    
+
         @param controller The controller to register to the timeframe list
     */
-    
+
     public void registerTimeframeListController(
             ListSelectionListener controller)
     {
         timeframeList.addListSelectionListener(controller);
     }
-    
-    /**
-        Removes the specified location from the locations combo box
-    
-        @param loc Location to remove
-    */
-    
-    public void removeLocation(Location loc)
-    {
-        locations.removeItem(loc);
-    }
-    
+
     /**
         Set the locations that can be reserved
-    
+
         @param locs Locations that can be reserved
     */
-    
+
     public void setLocations(List<Location> locs)
     {
         ActionListener[] als = locations.getActionListeners();
         for (ActionListener al : als)
             locations.removeActionListener(al);
-        
+
         locations.removeAllItems();
         for (Location loc : locs)
             locations.addItem(loc);
-        
+
+        Location loc = (Location) locations.getSelectedItem();
+        if (loc != null)
+        {
+            for (Timeframe timeframe : loc.getTimeframes())
+                timeframes.addElement(timeframe);
+        }
+
         for (ActionListener al : als)
             locations.addActionListener(al);
     }
-    
+
     /**
         Set the capacity of the selected location
-    
+
         @param cap Capacity to display
     */
-    
+
     public void setCapacity(String cap)
     {
         capacity.setText(cap);
     }
-    
+
     /**
         Set the cost field
-    
+
         @param c Cost to set in the cost field
     */
-    
+
     public void setCost(String c)
     {
         cost.setText(c);
     }
-    
+
     /**
         Set the end date field
-    
+
         @param date Date to set in the end date field
     */
-    
+
     public void setEndDate(String date)
     {
         endDate.setText(date);
     }
-    
+
     /**
         Set the end time field
-    
+
         @param time Time to set in the end time field
     */
-    
+
     public void setEndTime(String time)
     {
         endTime.setText(time);
     }
-    
+
     /**
         Set the reserved field
-    
+
         @param reserve Value to set in the reserved field
     */
-    
+
     public void setReserved(String reserve)
     {
         reserved.setText(reserve);
     }
-    
+
     /**
         Set the start date field
-    
+
         @param date Date to set in the start date field
     */
-    
+
     public void setStartDate(String date)
     {
         startDate.setText(date);
     }
-    
+
     /**
         Set the start time field
-    
+
         @param time Time to set in the start time field
     */
-    
+
     public void setStartTime(String time)
     {
         startTime.setText(time);
     }
-    
+
     /**
         Set the timeframes displayed in the list
-    
+
         @param times Timeframes to display in the list
     */
-    
+
     public void setTimeframes(List<Timeframe> times)
     {
         timeframes.removeAllElements();

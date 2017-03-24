@@ -12,7 +12,6 @@ import edu.faytechcc.student.burnst9091.data.Reservable;
 import edu.faytechcc.student.burnst9091.data.Timeframe;
 import edu.faytechcc.student.burnst9091.data.search.Filter;
 import edu.faytechcc.student.gayj5385.gui.ManageReservablePanel;
-import edu.faytechcc.student.mccanns0131.database.Query;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -58,9 +57,6 @@ public class ManageReservableComboBoxController implements ActionListener
         {
             try
             {
-                Query q = new Query();
-                Location[] locations = q.queryLocations();
-
                 List<Reservable> reservables = new ArrayList();
 
                 for (Location loc : locations)

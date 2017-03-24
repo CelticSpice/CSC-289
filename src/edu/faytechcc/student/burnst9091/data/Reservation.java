@@ -21,46 +21,6 @@ public class Reservation
     
     /**
         Constructs a new Reservation with the specified reserver, the reservable
-        that is reserved, & the estimated number of attendees. The event type of
-        the reservation will default to "General"
-    
-        @param rsver The reserver
-        @param rble The reservable
-        @param attendence Estimated number of attendees
-    */
-    
-    public Reservation(Reserver rsver, Reservable rble, int attendence)
-    {
-        approved = false;
-        reserver = rsver;
-        numberAttending = attendence;
-        reservable = rble;
-        eventType = "General";
-    }
-    
-   /**
-        Constructs a new Reservation with the specified reserver, the reservable
-        that is reserved, the estimated number of attendees, & the type of event
-        the reservation entails
-    
-        @param rsver The reserver
-        @param rble The reservable
-        @param attendence Estimated number of attendees
-        @param type Type of event the reservation entails
-    */
-    
-    public Reservation(Reserver rsver, Reservable rble, int attendence,
-            String type)
-    {
-        approved = false;
-        reserver = rsver;
-        numberAttending = attendence;
-        reservable = rble;
-        eventType = type;
-    }
-    
-    /**
-        Constructs a new Reservation with the specified reserver, the reservable
         that is reserved, the estimated number of attendees, the type of event
         the reservation entails, & whether the reservation is approved
     
@@ -99,6 +59,17 @@ public class Reservation
     public BigDecimal getCost()
     {
         return reservable.getCost();
+    }
+    
+    /**
+        Returns the cost of the reservations as a string
+        
+        @return The cost of the reservation as a string
+    */
+    
+    public String getCostString()
+    {
+        return reservable.getTimeframe().getCostString();
     }
     
     /**
@@ -176,6 +147,28 @@ public class Reservation
     public String getReserverEmail()
     {
         return reserver.getEmailAddress();
+    }
+    
+    /**
+        Returns the first name of the reserver
+    
+        @return The reserver's first name
+    */
+    
+    public String getReserverFirstName()
+    {
+        return reserver.getFirstName();
+    }
+    
+    /**
+        Returns the last name of the reserver
+    
+        @return The reserver's last name
+    */
+    
+    public String getReserverLastName()
+    {
+        return reserver.getLastName();
     }
     
     /**

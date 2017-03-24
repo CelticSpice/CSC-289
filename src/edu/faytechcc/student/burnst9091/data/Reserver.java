@@ -6,126 +6,81 @@
 
 package edu.faytechcc.student.burnst9091.data;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Reserver
 {
     // Fields
-    private ContactInfo contact;
-    private List<Reservation> reservations;
+    private String firstName, lastName, email, phone;
     
     /**
-        Constructor - Accepts the contact information of the reserver
+        Constructs a new Reserver with the given first & last names,
+        email address, & phone number
     
-        @param c Contact info
+        @param fName First name
+        @param lName Last name
+        @param e Email address
+        @param p Phone number
     */
     
-    public Reserver(ContactInfo c)
+    public Reserver(String fName, String lName, String e, String p)
     {
-        contact = c;
-        reservations = new ArrayList<>();
+        firstName = fName;
+        lastName = lName;
+        email = e;
+        phone = p;
     }
     
     /**
-        Constructor - Accepts the contact information of the reserver & a
-        list of reservations that the reserver has made
+        Returns the email address of the Reserver
     
-        @param c Contact info
-        @param reservationList Reservations that the reserver has made
-    */
-    
-    public Reserver(ContactInfo c, List<Reservation> reservationList)
-    {
-        contact = c;
-        reservations = reservationList;
-    }
-    
-    /**
-        Adds a reservation to that this reserver has made
-    
-        @param reservation The reservation
-    */
-    
-    public void addReservation(Reservation reservation)
-    {
-        reservations.add(reservation);
-    }
-    
-    /**
-        Returns the reserver's contact information
-    
-        @return The reserver's contact information
-    */
-    
-    public ContactInfo getContactInfo()
-    {
-        return contact;
-    }
-    
-    /**
-        GetEmailAddress - Return the email address of the reserver
-    
-        @return The email address of the reserver
+        @return The email address of the Reserver
     */
     
     public String getEmailAddress()
     {
-        return contact.getEmail();
+        return email;
     }
     
     /**
-        GetFirstName - Return the first name of the reserver
+        Returns the first name of the reserver
     
         @return The first name of the reserver
     */
     
     public String getFirstName()
     {
-        return contact.getFirstName();
+        return firstName;
     }
     
     /**
-        GetName - Return the full name of the reserver
-    
-        @return The full name of the reserver
-    */
-    
-    public String getName()
-    {
-        return contact.getFullName(false);
-    }
-    
-    /**
-        GetLastName - Return the last name of the reserver
+        Returns the last name of the reserver
     
         @return The last name of the reserver
     */
     
     public String getLastName()
     {
-        return contact.getLastName();
+        return lastName;
     }
     
     /**
-        GetPhoneNumber - Return the phone number of the reserver
+        Returns the full name of the reserver
     
-        @return The phone number of the reserver
+        @return The full name of the Reserver
+    */
+    
+    public String getName()
+    {
+        return firstName + " " + lastName;
+    }
+    
+    /**
+        Returns the phone number of the Reserver
+    
+        @return The phone number of the Reserver
     */
     
     public String getPhoneNumber()
     {
-        return contact.getPhoneNumber();
-    }
-    
-    /**
-        GetReservations - Return the reservations that the reserver has made
-    
-        @return The reservations the reserver made
-    */
-    
-    public List<Reservation> getReservations()
-    {
-        return new ArrayList<>(reservations);
+        return phone;
     }
 }

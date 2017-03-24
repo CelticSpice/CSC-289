@@ -19,7 +19,6 @@ import edu.faytechcc.student.mccanns0131.database.Query;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,29 +27,33 @@ import javax.swing.JOptionPane;
 public class ManageReservableButtonController implements ActionListener
 {
     // Fields
+    private List<Location> locations;
     private ManageReservablePanel view;
     private Filter<Reservable> filter;
     
     /**
-        Constructor - Accepts the view to control buttons for
-    
+        Constructs a new ManageReservableButtonController to manage the
+        given view's buttons & a list of locations
+
         @param v The view
-     * @param f
+        @param f The filter
+        @param locs The locations
     */
     
     public ManageReservableButtonController(ManageReservablePanel v,
-            Filter<Reservable> f)
+            Filter<Reservable> f, List<Location> locs)
     {
         view = v;
         filter = f;
+        locations = locs;
     }
-    
+
     /**
         Handle the clicking of a button
-    
+
         @param e The action event
     */
-    
+
     @Override
     public void actionPerformed(ActionEvent e)
     {
@@ -83,15 +86,15 @@ public class ManageReservableButtonController implements ActionListener
                 break;
         }
     }
-    
+
     /**
-        Return if any timeframe within a list of timeframes is reserved
-    
+        Returns if any timeframe within a list of timeframes is reserved
+
         @param timeframes Timeframe list to check for any reserved timeframes
         @return If any timeframe in the list is reserved
     */
-    
-    private boolean areTimeframesReserved(List<Timeframe> timeframes)
+
+    private boolean isTimeframeReserved(List<Timeframe> timeframes)
     {
         boolean reserved = false;
         for (Timeframe timeframe : timeframes)
@@ -102,17 +105,29 @@ public class ManageReservableButtonController implements ActionListener
             }
         return reserved;
     }
-    
+
+    /**
+        Deletes the specified location
+
+        @param loc The location to delete
+    */
+
+    private void deleteLocation(Location loc)
+    {
+        locations.remove(loc);
+        view.setLocations(locations);
+    }
+
     /**
         Delete timeframes given in a list
-    
+
         @param timeframes Timeframes to delete
     */
-    
+
     private void deleteTimeframes(List<Timeframe> timeframes)
     {
         Location loc = view.getSelectedLocation();
-        
+
         try
         {
             for (Timeframe timeframe : timeframes)
@@ -120,46 +135,41 @@ public class ManageReservableButtonController implements ActionListener
                 Admin.removeReservable(new Reservable(loc, timeframe));
                 loc.removeTimeframe(timeframe);
             }
-            
+
             view.setTimeframes(loc.getTimeframes());
-            
-            if (loc.getNumTimeframes() == 0)
-                view.removeLocation(loc);
         }
         catch (SQLException ex)
         {
-            
+            JOptionPane.showMessageDialog(view, "Failed to update database");
         }
     }
-    
+
     private void doClear() throws SQLException
     {
-        Query query = new Query();
-        
-        Location[] locationsArray = query.queryLocations();
         List<Location> locationsList = new ArrayList();
-        
-        for (Location loc : locationsArray)
+
+        for (Location loc : locations)
         {
             locationsList.add(loc);
         }
         
         filter.setPredicate(null);
+        
         view.setLocations(locationsList);
         view.clearSearch();
     }
-    
+
     /**
-        Respond to the "Delete" button being clicked
+        Perform the deletion of timeframes & potentially a location
     */
-    
+
     private void doDelete()
     {
         List<Timeframe> timeframes = view.getSelectedTimeframes();
-        
+
         if (!timeframes.isEmpty())
         {
-            if (areTimeframesReserved(timeframes))
+            if (isTimeframeReserved(timeframes))
             {
                 JOptionPane.showMessageDialog(view,
                     "Cannot remove reserved timeframes : Cancel reservations " +
@@ -173,13 +183,18 @@ public class ManageReservableButtonController implements ActionListener
 
                 if (choice == JOptionPane.YES_OPTION)
                     deleteTimeframes(timeframes);
-            }   
+
+                // Check if location should be deleted as well
+                Location loc = view.getSelectedLocation();
+                if (loc.getNumTimeframes() == 0)
+                    deleteLocation(loc);
+            }
         }
     }
-    
+
     /**
      * DoSearch - Perform a search for reservables based on search criteria
-     * 
+     *
      * @param criteria The search criteria
      */
     private void doSearch(String criteria)
@@ -190,8 +205,6 @@ public class ManageReservableButtonController implements ActionListener
             
             filter.setPredicate(search.searchReservables(criteria));
             
-            Query q = new Query();
-            Location[] locations = q.queryLocations();
             List<Reservable> reservables = new ArrayList();
             
             for (Location loc : locations)
@@ -215,82 +228,30 @@ public class ManageReservableButtonController implements ActionListener
             List <Timeframe> timeframes = new ArrayList();
             
             // location=cabin 01; cap=15; startdate=2017-03-23; starttime=00:00; enddate=2017-03-23; endtime=01:00; cost=325.00
+
+            view.setLocations(locations);
         }
         catch (SQLException ex){}
     }
     
-    
     /**
-        Show the dialog enabling the addition of a reservable
+        Show the dialog enabling the addition of reservables
     */
-    
+
     private void showAddDialog()
-    {        
-        ReservableAddDialog d = new ReservableAddDialog();
-        
-        d.registerButtonController(new ReservableAddButtonController(d));
+    {
+        ReservableAddDialog d = new ReservableAddDialog(locations);
+
+        d.registerButtonController(new ReservableAddButtonController(d,
+                locations));
         d.registerRadioButtonController(new ReservableAddRadioController(d));
         d.registerComboBoxController(new ReservableAddComboBoxController(d));
-        
-        d.setExistingLocations(view.getLocations());
-        
-        setInitialDatetimeFields(d);
-        
+
         d.setVisible(true);
         
-        if (d.getIfRecordsAdded())
-            view.setLocations(d.getExistingLocations());
+        view.setLocations(locations);
     }
-    
-    /**
-        Set the initial datetime fields on a dialog
-    
-        @param dialog The dialog
-    */
-    
-    private void setInitialDatetimeFields(ReservableAddDialog dialog)
-    {
-        final int HOURS = 24;
-        final int MAX_YEAR = 2099;
-        final int MINUTES = 60;
-        final int MONTHS = 12;
-        
-        LocalDateTime datetime = LocalDateTime.now();
-        
-        int[] years = new int[MAX_YEAR + 1 - datetime.getYear()];
-        for (int i = 0; i < years.length; i++)
-            years[i] = datetime.getYear() + i;
-        
-        int[] months = new int[MONTHS + 1 - datetime.getMonthValue()];
-        for (int i = 0; i < months.length; i++)
-            months[i] = datetime.getMonthValue() + i;
-        
-        int monthDays = datetime.toLocalDate().lengthOfMonth();
-        int[] days = new int[monthDays + 1 - datetime.getDayOfMonth()];
-        for (int i = 0; i < days.length; i++)
-            days[i] = datetime.getDayOfMonth() + i;
-        
-        int[] hours = new int[HOURS - datetime.getHour()];
-        for (int i = 0; i < hours.length; i++)
-            hours[i] = datetime.getHour() + i;
-        
-        int[] minutes = new int[MINUTES - datetime.getMinute()];
-        for (int i = 0; i < minutes.length; i++)
-            minutes[i] = datetime.getMinute() + i;
-        
-        dialog.setStartYears(years);
-        dialog.setStartMonths(months);
-        dialog.setStartDays(days);
-        dialog.setStartHours(hours);
-        dialog.setStartMinutes(minutes);
-        
-        dialog.setEndYears(years);
-        dialog.setEndMonths(months);
-        dialog.setEndDays(days);
-        dialog.setEndHours(hours);
-        dialog.setEndMinutes(minutes);
-    }
-    
+
     /**
      * Validate the capacity input
      *
@@ -299,18 +260,18 @@ public class ManageReservableButtonController implements ActionListener
     private boolean validateCapacity(String cap)
     {
         boolean valid = cap.matches("\\d+");
-        
+
         if (valid)
         {
             valid = Integer.parseInt(cap) > 0;
-            
+
             if (!valid)
                 JOptionPane.showMessageDialog(view,
                     "Capacity must be greater than 0");
         }
         else
             JOptionPane.showMessageDialog(view, "Invalid input for capacity");
-        
+
         return valid;
     }
 }

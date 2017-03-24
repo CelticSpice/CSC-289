@@ -46,6 +46,19 @@ public class Admin
     }
     
     /**
+        Removes a record of a reservation
+    
+        @param reservation Reservation to remove
+        @throws SQLException Error removing record from database
+    */
+    
+    public static void removeReservation(Reservation reservation)
+            throws SQLException
+    {
+        new RecordDelete().deleteReservation(reservation);
+    }
+    
+    /**
         EmailReserver - Send an email to a reserver
     
         @param reserver The reserver to email

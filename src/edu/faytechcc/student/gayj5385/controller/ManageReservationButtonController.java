@@ -6,6 +6,7 @@
 
 package edu.faytechcc.student.gayj5385.controller;
 
+import edu.faytechcc.student.burnst9091.data.Admin;
 import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.gayj5385.gui.ManageReservationPanel;
@@ -70,7 +71,28 @@ public class ManageReservationButtonController implements ActionListener
     }
     
     /**
-        Respond to the "Cancel" button being clicked
+        Cancels a reservation
+    
+        @param reservation The reservation to cancel
+    */
+    
+    private void cancelReservation(Reservation reservation)
+    {
+        String cancellationMessage = JOptionPane.showInputDialog(
+                this, "Enter cancellation message:");
+        
+        try
+        {
+            Admin.removeReservation(reservation);
+            Admin.emailReserver(reservation.getReserver(),
+                    "Reservation Cancelled", cancellationMessage);
+            
+            
+        }
+    }
+    
+    /**
+        Responds to the "Cancel" button being clicked
     */
     
     private void doCancel()
@@ -89,6 +111,6 @@ public class ManageReservationButtonController implements ActionListener
         
         if (selectedReservations.size() > 1)
             JOptionPane.showMessageDialog(view, 
-                "Cannot cancel multiple reservations");
+                "Cannot cancel multiple reservations at once.");
     }
 }

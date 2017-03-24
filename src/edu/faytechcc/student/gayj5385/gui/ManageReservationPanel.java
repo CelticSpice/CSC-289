@@ -34,7 +34,7 @@ public class ManageReservationPanel extends JPanel
 {
     // Fields
     private DefaultListModel<Reservation> reservations;
-    private JButton searchBtn, update, contact, approve, cancel, logout;
+    private JButton searchBtn, update, contact, reviewed, cancel, logout;
     private JComboBox<Location> locations;
     private JList<Reservation> reservationList;
     private JTextField capacity, search, startDate, startTime, endDate, endTime,
@@ -74,7 +74,7 @@ public class ManageReservationPanel extends JPanel
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
         btnPanel.add(update = new JButton("Update"));
         btnPanel.add(contact = new JButton("Contact"));
-        btnPanel.add(approve = new JButton("Approve"));
+        btnPanel.add(reviewed = new JButton("Reviewed"));
         btnPanel.add(cancel = new JButton("Cancel"));
         
         // Build logout button panel
@@ -254,7 +254,7 @@ public class ManageReservationPanel extends JPanel
     {
         update.addActionListener(controller);
         contact.addActionListener(controller);
-        approve.addActionListener(controller);
+        reviewed.addActionListener(controller);
         cancel.addActionListener(controller);
         logout.addActionListener(controller);
         searchBtn.addActionListener(controller);

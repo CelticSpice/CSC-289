@@ -8,6 +8,7 @@ package edu.faytechcc.student.mccanns0131.database;
 
 import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reserver;
+import edu.faytechcc.student.burnst9091.data.Timeframe;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -72,6 +73,28 @@ public class ReservationQuery extends Query
               "INNER JOIN Timeframes " +
               "ON Reservations.TimeframeID = Timeframes.TimeframeID " +
               "WHERE Reservations.LocationName = '" + loc.getName() + "'";
+        
+        return ReserveDB.getInstance().runQuery(this);
+    }
+    
+    public ResultSet queryReservation(String loc, Timeframe time)
+            throws SQLException
+    {
+        sql = "SELECT Reservers.FirstName, Reservers.LastName, " +
+              "Reservers.Email, Reservers.Phone, Timeframes.StartDate, " +
+              "Timeframes.StartTime, Timeframes.EndDate, Timeframes.EndTime, " +
+              "Reservations.EventType, Reservations.NumberAttending, " +
+              "Reservations.Approved " +
+              "FROM Reservers " +
+              "INNER JOIN Reservations " +
+              "ON Reservers.ReserverID = Reservations.ReserverID " +
+              "INNER JOIN Timeframes " +
+              "ON Reservations.TimeframeID = Timeframes.TimeframeID " +
+              "WHERE Reservations.LocationName = '" + loc + "'" +
+              "AND Timeframes.StartDate = '" + time.getStartDate() + "'" +
+              "AND Timeframes.StartTime = '" + time.getStartTime() + "'" +
+              "AND Timeframes.EndDate = '" + time.getEndDate() + "'" +
+              "AND Timeframes.EndTime = '" + time.getEndTime() + "'";
         
         return ReserveDB.getInstance().runQuery(this);
     }

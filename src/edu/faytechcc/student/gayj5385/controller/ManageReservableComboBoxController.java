@@ -24,6 +24,7 @@ public class ManageReservableComboBoxController implements ActionListener
     // Fields
     private ManageReservablePanel view;
     private Filter<Reservable> filter;
+//    private Lis
     
     /**
         Constructor - Accepts the view to manage the combo box of
@@ -55,37 +56,28 @@ public class ManageReservableComboBoxController implements ActionListener
         
         if (filter.getPredicate() != null)
         {
-            try
-            {
-                List<Reservable> reservables = new ArrayList();
+            List<Reservable> reservables = new ArrayList();
 
-                for (Location loc : locations)
-                {
-                    reservables.addAll(loc.deriveReservables());
-                }
-                
-                List<Reservable> filteredReservables;
-                filteredReservables = reservables.stream()
-                        .filter(filter.getPredicate())
-                        .collect(Collectors.<Reservable>toList());
-                
-                timeframes = new ArrayList();
-                
-                for (Reservable r : filteredReservables)
-                {
+            List<Reservable> filteredReservables;
+            filteredReservables = reservables.stream()
+                    .filter(filter.getPredicate())
+                    .collect(Collectors.<Reservable>toList());
+
+            timeframes = new ArrayList();
+
+            for (Reservable r : filteredReservables)
+            {
 //                    System.out.println(r.getTimeframe().toString());
-                    if (r.getName().equals(view.getSelectedLocation().getName()))
-                        timeframes.add(r.getTimeframe());
-                }
-                
+                if (r.getName().equals(view.getSelectedLocation().getName()))
+                    timeframes.add(r.getTimeframe());
+            }
+
 //                for (Timeframe t : timeframes)
 //                {
 //                    System.out.println(t.toString());
 //                }
-                
-                view.setTimeframes(timeframes);
-            }
-            catch (SQLException ex){}
+
+            view.setTimeframes(timeframes);
         }
         else
         {

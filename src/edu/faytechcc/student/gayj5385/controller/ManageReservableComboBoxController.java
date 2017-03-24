@@ -8,24 +8,36 @@
 package edu.faytechcc.student.gayj5385.controller;
 
 import edu.faytechcc.student.burnst9091.data.Location;
+import edu.faytechcc.student.burnst9091.data.Reservable;
+import edu.faytechcc.student.burnst9091.data.Timeframe;
+import edu.faytechcc.student.burnst9091.data.search.Filter;
 import edu.faytechcc.student.gayj5385.gui.ManageReservablePanel;
+import edu.faytechcc.student.mccanns0131.database.Query;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ManageReservableComboBoxController implements ActionListener
 {
     // Fields
     private ManageReservablePanel view;
+    private Filter<Reservable> filter;
     
     /**
         Constructor - Accepts the view to manage the combo box of
     
         @param v The view
+     * @param f
     */
     
-    public ManageReservableComboBoxController(ManageReservablePanel v)
+    public ManageReservableComboBoxController(ManageReservablePanel v,
+            Filter<Reservable> f)
     {
         view = v;
+        filter = f;
     }
     
     /**
@@ -39,6 +51,50 @@ public class ManageReservableComboBoxController implements ActionListener
     {
         Location location = view.getSelectedLocation();
         view.setCapacity(String.valueOf(location.getCapacity()));
-        view.setTimeframes(location.getTimeframes());
+        
+        List<Timeframe> timeframes;
+        
+        if (filter.getPredicate() != null)
+        {
+            try
+            {
+                Query q = new Query();
+                Location[] locations = q.queryLocations();
+
+                List<Reservable> reservables = new ArrayList();
+
+                for (Location loc : locations)
+                {
+                    reservables.addAll(loc.deriveReservables());
+                }
+                
+                List<Reservable> filteredReservables;
+                filteredReservables = reservables.stream()
+                        .filter(filter.getPredicate())
+                        .collect(Collectors.<Reservable>toList());
+                
+                timeframes = new ArrayList();
+                
+                for (Reservable r : filteredReservables)
+                {
+//                    System.out.println(r.getTimeframe().toString());
+                    if (r.getName().equals(view.getSelectedLocation().getName()))
+                        timeframes.add(r.getTimeframe());
+                }
+                
+//                for (Timeframe t : timeframes)
+//                {
+//                    System.out.println(t.toString());
+//                }
+                
+                view.setTimeframes(timeframes);
+            }
+            catch (SQLException ex){}
+        }
+        else
+        {
+            timeframes = location.getTimeframes();
+            view.setTimeframes(timeframes);
+        }
     }
 }

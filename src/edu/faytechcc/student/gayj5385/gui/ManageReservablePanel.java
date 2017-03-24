@@ -215,7 +215,7 @@ public class ManageReservablePanel extends JPanel
     public void clearSearch()
     {
         search.setText("");
-        timeframeList.setModel(timeframes = new DefaultListModel());
+//        timeframeList.setModel(timeframes = new DefaultListModel());
         capacity.setText("");
         startTime.setText("");
         endTime.setText("");
@@ -223,6 +223,7 @@ public class ManageReservablePanel extends JPanel
         endDate.setText("");
         reserved.setText("");
         cost.setText("");
+        
     }
     
     /**
@@ -247,7 +248,7 @@ public class ManageReservablePanel extends JPanel
     public String getSearchCriteria()
     {
         
-        timeframeList.setModel(timeframes = new DefaultListModel());
+//        timeframeList.setModel(timeframes = new DefaultListModel());
         capacity.setText("");
         startTime.setText("");
         endTime.setText("");

@@ -14,13 +14,15 @@ import java.util.function.Predicate;
 public class ReservableSearch
 {
     // Fields
-    Predicate<Reservable> locationName,
-                          capacity,
-                          startDate,
-                          startTime,
-                          endDate,
-                          endTime,
-                          cost;
+    private Predicate<Reservable> locationName,
+                                  capacity,
+                                  startDate,
+                                  startTime,
+                                  endDate,
+                                  endTime,
+                                  cost,
+                                  finalPredicate;
+    
     
     /**
      * Constructor
@@ -34,6 +36,7 @@ public class ReservableSearch
         endDate = null;
         endTime = null;
         cost = null;
+        finalPredicate = null;
     }
     
     /**
@@ -62,35 +65,62 @@ public class ReservableSearch
                     case "locationname":
                     case "location":
                         locationName = filterByLocationName(val);
+                        if (finalPredicate == null)
+                            finalPredicate = locationName;
+                        else
+                            finalPredicate = finalPredicate.and(locationName);
                         break;
                     case "capacity":
                     case "cap":
                         capacity = filterByCapacity(val);
+                        if (finalPredicate == null)
+                            finalPredicate = capacity;
+                        else
+                            finalPredicate = finalPredicate.and(capacity);
                         break;
                     case "startdate":
                         startDate = filterByStartDate(val);
+                        if (finalPredicate == null)
+                            finalPredicate = startDate;
+                        else
+                            finalPredicate = finalPredicate.and(startDate);
                         break;
                     case "starttime":
                         //if (val.matches("\\d{4}-\\d{2}-\\d{2},\\d{2}:\\d{2}"))
                         startTime = filterByStartTime(val);
+                        if (finalPredicate == null)
+                            finalPredicate = startTime;
+                        else
+                            finalPredicate = finalPredicate.and(startTime);
                         break;
                     case "enddate":
                         endDate = filterByEndDate(val);
+                        if (finalPredicate == null)
+                            finalPredicate = endDate;
+                        else
+                            finalPredicate = finalPredicate.and(endDate);
                         break;
                     case "endtime":
                         endTime = filterByEndTime(val);
+                        if (finalPredicate == null)
+                            finalPredicate = endTime;
+                        else
+                            finalPredicate = finalPredicate.and(endTime);
                         break;
                         //start=2017-03-20,13:00; end=2017-03-20,14:00
                     case "cost":
                     case "price":
                         cost = filterByCost(val);
+                        if (finalPredicate == null)
+                            finalPredicate = cost;
+                        else
+                            finalPredicate = finalPredicate.and(cost);
                         break;
                 }
             }
         }
         
-        return locationName.and(capacity).and(startDate).and(startTime).and(
-                endDate).and(endTime).and(cost);
+        return finalPredicate;
     }
     
     private Predicate<Reservable> filterByLocationName(String value)
@@ -137,6 +167,6 @@ public class ReservableSearch
     
     private Predicate<Reservable> filterByCost(String value)
     {
-        return r -> r.getCost() == BigDecimal.valueOf(Double.parseDouble(value));
+        return r -> r.getCost().equals(new BigDecimal(value));
     }
 }

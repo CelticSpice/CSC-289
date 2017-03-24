@@ -29,16 +29,20 @@ public class ManageReservableButtonController implements ActionListener
 {
     // Fields
     private ManageReservablePanel view;
+    private Filter<Reservable> filter;
     
     /**
         Constructor - Accepts the view to control buttons for
     
         @param v The view
+     * @param f
     */
     
-    public ManageReservableButtonController(ManageReservablePanel v)
+    public ManageReservableButtonController(ManageReservablePanel v,
+            Filter<Reservable> f)
     {
         view = v;
+        filter = f;
     }
     
     /**
@@ -65,13 +69,15 @@ public class ManageReservableButtonController implements ActionListener
                 System.exit(0);
                 break;
             case "Search":
-                doSearch(view.getSearchCriteria());
+                if (!view.getSearchCriteria().equals(""))
+                    doSearch(view.getSearchCriteria());
+                else
+                    JOptionPane.showMessageDialog(view, "No search criteria");
                 break;
             case "Clear":
                 try
                 {
                     doClear();
-                    view.clearSearch();
                 }
                 catch (SQLException ex){}
                 break;
@@ -138,7 +144,9 @@ public class ManageReservableButtonController implements ActionListener
             locationsList.add(loc);
         }
         
+        filter.setPredicate(null);
         view.setLocations(locationsList);
+        view.clearSearch();
     }
     
     /**
@@ -180,35 +188,37 @@ public class ManageReservableButtonController implements ActionListener
         {
             SearchActualizer search = new SearchActualizer();
             
-            Filter<Reservable> f = new Filter();
-            f.setPredicate(search.searchReservables(criteria));
+            filter.setPredicate(search.searchReservables(criteria));
             
-            List<Reservable> reservables = ;
+            Query q = new Query();
+            Location[] locations = q.queryLocations();
+            List<Reservable> reservables = new ArrayList();
             
-            JOptionPane.showMessageDialog(view, reservables.size());
-                        
+            for (Location loc : locations)
+            {
+                reservables.addAll(loc.deriveReservables());
+            }
+            
             List<Reservable> filteredReservables = reservables.stream().filter
-                (f.getPredicate()).collect(Collectors.<Reservable>toList());
+                (filter.getPredicate()).collect(Collectors.<Reservable>toList());
             
-            JOptionPane.showMessageDialog(view, f.getPredicate());
-            
-            List<Location> locations = new ArrayList();
+            List<Location> filteredLocations = new ArrayList();
             
             for (Reservable r : filteredReservables)
             {
-                locations.add(r.getLocation());
+                if (!filteredLocations.contains(r.getLocation()))
+                    filteredLocations.add(r.getLocation());
             }
+                        
+            view.setLocations(filteredLocations);
             
-//            Location[] locsToAdd = new Location[locations.size()];
+            List <Timeframe> timeframes = new ArrayList();
             
-            view.setLocations(locations);
-            
-            // location=cabin 01; cap=15; startdate=2017-03-23; starttime=00:00; enddate=2017-03-23; endtime=01:00; cost=325
+            // location=cabin 01; cap=15; startdate=2017-03-23; starttime=00:00; enddate=2017-03-23; endtime=01:00; cost=325.00
         }
-        catch (SQLException ex)
-        {
-        }
+        catch (SQLException ex){}
     }
+    
     
     /**
         Show the dialog enabling the addition of a reservable

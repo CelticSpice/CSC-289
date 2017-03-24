@@ -7,6 +7,7 @@
 package edu.faytechcc.student.gayj5385.gui;
 
 import edu.faytechcc.student.burnst9091.data.Location;
+import edu.faytechcc.student.burnst9091.data.Reservable;
 import edu.faytechcc.student.gayj5385.controller.ManageReservableButtonController;
 import edu.faytechcc.student.gayj5385.controller.SettingsPanelController;
 import edu.faytechcc.student.burnst9091.data.SMTPProperties;
@@ -60,15 +61,6 @@ public class AdminPanel extends JPanel
     {
         mngReservablePanel = new ManageReservablePanel();
         
-        mngReservablePanel.registerButtonController
-            (new ManageReservableButtonController(mngReservablePanel));
-        
-        mngReservablePanel.registerComboBoxController
-            (new ManageReservableComboBoxController(mngReservablePanel));
-        
-        mngReservablePanel.registerTimeframeListController
-            (new ManageReservableListController(mngReservablePanel));
-        
         try
         {
             Query q = new Query();
@@ -86,6 +78,17 @@ public class AdminPanel extends JPanel
             JOptionPane.showMessageDialog(this, "Error loading location data",
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
+        
+        Filter<Reservable> filter = new Filter();
+        
+        mngReservablePanel.registerButtonController
+            (new ManageReservableButtonController(mngReservablePanel, filter));
+        
+        mngReservablePanel.registerComboBoxController
+            (new ManageReservableComboBoxController(mngReservablePanel, filter));
+        
+        mngReservablePanel.registerTimeframeListController
+            (new ManageReservableListController(mngReservablePanel));
         
         return mngReservablePanel;
     }

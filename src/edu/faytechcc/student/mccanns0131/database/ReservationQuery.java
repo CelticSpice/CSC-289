@@ -77,6 +77,15 @@ public class ReservationQuery extends Query
         return ReserveDB.getInstance().runQuery(this);
     }
     
+    /**
+     * QueryReservation - Returns a reservation that matches the given location
+     * name and timeframe
+     * 
+     * @param loc The location name
+     * @param time The timeframe of the reservation
+     * @return A ResultSet containing the matching record
+     * @throws SQLException Error querying the database
+     */
     public ResultSet queryReservation(String loc, Timeframe time)
             throws SQLException
     {

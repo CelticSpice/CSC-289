@@ -123,6 +123,12 @@ public class ReservableSearch
         return finalPredicate;
     }
     
+    /**
+     * FilterByLocationName - 
+     * 
+     * @param value The location name
+     * @return A Predicate that checks for a match with the location name
+     */
     private Predicate<Reservable> filterByLocationName(String value)
     {
         return r -> r.getLocation().getName().equalsIgnoreCase(value);

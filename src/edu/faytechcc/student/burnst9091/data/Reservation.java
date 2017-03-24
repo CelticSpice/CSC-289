@@ -13,7 +13,7 @@ import java.time.LocalTime;
 public class Reservation
 {
     // Fields
-    private boolean approved;
+    private boolean reviewed;
     private int numberAttending;
     private Reservable reservable;
     private Reserver reserver;
@@ -34,7 +34,7 @@ public class Reservation
     public Reservation(Reserver rsver, Reservable rble, int attendence,
             String type, boolean proved)
     {
-        approved = proved;
+        reviewed = proved;
         reserver = rsver;
         numberAttending = attendence;
         reservable = rble;
@@ -45,9 +45,9 @@ public class Reservation
         Approve - Approve the reservation
     */
     
-    public void approve()
+    public void reviewed()
     {
-        approved = true;
+        reviewed = true;
     }
     
     /**
@@ -223,6 +223,6 @@ public class Reservation
     
     public boolean isApproved()
     {
-        return approved;
+        return reviewed;
     }
 }

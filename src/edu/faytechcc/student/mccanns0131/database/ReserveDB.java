@@ -172,7 +172,7 @@ public class ReserveDB
               "reserverID INT NOT NULL," +
               "eventType VARCHAR(35) NOT NULL," +
               "numberAttending INT NOT NULL," +
-              "approved BOOLEAN NOT NULL DEFAULT 0," +
+              "reviewed BOOLEAN NOT NULL DEFAULT 0," +
               "FOREIGN KEY (locationName) REFERENCES Locations(locationName) " +
               "ON UPDATE ON DELETE CASCADE," +
               "FOREIGN KEY (timeframeID) REFERENCES Timeframes(timeframeID) " +

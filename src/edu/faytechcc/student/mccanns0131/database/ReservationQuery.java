@@ -90,7 +90,11 @@ public class ReservationQuery extends Query
               "ON Reservers.ReserverID = Reservations.ReserverID " +
               "INNER JOIN Timeframes " +
               "ON Reservations.TimeframeID = Timeframes.TimeframeID " +
-              "WHERE Reservations.LocationName = '" + loc + "'";
+              "WHERE Reservations.LocationName = '" + loc + "'" +
+              "AND Timeframes.StartDate = '" + time.getStartDate() + "'" +
+              "AND Timeframes.StartTime = '" + time.getStartTime() + "'" +
+              "AND Timeframes.EndDate = '" + time.getEndDate() + "'" +
+              "AND Timeframes.EndTime = '" + time.getEndTime() + "'";
         
         return ReserveDB.getInstance().runQuery(this);
     }

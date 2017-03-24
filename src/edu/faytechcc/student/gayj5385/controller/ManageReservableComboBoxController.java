@@ -56,33 +56,20 @@ public class ManageReservableComboBoxController implements ActionListener
         
         if (filter.getPredicate() != null)
         {
-            List<Reservable> reservables = new ArrayList();
+            List<Reservable> reservables = location.deriveReservables();
 
-            List<Reservable> filteredReservables;
-            filteredReservables = reservables.stream()
+            reservables = reservables.stream()
                     .filter(filter.getPredicate())
                     .collect(Collectors.<Reservable>toList());
 
             timeframes = new ArrayList();
 
-            for (Reservable r : filteredReservables)
-            {
-//                    System.out.println(r.getTimeframe().toString());
-                if (r.getName().equals(view.getSelectedLocation().getName()))
-                    timeframes.add(r.getTimeframe());
-            }
-
-//                for (Timeframe t : timeframes)
-//                {
-//                    System.out.println(t.toString());
-//                }
-
-            view.setTimeframes(timeframes);
+            for (Reservable r : reservables)
+                timeframes.add(r.getTimeframe());
         }
         else
-        {
             timeframes = location.getTimeframes();
-            view.setTimeframes(timeframes);
-        }
+        
+         view.setTimeframes(timeframes);
     }
 }

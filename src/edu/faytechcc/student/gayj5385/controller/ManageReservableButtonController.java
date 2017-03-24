@@ -15,11 +15,11 @@ import edu.faytechcc.student.burnst9091.data.Timeframe;
 import edu.faytechcc.student.burnst9091.data.search.Filter;
 import edu.faytechcc.student.gayj5385.gui.ManageReservablePanel;
 import edu.faytechcc.student.gayj5385.gui.ReservableAddDialog;
-import edu.faytechcc.student.mccanns0131.database.Query;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
@@ -27,6 +27,7 @@ import javax.swing.JOptionPane;
 public class ManageReservableButtonController implements ActionListener
 {
     // Fields
+    private HashMap<Timeframe, Location> timeframeMap;
     private List<Location> locations;
     private ManageReservablePanel view;
     private Filter<Reservable> filter;
@@ -46,6 +47,7 @@ public class ManageReservableButtonController implements ActionListener
         view = v;
         filter = f;
         locations = locs;
+        timeframeMap = new HashMap<>();
     }
 
     /**
@@ -74,8 +76,6 @@ public class ManageReservableButtonController implements ActionListener
             case "Search":
                 if (!view.getSearchCriteria().equals(""))
                     doSearch(view.getSearchCriteria());
-                else
-                    JOptionPane.showMessageDialog(view, "No search criteria");
                 break;
             case "Clear":
                 try
@@ -146,16 +146,10 @@ public class ManageReservableButtonController implements ActionListener
 
     private void doClear() throws SQLException
     {
-        List<Location> locationsList = new ArrayList();
-
-        for (Location loc : locations)
-        {
-            locationsList.add(loc);
-        }
-        
         filter.setPredicate(null);
         
-        view.setLocations(locationsList);
+        view.setTimeframes(new ArrayList<Timeframe>());
+        view.setLocations(locations);
         view.clearSearch();
     }
 
@@ -199,39 +193,40 @@ public class ManageReservableButtonController implements ActionListener
      */
     private void doSearch(String criteria)
     {
-        try
+        if (validateSearch())
         {
-            SearchActualizer search = new SearchActualizer();
-            
-            filter.setPredicate(search.searchReservables(criteria));
-            
-            List<Reservable> reservables = new ArrayList();
-            
-            for (Location loc : locations)
+            switch (numSearchLocations())
             {
-                reservables.addAll(loc.deriveReservables());
+                case 0:
+                    searchOnThisLocation();
+                    break;
+                case 1:
+                    searchOnOneLocation();
+                    break;
+                default:
+                    searchOnMultipleLocations();
+                    break;
             }
-            
-            List<Reservable> filteredReservables = reservables.stream().filter
-                (filter.getPredicate()).collect(Collectors.<Reservable>toList());
-            
-            List<Location> filteredLocations = new ArrayList();
-            
-            for (Reservable r : filteredReservables)
-            {
-                if (!filteredLocations.contains(r.getLocation()))
-                    filteredLocations.add(r.getLocation());
-            }
-                        
-            view.setLocations(filteredLocations);
-            
-            List <Timeframe> timeframes = new ArrayList();
-            
-            // location=cabin 01; cap=15; startdate=2017-03-23; starttime=00:00; enddate=2017-03-23; endtime=01:00; cost=325.00
-
-            view.setLocations(locations);
         }
-        catch (SQLException ex){}
+        SearchActualizer search = new SearchActualizer();       
+        filter.setPredicate(search.searchReservables(criteria));
+
+        List<Reservable> reservables = new ArrayList();
+        for (Location loc : locations)
+            reservables.addAll(loc.deriveReservables(filter.getPredicate()));
+
+        List<Location> filteredLocations = new ArrayList();
+        List<Timeframe> timeframes = new ArrayList();
+
+        for (Reservable r : reservables)
+        {
+             timeframeMap.put(r.getTimeframe(), r.getLocation());
+             timeframes.add(r.getTimeframe());
+        }
+
+        view.setLocations(filteredLocations);
+
+        // location=cabin 01; cap=15; startdate=2017-03-23; starttime=00:00; enddate=2017-03-23; endtime=01:00; cost=325.00
     }
     
     /**

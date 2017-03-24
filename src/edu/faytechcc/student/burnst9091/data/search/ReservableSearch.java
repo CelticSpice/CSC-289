@@ -1,5 +1,6 @@
 /**
- * 
+ * Creates search filters based on search criteria
+ * CSC-289
  * @author Shane McCann
  */
 package edu.faytechcc.student.burnst9091.data.search;
@@ -40,10 +41,12 @@ public class ReservableSearch
     }
     
     /**
-     * Search - 
+     * Search - Gather search constraints and create predicates to filter by
+     * with those constraints
      * 
-     * @param criteria
-     * @return 
+     * @param criteria The search criteria
+     * @return A Predicate containing all relevant filters based on search
+     *         constraints
      */
     public Predicate<Reservable> search(String criteria)
     {
@@ -124,7 +127,7 @@ public class ReservableSearch
     }
     
     /**
-     * FilterByLocationName - 
+     * FilterByLocationName - Filter reservables by location name.
      * 
      * @param value The location name
      * @return A Predicate that checks for a match with the location name
@@ -134,11 +137,21 @@ public class ReservableSearch
         return r -> r.getLocation().getName().equalsIgnoreCase(value);
     }
     
+    /**
+     * FilterByCapacity - Filter reservables by capacity
+     * @param value The location capacity
+     * @return A predicate that checks for a match with the location capacity
+     */
     private Predicate<Reservable> filterByCapacity(String value)
     {
         return r -> r.getCapacity() == Integer.parseInt(value);
     }
     
+    /**
+     * FilterByStartDate - Filter reservables by start date
+     * @param value The start date
+     * @return A predicate that checks for a match with the start date
+     */
     private Predicate<Reservable> filterByStartDate(String value)
     {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -147,6 +160,11 @@ public class ReservableSearch
         return r -> r.getStartDate().equals(start);
     }
     
+    /**
+     * FilterByStartTime - Filter reservables by start time
+     * @param value The start time
+     * @return A predicate that checks for a match with the start time
+     */
     private Predicate<Reservable> filterByStartTime(String value)
     {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm");
@@ -155,6 +173,11 @@ public class ReservableSearch
         return r-> r.getStartTime().equals(start);
     }
     
+    /**
+     * FilterByEndDate - Filter reservables by end date
+     * @param value The end date
+     * @return A predicate that checks for a match with the end date
+     */
     private Predicate<Reservable> filterByEndDate(String value)
     {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -163,6 +186,11 @@ public class ReservableSearch
         return r -> r.getEndDate().equals(end);
     }
     
+    /**
+     * FilterByEndTime - Filter reservables by end time
+     * @param value The end time
+     * @return A predicate that checks for a match with the end time
+     */
     private Predicate<Reservable> filterByEndTime(String value)
     {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm");
@@ -171,6 +199,11 @@ public class ReservableSearch
         return r-> r.getEndTime().equals(end);
     }
     
+    /**
+     * FilterByCost - Filter reservables by cost
+     * @param value The cost
+     * @return A predicate that checks for a match with the cost
+     */
     private Predicate<Reservable> filterByCost(String value)
     {
         return r -> r.getCost().equals(new BigDecimal(value));

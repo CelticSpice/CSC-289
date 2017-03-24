@@ -21,6 +21,32 @@ public class LocationQuery extends Query
     }
     
     /**
+        Queries for & returns data on locations
+    
+        @throws SQLException Error querying the database
+        @return ResultSet containing data on locations
+    */
+    
+    public ResultSet queryLocations() throws SQLException
+    {
+        sql = "SELECT Locations.LocationName, Locations.Capacity, " +
+              "Timeframes.StartDate, Timeframes.StartTime, " +
+              "Timeframes.EndDate, Timeframes.EndTime, Reservables.Cost, " +
+              "Reservations.LocationName AS 'ReservedLocationName' " +
+              "FROM Locations " +
+              "INNER JOIN Reservables " +
+              "ON Locations.LocationName = Reservables.LocationName " +
+              "INNER JOIN Timeframes " +
+              "ON Timeframes.TimeframeID = Reservables.TimeframeID " +
+              "LEFT JOIN Reservations " +
+              "ON Reservables.LocationName = Reservations.LocationName " +
+              "AND Reservables.TimeframeID = Reservations.TimeframeID " +
+              "ORDER BY Locations.LocationName";
+        
+        return ReserveDB.getInstance().runQuery(this);
+    }
+    
+    /**
         Queries for & returns data on the timeframes allocated to the named
         location
     
@@ -34,7 +60,7 @@ public class LocationQuery extends Query
     {
         sql = "SELECT Timeframes.StartDate, Timeframes.StartTime, " +
               "Timeframes.EndDate, Timeframes.EndTime, Reservables.Cost, " +
-              "Reservations.LocationName AS 'ReservedLocationName'" +
+              "Reservations.LocationName AS 'ReservedLocationName' " +
               "FROM Timeframes " +
               "INNER JOIN Reservables " +
               "ON Timeframes.TimeframeID = Reservables.TimeframeID " +

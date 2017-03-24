@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ResultSetParser
@@ -79,6 +80,65 @@ public class ResultSetParser
     {
         rs.next();
         return rs.getInt(1);
+    }
+    
+    /**
+        Parses data on locations
+    
+        @throws SQLException Error parsing the result set
+        @return List of locations
+    */
+    
+    public List<Location> parseLocations() throws SQLException
+    {
+        List<Location> locations = new ArrayList<>();
+        HashMap<String, Location> locationMap = new HashMap<>();
+        
+        String name;
+        int capacity;
+        Location loc;
+        Timeframe timeframe;
+        BigDecimal cost;
+        LocalDate startDate, endDate;
+        LocalTime startTime, endTime;
+        LocalDateTime sDateTime, eDateTime;
+        
+        while (rs.next())
+        {
+            // Build location
+            name = rs.getString("LocationName");
+            capacity = rs.getInt("Capacity");
+            
+            if (locationMap.containsKey(name))
+                loc = locationMap.get(name);
+            else
+            {
+                loc = new Location(name, capacity);
+                locationMap.put(name, loc);
+                locations.add(loc);
+            }
+            
+            // Build timeframe
+            startDate = rs.getDate("StartDate").toLocalDate();
+            startTime = rs.getTime("StartTime").toLocalTime();
+            endDate = rs.getDate("EndDate").toLocalDate();
+            endTime = rs.getTime("EndTime").toLocalTime();
+            cost = rs.getBigDecimal("Cost");
+            
+            sDateTime = LocalDateTime.of(startDate, startTime);
+            eDateTime = LocalDateTime.of(endDate, endTime);
+            
+            // Check if timeframe is reserved
+            rs.getString("ReservedLocationName");
+            if (rs.wasNull())
+                timeframe = new Timeframe(sDateTime, eDateTime, cost);
+            else
+                timeframe = new Timeframe(sDateTime, eDateTime, cost, true);
+            
+            loc.addTimeframe(timeframe);            
+        }
+        
+        return locations;
     }
     
     /**

@@ -49,28 +49,15 @@ public class Application
         LocationQuery q = new LocationQuery();
         ReservationQuery reserveQ = new ReservationQuery();
         
-        parser.setResultSet(q.queryLocationNames());
+        parser.setResultSet(q.queryLocations());
         
-        List<String> locNames = parser.parseLocationNames();
-        
-        List<Location> locations = new ArrayList<>();
+        List<Location> locations = parser.parseLocations();
         HashMap<String, List<Reservation>> reserveMap = new HashMap<>();
         
-        for (String locName : locNames)
+        for (Location loc : locations)
         {
-            parser.setResultSet(q.queryLocationCapacity(locName));
-            int capacity = parser.parseLocationCapacity();
-            
-            parser.setResultSet(q.queryLocationTimeframes(locName));
-            List<Timeframe> timeframes = parser.parseTimeframes();
-            
-            Location loc = new Location(locName, capacity, timeframes);
-            
-            locations.add(loc);
-            
             parser.setResultSet(reserveQ.queryReservations(loc));
-            
-            reserveMap.put(locName, parser.parseReservations(loc));
+            reserveMap.put(loc.getName(), parser.parseReservations(loc));
         }
         
         AdminPanel panel = new AdminPanel(locations, reserveMap);

@@ -33,7 +33,6 @@ public class AdminPanel extends JPanel
     private ManageReservablePanel mngReservablePanel;
     private ManageReservationPanel mngReservationPanel;
     private SettingsPanel settingsPanel;
-    private Filter filter;
     
     /**
         Constructs a new AdminPanel with the given location & reservation data
@@ -70,6 +69,7 @@ public class AdminPanel extends JPanel
     {
         mngReservablePanel = new ManageReservablePanel(locs);
         
+        Filter<Reservable> filter = new Filter<>();
         mngReservablePanel.registerButtonController(
                 new ManageReservableButtonController(mngReservablePanel, filter,
                         locs));

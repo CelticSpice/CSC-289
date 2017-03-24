@@ -13,7 +13,7 @@ import java.time.LocalTime;
 public class Reservation
 {
     // Fields
-    private boolean approved;
+    private boolean reviewed;
     private int numberAttending;
     private Reservable reservable;
     private Reserver reserver;
@@ -22,19 +22,19 @@ public class Reservation
     /**
         Constructs a new Reservation with the specified reserver, the reservable
         that is reserved, the estimated number of attendees, the type of event
-        the reservation entails, & whether the reservation is approved
+        the reservation entails, & whether the reservation is reviewed
     
         @param rsver The reserver
         @param rble The reservable
         @param attendence Estimated number of attendees
         @param type Type of event the reservation entails
-        @param proved If the reservation is approved
+        @param viewed If the reservation is reviewed
     */
     
     public Reservation(Reserver rsver, Reservable rble, int attendence,
-            String type, boolean proved)
+            String type, boolean viewed)
     {
-        approved = proved;
+        reviewed = viewed;
         reserver = rsver;
         numberAttending = attendence;
         reservable = rble;
@@ -42,12 +42,12 @@ public class Reservation
     }
     
     /**
-        Approve - Approve the reservation
+        Reviewed - Approve the reservation
     */
     
     public void approve()
     {
-        approved = true;
+        reviewed = true;
     }
     
     /**
@@ -216,13 +216,13 @@ public class Reservation
     }
     
     /**
-        IsApproved - Return if the reservation is approved
+        IsReviewed - Return if the reservation is reviewed
     
-        @return If the reservation is approved
+        @return If the reservation is reviewed
     */
     
-    public boolean isApproved()
+    public boolean isReviewed()
     {
-        return approved;
+        return reviewed;
     }
 }

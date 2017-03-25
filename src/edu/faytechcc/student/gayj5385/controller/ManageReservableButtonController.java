@@ -253,8 +253,11 @@ public class ManageReservableButtonController implements ActionListener
     private void searchOnMultipleLocations(SearchActualizer s, String criteria)
     {
         locationFilter.setPredicate(s.searchLocations(criteria));
-        
         setLocations();
+        
+        timeframeFilter.setPredicate(s.searchTimeframes(criteria));
+        setTimeframes(timeframeFilter.filter(view.getSelectedLocation()
+                .getTimeframes()));
     }
     
     /**
@@ -268,14 +271,9 @@ public class ManageReservableButtonController implements ActionListener
         locationFilter.setPredicate(s.searchLocations(criteria));
         setLocations();
         
-        List<Location> filteredLocation = locationFilter.filter(locations);
-        
         timeframeFilter.setPredicate(s.searchTimeframes(criteria));
-        
-        for (Location l : filteredLocation)
-            // Since we expect only one location, set timeframes to a filtered
-            // version of the location's timeframes
-            view.setTimeframes(l.getTimeframes(timeframeFilter.getPredicate()));
+        setTimeframes(timeframeFilter.filter(view.getSelectedLocation()
+                .getTimeframes()));
     }
     
     /**
@@ -289,10 +287,10 @@ public class ManageReservableButtonController implements ActionListener
         if (view.getSelectedLocation() != null)
         {
             timeframeFilter.setPredicate(s.searchTimeframes(criteria));
-
+            
             List<Timeframe> timeframes = view.getSelectedLocation()
                     .getTimeframes(timeframeFilter.getPredicate());
-
+            
             view.setTimeframes(timeframes);
         }
         else

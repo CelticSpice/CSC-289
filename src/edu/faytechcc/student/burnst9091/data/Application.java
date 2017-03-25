@@ -52,14 +52,15 @@ public class Application
         parser.setResultSet(q.queryLocations());
         
         List<Location> locations = parser.parseLocations();
-        HashMap<String, List<Reservation>> reserveMap = new HashMap<>();
+        HashMap<Location, List<Reservation>> reserveMap = new HashMap<>();
         
         for (Location loc : locations)
         {
             parser.setResultSet(reserveQ.queryReservations(loc));
-            reserveMap.put(loc.getName(), parser.parseReservations(loc));
+            if (!parser.isEmpty())
+                reserveMap.put(loc, parser.parseReservations(loc));
         }
-        
+                
         AdminPanel panel = new AdminPanel(locations, reserveMap);
         panel.registerChangeController(new AdminPanelController(panel));
         frame.add(panel);

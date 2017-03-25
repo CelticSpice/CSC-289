@@ -20,7 +20,7 @@ public class RecordDelete
     private String sql;
     
     /**
-        Constructor
+        Constructs a new RecordDelete
     */
     
     public RecordDelete()
@@ -91,6 +91,7 @@ public class RecordDelete
     /**
         Removes a record of a reservation from the database
     
+
         @param reservation The reservation to remove from the database
         @throws SQLException Error removing record from database
     */
@@ -111,15 +112,16 @@ public class RecordDelete
         sql = "DELETE FROM Reservations " +
               "WHERE Reservations.LocationName = '" +
                 reservation.getLocationName() + "' " +
-              "AND Reservations.TimeframeID = '" +
-                timeframeID + "'";
+              "AND Reservations.TimeframeID = " +
+                timeframeID;
         
         ReserveDB.getInstance().deleteRecord(this);
         
         // Check if a record of a reserver should also be deleted
         ReservationQuery q = new ReservationQuery();
-        ResultSet rs = q.queryReservationReserver(reservation.getReserver());
-        ResultSetParser parser = new ResultSetParser(rs);
+        ResultSetParser parser = new ResultSetParser();
+        parser.setResultSet(q.queryReservationReserver(
+                reservation.getReserver()));
         
         if (parser.isEmpty())
             deleteReserver(reservation.getReserver());
@@ -128,7 +130,7 @@ public class RecordDelete
     /**
         Removes a record of a reserver from the database
     
-        @param reserver The reserver to remove from the database
+        @param reserver Reserver to remove from the database
         @throws SQLException Error removing record from database
     */
     
@@ -136,14 +138,14 @@ public class RecordDelete
     {
         String reserverID = "(SELECT Reservers.ReserverID " +
                             "FROM Reservers " +
-                            "WHERE Reservers,FirstName = '" +
-                                reserver.getFirstName() + "' " +
+                            "WHERE Reservers.FirstName = '" +
+                              reserver.getFirstName() + "' " +
                             "AND Reservers.LastName = '" +
-                                reserver.getLastName() + "' " +
+                              reserver.getLastName() + "' " +
                             "AND Reservers.Email = '" +
-                                reserver.getEmailAddress() + "' " +
+                              reserver.getEmailAddress() + "' " +
                             "AND Reservers.Phone = '" +
-                                reserver.getPhoneNumber() + "')";
+                              reserver.getPhoneNumber() + "')";
         
         sql = "DELETE FROM Reservers " +
               "WHERE Reservers.ReserverID = " + reserverID;

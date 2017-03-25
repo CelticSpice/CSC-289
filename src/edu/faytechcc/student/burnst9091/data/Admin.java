@@ -17,7 +17,7 @@ import javax.mail.internet.AddressException;
 public class Admin
 {
     /**
-        AddReservable - Add a new reservable that can be reserved
+        Adds a new reservable that can be reserved
     
         @param reservable The new reservable
         @throws SQLException Error adding the record of the reservable to the
@@ -30,6 +30,20 @@ public class Admin
             throws SQLException, RecordExistsException
     {
         new RecordAdd().addReservable(reservable);
+    }
+    
+    /**
+        Cancels a reservation
+    
+        @param reservation Reservation to cancel
+        @throws SQLException Error removing record of reservation
+    */
+    
+    public static void cancelReservation(Reservation reservation)
+            throws SQLException
+    {
+        reservation.cancel();
+        new RecordDelete().deleteReservation(reservation);
     }
 
     /**

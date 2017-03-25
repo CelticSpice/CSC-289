@@ -26,7 +26,6 @@ public class SearchActualizer
      * @throws SQLException Error querying locations
      */
     public Predicate<Reservable> searchReservables(String criteria)
-            throws SQLException
     {
         ReservableSearch search = new ReservableSearch();
         

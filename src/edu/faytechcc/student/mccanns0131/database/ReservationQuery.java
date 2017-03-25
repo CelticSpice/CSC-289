@@ -36,7 +36,7 @@ public class ReservationQuery extends Query
     {
         String reserverID = "(SELECT Reservers.ReserverID " +
                             "FROM Reservers " +
-                            "WHERE Reservers,FirstName = '" +
+                            "WHERE Reservers.FirstName = '" +
                                 reserver.getFirstName() + "' " +
                             "AND Reservers.LastName = '" +
                                 reserver.getLastName() + "' " +
@@ -66,7 +66,7 @@ public class ReservationQuery extends Query
               "Reservers.Email, Reservers.Phone, Timeframes.StartDate, " +
               "Timeframes.StartTime, Timeframes.EndDate, Timeframes.EndTime, " +
               "Reservations.EventType, Reservations.NumberAttending, " +
-              "Reservations.Approved " +
+              "Reservations.Reviewed " +
               "FROM Reservers " +
               "INNER JOIN Reservations " +
               "ON Reservers.ReserverID = Reservations.ReserverID " +
@@ -93,7 +93,7 @@ public class ReservationQuery extends Query
               "Reservers.Email, Reservers.Phone, Timeframes.StartDate, " +
               "Timeframes.StartTime, Timeframes.EndDate, Timeframes.EndTime, " +
               "Reservations.EventType, Reservations.NumberAttending, " +
-              "Reservations.Approved " +
+              "Reservations.Reviewed " +
               "FROM Reservers " +
               "INNER JOIN Reservations " +
               "ON Reservers.ReserverID = Reservations.ReserverID " +

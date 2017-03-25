@@ -18,6 +18,7 @@ public class Guest
     /**
         EmailAdmin - Send an email to the administrator of the system
     
+        @param subject The subject
         @param name The name to include in the email
         @param address The email address that may be replied to
         @param message The message to send to the administrator
@@ -26,11 +27,12 @@ public class Guest
         @throws UnsupportedEncodingException Failed to encode name in address
     */
     
-    public static void emailAdmin(String name, String address, String message)
+    public static void emailAdmin(String subject, String name, String address,
+        String message)
             throws AddressException, MessagingException,
-                   UnsupportedEncodingException
+                UnsupportedEncodingException
     {
-        EmailUtil.emailAdmin(name, address, message);
+        EmailUtil.emailAdmin(subject, name, address, message);
     }
     
     /**

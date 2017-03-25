@@ -1,8 +1,9 @@
 /**
- * Creates search filters based on search criteria
- * CSC-289
- * @author Shane McCann
- */
+    A search for reservables
+    CSC-289 - Group 4
+    @author Shane McCann
+*/
+
 package edu.faytechcc.student.burnst9091.data.search;
 
 import edu.faytechcc.student.burnst9091.data.Reservable;

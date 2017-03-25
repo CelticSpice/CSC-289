@@ -12,8 +12,8 @@ public class LocationSearch
 {
     // Fields
     private Predicate<Location> locationName,
-                                  capacity,
-                                  finalPredicate;
+                                capacity,
+                                finalPredicate;
     private int numLocations;
     
     /**

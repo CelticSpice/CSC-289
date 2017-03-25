@@ -19,35 +19,36 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 
 public class ManageReservableButtonController implements ActionListener
 {
     // Fields
-    private HashMap<Timeframe, Location> timeframeMap;
     private List<Location> locations;
     private ManageReservablePanel view;
-    private Filter<Reservable> filter;
+    private Filter<Timeframe> timeframeFilter;
+    private Filter<Location> locationFilter;
     
     /**
         Constructs a new ManageReservableButtonController to manage the
-        given view's buttons & a list of locations
+        given view's buttons, a list of locations, and filters for filtering
+        timeframes & locations
 
         @param v The view
-        @param f The filter
         @param locs The locations
+        @param timeFilter Timeframe filter
+        @param locFilter Location filter
     */
     
     public ManageReservableButtonController(ManageReservablePanel v,
-            Filter<Reservable> f, List<Location> locs)
+            List<Location> locs, Filter<Timeframe> timeFilter,
+            Filter<Location> locFilter)
     {
         view = v;
-        filter = f;
         locations = locs;
-        timeframeMap = new HashMap<>();
+        timeframeFilter = timeFilter;
+        locationFilter = locFilter;
     }
 
     /**
@@ -74,15 +75,11 @@ public class ManageReservableButtonController implements ActionListener
                 System.exit(0);
                 break;
             case "Search":
-                if (!view.getSearchCriteria().equals(""))
+                if (!view.getSearchCriteria().isEmpty())
                     doSearch(view.getSearchCriteria());
                 break;
             case "Clear":
-                try
-                {
-                    doClear();
-                }
-                catch (SQLException ex){}
+                doClear();
                 break;
         }
     }
@@ -107,18 +104,6 @@ public class ManageReservableButtonController implements ActionListener
     }
 
     /**
-        Deletes the specified location
-
-        @param loc The location to delete
-    */
-
-    private void deleteLocation(Location loc)
-    {
-        locations.remove(loc);
-        view.setLocations(locations);
-    }
-
-    /**
         Delete timeframes given in a list
 
         @param timeframes Timeframes to delete
@@ -135,26 +120,29 @@ public class ManageReservableButtonController implements ActionListener
                 Admin.removeReservable(new Reservable(loc, timeframe));
                 loc.removeTimeframe(timeframe);
             }
-
-            view.setTimeframes(loc.getTimeframes());
         }
         catch (SQLException ex)
         {
-            JOptionPane.showMessageDialog(view, "Failed to update database");
+            JOptionPane.showMessageDialog(view, "Failed to update database",
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    private void doClear() throws SQLException
+    /**
+        Clears the search parameters
+    */
+    
+    private void doClear()
     {
-        filter.setPredicate(null);
-        
-        view.setTimeframes(new ArrayList<Timeframe>());
-        view.setLocations(locations);
+        timeframeFilter.setPredicate(null);
+        locationFilter.setPredicate(null);
         view.clearSearch();
+        
+        view.setLocations(locations);
     }
 
     /**
-        Perform the deletion of timeframes & potentially a location
+        Respond to the "Delete" command
     */
 
     private void doDelete()
@@ -163,13 +151,7 @@ public class ManageReservableButtonController implements ActionListener
 
         if (!timeframes.isEmpty())
         {
-            if (isTimeframeReserved(timeframes))
-            {
-                JOptionPane.showMessageDialog(view,
-                    "Cannot remove reserved timeframes : Cancel reservations " +
-                    "first");
-            }
-            else
+            if (!isTimeframeReserved(timeframes))
             {
                 // Confirm deletion
                 int choice = JOptionPane.showConfirmDialog(view,
@@ -181,16 +163,21 @@ public class ManageReservableButtonController implements ActionListener
                 // Check if location should be deleted as well
                 Location loc = view.getSelectedLocation();
                 if (loc.getNumTimeframes() == 0)
-                    deleteLocation(loc);
+                    locations.remove(loc);
             }
+            else
+                JOptionPane.showMessageDialog(view,
+                    "Cannot remove reserved timeframes. Cancel reservations " +
+                        "first", "Warning", JOptionPane.WARNING_MESSAGE);
         }
     }
 
     /**
-     * DoSearch - Perform a search for reservables based on search criteria
-     *
-     * @param criteria The search criteria
-     */
+        Performs a search for reservables based on search criteria
+     
+        @param criteria The search criteria
+    */
+    
     private void doSearch(String criteria)
     {
         if (validateSearch())
@@ -208,6 +195,7 @@ public class ManageReservableButtonController implements ActionListener
                     break;
             }
         }
+        
         SearchActualizer search = new SearchActualizer();       
         filter.setPredicate(search.searchReservables(criteria));
 
@@ -225,8 +213,11 @@ public class ManageReservableButtonController implements ActionListener
         }
 
         view.setLocations(filteredLocations);
-
-        // location=cabin 01; cap=15; startdate=2017-03-23; starttime=00:00; enddate=2017-03-23; endtime=01:00; cost=325.00
+        
+        /*
+            location=cabin 01; cap=15; startdate=2017-03-23; starttime=00:00;
+            enddate=2017-03-23; endtime=01:00; cost=325.00
+        */
     }
     
     /**
@@ -244,29 +235,9 @@ public class ManageReservableButtonController implements ActionListener
 
         d.setVisible(true);
         
-        view.setLocations(locations);
-    }
-
-    /**
-     * Validate the capacity input
-     *
-     * @return If the capacity input is valid
-     */
-    private boolean validateCapacity(String cap)
-    {
-        boolean valid = cap.matches("\\d+");
-
-        if (valid)
-        {
-            valid = Integer.parseInt(cap) > 0;
-
-            if (!valid)
-                JOptionPane.showMessageDialog(view,
-                    "Capacity must be greater than 0");
-        }
+        if (locationFilter.getPredicate() != null)
+            view.setLocations(locationFilter.filter(locations));
         else
-            JOptionPane.showMessageDialog(view, "Invalid input for capacity");
-
-        return valid;
+            view.setLocations(locations);
     }
 }

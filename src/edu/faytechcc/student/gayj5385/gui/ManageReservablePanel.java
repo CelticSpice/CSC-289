@@ -221,36 +221,22 @@ public class ManageReservablePanel extends JPanel
     }
 
     /**
-     * ClearSearch - Clears search results
-     */
+        Clears the search criteria
+    */
+    
     public void clearSearch()
     {
         search.setText("");
-//        timeframeList.setModel(timeframes = new DefaultListModel());
-        capacity.setText("");
-        startTime.setText("");
-        endTime.setText("");
-        startDate.setText("");
-        endDate.setText("");
-        reserved.setText("");
-        cost.setText("");
-        
     }
 
     /**
-     * GetSearchCriteria - Get the search criteria within the search text field
-     *
-     * @return The text within the search text field
-     */
+        Returns the search criteria within the search text field
+     
+        @return The text within the search text field
+    */
+    
     public String getSearchCriteria()
     {
-        capacity.setText("");
-        startTime.setText("");
-        endTime.setText("");
-        startDate.setText("");
-        endDate.setText("");
-        reserved.setText("");
-        cost.setText("");
         return search.getText();
     }
 

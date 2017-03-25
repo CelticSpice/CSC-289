@@ -8,6 +8,8 @@ package edu.faytechcc.student.mccanns0131.database;
 
 import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reservable;
+import edu.faytechcc.student.burnst9091.data.Reservation;
+import edu.faytechcc.student.burnst9091.data.Reserver;
 import edu.faytechcc.student.burnst9091.data.Timeframe;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,7 +20,7 @@ public class RecordDelete
     private String sql;
     
     /**
-        Constructor
+        Constructs a new RecordDelete
     */
     
     public RecordDelete()
@@ -84,6 +86,70 @@ public class RecordDelete
                 q.queryReservableTimeframe(reservable.getTimeframe()));
         if (parser.isEmpty())
             deleteTimeframe(reservable.getTimeframe());
+    }
+    
+    /**
+        Removes a record of a reservation from the database
+    
+        @param reservation Reservation to remove
+        @throws SQLException Error removing record from database
+    */
+    
+    public void deleteReservation(Reservation reservation) throws SQLException
+    {
+        String timeframeID = "(SELECT Timeframes.TimeframeID " +
+                             "FROM Timeframes " +
+                             "WHERE Timeframes.StartDate = '" +
+                                reservation.getStartDate() + "' " +
+                             "AND Timeframes.StartTime = '" +
+                                reservation.getStartTime() + "' " +
+                             "AND Timeframes.EndDate = '" +
+                                reservation.getEndDate() + "' " +
+                             "AND Timeframes.EndTime = '" +
+                                reservation.getEndTime() + "')";
+        
+        sql = "DELETE FROM Reservations " +
+              "WHERE Reservations.LocationName = '" +
+                reservation.getLocationName() + "' " +
+              "AND Reservations.TimeframeID = " +
+                timeframeID;
+        
+        ReserveDB.getInstance().deleteRecord(this);
+        
+        // Check if a record of a reserver should also be deleted
+        ReservationQuery q = new ReservationQuery();
+        ResultSetParser parser = new ResultSetParser();
+        parser.setResultSet(q.queryReservationReserver(
+                reservation.getReserver()));
+        
+        if (parser.isEmpty())
+            deleteReserver(reservation.getReserver());
+    }
+    
+    /**
+        Removes a record of a reserver from the database
+    
+        @param reserver Reserver to remove from the database
+        @throws SQLException Error removing record from database
+    */
+    
+    private void deleteReserver(Reserver reserver) throws SQLException
+    {
+        String reserverID = "(SELECT Reservers.ReserverID " +
+                            "FROM Reservers " +
+                            "WHERE Reservers.FirstName = '" +
+                              reserver.getFirstName() + "' " +
+                            "AND Reservers.LastName = '" +
+                              reserver.getLastName() + "' " +
+                            "AND Reservers.Email = '" +
+                              reserver.getEmailAddress() + "' " +
+                            "AND Reservers.Phone = '" +
+                              reserver.getPhoneNumber() + "')";
+        
+        sql = "DELETE FROM Reservers " +
+              "WHERE Reservers.ReserverID = " + reserverID;
+        
+        ReserveDB.getInstance().deleteRecord(this);
     }
     
     /**

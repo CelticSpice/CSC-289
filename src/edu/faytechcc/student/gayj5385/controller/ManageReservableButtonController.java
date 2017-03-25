@@ -138,7 +138,7 @@ public class ManageReservableButtonController implements ActionListener
         locationFilter.setPredicate(null);
         view.clearSearch();
         
-        view.setLocations(locations);
+        setLocations();
     }
 
     /**
@@ -158,12 +158,19 @@ public class ManageReservableButtonController implements ActionListener
                     "Are you sure you want to delete the selected timeframes?");
 
                 if (choice == JOptionPane.YES_OPTION)
+                {
                     deleteTimeframes(timeframes);
-
-                // Check if location should be deleted as well
-                Location loc = view.getSelectedLocation();
-                if (loc.getNumTimeframes() == 0)
-                    locations.remove(loc);
+                    
+                    // Check if location should be deleted as well
+                    Location loc = view.getSelectedLocation();
+                    if (loc.getNumTimeframes() == 0)
+                    {
+                        locations.remove(loc);
+                        setLocations();
+                    }
+                    else
+                        setTimeframes(loc.getTimeframes());
+                }
             }
             else
                 JOptionPane.showMessageDialog(view,
@@ -221,6 +228,41 @@ public class ManageReservableButtonController implements ActionListener
     }
     
     /**
+        Shows the specified location on the view
+    
+        @param loc The location to display
+    */
+    
+    private void showLocation(Location loc)
+    {
+        view.setSelectedLocation(loc);
+    }
+    
+    /**
+        Sets the locations on the view to the current location list
+    */
+    
+    private void setLocations()
+    {
+        if (locationFilter.getPredicate() != null)
+            view.setLocations(locationFilter.filter(locations));
+        else
+            view.setLocations(locations);
+    }
+    
+    /**
+        Sets the timeframes on the view
+    */
+    
+    private void setTimeframes(List<Timeframe> timeframes)
+    {
+        if (timeframeFilter.getPredicate() != null)
+            view.setTimeframes(timeframeFilter.filter(timeframes));
+        else
+            view.setTimeframes(timeframes);
+    }
+    
+    /**
         Show the dialog enabling the addition of reservables
     */
 
@@ -229,15 +271,12 @@ public class ManageReservableButtonController implements ActionListener
         ReservableAddDialog d = new ReservableAddDialog(locations);
 
         d.registerButtonController(new ReservableAddButtonController(d,
-                locations));
+            locations));
         d.registerRadioButtonController(new ReservableAddRadioController(d));
         d.registerComboBoxController(new ReservableAddComboBoxController(d));
 
         d.setVisible(true);
         
-        if (locationFilter.getPredicate() != null)
-            view.setLocations(locationFilter.filter(locations));
-        else
-            view.setLocations(locations);
+        setLocations();
     }
 }

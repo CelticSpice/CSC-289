@@ -57,9 +57,10 @@ public class Application
         for (Location loc : locations)
         {
             parser.setResultSet(reserveQ.queryReservations(loc));
-            reserveMap.put(loc, parser.parseReservations(loc));
+            if (!parser.isEmpty())
+                reserveMap.put(loc, parser.parseReservations(loc));
         }
-        
+                
         AdminPanel panel = new AdminPanel(locations, reserveMap);
         panel.registerChangeController(new AdminPanelController(panel));
         frame.add(panel);

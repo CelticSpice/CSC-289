@@ -16,14 +16,15 @@ import edu.faytechcc.student.burnst9091.data.search.Filter;
 import edu.faytechcc.student.gayj5385.controller.ManageReservableButtonController;
 import edu.faytechcc.student.gayj5385.controller.ManageReservableComboBoxController;
 import edu.faytechcc.student.gayj5385.controller.ManageReservableListController;
+import edu.faytechcc.student.gayj5385.controller.ManageReservationButtonController;
 import edu.faytechcc.student.gayj5385.controller.ManageReservationComboBoxController;
 import java.awt.BorderLayout;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeListener;
-import static java.util.stream.Collectors.toList;
 
 public class AdminPanel extends JPanel
 {
@@ -48,7 +49,7 @@ public class AdminPanel extends JPanel
         tabbedPane = new JTabbedPane();
         
         buildManageReservablePanel(locs);
-        buildManageReservationPanel(locs, reserves);
+        buildManageReservationPanel(reserves);
         buildSettingsPanel();
         
         tabbedPane.add("Manage Reservables", mngReservablePanel);
@@ -74,54 +75,62 @@ public class AdminPanel extends JPanel
         Filter<Location> locationFilter = new Filter<>();
         
         mngReservablePanel.registerButtonController(
-                new ManageReservableButtonController(mngReservablePanel,
-                        locs, timeframeFilter, locationFilter));
+            new ManageReservableButtonController(mngReservablePanel,
+                locs, timeframeFilter, locationFilter));
         
         mngReservablePanel.registerComboBoxController(
-                new ManageReservableComboBoxController(mngReservablePanel,
-                        timeframeFilter));
+            new ManageReservableComboBoxController(mngReservablePanel,
+                timeframeFilter));
         
         mngReservablePanel.registerTimeframeListController(
-                new ManageReservableListController(mngReservablePanel));        
+            new ManageReservableListController(mngReservablePanel));        
     }
     
     /**
-        Builds & returns the panel to manage reservations on, initialized with
+        Builds the panel to manage reservations on, initialized with
         the given list of locations & mapping of reservations
     
+        @param locs Reserved locations
+        @param reserves Location reservation mapping
         @return The built panel
     */
     
-    private ManageReservationPanel buildManageReservationPanel(
-            List<Location> locs, HashMap<String, List<Reservation>> reserves)
+    private void buildManageReservationPanel(
+            HashMap<Location, List<Reservation>> reserves)
     {
-        List<Location> reservedLocs = locs.stream()
-                .filter(l -> l.isReserved())
-                .collect(toList());
+        List<Location> locs = new ArrayList<>(reserves.keySet());
+        List<Reservation> res;
         
-        Filter<Reservation> filter = new Filter<>();
+        if (locs.size() > 0)
+            res = reserves.get(locs.get(0));
+        else
+            res = new ArrayList<>();
         
-        mngReservationPanel = new ManageReservationPanel(reservedLocs);
+        mngReservationPanel = new ManageReservationPanel(locs, res);
+        
+        Filter<Location> locationFilter = new Filter<>();
+        Filter<Reservation> reservationFilter = new Filter<>();
+        
+        mngReservationPanel.registerButtonController(
+            new ManageReservationButtonController(mngReservationPanel,
+                reserves, locationFilter, reservationFilter));
         
         mngReservationPanel.registerComboBoxController(
-                new ManageReservationComboBoxController(mngReservationPanel,
-                    reserves, filter));
-        
-        return mngReservationPanel;
+            new ManageReservationComboBoxController(mngReservationPanel,
+                reserves, reservationFilter));        
     }
     
     /**
-        Build & return the panel allowing updates to settings to be made
+        Builds the panel allowing updates to settings to be made
     
         @return The built panel
     */
     
-    private SettingsPanel buildSettingsPanel()
+    private void buildSettingsPanel()
     {
         settingsPanel = new SettingsPanel();
         settingsPanel.registerController(
-                new SettingsPanelController(settingsPanel));
-        return settingsPanel;
+            new SettingsPanelController(settingsPanel));
     }
     
     /**

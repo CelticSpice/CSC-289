@@ -9,6 +9,7 @@ package edu.faytechcc.student.gayj5385.gui;
 
 import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Timeframe;
+import edu.faytechcc.student.gayj5385.gui.renderer.TimeframeRenderer;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -98,15 +99,13 @@ public class ManageReservablePanel extends JPanel
         panel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
 
         timeframeList = new JList(timeframes = new DefaultListModel());
+        timeframeList.setCellRenderer(new TimeframeRenderer());
         JScrollPane scrollPane = new JScrollPane(timeframeList);
         scrollPane.setPreferredSize(new Dimension(255, 225));
 
         Location loc = (Location) locations.getSelectedItem();
         if (loc != null)
-        {
-            for (Timeframe timeframe : loc.getTimeframes())
-                timeframes.addElement(timeframe);
-        }
+            setTimeframes(loc.getTimeframes());
 
         // Build timeframe detail panel
         JPanel timeframePanel = new JPanel(new GridLayout(6, 2, 5, 10));
@@ -178,6 +177,9 @@ public class ManageReservablePanel extends JPanel
         gbc.ipadx = 55;
         gbc.anchor = GridBagConstraints.WEST;
         locationComponentPanel.add(capacity = new JTextField(), gbc);
+        
+        if (locs.length > 0)
+            capacity.setText(String.valueOf(locs[0].getCapacity()));
 
         capacity.setEditable(false);
 
@@ -309,23 +311,9 @@ public class ManageReservablePanel extends JPanel
 
     public void setLocations(List<Location> locs)
     {
-        ActionListener[] als = locations.getActionListeners();
-        for (ActionListener al : als)
-            locations.removeActionListener(al);
-
         locations.removeAllItems();
         for (Location loc : locs)
             locations.addItem(loc);
-
-        Location loc = (Location) locations.getSelectedItem();
-        if (loc != null)
-        {
-            for (Timeframe timeframe : loc.getTimeframes())
-                timeframes.addElement(timeframe);
-        }
-
-        for (ActionListener al : als)
-            locations.addActionListener(al);
     }
 
     /**
@@ -381,6 +369,17 @@ public class ManageReservablePanel extends JPanel
     public void setReserved(String reserve)
     {
         reserved.setText(reserve);
+    }
+    
+    /**
+        Sets the selected location to the specified location
+    
+        @param loc The location to set as selected
+    */
+    
+    public void setSelectedLocation(Location loc)
+    {
+        locations.setSelectedItem(loc);
     }
 
     /**

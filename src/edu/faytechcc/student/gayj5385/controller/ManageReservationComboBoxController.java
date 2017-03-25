@@ -6,6 +6,7 @@
 
 package edu.faytechcc.student.gayj5385.controller;
 
+import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.search.Filter;
 import edu.faytechcc.student.gayj5385.gui.ManageReservationPanel;
@@ -13,13 +14,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.List;
-import static java.util.stream.Collectors.toList;
 
 public class ManageReservationComboBoxController implements ActionListener
 {
     // Fields
     private Filter<Reservation> filter;
-    private HashMap<String, List<Reservation>> reservations;
+    private HashMap<Location, List<Reservation>> reservations;
     private ManageReservationPanel view;
     
     /**
@@ -33,8 +33,8 @@ public class ManageReservationComboBoxController implements ActionListener
     */
     
     public ManageReservationComboBoxController(ManageReservationPanel v,
-                                    HashMap<String, List<Reservation>> reserves,
-                                    Filter<Reservation> f)
+                                HashMap<Location, List<Reservation>> reserves,
+                                Filter<Reservation> f)
     {
         view = v;
         reservations = reserves;
@@ -50,14 +50,14 @@ public class ManageReservationComboBoxController implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        String locName = view.getSelectedLocation().getName();
-        List<Reservation> reserves = reservations.get(locName);
-        if (filter.getPredicate() != null)
+        Location loc = view.getSelectedLocation();
+        if (loc != null)
         {
-            reserves = reserves.stream()
-                    .filter(filter.getPredicate())
-                    .collect(toList());
+            view.setCapacity(String.valueOf(loc.getCapacity()));
+            if (filter.getPredicate() != null)
+                view.setReservations(filter.filter(reservations.get(loc)));
+            else
+                view.setReservations(reservations.get(loc));
         }
-        view.setReservations(reserves);
     }
 }

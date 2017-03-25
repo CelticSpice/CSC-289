@@ -45,10 +45,13 @@ public class ManageReservableComboBoxController implements ActionListener
     public void actionPerformed(ActionEvent e)
     {
         Location loc = view.getSelectedLocation();
-        
-        if (filter.getPredicate() != null)
-            view.setTimeframes(filter.filter(loc.getTimeframes()));
-        else
-            view.setTimeframes(loc.getTimeframes());
+        if (loc != null)
+        {
+            view.setCapacity(String.valueOf(loc.getCapacity()));
+            if (filter.getPredicate() != null)
+                view.setTimeframes(filter.filter(loc.getTimeframes()));
+            else
+                view.setTimeframes(loc.getTimeframes());
+        }
     }
 }

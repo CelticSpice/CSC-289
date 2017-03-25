@@ -107,7 +107,7 @@ public class RecordAdd
         
         String reserverID = "(SELECT Reservers.ReserverID " +
                             "FROM Reservers " +
-                            "WHERE Reservers,FirstName = '" +
+                            "WHERE Reservers.FirstName = '" +
                                 reservation.getReserverFirstName() + "' " +
                             "AND Reservers.LastName = '" +
                                 reservation.getReserverLastName() + "' " +

@@ -31,6 +31,15 @@ public class Reservable
     }
     
     /**
+        Cancels the reservation of the reservable
+    */
+    
+    public void cancelReservation()
+    {
+        timeframe.cancelReserve();
+    }
+    
+    /**
         Returns the capacity of the Reservable
     
         @return The capacity of the Reservable

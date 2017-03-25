@@ -8,6 +8,7 @@ package edu.faytechcc.student.gayj5385.gui;
 
 import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reservation;
+import edu.faytechcc.student.gayj5385.gui.renderer.ReservationRenderer;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -43,18 +44,20 @@ public class ManageReservationPanel extends JPanel
     
     /**
         Constructs a new ManageReservationPanel initialized with the given
-        list of locations
+        list of locations & reservations
     
         @param locs The locations
+        @param res The reservations
     */
     
-    public ManageReservationPanel(List<Location> locs)
+    public ManageReservationPanel(List<Location> locs, List<Reservation> res)
     {
         super(new BorderLayout());
         
         Location[] locArray = locs.toArray(new Location[locs.size()]);
+        
         add(buildTopPanel(locArray), BorderLayout.NORTH);
-        add(buildMidPanel(), BorderLayout.CENTER);
+        add(buildMidPanel(res), BorderLayout.CENTER);
         add(buildBottomPanel(), BorderLayout.SOUTH);
     }
     
@@ -78,30 +81,35 @@ public class ManageReservationPanel extends JPanel
         btnPanel.add(cancel = new JButton("Cancel"));
         
         // Build logout button panel
-        JPanel logoutBtnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT,0,0));
-        logoutBtnPanel.add(logout = new JButton("Logout"));
+        JPanel logoutPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT,0,0));
+        logoutPanel.add(logout = new JButton("Logout"));
         
         panel.add(btnPanel);
         panel.add(Box.createHorizontalGlue());
-        panel.add(logoutBtnPanel);
+        panel.add(logoutPanel);
         
         return panel;
     }
     
     /**
-        Build & return the middle panel of this panel
+        Build & return the middle panel of this panel, initialized with the
+        given list of reservations
     
+        @param res List of reservations
         @return The built panel
     */
     
-    private JPanel buildMidPanel()
+    private JPanel buildMidPanel(List<Reservation> res)
     {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         panel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
         
         reservationList = new JList(reservations = new DefaultListModel());
+        reservationList.setCellRenderer(new ReservationRenderer());
         JScrollPane scrollPane = new JScrollPane(reservationList);
         scrollPane.setPreferredSize(new Dimension(255, 225));
+        
+        setReservations(res);
         
         // Build reservation detail panels
         JPanel reservationPanel1 = new JPanel(new GridLayout(5, 2, 5, 10));        
@@ -189,6 +197,9 @@ public class ManageReservationPanel extends JPanel
         gbc.ipadx = 55;
         gbc.anchor = GridBagConstraints.WEST;
         locationComponentPanel.add(capacity = new JTextField(), gbc);
+        
+        if (locs.length > 0)
+            capacity.setText(String.valueOf(locs[0].getCapacity()));
         
         capacity.setEditable(false);
         

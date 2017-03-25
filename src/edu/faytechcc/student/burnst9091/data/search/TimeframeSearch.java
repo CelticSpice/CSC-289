@@ -1,5 +1,5 @@
 /**
- * Creates timeframe search filters based on search criteria
+ * A timeframe search
  * CSC-289
  * @author Shane McCann
  */

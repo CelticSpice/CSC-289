@@ -1,5 +1,5 @@
 /**
- * Creates location search filters based on search criteria
+ * A location search
  * CSC-289
  * @author Shane McCann
  */

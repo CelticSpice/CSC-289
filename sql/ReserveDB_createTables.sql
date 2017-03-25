@@ -25,7 +25,7 @@ CREATE TABLE Reservables(
 locationName VARCHAR(20) NOT NULL,
 timeframeID INT NOT NULL,
 cost DECIMAL(7,2) NOT NULL,
-FOREIGN KEY (locationName) REFERENCES Locations(locationName) ON UPDATE ON DELETE CASCADE,
+FOREIGN KEY (locationName) REFERENCES Locations(locationName) ON UPDATE CASCADE ON DELETE CASCADE,
 FOREIGN KEY (timeframeID) REFERENCES Timeframes(timeframeID) ON DELETE CASCADE,
 CONSTRAINT locTime PRIMARY KEY (locationName, timeframeID)
 );
@@ -53,7 +53,7 @@ reserverID INT NOT NULL,
 eventType VARCHAR(35) NOT NULL,
 numberAttending INT NOT NULL,
 reviewed BOOLEAN NOT NULL DEFAULT 0,
-FOREIGN KEY (locationName) REFERENCES Locations(locationName) ON UPDATE ON DELETE CASCADE,
+FOREIGN KEY (locationName) REFERENCES Locations(locationName) ON UPDATE CASCADE ON DELETE CASCADE,
 FOREIGN KEY (timeframeID) REFERENCES Timeframes(timeframeID) ON DELETE CASCADE,
 FOREIGN KEY (reserverID) REFERENCES Reservers(reserverID) ON DELETE CASCADE,
 CONSTRAINT locTime PRIMARY KEY (locationName, timeframeID)

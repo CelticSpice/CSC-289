@@ -42,6 +42,15 @@ public class Reservation
     }
     
     /**
+        Cancels the reservation
+    */
+    
+    public void cancel()
+    {
+        reservable.cancelReservation();
+    }
+    
+    /**
         Reviewed - Approve the reservation
     */
     
@@ -103,6 +112,17 @@ public class Reservation
     public String getEventType()
     {
         return eventType;
+    }
+    
+    /**
+        Returns the location of this reservation
+    
+        @return The location of this reservation
+    */
+    
+    public Location getLocation()
+    {
+        return reservable.getLocation();
     }
     
     /**

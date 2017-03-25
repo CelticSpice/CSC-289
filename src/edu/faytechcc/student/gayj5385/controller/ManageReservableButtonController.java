@@ -18,36 +18,36 @@ import edu.faytechcc.student.gayj5385.gui.ReservableAddDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 
 public class ManageReservableButtonController implements ActionListener
 {
     // Fields
-    private HashMap<Location, List<Timeframe>> timeframeMap;
     private List<Location> locations;
     private ManageReservablePanel view;
-    private Filter filter;
+    private Filter<Timeframe> timeframeFilter;
+    private Filter<Location> locationFilter;
     
     /**
         Constructs a new ManageReservableButtonController to manage the
-        given view's buttons & a list of locations
+        given view's buttons, a list of locations, and filters for filtering
+        timeframes & locations
 
         @param v The view
-        @param f The filter
         @param locs The locations
+        @param timeFilter Timeframe filter
+        @param locFilter Location filter
     */
     
     public ManageReservableButtonController(ManageReservablePanel v,
-            Filter<Reservable> f, List<Location> locs)
+            List<Location> locs, Filter<Timeframe> timeFilter,
+            Filter<Location> locFilter)
     {
         view = v;
-        filter = f;
         locations = locs;
-        timeframeMap = new HashMap<>();
+        timeframeFilter = timeFilter;
+        locationFilter = locFilter;
     }
 
     /**
@@ -74,11 +74,11 @@ public class ManageReservableButtonController implements ActionListener
                 System.exit(0);
                 break;
             case "Search":
-                if (!view.getSearchCriteria().equals(""))
+                if (!view.getSearchCriteria().isEmpty())
                     doSearch(view.getSearchCriteria());
                 break;
             case "Clear":
-                    doClear();
+                doClear();
                 break;
         }
     }
@@ -103,18 +103,6 @@ public class ManageReservableButtonController implements ActionListener
     }
 
     /**
-        Deletes the specified location
-
-        @param loc The location to delete
-    */
-
-    private void deleteLocation(Location loc)
-    {
-        locations.remove(loc);
-        view.setLocations(locations);
-    }
-
-    /**
         Delete timeframes given in a list
 
         @param timeframes Timeframes to delete
@@ -131,26 +119,28 @@ public class ManageReservableButtonController implements ActionListener
                 Admin.removeReservable(new Reservable(loc, timeframe));
                 loc.removeTimeframe(timeframe);
             }
-
-            view.setTimeframes(loc.getTimeframes());
         }
         catch (SQLException ex)
         {
-            JOptionPane.showMessageDialog(view, "Failed to update database");
+            JOptionPane.showMessageDialog(view, "Failed to update database",
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
+    /**
+        Clears the search parameters
+    */
+    
     private void doClear()
     {
-        filter.setPredicate(null);
-        
-        view.setTimeframes(new ArrayList());
-        view.setLocations(locations);
+        timeframeFilter.setPredicate(null);
+        locationFilter.setPredicate(null);
         view.clearSearch();
+        
+        setLocations();
     }
 
     /**
-        Perform the deletion of timeframes & potentially a location
+        Respond to the "Delete" command
     */
 
     private void doDelete()
@@ -159,70 +149,69 @@ public class ManageReservableButtonController implements ActionListener
 
         if (!timeframes.isEmpty())
         {
-            if (isTimeframeReserved(timeframes))
-            {
-                JOptionPane.showMessageDialog(view,
-                    "Cannot remove reserved timeframes : Cancel reservations " +
-                    "first");
-            }
-            else
+            if (!isTimeframeReserved(timeframes))
             {
                 // Confirm deletion
                 int choice = JOptionPane.showConfirmDialog(view,
                     "Are you sure you want to delete the selected timeframes?");
 
                 if (choice == JOptionPane.YES_OPTION)
+                {
                     deleteTimeframes(timeframes);
-
-                // Check if location should be deleted as well
-                Location loc = view.getSelectedLocation();
-                if (loc.getNumTimeframes() == 0)
-                    deleteLocation(loc);
+                    
+                    // Check if location should be deleted as well
+                    Location loc = view.getSelectedLocation();
+                    if (loc.getNumTimeframes() == 0)
+                    {
+                        locations.remove(loc);
+                        setLocations();
+                    }
+                    else
+                        setTimeframes(loc.getTimeframes());
+                }
             }
+            else
+                JOptionPane.showMessageDialog(view,
+                    "Cannot remove reserved timeframes. Cancel reservations " +
+                        "first", "Warning", JOptionPane.WARNING_MESSAGE);
         }
     }
 
     /**
-     * DoSearch - Perform a search for reservables based on search criteria
-     *
-     * @param criteria The search criteria
-     */
+        Performs a search for reservables based on search criteria
+     
+        @param criteria The search criteria
+    */
+    
     private void doSearch(String criteria)
     {      
         if (validateSearch(criteria))
         {
-            System.out.println(numSearchLocations(criteria));
+            SearchActualizer search = new SearchActualizer();
+            
             switch (numSearchLocations(criteria))
             {
                 case 0:
-                    searchOnSelectedLocation(criteria);
+                    searchOnSelectedLocation(search, criteria);
                     break;
                 case 1:
-                    searchOnOneLocation(criteria);
+                    searchOnOneLocation(search, criteria);
                     break;
                 default:
-                    searchOnMultipleLocations(criteria);
+                    searchOnMultipleLocations(search, criteria);
                     break;
             }
         }
-//        List<Reservable> reservables = new ArrayList();
-//        for (Location loc : locations)
-//            reservables.addAll(loc.deriveReservables(filter.getPredicate()));
-//
-//        List<Location> filteredLocations = new ArrayList();
-//        List<Timeframe> timeframes = new ArrayList();
-//
-//        for (Reservable r : reservables)
-//        {
-//             
-//             timeframes.add(r.getTimeframe());
-//        }
-//
-//        view.setLocations(filteredLocations);
 
         // location=cabin 01; cap=15; startdate=2017-03-23; starttime=00:00; enddate=2017-03-23; endtime=01:00; cost=325.00
     }
     
+    /**
+     * Returns the number of locations that are searched for
+     * 
+     * @param criteria The search criteria
+     * @return number of locations searched for
+     */
     private int numSearchLocations(String criteria)
     {
         int num = 0;
@@ -249,56 +238,100 @@ public class ManageReservableButtonController implements ActionListener
                 }
             }
             else
-                JOptionPane.showMessageDialog(view, "Invalid search criteria");
+                JOptionPane.showMessageDialog(view, "Invalid search.");
         }
         
         return num;
     }
-    private void searchOnMultipleLocations(String criteria)
+    
+    /**
+     * Performs a search on two or more locations
+     * 
+     * @param s The SearchActualizer to perform the search with
+     * @param criteria The search criteria
+     */
+    private void searchOnMultipleLocations(SearchActualizer s, String criteria)
     {
-        SearchActualizer search = new SearchActualizer();
+        locationFilter.setPredicate(s.searchLocations(criteria));
         
-        filter.setPredicate(search.searchLocations(criteria));
-        
-        List<Location> filteredLocations = (ArrayList<Location>)
-                locations.stream().filter(filter.getPredicate())
-                        .collect(Collectors.toList());
-        
-        view.setLocations(filteredLocations);
+        setLocations();
     }
     
-    private void searchOnOneLocation(String criteria)
+    /**
+     * Performs a search on one specified location
+     * 
+     * @param s The SearchActualizer to perform the search with
+     * @param criteria The search criteria
+     */
+    private void searchOnOneLocation(SearchActualizer s, String criteria)
     {
-        SearchActualizer search = new SearchActualizer();
-
-        filter.setPredicate(search.searchLocations(criteria));
+        locationFilter.setPredicate(s.searchLocations(criteria));
+        setLocations();
         
-        List<Location> filteredLocation = (ArrayList<Location>)
-                locations.stream().filter(filter.getPredicate())
-                        .collect(Collectors.toList());
+        List<Location> filteredLocation = locationFilter.filter(locations);
         
-        filter.setPredicate(search.searchTimeframes(criteria));
+        timeframeFilter.setPredicate(s.searchTimeframes(criteria));
         
-        view.setLocations(filteredLocation);
         for (Location l : filteredLocation)
-            view.setTimeframes(l.getTimeframes(filter.getPredicate()));
+            // Since we expect only one location, set timeframes to a filtered
+            // version of the location's timeframes
+            view.setTimeframes(l.getTimeframes(timeframeFilter.getPredicate()));
     }
     
-    private void searchOnSelectedLocation(String criteria)
+    /**
+     * Performs a search on the currently selected location
+     * 
+     * @param s The SearchActualizer to perform the search with
+     * @param criteria The search criteria
+     */
+    private void searchOnSelectedLocation(SearchActualizer s, String criteria)
     {
         if (view.getSelectedLocation() != null)
         {
-            SearchActualizer search = new SearchActualizer();
-
-            filter.setPredicate(search.searchTimeframes(criteria));
+            timeframeFilter.setPredicate(s.searchTimeframes(criteria));
 
             List<Timeframe> timeframes = view.getSelectedLocation()
-                    .getTimeframes(filter.getPredicate());
+                    .getTimeframes(timeframeFilter.getPredicate());
 
             view.setTimeframes(timeframes);
         }
         else
             JOptionPane.showMessageDialog(view, "No location selected");
+    }
+    
+    /**
+        Shows the specified location on the view
+    
+        @param loc The location to display
+    */
+    
+    private void showLocation(Location loc)
+    {
+        view.setSelectedLocation(loc);
+    }
+    
+    /**
+        Sets the locations on the view to the current location list
+    */
+    
+    private void setLocations()
+    {
+        if (locationFilter.getPredicate() != null)
+            view.setLocations(locationFilter.filter(locations));
+        else
+            view.setLocations(locations);
+    }
+    
+    /**
+        Sets the timeframes on the view
+    */
+    
+    private void setTimeframes(List<Timeframe> timeframes)
+    {
+        if (timeframeFilter.getPredicate() != null)
+            view.setTimeframes(timeframeFilter.filter(timeframes));
+        else
+            view.setTimeframes(timeframes);
     }
     
     /**
@@ -310,7 +343,7 @@ public class ManageReservableButtonController implements ActionListener
         ReservableAddDialog d = new ReservableAddDialog(locations);
 
         d.registerButtonController(new ReservableAddButtonController(d,
-                locations));
+            locations));
         d.registerRadioButtonController(new ReservableAddRadioController(d));
         d.registerComboBoxController(new ReservableAddComboBoxController(d));
 
@@ -321,7 +354,8 @@ public class ManageReservableButtonController implements ActionListener
 
     /**
      * Validate the capacity input
-     *
+     * 
+     * @param capacity The capacity
      * @return If the capacity input is valid
      */
     private boolean validateCapacity(String capacity)
@@ -338,10 +372,18 @@ public class ManageReservableButtonController implements ActionListener
         }
         else
             JOptionPane.showMessageDialog(view, "Invalid input for capacity");
+        
+        setLocations();
 
         return valid;
     }
     
+    /**
+     * Validate the cost input
+     * 
+     * @param cost The cost
+     * @return If the cost is valid
+     */
     private boolean validateCost(String cost)
     {
         boolean valid = cost.matches("\\d+.\\d{2}");
@@ -360,11 +402,23 @@ public class ManageReservableButtonController implements ActionListener
         return valid;
     }
     
+    /**
+     * Validate the end date input
+     * 
+     * @param date The end date
+     * @return If the end date is valid
+     */
     private boolean validateEndDate(String date)
     {
         return date.matches("\\d{4}-\\d{2}-\\d{2}");
     }
     
+    /**
+     * Validate the end time input
+     * 
+     * @param time The end time
+     * @return If the end time is valid
+     */
     private boolean validateEndTime(String time)
     {
         
@@ -394,6 +448,11 @@ public class ManageReservableButtonController implements ActionListener
         return true;
     }
     
+    /**
+     * Validate the entire search
+     * @param criteria The search criteria
+     * @return If the search is valid
+     */
     private boolean validateSearch(String criteria)
     {
         // Split search criteria
@@ -451,11 +510,23 @@ public class ManageReservableButtonController implements ActionListener
         return true;
     }
     
+    /**
+     * Validate the start date input
+     * 
+     * @param date The start date
+     * @return If the start date is valid
+     */
     private boolean validateStartDate(String date)
     {
         return date.matches("\\d{4}-\\d{2}-\\d{2}");
     }
     
+    /**
+     * Validate the start time input
+     * 
+     * @param time The start time
+     * @return If the start time is valid
+     */
     private boolean validateStartTime(String time)
     {
         return time.matches("\\d{2}:\\d{2}");

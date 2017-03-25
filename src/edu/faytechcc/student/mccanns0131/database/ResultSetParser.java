@@ -172,7 +172,7 @@ public class ResultSetParser
         Reserver reserver;
         Reservation reservation;
         
-        boolean approved;
+        boolean reviewed;
         String firstName, lastName, email, phone, eventType;
         int numAttending;
         LocalDate startDate, endDate;
@@ -203,10 +203,10 @@ public class ResultSetParser
             // Build Reservation
             eventType = rs.getString("EventType");
             numAttending = rs.getInt("NumberAttending");
-            approved = rs.getBoolean("Approved");
+            reviewed = rs.getBoolean("Reviewed");
             
             reservation = new Reservation(reserver, reservable, numAttending,
-                    eventType, approved);
+                    eventType, reviewed);
             
             reservations.add(reservation);
         }

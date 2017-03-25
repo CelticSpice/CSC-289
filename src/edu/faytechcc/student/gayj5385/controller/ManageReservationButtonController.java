@@ -9,8 +9,10 @@ package edu.faytechcc.student.gayj5385.controller;
 import edu.faytechcc.student.burnst9091.data.Admin;
 import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reservation;
+import edu.faytechcc.student.burnst9091.data.Reserver;
 import edu.faytechcc.student.burnst9091.data.search.Filter;
 import edu.faytechcc.student.gayj5385.gui.ManageReservationPanel;
+import edu.faytechcc.student.gayj5385.gui.SendEmailDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -63,7 +65,9 @@ public class ManageReservationButtonController implements ActionListener
                 // Do this
                 break;
             case "Contact":
-                // Do this
+                List<Reservation> r = view.getSelectedReservations();
+                if (r.size() == 1)
+                    showSendEmailDialog(r.get(0).getReserver());
                 break;
             case "Reviewed":
                 // Do this
@@ -157,5 +161,17 @@ public class ManageReservationButtonController implements ActionListener
             view.setReservations(reservationFilter.filter(reservations));
         else
             view.setReservations(reservations);
+    }
+    
+    /**
+        Shows the dialog enabling the administrator to send an email
+    
+        @param r The reserver sending an email to
+    */
+    
+    private void showSendEmailDialog(Reserver r)
+    {
+        SendEmailDialog d = new SendEmailDialog(SendEmailDialog.ADMIN, r);
+        d.setVisible(true);
     }
 }

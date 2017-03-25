@@ -24,6 +24,7 @@ public class EmailUtil
     /**
         EmailAdmin - Send an email to the administrator of the system
     
+        @param subject The subject
         @param senderName Name of sender
         @param senderAddress Email address of sender
         @param body Body of message
@@ -32,10 +33,10 @@ public class EmailUtil
         @throws UnsupportedEncodingException Failed to encode name in address
     */
     
-    public static void emailAdmin(String senderName, String senderAddress,
-                                  String body)
+    public static void emailAdmin(String subject, String senderName,
+        String senderAddress, String body)
             throws AddressException, MessagingException,
-                   UnsupportedEncodingException
+                UnsupportedEncodingException
     {
         // Build address to display in message
         InternetAddress address = new InternetAddress(senderAddress);
@@ -80,7 +81,7 @@ public class EmailUtil
         MimeMessage message = new MimeMessage(session);
         message.setFrom(from);
         message.setRecipient(Message.RecipientType.TO, to);
-        message.setSubject("Message from Guest " + senderName);
+        message.setSubject(subject);
         message.setSentDate(new Date());
         message.setText("Message from guest " + address.toString() +
                 "\n\n" + body);

@@ -11,10 +11,10 @@ import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reservable;
 import edu.faytechcc.student.burnst9091.data.Timeframe;
 import edu.faytechcc.student.burnst9091.data.search.Filter;
+import edu.faytechcc.student.burnst9091.data.search.SearchActualizer;
 import edu.faytechcc.student.gayj5385.gui.ManageReservablePanel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,7 +23,7 @@ public class ManageReservableComboBoxController implements ActionListener
 {
     // Fields
     private ManageReservablePanel view;
-    private Filter<Reservable> filter;
+    private Filter filter;
 //    private Lis
     
     /**
@@ -34,7 +34,7 @@ public class ManageReservableComboBoxController implements ActionListener
     */
     
     public ManageReservableComboBoxController(ManageReservablePanel v,
-            Filter<Reservable> f)
+            Filter f)
     {
         view = v;
         filter = f;
@@ -56,16 +56,12 @@ public class ManageReservableComboBoxController implements ActionListener
         
         if (filter.getPredicate() != null)
         {
-            List<Reservable> reservables = location.deriveReservables();
-
-            reservables = reservables.stream()
-                    .filter(filter.getPredicate())
-                    .collect(Collectors.<Reservable>toList());
-
-            timeframes = new ArrayList();
-
-            for (Reservable r : reservables)
-                timeframes.add(r.getTimeframe());
+            SearchActualizer search = new SearchActualizer();
+            
+            filter.setPredicate(search.searchTimeframes(
+                    view.getSearchCriteria()));
+            
+            timeframes = location.getTimeframes(filter.getPredicate());
         }
         else
             timeframes = location.getTimeframes();

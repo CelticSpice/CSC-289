@@ -27,10 +27,10 @@ import javax.swing.JOptionPane;
 public class ManageReservableButtonController implements ActionListener
 {
     // Fields
-    private HashMap<Timeframe, Location> timeframeMap;
+    private HashMap<Location, List<Timeframe>> timeframeMap;
     private List<Location> locations;
     private ManageReservablePanel view;
-    private Filter<Reservable> filter;
+    private Filter filter;
     
     /**
         Constructs a new ManageReservableButtonController to manage the
@@ -78,11 +78,7 @@ public class ManageReservableButtonController implements ActionListener
                     doSearch(view.getSearchCriteria());
                 break;
             case "Clear":
-                try
-                {
                     doClear();
-                }
-                catch (SQLException ex){}
                 break;
         }
     }
@@ -144,11 +140,11 @@ public class ManageReservableButtonController implements ActionListener
         }
     }
 
-    private void doClear() throws SQLException
+    private void doClear()
     {
         filter.setPredicate(null);
         
-        view.setTimeframes(new ArrayList<Timeframe>());
+        view.setTimeframes(new ArrayList());
         view.setLocations(locations);
         view.clearSearch();
     }
@@ -192,41 +188,117 @@ public class ManageReservableButtonController implements ActionListener
      * @param criteria The search criteria
      */
     private void doSearch(String criteria)
-    {
-        if (validateSearch())
+    {      
+        if (validateSearch(criteria))
         {
-            switch (numSearchLocations())
+            System.out.println(numSearchLocations(criteria));
+            switch (numSearchLocations(criteria))
             {
                 case 0:
-                    searchOnThisLocation();
+                    searchOnSelectedLocation(criteria);
                     break;
                 case 1:
-                    searchOnOneLocation();
+                    searchOnOneLocation(criteria);
                     break;
                 default:
-                    searchOnMultipleLocations();
+                    searchOnMultipleLocations(criteria);
                     break;
             }
         }
-        SearchActualizer search = new SearchActualizer();       
-        filter.setPredicate(search.searchReservables(criteria));
-
-        List<Reservable> reservables = new ArrayList();
-        for (Location loc : locations)
-            reservables.addAll(loc.deriveReservables(filter.getPredicate()));
-
-        List<Location> filteredLocations = new ArrayList();
-        List<Timeframe> timeframes = new ArrayList();
-
-        for (Reservable r : reservables)
-        {
-             timeframeMap.put(r.getTimeframe(), r.getLocation());
-             timeframes.add(r.getTimeframe());
-        }
-
-        view.setLocations(filteredLocations);
+//        List<Reservable> reservables = new ArrayList();
+//        for (Location loc : locations)
+//            reservables.addAll(loc.deriveReservables(filter.getPredicate()));
+//
+//        List<Location> filteredLocations = new ArrayList();
+//        List<Timeframe> timeframes = new ArrayList();
+//
+//        for (Reservable r : reservables)
+//        {
+//             
+//             timeframes.add(r.getTimeframe());
+//        }
+//
+//        view.setLocations(filteredLocations);
 
         // location=cabin 01; cap=15; startdate=2017-03-23; starttime=00:00; enddate=2017-03-23; endtime=01:00; cost=325.00
+    }
+    
+    private int numSearchLocations(String criteria)
+    {
+        int num = 0;
+        
+        // Split search criteria
+        String[] filterArray = criteria.split(";");
+
+        for (String f : filterArray)
+        {
+            // Split keys and values
+            String[] constraint = f.split("=");
+
+            if (constraint.length == 2)
+            {                
+                String key = constraint[0].trim(), 
+                       val = constraint[1].trim();
+
+                switch(key.toLowerCase())
+                {
+                    case "locationname":
+                    case "location":
+                        num++;
+                        break;
+                }
+            }
+            else
+                JOptionPane.showMessageDialog(view, "Invalid search criteria");
+        }
+        
+        return num;
+    }
+    private void searchOnMultipleLocations(String criteria)
+    {
+        SearchActualizer search = new SearchActualizer();
+        
+        filter.setPredicate(search.searchLocations(criteria));
+        
+        List<Location> filteredLocations = (ArrayList<Location>)
+                locations.stream().filter(filter.getPredicate())
+                        .collect(Collectors.toList());
+        
+        view.setLocations(filteredLocations);
+    }
+    
+    private void searchOnOneLocation(String criteria)
+    {
+        SearchActualizer search = new SearchActualizer();
+
+        filter.setPredicate(search.searchLocations(criteria));
+        
+        List<Location> filteredLocation = (ArrayList<Location>)
+                locations.stream().filter(filter.getPredicate())
+                        .collect(Collectors.toList());
+        
+        filter.setPredicate(search.searchTimeframes(criteria));
+        
+        view.setLocations(filteredLocation);
+        for (Location l : filteredLocation)
+            view.setTimeframes(l.getTimeframes(filter.getPredicate()));
+    }
+    
+    private void searchOnSelectedLocation(String criteria)
+    {
+        if (view.getSelectedLocation() != null)
+        {
+            SearchActualizer search = new SearchActualizer();
+
+            filter.setPredicate(search.searchTimeframes(criteria));
+
+            List<Timeframe> timeframes = view.getSelectedLocation()
+                    .getTimeframes(filter.getPredicate());
+
+            view.setTimeframes(timeframes);
+        }
+        else
+            JOptionPane.showMessageDialog(view, "No location selected");
     }
     
     /**
@@ -252,13 +324,13 @@ public class ManageReservableButtonController implements ActionListener
      *
      * @return If the capacity input is valid
      */
-    private boolean validateCapacity(String cap)
+    private boolean validateCapacity(String capacity)
     {
-        boolean valid = cap.matches("\\d+");
+        boolean valid = capacity.matches("\\d+");
 
         if (valid)
         {
-            valid = Integer.parseInt(cap) > 0;
+            valid = Integer.parseInt(capacity) > 0;
 
             if (!valid)
                 JOptionPane.showMessageDialog(view,
@@ -269,4 +341,129 @@ public class ManageReservableButtonController implements ActionListener
 
         return valid;
     }
+    
+    private boolean validateCost(String cost)
+    {
+        boolean valid = cost.matches("\\d+.\\d{2}");
+        
+        if (valid)
+        {
+            valid = Double.parseDouble(cost) >= 0.00;
+            
+            if (!valid)
+                JOptionPane.showMessageDialog(view,
+                        "Cost must be greater than or equal to 0.00");
+        }
+        else
+            JOptionPane.showMessageDialog(view, "Invalid input for cost");
+        
+        return valid;
+    }
+    
+    private boolean validateEndDate(String date)
+    {
+        return date.matches("\\d{4}-\\d{2}-\\d{2}");
+    }
+    
+    private boolean validateEndTime(String time)
+    {
+        
+        return time.matches("\\d{2}:\\d{2}");
+    }
+    
+    /**
+     * Validates the location name input
+     * 
+     * @param name The location name
+     * @return Whether the location is valid or not
+     */
+    private boolean validateLocationName(String name)
+    {
+        for (char c : name.toCharArray())
+        {
+            if (!Character.isLetterOrDigit(c) && !Character.isSpaceChar(c))
+            {
+                JOptionPane.showMessageDialog(view,
+                        "A location name consists only of letters, digits," +
+                                " and/or spaces");
+                
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    private boolean validateSearch(String criteria)
+    {
+        // Split search criteria
+        String[] filterArray = criteria.split(";");
+
+        for (String f : filterArray)
+        {
+            // Split keys and values
+            String[] constraint = f.split("=");
+
+            if (constraint.length == 2)
+            {                
+                String key = constraint[0].trim(), 
+                       val = constraint[1].trim();
+
+                switch(key.toLowerCase())
+                {
+                    case "locationname":
+                    case "location":
+                        if (!validateLocationName(val))
+                            return false;
+                        break;
+                    case "capacity":
+                    case "cap":
+                        if (!validateCapacity(val))
+                            return false;
+                        break;
+                    case "startdate":
+                        if (!validateStartDate(val))
+                            return false;
+                        break;
+                    case "starttime":
+                        if (!validateStartTime(val))
+                            return false;
+                        break;
+                    case "enddate":
+                        if (!validateEndDate(val))
+                            return false;
+                        break;
+                    case "endtime":
+                        if (!validateEndTime(val))
+                            return false;
+                        break;
+                    case "cost":
+                    case "price":
+                        if (!validateCost(val))
+                            return false;
+                        break;
+                }
+            }
+            else
+                JOptionPane.showMessageDialog(view, "Invalid search criteria");
+        }
+        
+        return true;
+    }
+    
+    private boolean validateStartDate(String date)
+    {
+        return date.matches("\\d{4}-\\d{2}-\\d{2}");
+    }
+    
+    private boolean validateStartTime(String time)
+    {
+        return time.matches("\\d{2}:\\d{2}");
+    }
+    
+//    private boolean validateTimeframe()
+//    {
+//        Do we need to validate the entire timeframe?
+//        (i.e. ensuring dates and times don't take place before one another)
+//    }
 }

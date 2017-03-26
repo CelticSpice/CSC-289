@@ -18,6 +18,7 @@ import edu.faytechcc.student.gayj5385.gui.ReservableAddDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 
@@ -194,9 +195,7 @@ public class ManageReservableButtonController implements ActionListener
                 case 0:
                     if (criteria.toLowerCase().contains("cap=") ||
                         criteria.toLowerCase().contains("capacity="))
-                    {
                         searchOnMultipleLocations(search, criteria);
-                    }
                     else
                         searchOnSelectedLocation(search, criteria);
                     break;
@@ -208,8 +207,6 @@ public class ManageReservableButtonController implements ActionListener
                     break;
             }
         }
-
-        // location=cabin 01; cap=15; startdate=2017-03-23; starttime=00:00; enddate=2017-03-23; endtime=01:00; cost=325.00
     }
     
     /**
@@ -232,13 +229,13 @@ public class ManageReservableButtonController implements ActionListener
 
             if (constraint.length == 2)
             {                
-                String key = constraint[0].trim(), 
-                       val = constraint[1].trim();
+                String key = constraint[0].trim();
 
                 switch(key.toLowerCase())
                 {
                     case "locationname":
                     case "location":
+                    case "loc":
                         num++;
                         break;
                     case "capacity":
@@ -463,7 +460,20 @@ public class ManageReservableButtonController implements ActionListener
     {
         // Split search criteria
         String[] filterArray = criteria.split(";");
-
+        
+        List<String> acceptedKeys = new ArrayList();
+        acceptedKeys.add("locationname");
+        acceptedKeys.add("location");
+        acceptedKeys.add("loc");
+        acceptedKeys.add("capacity");
+        acceptedKeys.add("cap");
+        acceptedKeys.add("startdate");
+        acceptedKeys.add("starttime");
+        acceptedKeys.add("enddate");
+        acceptedKeys.add("endtime");
+        acceptedKeys.add("cost");
+        acceptedKeys.add("price");
+        
         for (String f : filterArray)
         {
             // Split keys and values
@@ -473,41 +483,48 @@ public class ManageReservableButtonController implements ActionListener
             {                
                 String key = constraint[0].trim(), 
                        val = constraint[1].trim();
-
-                switch(key.toLowerCase())
+                
+                if (acceptedKeys.contains(key))
                 {
-                    case "locationname":
-                    case "location":
-                        if (!validateLocationName(val))
-                            return false;
-                        break;
-                    case "capacity":
-                    case "cap":
-                        if (!validateCapacity(val))
-                            return false;
-                        break;
-                    case "startdate":
-                        if (!validateStartDate(val))
-                            return false;
-                        break;
-                    case "starttime":
-                        if (!validateStartTime(val))
-                            return false;
-                        break;
-                    case "enddate":
-                        if (!validateEndDate(val))
-                            return false;
-                        break;
-                    case "endtime":
-                        if (!validateEndTime(val))
-                            return false;
-                        break;
-                    case "cost":
-                    case "price":
-                        if (!validateCost(val))
-                            return false;
-                        break;
+                    switch(key.toLowerCase())
+                    {
+                        case "locationname":
+                        case "location":
+                        case "loc":
+                            if (!validateLocationName(val))
+                                return false;
+                            break;
+                        case "capacity":
+                        case "cap":
+                            if (!validateCapacity(val))
+                                return false;
+                            break;
+                        case "startdate":
+                            if (!validateStartDate(val))
+                                return false;
+                            break;
+                        case "starttime":
+                            if (!validateStartTime(val))
+                                return false;
+                            break;
+                        case "enddate":
+                            if (!validateEndDate(val))
+                                return false;
+                            break;
+                        case "endtime":
+                            if (!validateEndTime(val))
+                                return false;
+                            break;
+                        case "cost":
+                        case "price":
+                            if (!validateCost(val))
+                                return false;
+                            break;
+                    }
                 }
+                else
+                    JOptionPane.showMessageDialog(view, "Invalid search key: " +
+                            key);
             }
             else
                 JOptionPane.showMessageDialog(view, "Invalid search criteria");

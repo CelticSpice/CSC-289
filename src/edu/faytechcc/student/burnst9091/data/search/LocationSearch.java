@@ -52,6 +52,7 @@ public class LocationSearch
             {
                 case "locationname":
                 case "location":
+                case "loc":
                     numLocations++;
                     
                     locationName = filterByLocationName(val);

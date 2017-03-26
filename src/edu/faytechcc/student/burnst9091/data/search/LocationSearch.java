@@ -58,7 +58,7 @@ public class LocationSearch
                     
                     if (finalPredicate == null)
                         finalPredicate = locationName;
-                    else if (numLocations <= 1)
+                    else if (numLocations == 1)
                         finalPredicate = finalPredicate.and(locationName);
                     else
                         finalPredicate = finalPredicate.or(locationName);
@@ -66,6 +66,7 @@ public class LocationSearch
                 case "capacity":
                 case "cap":
                     capacity = filterByCapacity(val);
+                    
                     if (finalPredicate == null)
                         finalPredicate = capacity;
                     else
@@ -90,6 +91,7 @@ public class LocationSearch
     
     /**
      * FilterByCapacity - Filter reservables by capacity
+     * 
      * @param value The location capacity
      * @return A predicate that checks for a match with the location capacity
      */

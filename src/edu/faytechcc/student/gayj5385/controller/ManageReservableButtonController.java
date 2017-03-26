@@ -192,7 +192,13 @@ public class ManageReservableButtonController implements ActionListener
             switch (numSearchLocations(criteria))
             {
                 case 0:
-                    searchOnSelectedLocation(search, criteria);
+                    if (criteria.toLowerCase().contains("cap=") ||
+                        criteria.toLowerCase().contains("capacity="))
+                    {
+                        searchOnMultipleLocations(search, criteria);
+                    }
+                    else
+                        searchOnSelectedLocation(search, criteria);
                     break;
                 case 1:
                     searchOnOneLocation(search, criteria);
@@ -235,6 +241,8 @@ public class ManageReservableButtonController implements ActionListener
                     case "location":
                         num++;
                         break;
+                    case "capacity":
+                    case "cap":
                 }
             }
             else

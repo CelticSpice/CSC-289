@@ -427,6 +427,17 @@ public class ManageReservationPanel extends JPanel
     }
     
     /**
+        Sets the text of the reviewed button
+    
+        @param text Text to set
+    */
+    
+    public void setReviewedButtonText(String text)
+    {
+        reviewed.setText(text);
+    }
+    
+    /**
         Set the start date field
     
         @param date Date to set in the start date field

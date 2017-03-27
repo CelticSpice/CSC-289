@@ -60,6 +60,11 @@ public class ManageReservationListController implements ListSelectionListener
             view.setContactName(reservation.getReserverName());
             view.setEmail(reservation.getReserverEmail());
             view.setPhone(reservation.getReserverPhone());
+            
+            if (reservation.isReviewed())
+                view.setReviewedButtonText("Not Reviewed");
+            else
+                view.setReviewedButtonText("Reviewed");
         }
         else
         {
@@ -73,6 +78,8 @@ public class ManageReservationListController implements ListSelectionListener
             view.setContactName("");
             view.setEmail("");
             view.setPhone("");
+            
+            view.setReviewedButtonText("Reviewed");
         }
     }
 }

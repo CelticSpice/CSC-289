@@ -245,4 +245,13 @@ public class Reservation
     {
         return reviewed;
     }
+    
+    /**
+        Sets the reservation as not reviewed
+    */
+    
+    public void notReviewed()
+    {
+        reviewed = false;
+    }
 }

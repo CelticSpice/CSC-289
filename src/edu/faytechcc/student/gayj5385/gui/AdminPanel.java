@@ -18,6 +18,7 @@ import edu.faytechcc.student.gayj5385.controller.ManageReservableComboBoxControl
 import edu.faytechcc.student.gayj5385.controller.ManageReservableListController;
 import edu.faytechcc.student.gayj5385.controller.ManageReservationButtonController;
 import edu.faytechcc.student.gayj5385.controller.ManageReservationComboBoxController;
+import edu.faytechcc.student.gayj5385.controller.ManageReservationListController;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -117,7 +118,10 @@ public class AdminPanel extends JPanel
         
         mngReservationPanel.registerComboBoxController(
             new ManageReservationComboBoxController(mngReservationPanel,
-                reserves, reservationFilter));        
+                reserves, reservationFilter));
+        
+        mngReservationPanel.registerReservationListController(
+            new ManageReservationListController(mngReservationPanel));
     }
     
     /**

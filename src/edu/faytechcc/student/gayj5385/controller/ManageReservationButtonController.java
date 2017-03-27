@@ -70,7 +70,10 @@ public class ManageReservationButtonController implements ActionListener
                     showSendEmailDialog(r.get(0).getReserver());
                 break;
             case "Reviewed":
-                // Do this
+                doReviewed();
+                break;
+            case "Not Reviewed":
+                doNotReviewed();
                 break;
             case "Cancel":
                 doCancel();
@@ -135,6 +138,46 @@ public class ManageReservationButtonController implements ActionListener
         if (selectedReservations.size() > 1)
             JOptionPane.showMessageDialog(view, 
                 "Cannot cancel multiple reservations", "Warning",
+                    JOptionPane.WARNING_MESSAGE);
+    }
+    
+    /**
+        Responds to the "Not Reviewed" command
+    */
+    
+    private void doNotReviewed()
+    {
+        List<Reservation> reserves = view.getSelectedReservations();
+        
+        if (reserves.size() == 1)
+        {
+            Reservation reservation = reserves.get(0);
+            reservation.notReviewed();
+            view.setReviewedButtonText("Reviewed");
+        }
+        else
+            JOptionPane.showMessageDialog(view, 
+                "Can only set as not reviewed one reservation", "Warning",
+                    JOptionPane.WARNING_MESSAGE);
+    }
+    
+    /**
+        Responds to the "Reviewed" command
+    */
+    
+    private void doReviewed()
+    {
+        List<Reservation> reserves = view.getSelectedReservations();
+        
+        if (reserves.size() == 1)
+        {
+            Reservation reservation = reserves.get(0);
+            reservation.reviewed();
+            view.setReviewedButtonText("Not Reviewed");
+        }
+        else
+            JOptionPane.showMessageDialog(view, 
+                "Can only set as reviewed one reservation", "Warning",
                     JOptionPane.WARNING_MESSAGE);
     }
     

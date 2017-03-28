@@ -4,7 +4,7 @@
     @author Timothy Burns
 */
 
-package edu.faytechcc.student.gayj5385.controller;
+package edu.faytechcc.student.gayj5385.controller.reservation;
 
 import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reservation;

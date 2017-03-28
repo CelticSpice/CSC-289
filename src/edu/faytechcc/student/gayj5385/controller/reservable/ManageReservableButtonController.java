@@ -5,7 +5,7 @@
     @author Timothy Burns
 */
 
-package edu.faytechcc.student.gayj5385.controller;
+package edu.faytechcc.student.gayj5385.controller.reservable;
 
 import edu.faytechcc.student.burnst9091.data.Admin;
 import edu.faytechcc.student.burnst9091.data.Location;
@@ -13,6 +13,9 @@ import edu.faytechcc.student.burnst9091.data.Reservable;
 import edu.faytechcc.student.burnst9091.data.search.SearchActualizer;
 import edu.faytechcc.student.burnst9091.data.Timeframe;
 import edu.faytechcc.student.burnst9091.data.search.Filter;
+import edu.faytechcc.student.gayj5385.controller.ReservableAddButtonController;
+import edu.faytechcc.student.gayj5385.controller.ReservableAddComboBoxController;
+import edu.faytechcc.student.gayj5385.controller.ReservableAddRadioController;
 import edu.faytechcc.student.gayj5385.gui.ManageReservablePanel;
 import edu.faytechcc.student.gayj5385.gui.ReservableAddDialog;
 import java.awt.event.ActionEvent;

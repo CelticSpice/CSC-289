@@ -10,6 +10,8 @@ import edu.faytechcc.student.burnst9091.data.SMTPProperties;
 import edu.faytechcc.student.burnst9091.data.SecurityOption;
 import edu.faytechcc.student.burnst9091.data.SystemUtil;
 import edu.faytechcc.student.gayj5385.gui.AdminPanel;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -19,7 +21,7 @@ public class AdminPanelController implements ChangeListener
     private AdminPanel view;
     
     /**
-        Constructor - Accepts the view
+        Constructs a new AdminPanelController with the given view
     
         @param v The view
     */
@@ -30,7 +32,7 @@ public class AdminPanelController implements ChangeListener
     }
     
     /**
-        Handle the changing of a tab
+        Handles the changing of a tab
     
         @param e The change event
     */

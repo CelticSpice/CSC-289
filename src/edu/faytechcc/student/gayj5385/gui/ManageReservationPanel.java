@@ -112,29 +112,29 @@ public class ManageReservationPanel extends JPanel
         setReservations(res);
         
         // Build reservation detail panels
-        JPanel reservationPanel1 = new JPanel(new GridLayout(5, 2, 5, 10));        
+        JPanel reservationPanel1 = new JPanel(new GridLayout(5, 2, 0, 5));        
         reservationPanel1.add(new JLabel("Start Date:"));
-        reservationPanel1.add(startDate = new JTextField());
+        reservationPanel1.add(startDate = new JTextField(7));
         reservationPanel1.add(new JLabel("Start Time:"));
-        reservationPanel1.add(startTime = new JTextField());
+        reservationPanel1.add(startTime = new JTextField(7));
         reservationPanel1.add(new JLabel("End Date:"));
-        reservationPanel1.add(endDate = new JTextField());
+        reservationPanel1.add(endDate = new JTextField(7));
         reservationPanel1.add(new JLabel("End Time:"));
-        reservationPanel1.add(endTime = new JTextField());
+        reservationPanel1.add(endTime = new JTextField(7));
         reservationPanel1.add(new JLabel("Cost:"));
-        reservationPanel1.add(cost = new JTextField());
+        reservationPanel1.add(cost = new JTextField(7));
         
-        JPanel reservationPanel2 = new JPanel(new GridLayout(5, 2, 5, 10));
+        JPanel reservationPanel2 = new JPanel(new GridLayout(5, 2, 0, 5));
         reservationPanel2.add(new JLabel("Attendees:"));
-        reservationPanel2.add(attendees = new JTextField());
+        reservationPanel2.add(attendees = new JTextField(15));
         reservationPanel2.add(new JLabel("Event:"));
-        reservationPanel2.add(event = new JTextField());
+        reservationPanel2.add(event = new JTextField(15));
         reservationPanel2.add(new JLabel("Contact Name:"));
-        reservationPanel2.add(contactName = new JTextField());
+        reservationPanel2.add(contactName = new JTextField(15));
         reservationPanel2.add(new JLabel("Contact Email:"));
-        reservationPanel2.add(contactEmail = new JTextField());
+        reservationPanel2.add(contactEmail = new JTextField(15));
         reservationPanel2.add(new JLabel("Contact Phone:"));
-        reservationPanel2.add(contactPhone = new JTextField());
+        reservationPanel2.add(contactPhone = new JTextField(15));
         
         startDate.setEditable(false);
         startTime.setEditable(false);
@@ -194,9 +194,8 @@ public class ManageReservationPanel extends JPanel
         
         gbc.gridx = 1;
         gbc.insets = new Insets(0, 0, 0, 0);
-        gbc.ipadx = 55;
         gbc.anchor = GridBagConstraints.WEST;
-        locationComponentPanel.add(capacity = new JTextField(), gbc);
+        locationComponentPanel.add(capacity = new JTextField(5), gbc);
         
         if (locs.length > 0)
             capacity.setText(String.valueOf(locs[0].getCapacity()));
@@ -213,15 +212,11 @@ public class ManageReservationPanel extends JPanel
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(0, 0, 5, 0);
-        gbc.ipadx = 225;
-        gbc.ipady = 5;
         gbc.anchor = GridBagConstraints.CENTER;
-        searchComponentPanel.add(search = new JTextField(), gbc);
+        searchComponentPanel.add(search = new JTextField(15), gbc);
         
         gbc.gridy = 1;
         gbc.insets = new Insets(0, 0, 0, 0);
-        gbc.ipadx = 0;
-        gbc.ipady = 0;
         searchComponentPanel.add(searchBtn = new JButton("Search"), gbc);
         
         searchPanel.add(searchComponentPanel);

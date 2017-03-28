@@ -181,15 +181,15 @@ public class RecordModify
     }
     
     /**
-     * ModifyReservationApproval - Modify the approval of a reservation
+     * ModifyReservationReviewed - Modify the reviewed status of a reservation
      * 
      * @param reservation The reservation being modified
-     * @param approved Whether or not the reservation is approved
-     * @throws SQLException Error modifying the approval
+     * @param reviewed Whether or not the reservation is reviewed
+     * @throws SQLException Error modifying the record
      * @throws RecordNotExistsException The record does not exist
      */
-    public void modifyReservationApproval(Reservation reservation,
-            boolean approved) throws SQLException, RecordNotExistsException
+    public void modifyReservationReviewed(Reservation reservation,
+            boolean reviewed) throws SQLException, RecordNotExistsException
     {
         // Ensure that the record exists.
         ReservationQuery q = new ReservationQuery();
@@ -206,14 +206,21 @@ public class RecordModify
         
         if (!rsp.isEmpty())
         {
-            sql = "UPDATE Reservations" +
-                  "SET approved = " + approved +
-                  "WHERE locationName = '" + reservation.getLocationName() + "'" +
-                  "AND Reservations.timeframeID = Timeframes.timeframeID" +
-                  "AND Timeframes.startDate = '" + reservation.getStartDate() + "'" +
-                  "AND Timeframes.endDate = '" + reservation.getEndDate() + "'" +
-                  "AND Timeframes.startTime = '" + reservation.getStartTime() + "'" +
-                  "AND Timeframes.endTime = '" + reservation.getEndTime() + "'";
+            String timeframeID = "(SELECT Timeframes.TimeframeID " +
+                             "FROM Timeframes " +
+                             "WHERE Timeframes.StartDate = '" +
+                                reservation.getStartDate() + "' " +
+                             "AND Timeframes.StartTime = '" +
+                                reservation.getStartTime() + "' " +
+                             "AND Timeframes.EndDate = '" +
+                                reservation.getEndDate() + "' " +
+                             "AND Timeframes.EndTime = '" +
+                                reservation.getEndTime() + "')";
+            
+            sql = "UPDATE Reservations " +
+                  "SET Reservations.Reviewed = " + reviewed + " " +
+                  "WHERE Reservations.LocationName = '" + reservation.getLocationName() + "' " +
+                  "AND Reservations.TimeframeID = " + timeframeID;
             
             ReserveDB.getInstance().modifyRecord(this);
         }

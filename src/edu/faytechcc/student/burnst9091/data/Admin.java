@@ -9,6 +9,8 @@ package edu.faytechcc.student.burnst9091.data;
 import edu.faytechcc.student.mccanns0131.database.RecordAdd;
 import edu.faytechcc.student.mccanns0131.database.RecordDelete;
 import edu.faytechcc.student.burnst9091.exception.RecordExistsException;
+import edu.faytechcc.student.burnst9091.exception.RecordNotExistsException;
+import edu.faytechcc.student.mccanns0131.database.RecordModify;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import javax.mail.MessagingException;
@@ -45,6 +47,20 @@ public class Admin
         reservation.cancel();
         new RecordDelete().deleteReservation(reservation);
     }
+    
+    /**
+        Marks a reservation to be reassessed
+    
+        @param reservation The reservation
+        @throws SQLException Error updating the database
+        @throws RecordNotExistsException Record does not exist
+    */
+    
+    public static void reassess(Reservation reservation) throws SQLException,
+            RecordNotExistsException
+    {
+        new RecordModify().modifyReservationReviewed(reservation, false);
+    }
 
     /**
         RemoveReservable - Remove a reservable that can be reserved
@@ -70,6 +86,20 @@ public class Admin
             throws SQLException
     {
         new RecordDelete().deleteReservation(reservation);
+    }
+    
+    /**
+        Marks a reservation as reviewed
+    
+        @param reservation The reservation
+        @throws SQLException Error updating the database
+        @throws RecordNotExistsException Record does not exist
+    */
+    
+    public static void review(Reservation reservation) throws SQLException,
+            RecordNotExistsException
+    {
+        new RecordModify().modifyReservationReviewed(reservation, true);
     }
     
     /**

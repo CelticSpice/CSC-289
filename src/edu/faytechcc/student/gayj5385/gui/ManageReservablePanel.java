@@ -36,7 +36,7 @@ public class ManageReservablePanel extends JPanel
 {
     // Fields
     private DefaultListModel timeframes;
-    private JButton addBtn, updateBtn, delBtn, exitBtn, searchBtn, clearBtn;
+    private JButton add, update, delete, logout, searchBtn, clear;
     private JComboBox<Location> locations;
     private JList<Timeframe> timeframeList;
     private JTextField capacity, search, startDate, startTime, endDate, endTime,
@@ -59,7 +59,7 @@ public class ManageReservablePanel extends JPanel
     }
 
     /**
-        Build & return the bottom panel of this panel
+        Builds & return the bottom panel of this panel
 
         @return The built panel
     */
@@ -71,18 +71,18 @@ public class ManageReservablePanel extends JPanel
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         // Build main button panel
-        JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
-        btnPanel.add(addBtn = new JButton("Add"));
-        btnPanel.add(updateBtn = new JButton("Update"));
-        btnPanel.add(delBtn = new JButton("Delete"));
+        JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        btnPanel.add(add = new JButton("Add"));
+        btnPanel.add(update = new JButton("Update"));
+        btnPanel.add(delete = new JButton("Delete"));
 
-        // Build exit button panel
-        JPanel exitBtnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT,0,0));
-        exitBtnPanel.add(exitBtn = new JButton("Logout"));
+        // Build logout button panel
+        JPanel logoutBtnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        logoutBtnPanel.add(logout = new JButton("Logout"));
 
         panel.add(btnPanel);
         panel.add(Box.createHorizontalGlue());
-        panel.add(exitBtnPanel);
+        panel.add(logoutBtnPanel);
 
         return panel;
     }
@@ -95,7 +95,7 @@ public class ManageReservablePanel extends JPanel
 
     private JPanel buildMidPanel()
     {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
 
         timeframeList = new JList(timeframes = new DefaultListModel());
@@ -103,24 +103,26 @@ public class ManageReservablePanel extends JPanel
         JScrollPane scrollPane = new JScrollPane(timeframeList);
         scrollPane.setPreferredSize(new Dimension(255, 225));
 
+        // If the list of locations used to construct the ManageReservablePanel
+        // is not empty, display the first location's timeframes initially
         Location loc = (Location) locations.getSelectedItem();
         if (loc != null)
             setTimeframes(loc.getTimeframes());
 
         // Build timeframe detail panel
-        JPanel timeframePanel = new JPanel(new GridLayout(6, 2, 5, 10));
-        timeframePanel.add(new JLabel("Start Date:"));
-        timeframePanel.add(startDate = new JTextField());
-        timeframePanel.add(new JLabel("Start Time:"));
-        timeframePanel.add(startTime = new JTextField());
-        timeframePanel.add(new JLabel("End Date:"));
-        timeframePanel.add(endDate = new JTextField());
-        timeframePanel.add(new JLabel("End Time:"));
-        timeframePanel.add(endTime = new JTextField());
-        timeframePanel.add(new JLabel("Cost:"));
-        timeframePanel.add(cost = new JTextField());
-        timeframePanel.add(new JLabel("Reserved:"));
-        timeframePanel.add(reserved = new JTextField());
+        JPanel timeframeDetailPanel = new JPanel(new GridLayout(6, 2, 5, 10));
+        timeframeDetailPanel.add(new JLabel("Start Date:"));
+        timeframeDetailPanel.add(startDate = new JTextField(7));
+        timeframeDetailPanel.add(new JLabel("Start Time:"));
+        timeframeDetailPanel.add(startTime = new JTextField(7));
+        timeframeDetailPanel.add(new JLabel("End Date:"));
+        timeframeDetailPanel.add(endDate = new JTextField(7));
+        timeframeDetailPanel.add(new JLabel("End Time:"));
+        timeframeDetailPanel.add(endTime = new JTextField(7));
+        timeframeDetailPanel.add(new JLabel("Cost:"));
+        timeframeDetailPanel.add(cost = new JTextField(7));
+        timeframeDetailPanel.add(new JLabel("Reserved:"));
+        timeframeDetailPanel.add(reserved = new JTextField(7));
 
         startDate.setEditable(false);
         startTime.setEditable(false);
@@ -131,7 +133,7 @@ public class ManageReservablePanel extends JPanel
 
         panel.add(scrollPane);
         panel.add(Box.createRigidArea(new Dimension(15, 0)));
-        panel.add(timeframePanel);
+        panel.add(timeframeDetailPanel);
 
         return panel;
     }
@@ -151,7 +153,7 @@ public class ManageReservablePanel extends JPanel
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         // Build location selection panel
-        JPanel locationPanel = new JPanel(new FlowLayout(FlowLayout.LEFT,0,0));
+        JPanel locationPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         JPanel locationComponentPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -165,7 +167,7 @@ public class ManageReservablePanel extends JPanel
         gbc.insets = new Insets(0, 0, 10, 0);
         gbc.ipadx = 125;
         locationComponentPanel.add(locations = new JComboBox(locs), gbc);
-
+        
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.insets = new Insets(0, 0, 0, 5);
@@ -174,10 +176,12 @@ public class ManageReservablePanel extends JPanel
 
         gbc.gridx = 1;
         gbc.insets = new Insets(0, 0, 0, 0);
-        gbc.ipadx = 55;
         gbc.anchor = GridBagConstraints.WEST;
-        locationComponentPanel.add(capacity = new JTextField(), gbc);
+        locationComponentPanel.add(capacity = new JTextField(5), gbc);
         
+        // If there are locations in the list of locations the
+        // ManageReservablePanel was constructed with, display the first
+        // location's capacity initially
         if (locs.length > 0)
             capacity.setText(String.valueOf(locs[0].getCapacity()));
 
@@ -186,7 +190,7 @@ public class ManageReservablePanel extends JPanel
         locationPanel.add(locationComponentPanel);
 
         // Build search panel
-        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
         JPanel searchComponentPanel = new JPanel(new GridBagLayout());
 
@@ -195,22 +199,14 @@ public class ManageReservablePanel extends JPanel
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(0, 0, 5, 0);
-        gbc.ipadx = 225;
-        gbc.ipady = 5;
         gbc.anchor = GridBagConstraints.CENTER;
-
-        search = new JTextField();
-        search.setMaximumSize(search.getSize());
-
-        searchComponentPanel.add(search, gbc);
+        searchComponentPanel.add(search = new JTextField(15), gbc);
 
         searchButtonsPanel.add(searchBtn = new JButton("Search"));
-        searchButtonsPanel.add(clearBtn = new JButton("Clear"));
+        searchButtonsPanel.add(clear = new JButton("Clear"));
 
         gbc.gridy = 1;
         gbc.insets = new Insets(0, 0, 0, 0);
-        gbc.ipadx = 0;
-        gbc.ipady = 0;
         searchComponentPanel.add(searchButtonsPanel, gbc);
 
         searchPanel.add(searchComponentPanel);
@@ -272,12 +268,12 @@ public class ManageReservablePanel extends JPanel
 
     public void registerButtonController(ActionListener controller)
     {
-        addBtn.addActionListener(controller);
-        updateBtn.addActionListener(controller);
-        delBtn.addActionListener(controller);
-        exitBtn.addActionListener(controller);
+        add.addActionListener(controller);
+        update.addActionListener(controller);
+        delete.addActionListener(controller);
+        logout.addActionListener(controller);
         searchBtn.addActionListener(controller);
-        clearBtn.addActionListener(controller);
+        clear.addActionListener(controller);
     }
 
     /**

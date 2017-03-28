@@ -4,13 +4,14 @@
     @author Timothy Burns
 */
 
-package edu.faytechcc.student.gayj5385.controller;
+package edu.faytechcc.student.gayj5385.controller.reservation;
 
 import edu.faytechcc.student.burnst9091.data.Admin;
 import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.Reserver;
 import edu.faytechcc.student.burnst9091.data.search.Filter;
+import edu.faytechcc.student.burnst9091.exception.RecordNotExistsException;
 import edu.faytechcc.student.gayj5385.gui.ManageReservationPanel;
 import edu.faytechcc.student.gayj5385.gui.SendEmailDialog;
 import java.awt.event.ActionEvent;
@@ -70,10 +71,10 @@ public class ManageReservationButtonController implements ActionListener
                     showSendEmailDialog(r.get(0).getReserver());
                 break;
             case "Reviewed":
-                doReviewed();
+                reviewed();
                 break;
-            case "Not Reviewed":
-                doNotReviewed();
+            case "Reassess":
+                reassess();
                 break;
             case "Cancel":
                 doCancel();
@@ -142,38 +143,58 @@ public class ManageReservationButtonController implements ActionListener
     }
     
     /**
-        Responds to the "Not Reviewed" command
+        Marks a reservation as not yet reviewed
     */
     
-    private void doNotReviewed()
+    private void reassess()
     {
         List<Reservation> reserves = view.getSelectedReservations();
         
         if (reserves.size() == 1)
         {
-            Reservation reservation = reserves.get(0);
-            reservation.notReviewed();
-            view.setReviewedButtonText("Reviewed");
+            try
+            {
+                Reservation reservation = reserves.get(0);
+                Admin.reassess(reservation);
+                reservation.notReviewed();
+                view.setReviewedButtonText("Reviewed");
+                setReservations(reservations.get(view.getSelectedLocation()));
+            }
+            catch (SQLException | RecordNotExistsException ex)
+            {
+                JOptionPane.showMessageDialog(view, "Error updating database",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
         else
             JOptionPane.showMessageDialog(view, 
-                "Can only set as not reviewed one reservation", "Warning",
+                "Can only reassess one reservation", "Warning",
                     JOptionPane.WARNING_MESSAGE);
     }
     
     /**
-        Responds to the "Reviewed" command
+        Marks a reservation as reviewed
     */
     
-    private void doReviewed()
+    private void reviewed()
     {
         List<Reservation> reserves = view.getSelectedReservations();
         
         if (reserves.size() == 1)
         {
-            Reservation reservation = reserves.get(0);
-            reservation.reviewed();
-            view.setReviewedButtonText("Not Reviewed");
+            try
+            {
+                Reservation reservation = reserves.get(0);
+                Admin.review(reservation);
+                reservation.reviewed();
+                view.setReviewedButtonText("Reassess");
+                setReservations(reservations.get(view.getSelectedLocation()));
+            }
+            catch (SQLException | RecordNotExistsException ex)
+            {
+                JOptionPane.showMessageDialog(view, "Error updating database",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
         else
             JOptionPane.showMessageDialog(view, 

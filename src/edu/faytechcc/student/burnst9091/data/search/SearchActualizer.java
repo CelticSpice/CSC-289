@@ -29,17 +29,17 @@ public class SearchActualizer
         return search.search(criteria);
     }
     
-    /**
-     * Return a predicate that checks for a match with a given reserver
-     * 
-     * @param criteria The search criteria
-     * @return A reserver predicate
-     */
-    public Predicate<Reserver> searchReservers(String criteria)
-    {
-        ReserverSearch search = new ReserverSearch();
-        return search.search(criteria);
-    }
+//    /**
+//     * Return a predicate that checks for a match with a given reserver
+//     * 
+//     * @param criteria The search criteria
+//     * @return A reserver predicate
+//     */
+//    public Predicate<Reserver> searchReservers(String criteria)
+//    {
+//        ReserverSearch search = new ReserverSearch();
+//        return search.search(criteria);
+//    }
     
     /**
      * Return a predicate that checks for a match with a given timeframe

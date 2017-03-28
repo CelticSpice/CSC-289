@@ -43,7 +43,7 @@ public class LocationSearch
         for (String filter : filters)
         {
             // Split keys and values
-            String[] constraint = filter.split("=");
+            String[] constraint = filter.split(":");
             
             String key = constraint[0].trim(), 
                    val = constraint[1].trim();
@@ -98,6 +98,15 @@ public class LocationSearch
      */
     private Predicate<Location> filterByCapacity(String value)
     {
-        return l -> l.getCapacity() == Integer.parseInt(value);
+        if (value.startsWith(">="))
+            return l -> l.getCapacity() > Integer.parseInt(value.replace(">=", ""));
+        else if (value.startsWith("<="))
+            return l -> l.getCapacity() < Integer.parseInt(value.replace("<=", ""));
+        else if (value.startsWith(">"))
+            return l -> l.getCapacity() >= Integer.parseInt(value.replace(">", ""));
+        else if (value.startsWith("<"))
+            return l -> l.getCapacity() <= Integer.parseInt(value.replace("<", ""));
+        else
+            return l -> l.getCapacity() == Integer.parseInt(value);
     }
 }

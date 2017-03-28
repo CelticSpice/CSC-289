@@ -193,8 +193,8 @@ public class ManageReservableButtonController implements ActionListener
             switch (numSearchLocations(criteria))
             {
                 case 0:
-                    if (criteria.toLowerCase().contains("cap=") ||
-                        criteria.toLowerCase().contains("capacity="))
+                    if (criteria.toLowerCase().contains("cap:") ||
+                        criteria.toLowerCase().contains("capacity:"))
                         searchOnMultipleLocations(search, criteria);
                     else
                         searchOnSelectedLocation(search, criteria);
@@ -225,25 +225,20 @@ public class ManageReservableButtonController implements ActionListener
         for (String f : filterArray)
         {
             // Split keys and values
-            String[] constraint = f.split("=");
+            String[] constraint = f.split(":");
+            
+            String key = constraint[0].trim();
 
-            if (constraint.length == 2)
-            {                
-                String key = constraint[0].trim();
-
-                switch(key.toLowerCase())
-                {
-                    case "locationname":
-                    case "location":
-                    case "loc":
-                        num++;
-                        break;
-                    case "capacity":
-                    case "cap":
-                }
+            switch(key.toLowerCase())
+            {
+                case "locationname":
+                case "location":
+                case "loc":
+                    num++;
+                    break;
+                case "capacity":
+                case "cap":
             }
-            else
-                JOptionPane.showMessageDialog(view, "Invalid search.");
         }
         
         return num;
@@ -260,9 +255,12 @@ public class ManageReservableButtonController implements ActionListener
         locationFilter.setPredicate(s.searchLocations(criteria));
         setLocations();
         
-        timeframeFilter.setPredicate(s.searchTimeframes(criteria));
-        setTimeframes(timeframeFilter.filter(view.getSelectedLocation()
-                .getTimeframes()));
+        if (timeframeFilter.getPredicate() != null)
+        {
+            timeframeFilter.setPredicate(s.searchTimeframes(criteria));
+            setTimeframes(timeframeFilter.filter(view.getSelectedLocation()
+                    .getTimeframes()));
+        }
     }
     
     /**
@@ -275,10 +273,18 @@ public class ManageReservableButtonController implements ActionListener
     {
         locationFilter.setPredicate(s.searchLocations(criteria));
         setLocations();
-        
-        timeframeFilter.setPredicate(s.searchTimeframes(criteria));
-        setTimeframes(timeframeFilter.filter(view.getSelectedLocation()
-                .getTimeframes()));
+            
+        if (view.getSelectedLocation() != null)
+        {
+            timeframeFilter.setPredicate(s.searchTimeframes(criteria));
+            setTimeframes(timeframeFilter.filter(view.getSelectedLocation()
+                    .getTimeframes()));
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(view, "No such location exists");
+            doClear();
+        }
     }
     
     /**
@@ -295,7 +301,7 @@ public class ManageReservableButtonController implements ActionListener
             
             List<Timeframe> timeframes = view.getSelectedLocation()
                     .getTimeframes(timeframeFilter.getPredicate());
-            
+
             view.setTimeframes(timeframes);
         }
         else
@@ -363,11 +369,11 @@ public class ManageReservableButtonController implements ActionListener
      */
     private boolean validateCapacity(String capacity)
     {
-        boolean valid = capacity.matches("\\d+");
+        boolean valid = capacity.matches("([<>]=|[<>=])\\d+");
 
         if (valid)
         {
-            valid = Integer.parseInt(capacity) > 0;
+            valid = Integer.parseInt(capacity.replaceFirst("([<>]=|[<>=])", "")) > 0;
 
             if (!valid)
                 JOptionPane.showMessageDialog(view,
@@ -458,9 +464,6 @@ public class ManageReservableButtonController implements ActionListener
      */
     private boolean validateSearch(String criteria)
     {
-        // Split search criteria
-        String[] filterArray = criteria.split(";");
-        
         List<String> acceptedKeys = new ArrayList();
         acceptedKeys.add("locationname");
         acceptedKeys.add("location");
@@ -474,21 +477,25 @@ public class ManageReservableButtonController implements ActionListener
         acceptedKeys.add("cost");
         acceptedKeys.add("price");
         
-        for (String f : filterArray)
+        // Split search criteria
+        String[] filterArray = criteria.split(";");
+        
+        try
         {
-            // Split keys and values
-            String[] constraint = f.split("=");
-
-            if (constraint.length == 2)
-            {                
+            for (String f : filterArray)
+            {
+                // Split keys and values
+                String[] constraint = f.split(":");
+                
                 String key = constraint[0].trim(), 
                        val = constraint[1].trim();
-                
-                if (acceptedKeys.contains(key))
+
+                if (!key.equals("") && acceptedKeys.contains(key))
                 {
                     switch(key.toLowerCase())
                     {
                         case "locationname":
+                        case "location name":
                         case "location":
                         case "loc":
                             if (!validateLocationName(val))
@@ -500,18 +507,22 @@ public class ManageReservableButtonController implements ActionListener
                                 return false;
                             break;
                         case "startdate":
+                        case "start date":
                             if (!validateStartDate(val))
                                 return false;
                             break;
                         case "starttime":
+                        case "start time":
                             if (!validateStartTime(val))
                                 return false;
                             break;
                         case "enddate":
+                        case "end date":
                             if (!validateEndDate(val))
                                 return false;
                             break;
                         case "endtime":
+                        case "end time":
                             if (!validateEndTime(val))
                                 return false;
                             break;
@@ -523,11 +534,19 @@ public class ManageReservableButtonController implements ActionListener
                     }
                 }
                 else
-                    JOptionPane.showMessageDialog(view, "Invalid search key: " +
-                            key);
+                {
+                    JOptionPane.showMessageDialog(view,
+                            "Missing or misspelled key (i.e. \"start time\")");
+                    return false;
+                }
             }
-            else
-                JOptionPane.showMessageDialog(view, "Invalid search criteria");
+        }
+        catch (NullPointerException | ArrayIndexOutOfBoundsException ex)
+        {
+            JOptionPane.showMessageDialog(view, "Invalid search" +
+                    "\nEnsure your search keys (i.e. \"start time\") and " + 
+                    " parameters (i.e. \"12:00\") are correct.");
+            return false;
         }
         
         return true;

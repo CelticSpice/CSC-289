@@ -7,14 +7,14 @@
 package edu.faytechcc.student.gayj5385.controller;
 
 import edu.faytechcc.student.burnst9091.data.Location;
-import edu.faytechcc.student.gayj5385.gui.ReservableAddDialog;
+import edu.faytechcc.student.gayj5385.gui.AddReservableDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ReservableAddRadioController implements ActionListener
 {
     // Fields
-    private ReservableAddDialog view;
+    private AddReservableDialog view;
     
     /**
         Constructor - Accepts the view
@@ -22,7 +22,7 @@ public class ReservableAddRadioController implements ActionListener
         @param v The view
     */
     
-    public ReservableAddRadioController(ReservableAddDialog v)
+    public ReservableAddRadioController(AddReservableDialog v)
     {
         view = v;
     }

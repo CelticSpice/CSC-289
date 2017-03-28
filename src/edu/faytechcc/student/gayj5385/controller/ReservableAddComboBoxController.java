@@ -7,7 +7,7 @@
 package edu.faytechcc.student.gayj5385.controller;
 
 import edu.faytechcc.student.burnst9091.data.Location;
-import edu.faytechcc.student.gayj5385.gui.ReservableAddDialog;
+import edu.faytechcc.student.gayj5385.gui.AddReservableDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDateTime;
@@ -18,7 +18,7 @@ public class ReservableAddComboBoxController implements ActionListener
     private static final int START = 0;
     private static final int END = 1;
     
-    private ReservableAddDialog view;
+    private AddReservableDialog view;
     
     /**
         Constructor - Accepts the view
@@ -26,7 +26,7 @@ public class ReservableAddComboBoxController implements ActionListener
         @param v The view
     */
     
-    public ReservableAddComboBoxController(ReservableAddDialog v)
+    public ReservableAddComboBoxController(AddReservableDialog v)
     {
         view = v;
     }

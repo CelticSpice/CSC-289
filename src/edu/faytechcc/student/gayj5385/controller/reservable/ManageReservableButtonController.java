@@ -18,7 +18,7 @@ import edu.faytechcc.student.gayj5385.controller.ReservableAddComboBoxController
 import edu.faytechcc.student.gayj5385.controller.ReservableAddRadioController;
 import edu.faytechcc.student.gayj5385.gui.MainPanel;
 import edu.faytechcc.student.gayj5385.gui.ManageReservablePanel;
-import edu.faytechcc.student.gayj5385.gui.ReservableAddDialog;
+import edu.faytechcc.student.gayj5385.gui.AddReservableDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -355,7 +355,7 @@ public class ManageReservableButtonController implements ActionListener
 
     private void showAddDialog()
     {
-        ReservableAddDialog d = new ReservableAddDialog(locations);
+        AddReservableDialog d = new AddReservableDialog(locations);
 
         d.registerButtonController(new ReservableAddButtonController(d,
             locations));

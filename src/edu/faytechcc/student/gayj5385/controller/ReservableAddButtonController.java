@@ -11,7 +11,7 @@ import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reservable;
 import edu.faytechcc.student.burnst9091.data.Timeframe;
 import edu.faytechcc.student.burnst9091.exception.RecordExistsException;
-import edu.faytechcc.student.gayj5385.gui.ReservableAddDialog;
+import edu.faytechcc.student.gayj5385.gui.AddReservableDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
@@ -27,7 +27,7 @@ public class ReservableAddButtonController implements ActionListener
     private static final int END = 1;
 
     private List<Location> locations;
-    private ReservableAddDialog view;
+    private AddReservableDialog view;
 
     /**
         Constructs a new ReservableAddButtonController to manage the buttons
@@ -37,7 +37,7 @@ public class ReservableAddButtonController implements ActionListener
         @param locs The locations
     */
 
-    public ReservableAddButtonController(ReservableAddDialog v,
+    public ReservableAddButtonController(AddReservableDialog v,
             List<Location> locs)
     {
         view = v;

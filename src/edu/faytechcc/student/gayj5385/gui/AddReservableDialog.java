@@ -25,7 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-public class ReservableAddDialog extends JDialog
+public class AddReservableDialog extends JDialog
 {
     // Fields
     private JButton add, exit;
@@ -41,7 +41,7 @@ public class ReservableAddDialog extends JDialog
         @param locs The locations
     */
 
-    public ReservableAddDialog(List<Location> locs)
+    public AddReservableDialog(List<Location> locs)
     {
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();

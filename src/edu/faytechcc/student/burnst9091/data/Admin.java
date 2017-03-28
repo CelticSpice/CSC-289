@@ -9,6 +9,8 @@ package edu.faytechcc.student.burnst9091.data;
 import edu.faytechcc.student.mccanns0131.database.RecordAdd;
 import edu.faytechcc.student.mccanns0131.database.RecordDelete;
 import edu.faytechcc.student.burnst9091.exception.RecordExistsException;
+import edu.faytechcc.student.burnst9091.exception.RecordNotExistsException;
+import edu.faytechcc.student.mccanns0131.database.RecordModify;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import javax.mail.MessagingException;
@@ -70,6 +72,26 @@ public class Admin
             throws SQLException
     {
         new RecordDelete().deleteReservation(reservation);
+    }
+    
+    /**
+        Marks a reservation as either reviewed or not reviewed
+    
+        @param reservation The reservation
+        @param reviewed Whether to mark reservation as reviewed or not
+        @throws SQLException Error updating the database
+        @throws RecordNotExistsException Record does not exist
+    */
+    
+    public static void review(Reservation reservation, boolean reviewed)
+            throws SQLException, RecordNotExistsException
+    {
+        if (reviewed)
+            reservation.reviewed();
+        else
+            reservation.notReviewed();
+        
+        new RecordModify().modifyReservationReviewed(reservation, reviewed);
     }
     
     /**

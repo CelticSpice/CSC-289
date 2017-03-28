@@ -6,24 +6,15 @@
 
 package edu.faytechcc.student.burnst9091.data;
 
-import edu.faytechcc.student.burnst9091.exception.RecordExistsException;
-import edu.faytechcc.student.gayj5385.controller.AdminPanelController;
-import edu.faytechcc.student.gayj5385.gui.AdminPanel;
+import edu.faytechcc.student.gayj5385.gui.MainFrame;
 import edu.faytechcc.student.mccanns0131.database.LocationQuery;
 import edu.faytechcc.student.mccanns0131.database.ReservationQuery;
 import edu.faytechcc.student.mccanns0131.database.ResultSetParser;
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.prefs.BackingStoreException;
-import javax.mail.MessagingException;
-import javax.mail.internet.AddressException;
-import javax.swing.JFrame;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.JOptionPane;
 
 public class Application
 {    
@@ -34,55 +25,71 @@ public class Application
     */
     
     public static void main(String[] args)
-            throws BackingStoreException, SQLException, RecordExistsException,
-                   NoSuchAlgorithmException, AddressException, MessagingException,
-                   UnsupportedEncodingException, ClassNotFoundException,
-                   InstantiationException, IllegalAccessException,
-                   UnsupportedLookAndFeelException
     {
-        UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+        List<Location> locations = queryLocations();
+        HashMap<Location, List<Reservation>> reservations = queryReservations(
+            locations);
         
-        SystemUtil.initPreferences();
-        JFrame frame = new JFrame();
-        
-        ResultSetParser parser = new ResultSetParser();
-        LocationQuery q = new LocationQuery();
-        ReservationQuery reserveQ = new ReservationQuery();
-        
-        parser.setResultSet(q.queryLocations());
-        
-        List<Location> locations = parser.parseLocations();
-        HashMap<Location, List<Reservation>> reserveMap = new HashMap<>();
-        
-        for (Location loc : locations)
-        {
-            parser.setResultSet(reserveQ.queryReservations(loc));
-            if (!parser.isEmpty())
-                reserveMap.put(loc, parser.parseReservations(loc));
-        }
-                
-        AdminPanel panel = new AdminPanel(locations, reserveMap);
-        panel.registerChangeController(new AdminPanelController(panel));
-        frame.add(panel);
-        frame.pack();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
+        new MainFrame(locations, reservations);
     }
     
     /**
-        Consolidates a list of reservations with a list of locations
+        Queries the database for locations
+    
+        @return List of locations
     */
     
-    private static void consolidate(List<Location> locs,
-            List<Reservation> reserves)
+    private static List<Location> queryLocations()
     {
-        for (Location loc : locs)
+        List<Location> locations = new ArrayList<>();
+        
+        try
         {
-            for (Reservation reserve : reserves)
+            ResultSetParser parser = new ResultSetParser();
+            parser.setResultSet(new LocationQuery().queryLocations());
+            return parser.parseLocations();
+        }
+        catch (SQLException ex)
+        {
+            JOptionPane.showMessageDialog(null,
+                "Failed acquiring location information", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+        
+        return locations;
+    }
+    
+    /**
+        Queries the database for reservations
+    
+        @param locations List of locations to query reservations of
+        @return Mapping of reservations
+    */
+    
+    private static HashMap<Location, List<Reservation>> queryReservations(
+        List<Location> locations)
+    {
+        HashMap<Location, List<Reservation>> reservations = new HashMap<>();
+        
+        try
+        {
+            ResultSetParser parser = new ResultSetParser();
+            ReservationQuery query = new ReservationQuery();
+            
+            for (Location loc : locations)
             {
-                if (loc.getName().equals(reserve.getLocationName()));
-                    
+                parser.setResultSet(query.queryReservations(loc));
+                if (!parser.isEmpty())
+                    reservations.put(loc, parser.parseReservations(loc));
             }
         }
+        catch (SQLException ex)
+        {
+            JOptionPane.showMessageDialog(null,
+                "Failed acquiring reservation information", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+        
+        return reservations;
     }
 }

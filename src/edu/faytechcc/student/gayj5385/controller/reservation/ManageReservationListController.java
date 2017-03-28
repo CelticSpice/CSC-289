@@ -4,7 +4,7 @@
     @author Timothy Burns
 */
 
-package edu.faytechcc.student.gayj5385.controller;
+package edu.faytechcc.student.gayj5385.controller.reservation;
 
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.gayj5385.gui.ManageReservationPanel;
@@ -62,7 +62,7 @@ public class ManageReservationListController implements ListSelectionListener
             view.setPhone(reservation.getReserverPhone());
             
             if (reservation.isReviewed())
-                view.setReviewedButtonText("Not Reviewed");
+                view.setReviewedButtonText("Reassess");
             else
                 view.setReviewedButtonText("Reviewed");
         }

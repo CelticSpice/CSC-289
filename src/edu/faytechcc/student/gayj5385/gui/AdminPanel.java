@@ -13,16 +13,21 @@ import edu.faytechcc.student.burnst9091.data.SMTPProperties;
 import edu.faytechcc.student.burnst9091.data.SecurityOption;
 import edu.faytechcc.student.burnst9091.data.Timeframe;
 import edu.faytechcc.student.burnst9091.data.search.Filter;
-import edu.faytechcc.student.gayj5385.controller.ManageReservableButtonController;
-import edu.faytechcc.student.gayj5385.controller.ManageReservableComboBoxController;
-import edu.faytechcc.student.gayj5385.controller.ManageReservableListController;
-import edu.faytechcc.student.gayj5385.controller.ManageReservationButtonController;
-import edu.faytechcc.student.gayj5385.controller.ManageReservationComboBoxController;
-import edu.faytechcc.student.gayj5385.controller.ManageReservationListController;
+import edu.faytechcc.student.gayj5385.controller.reservable.ManageReservableButtonController;
+import edu.faytechcc.student.gayj5385.controller.reservable.ManageReservableComboBoxController;
+import edu.faytechcc.student.gayj5385.controller.reservable.ManageReservableListController;
+import edu.faytechcc.student.gayj5385.controller.reservation.ManageReservationButtonController;
+import edu.faytechcc.student.gayj5385.controller.reservation.ManageReservationComboBoxController;
+import edu.faytechcc.student.gayj5385.controller.reservation.ManageReservationListController;
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeListener;
@@ -30,54 +35,80 @@ import javax.swing.event.ChangeListener;
 public class AdminPanel extends JPanel
 {
     // Fields
+    private JButton logout;
     private JTabbedPane tabbedPane;
     private ManageReservablePanel mngReservablePanel;
     private ManageReservationPanel mngReservationPanel;
     private SettingsPanel settingsPanel;
     
     /**
-        Constructs a new AdminPanel with the given location & reservation data
+        Constructs a new AdminPanel initialized with the given listing of
+        locations & mapping of reservations
     
-        @param locs The locations
-        @param reserves The reservations
+        @param locations The locations
+        @param reservations The reservations
     */
     
-    public AdminPanel(List<Location> locs,
-            HashMap<Location, List<Reservation>> reserves)
+    public AdminPanel(List<Location> locations,
+        HashMap<Location, List<Reservation>> reservations)
     {
         super(new BorderLayout());
         
         tabbedPane = new JTabbedPane();
+        tabbedPane.setBorder(BorderFactory.createEtchedBorder());
         
-        buildManageReservablePanel(locs);
-        buildManageReservationPanel(reserves);
+        buildManageReservablePanel(locations);
+        buildManageReservationPanel(reservations);
         buildSettingsPanel();
+        buildBottomPanel();
         
         tabbedPane.add("Manage Reservables", mngReservablePanel);
         tabbedPane.add("Manage Reservations", mngReservationPanel);
         tabbedPane.add("Settings", settingsPanel);
         
-        add(tabbedPane);
+        add(tabbedPane, BorderLayout.CENTER);
     }
     
     /**
-        Builds the panel to manage reservables on, initialized with
-        the given list of locations
-    
-        @param locs The locations
-        @return The built panel
+        Builds the bottom panel of this panel
     */
     
-    private void buildManageReservablePanel(List<Location> locs)
+    private void buildBottomPanel()
     {
-        mngReservablePanel = new ManageReservablePanel(locs);
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        
+        panel.add(logout = new JButton("Logout"));
+        
+        logout.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                MainPanel parent = ((MainPanel)getParent());
+                parent.showOpenPanel();
+            }
+        });
+        
+        add(panel, BorderLayout.SOUTH);
+    }
+    
+    /**
+        Builds the panel to manage reservables on initialized with the given
+        list of locations
+    
+        @param locations The locations
+    */
+    
+    private void buildManageReservablePanel(List<Location> locations)
+    {
+        mngReservablePanel = new ManageReservablePanel(locations);
         
         Filter<Timeframe> timeframeFilter = new Filter<>();
         Filter<Location> locationFilter = new Filter<>();
         
         mngReservablePanel.registerButtonController(
             new ManageReservableButtonController(mngReservablePanel,
-                locs, timeframeFilter, locationFilter));
+                locations, timeframeFilter, locationFilter));
         
         mngReservablePanel.registerComboBoxController(
             new ManageReservableComboBoxController(mngReservablePanel,
@@ -89,21 +120,20 @@ public class AdminPanel extends JPanel
     
     /**
         Builds the panel to manage reservations on, initialized with
-        the given list of locations & mapping of reservations
+        the given mapping of reservations
     
-        @param locs Reserved locations
-        @param reserves Location reservation mapping
+        @param reservations Location reservation mapping
         @return The built panel
     */
     
     private void buildManageReservationPanel(
-            HashMap<Location, List<Reservation>> reserves)
+            HashMap<Location, List<Reservation>> reservations)
     {
-        List<Location> locs = new ArrayList<>(reserves.keySet());
+        List<Location> locs = new ArrayList<>(reservations.keySet());
         List<Reservation> res;
         
         if (locs.size() > 0)
-            res = reserves.get(locs.get(0));
+            res = reservations.get(locs.get(0));
         else
             res = new ArrayList<>();
         
@@ -114,11 +144,11 @@ public class AdminPanel extends JPanel
         
         mngReservationPanel.registerButtonController(
             new ManageReservationButtonController(mngReservationPanel,
-                reserves, locationFilter, reservationFilter));
+                reservations, locationFilter, reservationFilter));
         
         mngReservationPanel.registerComboBoxController(
             new ManageReservationComboBoxController(mngReservationPanel,
-                reserves, reservationFilter));
+                reservations, reservationFilter));
         
         mngReservationPanel.registerReservationListController(
             new ManageReservationListController(mngReservationPanel));

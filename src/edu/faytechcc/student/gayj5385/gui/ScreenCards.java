@@ -18,7 +18,7 @@ public class ScreenCards extends JPanel
         
         OpenScreen open = new OpenScreen();
         //GuestReservations guest = new GuestReservations();
-        LogOnScreen log = new LogOnScreen();
+        LoginDialog log = new LoginDialog();
         
         //add(guest,"guestReservations");
         add(open,"openScreen");

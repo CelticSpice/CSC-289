@@ -35,7 +35,7 @@ public class ManageReservationPanel extends JPanel
 {
     // Fields
     private DefaultListModel<Reservation> reservations;
-    private JButton searchBtn, update, contact, reviewed, cancel, logout;
+    private JButton searchBtn, clear, update, contact, reviewed, cancel, logout;
     private JComboBox<Location> locations;
     private JList<Reservation> reservationList;
     private JTextField capacity, search, startDate, startTime, endDate, endTime,
@@ -62,7 +62,7 @@ public class ManageReservationPanel extends JPanel
     }
     
     /**
-        Build & return the bottom panel of this panel
+        Builds & return the bottom panel of this panel
     
         @return The built panel
     */
@@ -74,14 +74,14 @@ public class ManageReservationPanel extends JPanel
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
         // Build main button panel
-        JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+        JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         btnPanel.add(update = new JButton("Update"));
         btnPanel.add(contact = new JButton("Contact"));
         btnPanel.add(reviewed = new JButton("Reviewed"));
         btnPanel.add(cancel = new JButton("Cancel"));
         
         // Build logout button panel
-        JPanel logoutPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT,0,0));
+        JPanel logoutPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         logoutPanel.add(logout = new JButton("Logout"));
         
         panel.add(btnPanel);
@@ -92,7 +92,7 @@ public class ManageReservationPanel extends JPanel
     }
     
     /**
-        Build & return the middle panel of this panel, initialized with the
+        Builds & return the middle panel of this panel, initialized with the
         given list of reservations
     
         @param res List of reservations
@@ -101,7 +101,7 @@ public class ManageReservationPanel extends JPanel
     
     private JPanel buildMidPanel(List<Reservation> res)
     {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
         
         reservationList = new JList(reservations = new DefaultListModel());
@@ -112,29 +112,29 @@ public class ManageReservationPanel extends JPanel
         setReservations(res);
         
         // Build reservation detail panels
-        JPanel reservationPanel1 = new JPanel(new GridLayout(5, 2, 5, 10));        
-        reservationPanel1.add(new JLabel("Start Date:"));
-        reservationPanel1.add(startDate = new JTextField());
-        reservationPanel1.add(new JLabel("Start Time:"));
-        reservationPanel1.add(startTime = new JTextField());
-        reservationPanel1.add(new JLabel("End Date:"));
-        reservationPanel1.add(endDate = new JTextField());
-        reservationPanel1.add(new JLabel("End Time:"));
-        reservationPanel1.add(endTime = new JTextField());
-        reservationPanel1.add(new JLabel("Cost:"));
-        reservationPanel1.add(cost = new JTextField());
+        JPanel reservationDetailPanel1 = new JPanel(new GridLayout(5, 2, 0, 5));        
+        reservationDetailPanel1.add(new JLabel("Start Date:"));
+        reservationDetailPanel1.add(startDate = new JTextField(7));
+        reservationDetailPanel1.add(new JLabel("Start Time:"));
+        reservationDetailPanel1.add(startTime = new JTextField(7));
+        reservationDetailPanel1.add(new JLabel("End Date:"));
+        reservationDetailPanel1.add(endDate = new JTextField(7));
+        reservationDetailPanel1.add(new JLabel("End Time:"));
+        reservationDetailPanel1.add(endTime = new JTextField(7));
+        reservationDetailPanel1.add(new JLabel("Cost:"));
+        reservationDetailPanel1.add(cost = new JTextField(7));
         
-        JPanel reservationPanel2 = new JPanel(new GridLayout(5, 2, 5, 10));
-        reservationPanel2.add(new JLabel("Attendees:"));
-        reservationPanel2.add(attendees = new JTextField());
-        reservationPanel2.add(new JLabel("Event:"));
-        reservationPanel2.add(event = new JTextField());
-        reservationPanel2.add(new JLabel("Contact Name:"));
-        reservationPanel2.add(contactName = new JTextField());
-        reservationPanel2.add(new JLabel("Contact Email:"));
-        reservationPanel2.add(contactEmail = new JTextField());
-        reservationPanel2.add(new JLabel("Contact Phone:"));
-        reservationPanel2.add(contactPhone = new JTextField());
+        JPanel reservationDetailPanel2 = new JPanel(new GridLayout(5, 2, 0, 5));
+        reservationDetailPanel2.add(new JLabel("Attendees:"));
+        reservationDetailPanel2.add(attendees = new JTextField(15));
+        reservationDetailPanel2.add(new JLabel("Event:"));
+        reservationDetailPanel2.add(event = new JTextField(15));
+        reservationDetailPanel2.add(new JLabel("Contact Name:"));
+        reservationDetailPanel2.add(contactName = new JTextField(15));
+        reservationDetailPanel2.add(new JLabel("Contact Email:"));
+        reservationDetailPanel2.add(contactEmail = new JTextField(15));
+        reservationDetailPanel2.add(new JLabel("Contact Phone:"));
+        reservationDetailPanel2.add(contactPhone = new JTextField(15));
         
         startDate.setEditable(false);
         startTime.setEditable(false);
@@ -149,9 +149,9 @@ public class ManageReservationPanel extends JPanel
         
         panel.add(scrollPane);
         panel.add(Box.createRigidArea(new Dimension(15, 0)));
-        panel.add(reservationPanel1);
+        panel.add(reservationDetailPanel1);
         panel.add(Box.createRigidArea(new Dimension(30, 0)));
-        panel.add(reservationPanel2);
+        panel.add(reservationDetailPanel2);
         
         return panel;
     }
@@ -171,18 +171,18 @@ public class ManageReservationPanel extends JPanel
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
         // Build location selection panel
-        JPanel locationPanel = new JPanel(new FlowLayout(FlowLayout.LEFT,0,0));
+        JPanel locationPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         
         JPanel locationComponentPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.insets = new Insets(0, 0, 10, 5);
+        gbc.insets = new Insets(0, 0, 5, 5);
         locationComponentPanel.add(new JLabel("Location:"), gbc);
         
         gbc.gridx = 1;
-        gbc.insets = new Insets(0, 0, 10, 0);
+        gbc.insets = new Insets(0, 0, 5, 0);
         gbc.ipadx = 125;
         locationComponentPanel.add(locations = new JComboBox(locs), gbc);
         
@@ -194,9 +194,8 @@ public class ManageReservationPanel extends JPanel
         
         gbc.gridx = 1;
         gbc.insets = new Insets(0, 0, 0, 0);
-        gbc.ipadx = 55;
         gbc.anchor = GridBagConstraints.WEST;
-        locationComponentPanel.add(capacity = new JTextField(), gbc);
+        locationComponentPanel.add(capacity = new JTextField(5), gbc);
         
         if (locs.length > 0)
             capacity.setText(String.valueOf(locs[0].getCapacity()));
@@ -206,23 +205,24 @@ public class ManageReservationPanel extends JPanel
         locationPanel.add(locationComponentPanel);
         
         // Build search panel
-        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         
         JPanel searchComponentPanel = new JPanel(new GridBagLayout());
         
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(0, 0, 5, 0);
-        gbc.ipadx = 225;
-        gbc.ipady = 5;
         gbc.anchor = GridBagConstraints.CENTER;
-        searchComponentPanel.add(search = new JTextField(), gbc);
+        searchComponentPanel.add(search = new JTextField(15), gbc);
+        
+        JPanel searchButtonPanel = new JPanel();
+        
+        searchButtonPanel.add(searchBtn = new JButton("Search"));
+        searchButtonPanel.add(clear = new JButton("Clear"));
         
         gbc.gridy = 1;
         gbc.insets = new Insets(0, 0, 0, 0);
-        gbc.ipadx = 0;
-        gbc.ipady = 0;
-        searchComponentPanel.add(searchBtn = new JButton("Search"), gbc);
+        searchComponentPanel.add(searchButtonPanel, gbc);
         
         searchPanel.add(searchComponentPanel);
                 
@@ -263,12 +263,13 @@ public class ManageReservationPanel extends JPanel
     
     public void registerButtonController(ActionListener controller)
     {
+        searchBtn.addActionListener(controller);
+        clear.addActionListener(controller);
         update.addActionListener(controller);
         contact.addActionListener(controller);
         reviewed.addActionListener(controller);
         cancel.addActionListener(controller);
         logout.addActionListener(controller);
-        searchBtn.addActionListener(controller);
     }
     
     /**
@@ -401,16 +402,9 @@ public class ManageReservationPanel extends JPanel
     
     public void setLocations(List<Location> locs)
     {
-        ActionListener[] als = locations.getActionListeners();
-        for (ActionListener al : als)
-            locations.removeActionListener(al);
-        
         locations.removeAllItems();
         for (Location loc : locs)
             locations.addItem(loc);
-        
-        for (ActionListener al : als)
-            locations.addActionListener(al);
     }
     
     /**
@@ -422,8 +416,9 @@ public class ManageReservationPanel extends JPanel
     public void setReservations(List<Reservation> reserves)
     {
         reservations.removeAllElements();
-        for (Reservation reservation : reserves)
-            reservations.addElement(reservation);
+        if (reserves != null)
+            for (Reservation reservation : reserves)
+                reservations.addElement(reservation);
     }
     
     /**

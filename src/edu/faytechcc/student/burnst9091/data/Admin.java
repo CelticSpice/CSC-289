@@ -47,20 +47,6 @@ public class Admin
         reservation.cancel();
         new RecordDelete().deleteReservation(reservation);
     }
-    
-    /**
-        Marks a reservation to be reassessed
-    
-        @param reservation The reservation
-        @throws SQLException Error updating the database
-        @throws RecordNotExistsException Record does not exist
-    */
-    
-    public static void reassess(Reservation reservation) throws SQLException,
-            RecordNotExistsException
-    {
-        new RecordModify().modifyReservationReviewed(reservation, false);
-    }
 
     /**
         RemoveReservable - Remove a reservable that can be reserved
@@ -89,17 +75,23 @@ public class Admin
     }
     
     /**
-        Marks a reservation as reviewed
+        Marks a reservation as either reviewed or not reviewed
     
         @param reservation The reservation
+        @param reviewed Whether to mark reservation as reviewed or not
         @throws SQLException Error updating the database
         @throws RecordNotExistsException Record does not exist
     */
     
-    public static void review(Reservation reservation) throws SQLException,
-            RecordNotExistsException
+    public static void review(Reservation reservation, boolean reviewed)
+            throws SQLException, RecordNotExistsException
     {
-        new RecordModify().modifyReservationReviewed(reservation, true);
+        if (reviewed)
+            reservation.reviewed();
+        else
+            reservation.notReviewed();
+        
+        new RecordModify().modifyReservationReviewed(reservation, reviewed);
     }
     
     /**

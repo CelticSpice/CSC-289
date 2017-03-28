@@ -409,7 +409,8 @@ public class ManageReservablePanel extends JPanel
     public void setTimeframes(List<Timeframe> times)
     {
         timeframes.removeAllElements();
-        for (Timeframe timeframe : times)
-            timeframes.addElement(timeframe);
+        if (times != null)
+            for (Timeframe timeframe : times)
+                timeframes.addElement(timeframe);
     }
 }

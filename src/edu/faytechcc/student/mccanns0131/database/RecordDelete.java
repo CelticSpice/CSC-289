@@ -136,19 +136,11 @@ public class RecordDelete
     
     private void deleteReserver(Reserver reserver) throws SQLException
     {
-        String reserverID = "(SELECT Reservers.ReserverID " +
-                            "FROM Reservers " +
-                            "WHERE Reservers.FirstName = '" +
-                              reserver.getFirstName() + "' " +
-                            "AND Reservers.LastName = '" +
-                              reserver.getLastName() + "' " +
-                            "AND Reservers.Email = '" +
-                              reserver.getEmailAddress() + "' " +
-                            "AND Reservers.Phone = '" +
-                              reserver.getPhoneNumber() + "')";
-        
         sql = "DELETE FROM Reservers " +
-              "WHERE Reservers.ReserverID = " + reserverID;
+              "WHERE Reservers.FirstName = '" + reserver.getFirstName() + "' " +
+              "AND Reservers.LastName = '" + reserver.getLastName() + "' " +
+              "AND Reservers.Email = '" + reserver.getEmailAddress() + "' " +
+              "AND Reservers.Phone = '" + reserver.getPhoneNumber() + "'";
         
         ReserveDB.getInstance().deleteRecord(this);
     }

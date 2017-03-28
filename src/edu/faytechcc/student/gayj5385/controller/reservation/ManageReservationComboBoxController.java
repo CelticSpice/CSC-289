@@ -59,5 +59,10 @@ public class ManageReservationComboBoxController implements ActionListener
             else
                 view.setReservations(reservations.get(loc));
         }
+        else
+        {
+            view.setCapacity(null);
+            view.setReservations(null);
+        }
     }
 }

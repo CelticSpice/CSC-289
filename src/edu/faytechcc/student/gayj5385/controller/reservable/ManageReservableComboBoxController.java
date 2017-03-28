@@ -53,5 +53,10 @@ public class ManageReservableComboBoxController implements ActionListener
             else
                 view.setTimeframes(loc.getTimeframes());
         }
+        else
+        {
+            view.setCapacity(null);
+            view.setTimeframes(null);
+        }
     }
 }

@@ -66,18 +66,16 @@ public class ManageReservationButtonController implements ActionListener
                 // Do this
                 break;
             case "Contact":
-                List<Reservation> r = view.getSelectedReservations();
-                if (r.size() == 1)
-                    showSendEmailDialog(r.get(0).getReserver());
+                contact();
                 break;
             case "Reviewed":
-                reviewed();
+                reviewed(true);
                 break;
             case "Reassess":
-                reassess();
+                reviewed(false);
                 break;
             case "Cancel":
-                doCancel();
+                cancel();
                 break;
             case "Logout":
                 System.exit(0);
@@ -86,31 +84,10 @@ public class ManageReservationButtonController implements ActionListener
     }
     
     /**
-        Cancels a reservation
-    
-        @param reservation Reservation to cancel
+        Cancels selected reservations
     */
     
-    private void cancelReservation(Reservation reservation)
-    {
-        try
-        {
-            Admin.cancelReservation(reservation);
-            Location loc = reservation.getLocation();
-            reservations.get(loc).remove(reservation);
-        }
-        catch (SQLException ex)
-        {
-            JOptionPane.showMessageDialog(view, "Error updating database",
-                    "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    
-    /**
-        Responds to the "Cancel" command
-    */
-    
-    private void doCancel()
+    private void cancel()
     {
         List<Reservation> selectedReservations = view.getSelectedReservations();
         
@@ -118,21 +95,32 @@ public class ManageReservationButtonController implements ActionListener
         {
             // Confirm cancellation
             int choice = JOptionPane.showConfirmDialog(view,
-                    "Cancel this reservation?");
+                "Are you sure you want to cancel the selected reservation?");
             
             if (choice == JOptionPane.YES_OPTION)
             {
                 Reservation reservation = selectedReservations.get(0);
-                cancelReservation(reservation);
-                    
-                Location loc = reservation.getLocation();
-                if (reservations.get(loc).isEmpty())
+                
+                try
                 {
-                    reservations.remove(loc);
-                    setLocations();
+                    Admin.cancelReservation(reservation);
+                    Location loc = reservation.getLocation();
+                    reservations.get(loc).remove(reservation);
+                    
+                    if (reservations.get(loc).isEmpty())
+                    {
+                        reservations.remove(loc);
+                        setLocations();
+                    }
+                    else
+                        setReservations(reservations.get(loc));
                 }
-                else
-                    setReservations(reservations.get(loc));
+                catch (SQLException ex)
+                {
+                    JOptionPane.showMessageDialog(view,
+                        "Error updating database", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
             }
         }
         
@@ -143,40 +131,30 @@ public class ManageReservationButtonController implements ActionListener
     }
     
     /**
-        Marks a reservation as not yet reviewed
+        Shows the dialog enabling the administrator to send an email to a
+        reserver    
     */
     
-    private void reassess()
+    private void contact()
     {
-        List<Reservation> reserves = view.getSelectedReservations();
+        List<Reservation> selectedReservations = view.getSelectedReservations();
         
-        if (reserves.size() == 1)
+        if (selectedReservations.size() == 1)
         {
-            try
-            {
-                Reservation reservation = reserves.get(0);
-                Admin.reassess(reservation);
-                reservation.notReviewed();
-                view.setReviewedButtonText("Reviewed");
-                setReservations(reservations.get(view.getSelectedLocation()));
-            }
-            catch (SQLException | RecordNotExistsException ex)
-            {
-                JOptionPane.showMessageDialog(view, "Error updating database",
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            }
+            Reserver reserver = selectedReservations.get(0).getReserver();
+            SendEmailDialog d = new SendEmailDialog(SendEmailDialog.ADMIN,
+                reserver);
+            d.setVisible(true);
         }
-        else
-            JOptionPane.showMessageDialog(view, 
-                "Can only reassess one reservation", "Warning",
-                    JOptionPane.WARNING_MESSAGE);
     }
     
     /**
-        Marks a reservation as reviewed
+        Marks a reservation as either reviewed or not reviewed
+    
+        @param reviewed Whether to mark reservation as reviewed or not
     */
     
-    private void reviewed()
+    private void reviewed(boolean reviewed)
     {
         List<Reservation> reserves = view.getSelectedReservations();
         
@@ -185,9 +163,11 @@ public class ManageReservationButtonController implements ActionListener
             try
             {
                 Reservation reservation = reserves.get(0);
-                Admin.review(reservation);
-                reservation.reviewed();
-                view.setReviewedButtonText("Reassess");
+                Admin.review(reservation, reviewed);
+                
+                String btnText = (reviewed) ? "Reassess" : "Reviewed";
+                view.setReviewedButtonText(btnText);
+                
                 setReservations(reservations.get(view.getSelectedLocation()));
             }
             catch (SQLException | RecordNotExistsException ex)
@@ -198,7 +178,7 @@ public class ManageReservationButtonController implements ActionListener
         }
         else
             JOptionPane.showMessageDialog(view, 
-                "Can only set as reviewed one reservation", "Warning",
+                "Can only review or reassess one reservation", "Warning",
                     JOptionPane.WARNING_MESSAGE);
     }
     
@@ -225,17 +205,5 @@ public class ManageReservationButtonController implements ActionListener
             view.setReservations(reservationFilter.filter(reservations));
         else
             view.setReservations(reservations);
-    }
-    
-    /**
-        Shows the dialog enabling the administrator to send an email
-    
-        @param r The reserver sending an email to
-    */
-    
-    private void showSendEmailDialog(Reserver r)
-    {
-        SendEmailDialog d = new SendEmailDialog(SendEmailDialog.ADMIN, r);
-        d.setVisible(true);
     }
 }

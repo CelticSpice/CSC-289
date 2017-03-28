@@ -10,10 +10,12 @@ import edu.faytechcc.student.gayj5385.gui.MainFrame;
 import edu.faytechcc.student.mccanns0131.database.LocationQuery;
 import edu.faytechcc.student.mccanns0131.database.ReservationQuery;
 import edu.faytechcc.student.mccanns0131.database.ResultSetParser;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.prefs.BackingStoreException;
 import javax.swing.JOptionPane;
 
 public class Application
@@ -24,12 +26,14 @@ public class Application
         @param args The arguments
     */
     
-    public static void main(String[] args)
+    public static void main(String[] args) throws BackingStoreException,
+            NoSuchAlgorithmException
     {
         List<Location> locations = queryLocations();
         HashMap<Location, List<Reservation>> reservations = queryReservations(
             locations);
         
+        SystemUtil.initPreferences();
         new MainFrame(locations, reservations);
     }
     

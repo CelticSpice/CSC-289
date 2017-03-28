@@ -99,13 +99,13 @@ public class LocationSearch
     private Predicate<Location> filterByCapacity(String value)
     {
         if (value.startsWith(">="))
-            return l -> l.getCapacity() > Integer.parseInt(value.replace(">=", ""));
+            return l -> l.getCapacity() >= Integer.parseInt(value.replace(">=", ""));
         else if (value.startsWith("<="))
-            return l -> l.getCapacity() < Integer.parseInt(value.replace("<=", ""));
+            return l -> l.getCapacity() <= Integer.parseInt(value.replace("<=", ""));
         else if (value.startsWith(">"))
-            return l -> l.getCapacity() >= Integer.parseInt(value.replace(">", ""));
+            return l -> l.getCapacity() > Integer.parseInt(value.replace(">", ""));
         else if (value.startsWith("<"))
-            return l -> l.getCapacity() <= Integer.parseInt(value.replace("<", ""));
+            return l -> l.getCapacity() < Integer.parseInt(value.replace("<", ""));
         else
             return l -> l.getCapacity() == Integer.parseInt(value);
     }

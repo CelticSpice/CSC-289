@@ -579,10 +579,4 @@ public class ManageReservableButtonController implements ActionListener
     {
         return time.matches("\\d{2}:\\d{2}");
     }
-    
-//    private boolean validateTimeframe()
-//    {
-//        Do we need to validate the entire timeframe?
-//        (i.e. ensuring dates and times don't take place before one another)
-//    }
 }

@@ -63,7 +63,7 @@ public class OpeningController implements ActionListener
         switch (e.getActionCommand())
         {
             case "Make Reservation":
-                // Do this
+                showGuestReservationPanel();
                 break;
             case "Contact Administrator":
                 contactAdmin();
@@ -160,5 +160,14 @@ public class OpeningController implements ActionListener
         }
         
         mainPanel.showAdminPanel();
+    }
+    
+    /**
+        Shows the panel for the guest to make a reservation on
+    */
+    
+    private void showGuestReservationPanel()
+    {
+        mainPanel.showGuestReservationPanel();
     }
 }

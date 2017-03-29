@@ -125,6 +125,29 @@ public class Location
     }
     
     /**
+        Derives a list of timeframes that can be reserved at this location
+    
+        @return List of timeframes that can be reserved
+    */
+    
+    public List<Timeframe> deriveReservableTimeframes()
+    {
+        List<Timeframe> times = getTimeframes(t -> !t.isReserved());
+        List<Timeframe> reservedTimes = getTimeframes(t -> t.isReserved());
+        
+        for (Timeframe t : reservedTimes)
+        {
+            for (int i = 0; i < times.size(); i++)
+            {
+                if (t.consistsOf(times.get(i)))
+                    times.remove(i);
+            }
+        }
+        
+        return times;
+    }
+    
+    /**
         Returns the location's capacity
     
         @return The location's capacity

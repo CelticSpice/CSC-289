@@ -10,6 +10,7 @@ import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.gayj5385.controller.OpeningController;
 import java.awt.CardLayout;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import javax.swing.JPanel;
@@ -40,6 +41,9 @@ public class MainPanel extends JPanel
         
         buildOpenPanel(locations, reservations);
         buildAdminPanel(locations, reservations);
+        
+        List<Location> availableLocs = deriveAvailableLocs(locations);
+        buildReservationPanel(availableLocs);
     }
     
     /**
@@ -70,6 +74,42 @@ public class MainPanel extends JPanel
     }
     
     /**
+        Builds the guest reservation panel, initialized with the given list
+        of locations
+    
+        @param locs The locations
+    */
+    
+    private void buildReservationPanel(List<Location> locs)
+    {
+        final int CARD_INDEX = 2;
+        
+        GuestReservationPanel panel = new GuestReservationPanel(locs);
+        
+        add(panel, CARDS[CARD_INDEX]);
+    }
+    
+    /**
+        Derives locations available to be reserved from a list of locations
+    
+        @param locs The list of locations
+        @return List of locations available to reserve
+    */
+    
+    private List<Location> deriveAvailableLocs(List<Location> locs)
+    {
+        List<Location> locations = new ArrayList<>();
+        
+        for (Location loc : locs)
+        {
+            if (!loc.deriveReservableTimeframes().isEmpty())
+                locations.add(loc);
+        }
+        
+        return locations;
+    }
+    
+    /**
         Shows the administrator's view
     */
     
@@ -90,6 +130,20 @@ public class MainPanel extends JPanel
     public void showOpenPanel()
     {
         final int CARD_INDEX = 0;
+        
+        layout.show(this, CARDS[CARD_INDEX]);
+        
+        parent.pack();
+        parent.setLocationRelativeTo(null);
+    }
+    
+    /**
+        Shows the guest reservation panel
+    */
+    
+    public void showGuestReservationPanel()
+    {
+        final int CARD_INDEX = 2;
         
         layout.show(this, CARDS[CARD_INDEX]);
         

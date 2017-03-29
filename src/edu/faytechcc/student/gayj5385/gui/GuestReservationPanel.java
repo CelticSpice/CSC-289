@@ -43,14 +43,12 @@ public class GuestReservationPanel extends JPanel
     
     /**
         Constructs a new GuestReservationPanel initialized with the given
-        list of locations & timeframes
+        list of locations
     
         @param locs The locations
-        @param times The timeframes
     */
     
-    public GuestReservationPanel(List<Location> locs,
-            List<Timeframe> times)
+    public GuestReservationPanel(List<Location> locs)
     {
         super(new BorderLayout());
 
@@ -99,7 +97,10 @@ public class GuestReservationPanel extends JPanel
         // is not empty, display the first location's timeframes initially
         Location loc = (Location) locations.getSelectedItem();
         if (loc != null)
-            setTimeframes(loc.getTimeframes());
+        {
+            List<Timeframe> times = loc.deriveReservableTimeframes();
+            setTimeframes(times);
+        }
 
         // Build timeframe detail panel
         JPanel timeframeDetailPanel = new JPanel(new GridLayout(5, 2, 5, 10));

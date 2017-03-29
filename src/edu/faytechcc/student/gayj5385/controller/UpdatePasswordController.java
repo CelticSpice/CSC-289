@@ -7,7 +7,8 @@
 package edu.faytechcc.student.gayj5385.controller;
 
 import edu.faytechcc.student.burnst9091.data.Admin;
-import edu.faytechcc.student.burnst9091.data.SystemUtil;
+import edu.faytechcc.student.burnst9091.data.SHA256SaltHasher;
+import edu.faytechcc.student.burnst9091.data.SystemPreferences;
 import edu.faytechcc.student.gayj5385.gui.UpdatePasswordDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -58,37 +59,23 @@ public class UpdatePasswordController implements ActionListener
     }
     
     /**
-        Check that two character arrays are equal in their content
-    
-        @return If two character arrays are equal in their content
-    */
-    
-    private boolean isEqual(char[] c1, char[] c2)
-    {
-        for (int i = 0; i < c1.length && i < c2.length; i++)
-            if (c1[i] != c2[i])
-                return false;
-        return true;
-    }
-    
-    /**
-        Perform an update operation
+        Performs an update operation
     */
     
     private void performUpdate() throws NoSuchAlgorithmException
     {
         // Check that old password matches
-        char[] oldPass = view.getOldPass();
+        String oldPass = view.getOldPass();
         
-        if (SystemUtil.validateAdminPassword(String.valueOf(oldPass)))
+        if (new SystemPreferences().validateAdminPassword(oldPass))
         {
             // Check that new passwords entered & matching
-            char[] newPass = view.getNewPass();
-            char[] verifiedNewPass = view.getVerifiedNewPass();
+            String newPass = view.getNewPass();
+            String verifiedNewPass = view.getVerifiedNewPass();
 
-            if (isEqual(newPass, verifiedNewPass))
+            if (newPass.equals(verifiedNewPass))
             {
-                Admin.updatePassword(String.valueOf(newPass));
+                Admin.updatePassword(newPass);
                 view.setMessage("Password updated");
             }
             else

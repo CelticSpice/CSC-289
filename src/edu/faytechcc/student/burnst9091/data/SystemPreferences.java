@@ -13,24 +13,23 @@ import java.util.prefs.Preferences;
 public class SystemPreferences
 {
     // Fields
+    private static final String ROOT = "EventReservationSystem";
+    
     private EmailPreferences emailPrefs;
     private Preferences prefs;
     
     /**
-        Constructor - Accepts the root node of the system preferences
-    
-        @param root Root node of system preferences
+        Constructs a new SystemPreferences
     */
     
-    public SystemPreferences(String root)
+    public SystemPreferences()
     {
-        prefs = Preferences.userRoot().node(root);
+        prefs = Preferences.userRoot().node(ROOT);
         emailPrefs = new EmailPreferences(prefs.absolutePath() + "/Email");
     }
     
     /**
-        GetAdminGetAddress - Return the address for the administrator to
-        receive email at
+        Returns the address for the administrator to receive email at
     
         @return The address for the administrator to receive email at
     */
@@ -41,10 +40,9 @@ public class SystemPreferences
     }
     
     /**
-        GetAdminSMTPProperties - Return properties of the administrator's
-        SMTP server setup
+        Returns properties of the administrator's SMTP server
     
-        @return props Properties of the administrator's SMTP server setup
+        @return Properties of the administrator's SMTP server
     */
     
     public SMTPProperties getAdminSMTPProperties()
@@ -53,7 +51,7 @@ public class SystemPreferences
     }
     
     /**
-        GetDBPass - Return the password for the database
+        Returns the password for the database
     
         @return The password for the database
     */
@@ -64,7 +62,7 @@ public class SystemPreferences
     }
     
     /**
-        GetDBUser - Return the username for the database
+        Returns the username for the database
     
         @return The username for the database
     */
@@ -75,10 +73,9 @@ public class SystemPreferences
     }
     
     /**
-        GetGuestSMTPProperties - Return properties of the guest's
-        SMTP server setup
+        Returns properties of the guest's SMTP server
     
-        @return props Properties of the guest's SMTP server setup
+        @return Properties of the guest's SMTP server
     */
     
     public SMTPProperties getGuestSMTPProperties()
@@ -87,23 +84,23 @@ public class SystemPreferences
     }
     
     /**
-        Init - Initialize the system preferences with default values
+        Initializes the system preferences. If admin password does not already
+        exist, a new one will be created
     
-        @param saltHasher For salting & hashing initial password, if needed
-        @throws BackingStoreException Error communicating with preferences
+        @throws BackingStoreException Error working with preferences
         @throws NoSuchAlgorithmException Error hashing initial password
     */
     
-    public void init(SHA256SaltHasher saltHasher)
-            throws BackingStoreException, NoSuchAlgorithmException
+    public void init() throws BackingStoreException, NoSuchAlgorithmException
     {
         if (prefs.get("AdminPass", "").equals(""))
-            prefs.put("AdminPass", saltHasher.saltHash(""));            
+        {
+            prefs.put("AdminPass", new SHA256SaltHasher().saltHash(""));
+        }     
     }
     
     /**
-        SetAdminGetAddress - Set the address the administrator will receive
-        emails at
+        Sets the address the administrator will receive emails at
     
         @param address Address the administrator will receive emails at
     */
@@ -114,7 +111,7 @@ public class SystemPreferences
     }
     
     /**
-        SetAdminSMTPPrefs - Set preferences for the administrator's SMTP server
+        Sets preferences for the administrator's SMTP server
     
         @param props Preferences of the administrator's SMTP server
     */
@@ -125,7 +122,7 @@ public class SystemPreferences
     }
     
     /**
-        SetDBPass - Set the password for the database
+        Sets the password for the database
     
         @param pass The password for the database
     */
@@ -136,7 +133,7 @@ public class SystemPreferences
     }
     
     /**
-        SetDBUser - Set the username for the database
+        Sets the username for the database
     
         @param user The username for the database
     */
@@ -147,7 +144,7 @@ public class SystemPreferences
     }
     
     /**
-        SetGuestSMTPPrefs - Set preferences for the guest's SMTP server
+        Sets preferences for the guest's SMTP server
     
         @param props Preferences of the guest's SMTP server
     */
@@ -158,7 +155,7 @@ public class SystemPreferences
     }
     
     /**
-        UpdateAdminPassword - Update the administrator's password
+        Update the administrator's password
     
         @param pass The updated administrator password
     */
@@ -169,12 +166,10 @@ public class SystemPreferences
     }
     
     /**
-        ValidateAdminPassword - Validate a string against the stored
-        administrator password
+        Validate a string against the current administrator password
     
-        @param pass The string to validate against the stored administrator
-                    password
-        @return Whether the string & the stored administrator password match
+        @param pass String to validate against current administrator password
+        @return Whether the string & the current administrator password match
     */
     
     public boolean validateAdminPassword(String pass)

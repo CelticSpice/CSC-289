@@ -14,59 +14,24 @@ public class SHA256SaltHasher
     // Fields
     private static final String ALGO = "SHA-256";
     private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
-    
-    private String salt;
-    
-    /**
-        Constructor
-    */
-    
-    public SHA256SaltHasher()
-    {
-        salt = "";
-    }
+    private static final String SALT = "ShaBuzz556qle+7d??754!+Rw5ar?";    
     
     /**
-        Constructor - Accepts the salt to be used
-    
-        @param s The salt to be used
-    */
-    
-    public SHA256SaltHasher(String s)
-    {
-        if (s != null)
-            salt = s;
-        else
-            salt = "";
-    }
-    
-    /**
-        GetSalt - Return the salt
-    
-        @return The salt
-    */
-    
-    public String getSalt()
-    {
-        return salt;
-    }
-    
-    /**
-        SaltHash - Salt & hash the given input, returning the results
+        Salts & hashes the given input, returning the results
     
         @param input Input to hash
         @throws NoSuchAlgorithmException If SHA-256 algorithm cannot be found
         @return Input salted & hashed
     */
     
-    public String saltHash(String input) throws NoSuchAlgorithmException
+    public static String saltHash(String input) throws NoSuchAlgorithmException
     {
         MessageDigest sha256 = MessageDigest.getInstance(ALGO);
         
         if (input == null)
             input = "";
         
-        input += salt;
+        input += SALT;
         
         byte[] digestResult = sha256.digest(input.getBytes());
         
@@ -79,19 +44,5 @@ public class SHA256SaltHasher
         }
         
         return new String(hexChars);
-    }
-    
-    /**
-        SetSalt - Set the salt to be used
-    
-        @param s The salt
-    */
-    
-    public void setSalt(String s)
-    {
-        if (s != null)
-            salt = s;
-        else
-            salt = "";
     }
 }

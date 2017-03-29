@@ -26,8 +26,7 @@ public class Application
         @param args The arguments
     */
     
-    public static void main(String[] args) throws BackingStoreException,
-            NoSuchAlgorithmException
+    public static void main(String[] args)
     {
         try
         {
@@ -46,7 +45,6 @@ public class Application
         HashMap<Location, List<Reservation>> reservations = queryReservations(
             locations);
         
-        SystemUtil.initPreferences();
         new MainFrame(locations, reservations);
     }
     

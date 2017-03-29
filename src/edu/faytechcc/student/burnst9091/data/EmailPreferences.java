@@ -14,19 +14,18 @@ public class EmailPreferences
     private Preferences prefs;
     
     /**
-        Constructor - Accepts the location of the email preferences
+        Constructs a new EmailPreferences at the given node
     
-        @param prefsLocation The location of the email preferences
+        @param node The node of the email preferences
     */
     
-    public EmailPreferences(String prefsLocation)
+    public EmailPreferences(String node)
     {
-        prefs = Preferences.userRoot().node(prefsLocation);
+        prefs = Preferences.userRoot().node(node);
     }
     
     /**
-        GetAdminGetAddress - Return the address the administrator will receive
-        email at
+        Returns the address the administrator will receive email at
     
         @return The address the administrator will receive email at
     */
@@ -37,15 +36,15 @@ public class EmailPreferences
     }
     
     /**
-        GetAdminSMTPProperties - Return properties of the administrator's
-        SMTP server setup
+        Returns properties of the administrator's SMTP server
     
-        @return props Properties of the administrator's SMTP server setup
+        @return Properties of the administrator's SMTP server
     */
     
     public SMTPProperties getAdminSMTPProperties()
     {
         SMTPProperties props = new SMTPProperties();
+        
         props.setAddress(prefs.get("AdminSendAddress", "foo@bar.com"));
         props.setHost(prefs.get("AdminSMTPHost", "smtp.foo.com"));
         
@@ -55,32 +54,35 @@ public class EmailPreferences
         props.setPort(prefs.get("AdminSMTPPort", "587"));
         props.setUser(prefs.get("AdminSMTPUser", "foobar"));
         props.setPassword(prefs.get("AdminSMTPPass", "password"));
+        
         return props;
     }
     
     /**
-        GetGuestSMTPProperties - Return properties of the guest's
-        SMTP server setup
+        Returns properties of the guest's SMTP server
     
-        @return props Properties of the guest's SMTP server setup
+        @return props Properties of the guest's SMTP server
     */
     
     public SMTPProperties getGuestSMTPProperties()
     {
         SMTPProperties props = new SMTPProperties();
+        
         props.setAddress(prefs.get("GuestSendAddress", "foo@bar.com"));
         props.setHost(prefs.get("GuestSMTPHost", "smtp.foo.com"));
+        
         props.setSecurity(SecurityOption.valueOf
             (prefs.get("GuestSMTPSecurity", "NONE")));
+        
         props.setPort(prefs.get("GuestSMTPPort", "587"));
         props.setUser(prefs.get("GuestSMTPUser", "foobar"));
         props.setPassword(prefs.get("GuestSMTPPass", "password"));
+        
         return props;
     }
     
     /**
-        SetAdminGetAddress - Set the address the administrator will receive
-        emails at
+        Sets the address the administrator will receive email at
     
         @param address Address the administrator will receive emails at
     */
@@ -91,7 +93,7 @@ public class EmailPreferences
     }
     
     /**
-        SetAdminSMTPPrefs - Set preferences for the administrator's SMTP server
+        Sets preferences of the administrator's SMTP server
     
         @param props Preferences of the administrator's SMTP server
     */
@@ -107,7 +109,7 @@ public class EmailPreferences
     }
     
     /**
-        SetGuestSMTPPrefs - Set preferences for the guest's SMTP server
+        Sets preferences of the guest's SMTP server
     
         @param props Preferences of the guest's SMTP server
     */

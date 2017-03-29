@@ -8,6 +8,7 @@ package edu.faytechcc.student.gayj5385.controller;
 
 import edu.faytechcc.student.burnst9091.data.SMTPProperties;
 import edu.faytechcc.student.burnst9091.data.SMTPValidator;
+import edu.faytechcc.student.burnst9091.data.SystemPreferences;
 import edu.faytechcc.student.burnst9091.data.SystemUtil;
 import edu.faytechcc.student.gayj5385.gui.SettingsPanel;
 import edu.faytechcc.student.gayj5385.gui.UpdatePasswordDialog;
@@ -50,29 +51,29 @@ public class SettingsPanelController implements ActionListener
             case "Cancel":
                 cancelChanges();
                 break;
-            case "Logout":
-                System.exit(0);
         }
     }
     
     /**
-        Reset the fields to presently saved values
+        Resets the fields to current values
     */
     
     private void cancelChanges()
     {
-        SMTPProperties adminProps = SystemUtil.getAdminSMTPProperties();
-        SMTPProperties guestProps = SystemUtil.getGuestSMTPProperties();
-        String adminGetAddress = SystemUtil.getAdminGetAddress();
-        String dbUser = SystemUtil.getDBUser();
-        String dbPass = SystemUtil.getDBPass();
+        SystemPreferences systemPrefs = new SystemPreferences();
+        
+        SMTPProperties adminProps = systemPrefs.getAdminSMTPProperties();
+        SMTPProperties guestProps = systemPrefs.getGuestSMTPProperties();
+        String adminGetAddress = systemPrefs.getAdminGetAddress();
+        String dbUser = systemPrefs.getDBUser();
+        String dbPass = systemPrefs.getDBPass();
         
         view.setEmailFields(adminProps, guestProps, adminGetAddress);
         view.setDatabaseFields(dbUser, dbPass);
     }
     
     /**
-        Show the dialog for the user to update the administrator password
+        Shows the dialog for the user to update the administrator password
     */
     
     private void showUpdatePassDialog()

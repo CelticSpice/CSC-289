@@ -10,16 +10,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.prefs.BackingStoreException;
 
 public class SystemUtil
-{
-    // Fields
-    private static final String SALT = "ShaBuzz556qle+7d??754!+Rw5ar?";
-    
-    private static final SHA256SaltHasher SALT_HASHER =
-            new SHA256SaltHasher(SALT);
-    
-    private static final SystemPreferences PREFS =
-            new SystemPreferences("EventReservationSystem");
-    
+{   
     /**
         GetAdminGetAddress - Return the address for the administrator to
         receive email at

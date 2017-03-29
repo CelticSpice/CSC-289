@@ -17,8 +17,6 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -30,7 +28,7 @@ import javax.swing.JTextField;
 public class SettingsPanel extends JPanel
 {
     // Fields
-    private JButton save, updatePasswd, cancel, logout;
+    private JButton save, updatePasswd, cancel;
     private JComboBox adminSecurity, guestSecurity;
     private JPasswordField adminPass, guestPass, dbPass;
     private JTextField adminSendAddress, adminHost, adminPort,
@@ -88,44 +86,13 @@ public class SettingsPanel extends JPanel
     
     private JPanel buildBottomPanel()
     {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        
-        panel.add(buildBottomLeftPanel());
-        panel.add(Box.createHorizontalGlue());
-        panel.add(buildBottomRightPanel());
-        
-        return panel;
-    }
-    
-    /**
-        Build & return the bottom-left panel of this panel
-    
-        @return The built panel
-    */
-    
-    private JPanel buildBottomLeftPanel()
-    {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
         
         panel.add(save = new JButton("Save"));
         panel.add(updatePasswd = new JButton("Update Password"));
         panel.add(cancel = new JButton("Cancel"));
         
-        return panel;
-    }
-    
-    /**
-        Build & return the bottom-right panel of this panel
-    
-        @return The built panel
-    */
-    
-    private JPanel buildBottomRightPanel()
-    {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));
-        panel.add(logout = new JButton("Logout"));
         return panel;
     }
     
@@ -212,12 +179,14 @@ public class SettingsPanel extends JPanel
     public SMTPProperties getAdminSMTPProperties()
     {
         SMTPProperties props = new SMTPProperties();
+        
         props.setAddress(adminSendAddress.getText());
         props.setHost(adminHost.getText());
         props.setSecurity((SecurityOption) adminSecurity.getSelectedItem());
         props.setPort(adminPort.getText());
         props.setUser(adminUser.getText());
         props.setPassword(String.valueOf(adminPass.getPassword()));
+        
         return props;
     }
     
@@ -233,14 +202,14 @@ public class SettingsPanel extends JPanel
     }
     
     /**
-        Return the set database password
+        Returns the set database password
     
         @return The set database password
     */
     
-    public char[] getDBPass()
+    public String getDBPass()
     {
-        return dbPass.getPassword();
+        return new String(dbPass.getPassword());
     }
     
     /**
@@ -263,12 +232,14 @@ public class SettingsPanel extends JPanel
     public SMTPProperties getGuestSMTPProperties()
     {
         SMTPProperties props = new SMTPProperties();
+        
         props.setAddress(guestSendAddress.getText());
         props.setHost(guestHost.getText());
         props.setSecurity((SecurityOption) guestSecurity.getSelectedItem());
         props.setPort(guestPort.getText());
         props.setUser(guestUser.getText());
         props.setPassword(String.valueOf(guestPass.getPassword()));
+        
         return props;
     }
     
@@ -283,7 +254,6 @@ public class SettingsPanel extends JPanel
         save.addActionListener(controller);
         updatePasswd.addActionListener(controller);
         cancel.addActionListener(controller);
-        logout.addActionListener(controller);
     }
     
     /**

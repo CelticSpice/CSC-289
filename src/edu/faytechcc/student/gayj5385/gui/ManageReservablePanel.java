@@ -36,7 +36,7 @@ public class ManageReservablePanel extends JPanel
 {
     // Fields
     private DefaultListModel timeframes;
-    private JButton add, update, delete, logout, searchBtn, clear;
+    private JButton add, update, delete, searchBtn, clear;
     private JComboBox<Location> locations;
     private JList<Timeframe> timeframeList;
     private JTextField capacity, search, startDate, startTime, endDate, endTime,
@@ -44,16 +44,13 @@ public class ManageReservablePanel extends JPanel
 
     /**
         Constructs a ManageReservablePanel initialized with the given locations
-
-        @param locs The locations
     */
 
-    public ManageReservablePanel(List<Location> locs)
+    public ManageReservablePanel()
     {
         super(new BorderLayout());
 
-        Location[] locArray = locs.toArray(new Location[locs.size()]);
-        add(buildTopPanel(locArray), BorderLayout.NORTH);
+        add(buildTopPanel(), BorderLayout.NORTH);
         add(buildMidPanel(), BorderLayout.CENTER);
         add(buildBottomPanel(), BorderLayout.SOUTH);
     }
@@ -66,23 +63,12 @@ public class ManageReservablePanel extends JPanel
 
     private JPanel buildBottomPanel()
     {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Build main button panel
-        JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        btnPanel.add(add = new JButton("Add"));
-        btnPanel.add(update = new JButton("Update"));
-        btnPanel.add(delete = new JButton("Delete"));
-
-        // Build logout button panel
-        JPanel logoutBtnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        logoutBtnPanel.add(logout = new JButton("Logout"));
-
-        panel.add(btnPanel);
-        panel.add(Box.createHorizontalGlue());
-        panel.add(logoutBtnPanel);
+        panel.add(add = new JButton("Add"));
+        panel.add(update = new JButton("Update"));
+        panel.add(delete = new JButton("Delete"));
 
         return panel;
     }
@@ -139,14 +125,12 @@ public class ManageReservablePanel extends JPanel
     }
 
     /**
-        Builds & returns the top panel of this panel, initialized with
-        the given location data
+        Builds & returns the top panel of this panel
 
-        @param locs The locations
         @return The built panel
     */
 
-    private JPanel buildTopPanel(Location[] locs)
+    private JPanel buildTopPanel()
     {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
@@ -166,7 +150,7 @@ public class ManageReservablePanel extends JPanel
         gbc.gridx = 1;
         gbc.insets = new Insets(0, 0, 10, 0);
         gbc.ipadx = 125;
-        locationComponentPanel.add(locations = new JComboBox(locs), gbc);
+        locationComponentPanel.add(locations = new JComboBox(), gbc);
         
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -178,12 +162,6 @@ public class ManageReservablePanel extends JPanel
         gbc.insets = new Insets(0, 0, 0, 0);
         gbc.anchor = GridBagConstraints.WEST;
         locationComponentPanel.add(capacity = new JTextField(5), gbc);
-        
-        // If there are locations in the list of locations the
-        // ManageReservablePanel was constructed with, display the first
-        // location's capacity initially
-        if (locs.length > 0)
-            capacity.setText(String.valueOf(locs[0].getCapacity()));
 
         capacity.setEditable(false);
 
@@ -271,7 +249,6 @@ public class ManageReservablePanel extends JPanel
         add.addActionListener(controller);
         update.addActionListener(controller);
         delete.addActionListener(controller);
-        logout.addActionListener(controller);
         searchBtn.addActionListener(controller);
         clear.addActionListener(controller);
     }

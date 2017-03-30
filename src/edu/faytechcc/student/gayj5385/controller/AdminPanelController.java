@@ -9,7 +9,6 @@ package edu.faytechcc.student.gayj5385.controller;
 import edu.faytechcc.student.burnst9091.data.SMTPProperties;
 import edu.faytechcc.student.burnst9091.data.SecurityOption;
 import edu.faytechcc.student.burnst9091.data.SystemPreferences;
-import edu.faytechcc.student.burnst9091.data.SystemUtil;
 import edu.faytechcc.student.gayj5385.gui.AdminPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;

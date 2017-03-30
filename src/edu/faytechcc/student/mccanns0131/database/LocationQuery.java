@@ -6,9 +6,6 @@
 
 package edu.faytechcc.student.mccanns0131.database;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 public class LocationQuery extends Query
 {
     /**
@@ -21,13 +18,12 @@ public class LocationQuery extends Query
     }
     
     /**
-        Queries for & returns data on locations
+        Prepares the query to return data on locations
     
-        @throws SQLException Error querying the database
-        @return ResultSet containing data on locations
+        @return This query, prepared
     */
     
-    public ResultSet queryLocations() throws SQLException
+    public LocationQuery queryLocations()
     {
         sql = "SELECT Locations.LocationName, Locations.Capacity, " +
               "Timeframes.StartDate, Timeframes.StartTime, " +
@@ -43,65 +39,19 @@ public class LocationQuery extends Query
               "AND Reservables.TimeframeID = Reservations.TimeframeID " +
               "ORDER BY Locations.LocationName";
         
-        return ReserveDB.getInstance().runQuery(this);
+        return this;
     }
     
     /**
-        Queries for & returns data on the timeframes allocated to the named
-        location
-    
-        @param locName Name of location to get timeframes of
-        @throws SQLException Error querying the database
-        @return ResultSet containing data on timeframes allocated to named
-                location
-    */
-    
-    public ResultSet queryLocationTimeframes(String locName) throws SQLException
-    {
-        sql = "SELECT Timeframes.StartDate, Timeframes.StartTime, " +
-              "Timeframes.EndDate, Timeframes.EndTime, Reservables.Cost, " +
-              "Reservations.LocationName AS 'ReservedLocationName' " +
-              "FROM Timeframes " +
-              "INNER JOIN Reservables " +
-              "ON Timeframes.TimeframeID = Reservables.TimeframeID " +
-              "LEFT JOIN Reservations " +
-              "ON Reservables.LocationName = Reservations.LocationName " +
-              "AND Reservables.TimeframeID = Reservations.TimeframeID " +
-              "WHERE Reservables.LocationName = '" + locName + "'";
-        
-        return ReserveDB.getInstance().runQuery(this);
-    }
-    
-    /**
-        Queries for & returns the capacity of the named location
+        Prepares the query to return the capacity of the named location
     
         @param locName Name of the location to get the capacity of
-        @throws SQLException Error querying the database
-        @return ResultSet containing the capacity of the named location
     */
     
-    public ResultSet queryLocationCapacity(String locName) throws SQLException
+    public void queryLocationCapacity(String locName)
     {
         sql = "SELECT Locations.Capacity " +
               "FROM Locations " +
-              "WHERE Locations.LocationName = '" + locName + "'";
-        
-        return ReserveDB.getInstance().runQuery(this);
-    }
-    
-    /**
-        Queries for & returns the names of locations
-    
-        @throws SQLException Error querying the database
-        @return ResultSet containing location names
-    */
-    
-    public ResultSet queryLocationNames() throws SQLException
-    {
-        sql = "SELECT Locations.LocationName " +
-              "FROM Locations " +
-              "ORDER BY Locations.LocationName";
-        
-        return ReserveDB.getInstance().runQuery(this);
+              "WHERE Locations.LocationName = '" + locName + "'";        
     }
 }

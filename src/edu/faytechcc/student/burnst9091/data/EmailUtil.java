@@ -44,7 +44,8 @@ public class EmailUtil
             address.setPersonal(senderName);
         
         // Get the properties for the guest to send email
-        SMTPProperties props = SystemUtil.getGuestSMTPProperties();
+        SystemPreferences prefs = new SystemPreferences();
+        SMTPProperties props = prefs.getGuestSMTPProperties();
         
         // Get address, username, password from properties
         InternetAddress from = new InternetAddress(props.getAddress());
@@ -53,7 +54,7 @@ public class EmailUtil
         
         // Get the address for the administrator to receive email at
         InternetAddress to = new InternetAddress
-            (SystemUtil.getAdminGetAddress());
+            (prefs.getAdminGetAddress());
         
         // Prepare SMTP properties for session
         Properties smtpProps = props.asSessionProperties();
@@ -103,7 +104,8 @@ public class EmailUtil
             throws AddressException, MessagingException
     {
         // Get the properties for the admin to send email
-        SMTPProperties props = SystemUtil.getAdminSMTPProperties();
+        SystemPreferences prefs = new SystemPreferences();
+        SMTPProperties props = prefs.getAdminSMTPProperties();
         
         // Get address, username, password from properties
         InternetAddress from = new InternetAddress(props.getAddress());

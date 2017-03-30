@@ -16,14 +16,19 @@ import java.sql.SQLException;
 public class RecordAdd
 {
     // Fields
+    private DatabaseConnection connection;
     private String sql;
     
     /**
-        Constructs a new RecordAdd
+        Constructs a new RecordAdd initialized with the given connection to
+        the database
+    
+        @param conn Connection to database
     */
     
-    public RecordAdd()
+    public RecordAdd(DatabaseConnection conn)
     {
+        connection = conn;
         sql = "";
     }
     
@@ -31,7 +36,7 @@ public class RecordAdd
         Adds a record of a location to the database
     
         @param location The location to add
-        @throws SQLException Error adding record to the database
+        @throws SQLException Error adding record to database
     */
     
     private void addLocation(Location location) throws SQLException
@@ -40,33 +45,35 @@ public class RecordAdd
               "VALUES ('" + location.getName() + "', " +
                             location.getCapacity() + ")";
         
-        ReserveDB.getInstance().addRecord(this);
+        connection.addRecord(this);
     }
     
     /**
         Adds a record of a reservable to the database
     
         @param reservable The reservable to add
-        @throws SQLException Error adding record to the database
+        @throws SQLException Error adding record to database
     */
     
     public void addReservable(Reservable reservable) throws SQLException
-    {
+    {        
         // Check if a record of a location should be added
         ResultSetParser parser = new ResultSetParser();
         ReservableQuery q = new ReservableQuery();
-        parser.setResultSet(q.queryReservableName(reservable.getName()));
+        q.queryReservableName(reservable.getName());
+        parser.setResultSet(connection.runQuery(q));
         
         if (parser.isEmpty())
             addLocation(reservable.getLocation());
         
         // Check if a record of a timeframe should be added
-        parser.setResultSet(q.queryReservableTimeframe(
-                reservable.getTimeframe()));
+        q.queryReservableTimeframeID(reservable.getTimeframe());
+        parser.setResultSet(connection.runQuery(q));
         
         if (parser.isEmpty())
             addTimeframe(reservable.getTimeframe());
         
+        // Add record of reservable
         String timeframeID = "(SELECT Timeframes.TimeframeID " +
                              "FROM Timeframes " +
                              "WHERE Timeframes.StartDate = '" +
@@ -82,16 +89,15 @@ public class RecordAdd
               "VALUES ('" + reservable.getName() + "', " +
                             timeframeID + ", " +
                             reservable.getCost() + ")";
-
-
-        ReserveDB.getInstance().addRecord(this);
+        
+        connection.addRecord(this);
     }
     
     /**
         Adds a record of a reservation to the database
     
         @param reservation The reservation to add
-        @throws SQLException Error adding record to the database
+        @throws SQLException Error adding record to database
     */
     
     public void addReservation(Reservation reservation) throws SQLException
@@ -99,12 +105,13 @@ public class RecordAdd
         // Check if a record of a reserver should be added
         ResultSetParser parser = new ResultSetParser();
         ReservationQuery q = new ReservationQuery();
-        parser.setResultSet(q.queryReservationReserver(
-                reservation.getReserver()));
+        q.queryReservationReserverID(reservation.getReserver());
+        parser.setResultSet(connection.runQuery(q));
         
         if (parser.isEmpty())
             addReserver(reservation.getReserver());
         
+        // Add record of reservation
         String reserverID = "(SELECT Reservers.ReserverID " +
                             "FROM Reservers " +
                             "WHERE Reservers.FirstName = '" +
@@ -134,15 +141,15 @@ public class RecordAdd
                             reservation.getEventType() + "', " +
                             reservation.getNumberAttending() + ", " +
                             false + ")";
-
-        ReserveDB.getInstance().addRecord(this);
+        
+        connection.addRecord(this);
     }
     
     /**
-       Adds a record of a reserver to the database
+        Adds a record of a reserver to the database
        
-       @param reserver The reserver to add
-       @throws SQLException Error adding record to the database
+        @param reserver The reserver to add
+        @throws SQLException Error adding record to database
      */
     
     private void addReserver(Reserver reserver) throws SQLException
@@ -154,8 +161,8 @@ public class RecordAdd
                             reserver.getLastName()      + "', '" +
                             reserver.getEmailAddress()  + "', '" +
                             reserver.getPhoneNumber()   + "')";
-            
-        ReserveDB.getInstance().addRecord(this);
+        
+        connection.addRecord(this);
     }
     
     /**
@@ -175,7 +182,7 @@ public class RecordAdd
                             timeframe.getEndDate()   + "', '" +
                             timeframe.getEndTime() + "')";
         
-        ReserveDB.getInstance().addRecord(this);
+        connection.addRecord(this);
     }
     
     /**

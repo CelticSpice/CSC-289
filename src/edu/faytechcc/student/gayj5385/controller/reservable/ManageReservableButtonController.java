@@ -7,9 +7,9 @@
 
 package edu.faytechcc.student.gayj5385.controller.reservable;
 
-import edu.faytechcc.student.burnst9091.data.Admin;
 import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reservable;
+import edu.faytechcc.student.burnst9091.data.SystemPreferences;
 import edu.faytechcc.student.burnst9091.data.search.SearchActualizer;
 import edu.faytechcc.student.burnst9091.data.Timeframe;
 import edu.faytechcc.student.burnst9091.data.search.Filter;
@@ -19,6 +19,8 @@ import edu.faytechcc.student.gayj5385.controller.ReservableAddRadioController;
 import edu.faytechcc.student.gayj5385.gui.MainPanel;
 import edu.faytechcc.student.gayj5385.gui.ManageReservablePanel;
 import edu.faytechcc.student.gayj5385.gui.AddReservableDialog;
+import edu.faytechcc.student.mccanns0131.database.DatabaseConnection;
+import edu.faytechcc.student.mccanns0131.database.RecordDelete;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -33,26 +35,29 @@ public class ManageReservableButtonController implements ActionListener
     private ManageReservablePanel view;
     private Filter<Timeframe> timeframeFilter;
     private Filter<Location> locationFilter;
+    private SystemPreferences preferences;
     
     /**
         Constructs a new ManageReservableButtonController to manage the
-        given view's buttons, a list of locations, and filters for filtering
-        timeframes & locations
+        given view's buttons and accepts a list of locations, filters for
+        filtering timeframes & locations, and the system preferences
 
         @param v The view
         @param locs The locations
         @param timeFilter Timeframe filter
         @param locFilter Location filter
+        @param prefs System preferences
     */
     
     public ManageReservableButtonController(ManageReservablePanel v,
             List<Location> locs, Filter<Timeframe> timeFilter,
-            Filter<Location> locFilter)
+            Filter<Location> locFilter, SystemPreferences prefs)
     {
         view = v;
         locations = locs;
         timeframeFilter = timeFilter;
         locationFilter = locFilter;
+        preferences = prefs;
     }
 
     /**
@@ -74,11 +79,6 @@ public class ManageReservableButtonController implements ActionListener
                 break;
             case "Delete":
                 doDelete();
-                break;
-            case "Logout":
-                MainPanel panel = ((MainPanel)view.getParent());
-                panel.showOpenPanel();
-                view.setVisible(false);
                 break;
             case "Search":
                 if (!view.getSearchCriteria().isEmpty())
@@ -121,11 +121,20 @@ public class ManageReservableButtonController implements ActionListener
 
         try
         {
+            String user = preferences.getDBUser();
+            String pass = preferences.getDBPass();
+            DatabaseConnection conn = DatabaseConnection.getConnection(
+                    user, pass);
+            
+            RecordDelete delete = new RecordDelete(conn);
+            
             for (Timeframe timeframe : timeframes)
             {
-                Admin.removeReservable(new Reservable(loc, timeframe));
+                delete.deleteReservable(new Reservable(loc, timeframe));
                 loc.removeTimeframe(timeframe);
             }
+            
+            conn.close();
         }
         catch (SQLException ex)
         {
@@ -358,7 +367,7 @@ public class ManageReservableButtonController implements ActionListener
         AddReservableDialog d = new AddReservableDialog(locations);
 
         d.registerButtonController(new ReservableAddButtonController(d,
-            locations));
+            locations, preferences));
         d.registerRadioButtonController(new ReservableAddRadioController(d));
         d.registerComboBoxController(new ReservableAddComboBoxController(d));
 

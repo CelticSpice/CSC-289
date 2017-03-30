@@ -7,8 +7,6 @@
 package edu.faytechcc.student.mccanns0131.database;
 
 import edu.faytechcc.student.burnst9091.data.Timeframe;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class ReservableQuery extends Query
 {
@@ -22,32 +20,29 @@ public class ReservableQuery extends Query
     }
     
     /**
-        Queries reservables for a distinct name
+        Prepares the query to query reservables for the given location name
     
         @param name Name of reservable
-        @throws SQLException Error Querying the database
-        @return The results of the query
+        @return This query, prepared
     */
     
-    public ResultSet queryReservableName(String name) throws SQLException
+    public ReservableQuery queryReservableName(String name)
     {
         sql = "SELECT DISTINCT Reservables.LocationName " +
               "FROM Reservables " +
               "WHERE Reservables.LocationName = '" + name + "'";
         
-        return ReserveDB.getInstance().runQuery(this);
+        return this;
     }
     
     /**
-        Queries reservables for a distinct timeframe
+        Prepares the query to query reservables for the ID of the given
+        timeframe
     
-        @param timeframe The timeframe of the reservable
-        @throws SQLException Error Querying the database
-        @return The results of the query
+        @param timeframe The timeframe to query ID of
     */
     
-    public ResultSet queryReservableTimeframe(Timeframe timeframe)
-            throws SQLException
+    public void queryReservableTimeframeID(Timeframe timeframe)
     {
         String timeframeID = "(SELECT Timeframes.TimeframeID " +
                              "FROM Timeframes " +
@@ -63,7 +58,5 @@ public class ReservableQuery extends Query
         sql = "SELECT DISTINCT Reservables.TimeframeID " +
               "FROM Reservables " +
               "WHERE Reservables.TimeframeID = " + timeframeID;
-        
-        return ReserveDB.getInstance().runQuery(this);
     }
 }

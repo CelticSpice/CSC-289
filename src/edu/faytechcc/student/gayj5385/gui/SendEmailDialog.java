@@ -6,8 +6,7 @@
 
 package edu.faytechcc.student.gayj5385.gui;
 
-import edu.faytechcc.student.burnst9091.data.Admin;
-import edu.faytechcc.student.burnst9091.data.Guest;
+import edu.faytechcc.student.burnst9091.data.EmailUtil;
 import edu.faytechcc.student.burnst9091.data.Reserver;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -248,7 +247,7 @@ public class SendEmailDialog extends JDialog
                         
                         try
                         {
-                            Admin.emailReserver(r, subj, mesg);
+                            EmailUtil.emailReserver(r, subj, mesg);
                         }
                         catch (Exception ex)
                         {
@@ -266,7 +265,7 @@ public class SendEmailDialog extends JDialog
                         
                         try
                         {
-                            Guest.emailAdmin(subj, n, em, mesg);
+                            EmailUtil.emailAdmin(subj, n, em, mesg);
                         }
                         catch (Exception ex)
                         {

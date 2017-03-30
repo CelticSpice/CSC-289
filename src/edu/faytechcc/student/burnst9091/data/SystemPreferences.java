@@ -6,14 +6,12 @@
 
 package edu.faytechcc.student.burnst9091.data;
 
-import java.security.NoSuchAlgorithmException;
-import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 public class SystemPreferences
 {
     // Fields
-    private static final String ROOT = "EventReservationSystem";
+    private final String ROOT = "EventReservationSystem";
     
     private EmailPreferences emailPrefs;
     private Preferences prefs;
@@ -37,6 +35,17 @@ public class SystemPreferences
     public String getAdminGetAddress()
     {
         return emailPrefs.getAdminGetAddress();
+    }
+    
+    /**
+        Returns the administrator's password
+    
+        @return The administrator's password
+    */
+    
+    public String getAdminPassword()
+    {
+        return prefs.get("AdminPass", "");
     }
     
     /**
@@ -81,22 +90,6 @@ public class SystemPreferences
     public SMTPProperties getGuestSMTPProperties()
     {
         return emailPrefs.getGuestSMTPProperties();
-    }
-    
-    /**
-        Initializes the system preferences. If admin password does not already
-        exist, a new one will be created
-    
-        @throws BackingStoreException Error working with preferences
-        @throws NoSuchAlgorithmException Error hashing initial password
-    */
-    
-    public void init() throws BackingStoreException, NoSuchAlgorithmException
-    {
-        if (prefs.get("AdminPass", "").equals(""))
-        {
-            prefs.put("AdminPass", new SHA256SaltHasher().saltHash(""));
-        }     
     }
     
     /**
@@ -155,7 +148,7 @@ public class SystemPreferences
     }
     
     /**
-        Update the administrator's password
+        Updates the administrator's password
     
         @param pass The updated administrator password
     */
@@ -163,17 +156,5 @@ public class SystemPreferences
     public void updateAdminPassword(String pass)
     {
         prefs.put("AdminPass", pass);
-    }
-    
-    /**
-        Validate a string against the current administrator password
-    
-        @param pass String to validate against current administrator password
-        @return Whether the string & the current administrator password match
-    */
-    
-    public boolean validateAdminPassword(String pass)
-    {
-        return pass.equals(prefs.get("AdminPass", ""));
     }
 }

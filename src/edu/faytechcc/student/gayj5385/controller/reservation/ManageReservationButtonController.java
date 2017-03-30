@@ -6,14 +6,17 @@
 
 package edu.faytechcc.student.gayj5385.controller.reservation;
 
-import edu.faytechcc.student.burnst9091.data.Admin;
 import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.Reserver;
+import edu.faytechcc.student.burnst9091.data.SystemPreferences;
 import edu.faytechcc.student.burnst9091.data.search.Filter;
 import edu.faytechcc.student.burnst9091.exception.RecordNotExistsException;
 import edu.faytechcc.student.gayj5385.gui.ManageReservationPanel;
 import edu.faytechcc.student.gayj5385.gui.SendEmailDialog;
+import edu.faytechcc.student.mccanns0131.database.DatabaseConnection;
+import edu.faytechcc.student.mccanns0131.database.RecordDelete;
+import edu.faytechcc.student.mccanns0131.database.RecordModify;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -29,26 +32,30 @@ public class ManageReservationButtonController implements ActionListener
     private Filter<Reservation> reservationFilter;
     private HashMap<Location, List<Reservation>> reservations;
     private ManageReservationPanel view;
+    private SystemPreferences preferences;
     
     /**
         Constructs a new ManageReservationButtonController to control buttons
         on the given view, initialized with a mapping of location reservations
-        & filters for locations & reservations
+        & filters for locations & reservations, and the system preferences
     
         @param v The view
         @param reserves The reservation mapping
         @param locFilter Location filter
         @param resFilter Reservation filter
+        @param prefs System preferences
     */
     
     public ManageReservationButtonController(ManageReservationPanel v,
             HashMap<Location, List<Reservation>> reserves,
-            Filter<Location> locFilter, Filter<Reservation> resFilter)
+            Filter<Location> locFilter, Filter<Reservation> resFilter,
+            SystemPreferences prefs)
     {
         view = v;
         reservations = reserves;
         locationFilter = locFilter;
         reservationFilter = resFilter;
+        preferences = prefs;
     }
     
     /**
@@ -103,7 +110,17 @@ public class ManageReservationButtonController implements ActionListener
                 
                 try
                 {
-                    Admin.cancelReservation(reservation);
+                    String user = preferences.getDBUser();
+                    String pass = preferences.getDBPass();
+                    DatabaseConnection conn = DatabaseConnection.getConnection(
+                            user, pass);
+                    
+                    new RecordDelete(conn).deleteReservation(reservation);
+                    
+                    conn.close();
+                    
+                    reservation.cancel();
+                    
                     Location loc = reservation.getLocation();
                     reservations.get(loc).remove(reservation);
                     
@@ -162,8 +179,18 @@ public class ManageReservationButtonController implements ActionListener
         {
             try
             {
+                String user = preferences.getDBUser();
+                String pass = preferences.getDBPass();
+                DatabaseConnection conn = DatabaseConnection.getConnection(
+                        user, pass);
+                
                 Reservation reservation = reserves.get(0);
-                Admin.review(reservation, reviewed);
+                new RecordModify(conn).modifyReservationReviewed(
+                        reservation, reviewed);
+                
+                reservation.reviewed();
+                
+                conn.close();
                 
                 String btnText = (reviewed) ? "Reassess" : "Reviewed";
                 view.setReviewedButtonText(btnText);

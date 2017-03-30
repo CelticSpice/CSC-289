@@ -6,7 +6,6 @@
 
 package edu.faytechcc.student.mccanns0131.database;
 
-import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reserver;
 import edu.faytechcc.student.burnst9091.data.Timeframe;
 import java.sql.ResultSet;
@@ -24,15 +23,13 @@ public class ReservationQuery extends Query
     }
     
     /**
-        Queries for a reservation with a distinct reserver
+        Prepares the query to query reservations made for the ID of the given
+        reserver
     
-        @param reserver Reserver to query reservations with
-        @throws SQLException Error querying the database
-        @return A ResultSet containing the results of the query
+        @param reserver Reserver to query ID of
     */
     
-    public ResultSet queryReservationReserver(Reserver reserver)
-            throws SQLException
+    public void queryReservationReserverID(Reserver reserver)
     {
         String reserverID = "(SELECT Reservers.ReserverID " +
                             "FROM Reservers " +
@@ -48,19 +45,16 @@ public class ReservationQuery extends Query
         sql = "SELECT DISTINCT Reservations.ReserverID " +
               "FROM Reservations " +
               "WHERE Reservations.ReserverID = " + reserverID;
-        
-        return ReserveDB.getInstance().runQuery(this);
     }
     
     /**
-        Queries for & returns reservations made at the given location
+        Prepares the query to return data on reservations made at the named
+        location
     
-        @param loc The location
-        @throws SQLException Error querying the database
-        @return A ResultSet containing the results of the query
+        @param locName The location name
     */
     
-    public ResultSet queryReservations(Location loc) throws SQLException
+    public void queryReservations(String locName)
     {
         sql = "SELECT Reservers.FirstName, Reservers.LastName, " +
               "Reservers.Email, Reservers.Phone, Timeframes.StartDate, " +
@@ -72,9 +66,7 @@ public class ReservationQuery extends Query
               "ON Reservers.ReserverID = Reservations.ReserverID " +
               "INNER JOIN Timeframes " +
               "ON Reservations.TimeframeID = Timeframes.TimeframeID " +
-              "WHERE Reservations.LocationName = '" + loc.getName() + "'";
-        
-        return ReserveDB.getInstance().runQuery(this);
+              "WHERE Reservations.LocationName = '" + locName + "'";        
     }
     
     /**

@@ -11,20 +11,24 @@ import edu.faytechcc.student.burnst9091.data.Reservable;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.Reserver;
 import edu.faytechcc.student.burnst9091.data.Timeframe;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class RecordDelete
 {
     // Fields
+    private DatabaseConnection connection;
     private String sql;
     
     /**
-        Constructs a new RecordDelete
+        Constructs a new RecordDelete initialized with the given connection
+        to the database
+    
+        @param conn Connection to the database
     */
     
-    public RecordDelete()
+    public RecordDelete(DatabaseConnection conn)
     {
+        connection = conn;
         sql = "";
     }
     
@@ -40,7 +44,7 @@ public class RecordDelete
         sql = "DELETE FROM Locations " +
               "WHERE Locations.LocationName = '" + loc.getName() + "'";
         
-        ReserveDB.getInstance().deleteRecord(this);
+        connection.deleteRecord(this);
     }
     
     /**
@@ -69,21 +73,23 @@ public class RecordDelete
               "AND Reservables.TimeframeID = " +
                 timeframeID;
         
-        ReserveDB.getInstance().deleteRecord(this);
+        connection.deleteRecord(this);
         
         // Check if we should delete a record of a location with the same name
         // as the reservable
+        ResultSetParser parser = new ResultSetParser();
         ReservableQuery q = new ReservableQuery();
-        ResultSet rs = q.queryReservableName(reservable.getName());
-        ResultSetParser parser = new ResultSetParser(rs);
+        q.queryReservableName(reservable.getName());
+        parser.setResultSet(connection.runQuery(q));
         
         if (parser.isEmpty())
             deleteLocation(reservable.getLocation());
         
         // Check if we should delete a record of a timeframe with the same
         // timeframe as the reservable
-        parser.setResultSet(
-                q.queryReservableTimeframe(reservable.getTimeframe()));
+        q.queryReservableTimeframeID(reservable.getTimeframe());
+        parser.setResultSet(connection.runQuery(q));
+        
         if (parser.isEmpty())
             deleteTimeframe(reservable.getTimeframe());
     }
@@ -91,7 +97,6 @@ public class RecordDelete
     /**
         Removes a record of a reservation from the database
     
-
         @param reservation The reservation to remove from the database
         @throws SQLException Error removing record from database
     */
@@ -115,13 +120,13 @@ public class RecordDelete
               "AND Reservations.TimeframeID = " +
                 timeframeID;
         
-        ReserveDB.getInstance().deleteRecord(this);
+        connection.deleteRecord(this);
         
         // Check if a record of a reserver should also be deleted
-        ReservationQuery q = new ReservationQuery();
         ResultSetParser parser = new ResultSetParser();
-        parser.setResultSet(q.queryReservationReserver(
-                reservation.getReserver()));
+        ReservationQuery q = new ReservationQuery();
+        q.queryReservationReserverID(reservation.getReserver());
+        parser.setResultSet(connection.runQuery(q));
         
         if (parser.isEmpty())
             deleteReserver(reservation.getReserver());
@@ -142,7 +147,7 @@ public class RecordDelete
               "AND Reservers.Email = '" + reserver.getEmailAddress() + "' " +
               "AND Reservers.Phone = '" + reserver.getPhoneNumber() + "'";
         
-        ReserveDB.getInstance().deleteRecord(this);
+        connection.deleteRecord(this);
     }
     
     /**
@@ -164,7 +169,7 @@ public class RecordDelete
               "AND Timeframes.EndTime = '" +
                 timeframe.getEndTime() + "'";
         
-        ReserveDB.getInstance().deleteRecord(this);
+        connection.deleteRecord(this);
     }
     
     /**

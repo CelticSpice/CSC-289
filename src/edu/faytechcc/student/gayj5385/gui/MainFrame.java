@@ -6,10 +6,6 @@
 
 package edu.faytechcc.student.gayj5385.gui;
 
-import edu.faytechcc.student.burnst9091.data.Location;
-import edu.faytechcc.student.burnst9091.data.Reservation;
-import java.util.HashMap;
-import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -18,21 +14,16 @@ import javax.swing.UIManager.LookAndFeelInfo;
 public class MainFrame extends JFrame
 {    
     /**
-        Constructs a new MainFrame with children initialized with the given
-        list of locations & mapping of reservations
-           
-        @param locations The locations
-        @param reservations The reservations
+        Constructs a new MainFrame
     */
     
-    public MainFrame(List<Location> locations,
-        HashMap<Location, List<Reservation>> reservations)
+    public MainFrame()
     {
         setTitle("Event Reservation System");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLookAndFeel();
 
-        add(new MainPanel(this, locations, reservations));
+        add(new MainPanel(this));
 
         pack();
         setVisible(true);

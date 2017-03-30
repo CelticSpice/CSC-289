@@ -6,9 +6,6 @@
 
 package edu.faytechcc.student.burnst9091.data;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class SMTPValidator
 {
     // Fields
@@ -44,12 +41,8 @@ public class SMTPValidator
     
     public boolean validateAddress()
     {
-        Pattern addressPattern = Pattern.compile(
-                "\\b[\\w\\.-]+@[\\w\\.-]+\\.\\w{2,4}\\b");
-        
-        Matcher matcher = addressPattern.matcher(props.getAddress());
-        
-        return matcher.matches();
+        String pattern = "\\b[\\w\\.-]+@[\\w\\.-]+\\.\\w{2,4}\\b";
+        return props.getAddress().matches(pattern);
     }
     
     /**
@@ -60,12 +53,10 @@ public class SMTPValidator
     
     public boolean validateHost()
     {
-        Pattern hostPattern = Pattern.compile(
-                "([A-Za-z0-9-]+\\.[A-Za-z]+)(\\.\\w+)?((\\.[A-Za-z]+)?)?");
+        String pattern =
+                "([A-Za-z0-9-]+\\.[A-Za-z]+)(\\.\\w+)?((\\.[A-Za-z]+)?)?";
         
-        Matcher matcher = hostPattern.matcher(props.getHost());
-        
-        return matcher.matches();
+        return props.getHost().matches(pattern);
     }
     
     /**

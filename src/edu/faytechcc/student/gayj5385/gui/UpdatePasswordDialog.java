@@ -6,16 +6,20 @@
 
 package edu.faytechcc.student.gayj5385.gui;
 
+import edu.faytechcc.student.burnst9091.data.SHA256SaltHasher;
+import edu.faytechcc.student.burnst9091.data.SystemPreferences;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.security.NoSuchAlgorithmException;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 
@@ -27,10 +31,16 @@ public class UpdatePasswordDialog extends JDialog
     private JPasswordField oldPass, newPass, verifiedNewPass;
     
     /**
-        Constructs a new UpdatePasswordDialog
+        Constructs a new UpdatePasswordDialog backed by the given system
+        preferences & initialized with the given salt-hasher, for updating &
+        validating against current password
+    
+        @param prefs System preferences
+        @param saltHash The salt-hasher
     */
     
-    public UpdatePasswordDialog()
+    public UpdatePasswordDialog(SystemPreferences prefs,
+            SHA256SaltHasher saltHash)
     {
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -50,23 +60,33 @@ public class UpdatePasswordDialog extends JDialog
         
         gbc.gridy = 2;
         gbc.insets = new Insets(0, 10, 10, 10);
-        add(buildButtonPanel(), gbc);
+        add(buildButtonPanel(prefs, saltHash), gbc);
         
         pack();
     }
     
     /**
-        Builds & returns the panel containing the buttons
+        Builds & returns the panel containing the buttons. Accepts the
+        system preferences & salt-hasher for the controller to use in validating
+        against & updating the current password
     
+        @param prefs System preferences
+        @param saltHash Salt-hasher
         @return The built panel
     */
     
-    private JPanel buildButtonPanel()
+    private JPanel buildButtonPanel(SystemPreferences prefs,
+            SHA256SaltHasher saltHash)
     {
         JPanel panel = new JPanel();
         
         panel.add(update = new JButton("Update"));
         panel.add(exit = new JButton("Exit"));
+        
+        ButtonController controller = new ButtonController(prefs, saltHash);
+        
+        update.addActionListener(controller);
+        exit.addActionListener(controller);
         
         return panel;
     }
@@ -140,7 +160,7 @@ public class UpdatePasswordDialog extends JDialog
     }
     
     /**
-        Build & return the panel for displaying messages
+        Builds & returns the panel for displaying messages
     
         @return The built panel
     */
@@ -153,59 +173,14 @@ public class UpdatePasswordDialog extends JDialog
     }
     
     /**
-        Returns the input new password
+        Sets the message to be displayed
     
-        @return The input new password
+        @param mesg The message to display
     */
     
-    public String getNewPass()
+    public void setMessage(String mesg)
     {
-        return new String(newPass.getPassword());
-    }
-    
-    /**
-        Returns the input old password
-    
-        @return The input old password
-    */
-    
-    public String getOldPass()
-    {
-        return new String(oldPass.getPassword());
-    }
-    
-    /**
-        Returns the input verified new password
-    
-        @return The input verified new password
-    */
-    
-    public String getVerifiedNewPass()
-    {
-        return new String(verifiedNewPass.getPassword());
-    }
-    
-    /**
-        Registers a controller to the buttons
-    
-        @param controller The controller to register to the buttons
-    */
-    
-    public void registerController(ActionListener controller)
-    {
-        update.addActionListener(controller);
-        exit.addActionListener(controller);
-    }
-    
-    /**
-        Set the message to be displayed
-    
-        @param mes The message to display
-    */
-    
-    public void setMessage(String mes)
-    {
-        message.setText(mes);
+        message.setText(mesg);
         message.setForeground(Color.RED);
     }
     
@@ -215,6 +190,26 @@ public class UpdatePasswordDialog extends JDialog
     
     private class ButtonController implements ActionListener
     {
+        // Fields
+        private SystemPreferences preferences;
+        private SHA256SaltHasher saltHasher;
+        
+        /**
+            Constructs a new ButtonController initialized with the given
+            system preferences & salt-hasher for validating against & updating
+            the current password
+        
+            @param prefs SystemPreferences
+            @param saltHash Salt-hasher
+        */
+        
+        public ButtonController(SystemPreferences prefs,
+                SHA256SaltHasher saltHash)
+        {
+            preferences = prefs;
+            saltHasher = saltHash;
+        }
+        
         /**
             Responds to an action event
         
@@ -224,7 +219,50 @@ public class UpdatePasswordDialog extends JDialog
         @Override
         public void actionPerformed(ActionEvent e)
         {
-            
+            if (e.getSource() == update)
+            {
+                // Check that old password matches
+                String oldPassword = new String(oldPass.getPassword());
+                
+                try
+                {
+                    oldPassword = saltHasher.saltHash(oldPassword);
+                    String currentPassword = preferences.getAdminPassword();
+
+                    if (oldPassword.equals(currentPassword))
+                    {
+                        // Check that new passwords entered & matching
+                        String newPassword = new String(newPass.getPassword());
+                        String verifiedNewPassword = new String(
+                                verifiedNewPass.getPassword());
+                        
+                        newPassword = saltHasher.saltHash(newPassword);
+                        verifiedNewPassword = saltHasher.saltHash(
+                                verifiedNewPassword);
+
+                        if (newPassword.equals(verifiedNewPassword))
+                        {
+                            preferences.updateAdminPassword(newPassword);
+                            setMessage("Password updated");
+                        }
+                        else
+                            setMessage("Passwords do not match");
+                    }
+                    else
+                        setMessage("Incorrect current password entered");
+                }
+                catch (NoSuchAlgorithmException ex)
+                {
+                    JOptionPane.showMessageDialog(null,
+                            "Failed to apply salt & hashing operation", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            else
+            {
+                setVisible(false);
+                dispose();
+            }
         }
     }
 }

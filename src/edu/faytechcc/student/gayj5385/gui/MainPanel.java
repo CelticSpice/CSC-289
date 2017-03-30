@@ -8,6 +8,8 @@ package edu.faytechcc.student.gayj5385.gui;
 
 import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reservation;
+import edu.faytechcc.student.burnst9091.data.SHA256SaltHasher;
+import edu.faytechcc.student.burnst9091.data.SystemPreferences;
 import edu.faytechcc.student.gayj5385.controller.OpeningController;
 import java.awt.CardLayout;
 import java.util.ArrayList;
@@ -18,32 +20,33 @@ import javax.swing.JPanel;
 public class MainPanel extends JPanel
 {
     // Fields
+    private AdminPanel adminPanel;
     private CardLayout layout;
     private MainFrame parent;
+    private OpenPanel openPanel;
     
     private final String[] CARDS = { "Open", "Admin", "Guest" };
     
     /**
-        Constructs a new MainPanel with the given reference to its parent, and
-        a list of locations & mapping of reservations to initialize with
+        Constructs a new MainPanel with the given reference to its parent
     
         @param p The parent
-        @param locations The locations
-        @param reservations The reservations
     */
     
-    public MainPanel(MainFrame p, List<Location> locations,
-        HashMap<Location, List<Reservation>> reservations)
+    public MainPanel(MainFrame p)
     {        
         parent = p;
         
         setLayout(layout = new CardLayout());
         
-        buildOpenPanel(locations, reservations);
-        buildAdminPanel(locations, reservations);
+        List<Location> locations = new ArrayList<>();
+        HashMap<Location, List<Reservation>> reservations = new HashMap<>();
+        SystemPreferences prefs = new SystemPreferences();
+        SHA256SaltHasher saltHasher = new SHA256SaltHasher();
         
-        List<Location> availableLocs = deriveAvailableLocs(locations);
-        buildReservationPanel(availableLocs);
+        buildOpenPanel(locations, reservations, prefs, saltHasher);
+        buildAdminPanel(locations, reservations, prefs, saltHasher);        
+        buildReservationPanel(locations, prefs);
     }
     
     /**
@@ -51,11 +54,13 @@ public class MainPanel extends JPanel
     */
     
     private void buildAdminPanel(List<Location> locations,
-        HashMap<Location, List<Reservation>> reservations)
+        HashMap<Location, List<Reservation>> reservations,
+        SystemPreferences prefs, SHA256SaltHasher saltHasher)
     {
-        AdminPanel panel = new AdminPanel(locations, reservations);
+        adminPanel = new AdminPanel(locations, reservations, prefs,
+                saltHasher);
         
-        add(panel, CARDS[1]);
+        add(adminPanel, CARDS[1]);
     }
     
     /**
@@ -63,14 +68,16 @@ public class MainPanel extends JPanel
     */
     
     private void buildOpenPanel(List<Location> locations,
-        HashMap<Location, List<Reservation>> reservations)
+        HashMap<Location, List<Reservation>> reservations,
+        SystemPreferences prefs,
+        SHA256SaltHasher saltHash)
     {
-        OpenPanel panel = new OpenPanel();
+        openPanel = new OpenPanel();
         
-        panel.registerButtonListener(new OpeningController(this, panel,
-            locations, reservations));
+        openPanel.registerButtonListener(new OpeningController(this, openPanel,
+            locations, reservations, prefs, saltHash));
         
-        add(panel, CARDS[0]);
+        add(openPanel, CARDS[0]);
     }
     
     /**
@@ -80,7 +87,8 @@ public class MainPanel extends JPanel
         @param locs The locations
     */
     
-    private void buildReservationPanel(List<Location> locs)
+    private void buildReservationPanel(List<Location> locs,
+            SystemPreferences prefs)
     {
         final int CARD_INDEX = 2;
         
@@ -116,6 +124,8 @@ public class MainPanel extends JPanel
     public void showAdminPanel()
     {
         final int CARD_INDEX = 1;
+        
+        adminPanel.updateModel();
         
         layout.show(this, CARDS[CARD_INDEX]);
         

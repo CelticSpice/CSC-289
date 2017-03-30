@@ -18,13 +18,19 @@ import java.time.LocalDateTime;
 public class RecordModify
 {
     // Fields
+    private DatabaseConnection connection;
     private String sql;
     
     /**
-     * Constructor
-     */
-    public RecordModify()
+        Constructs a new RecordModify initialized with the given database
+        connection
+    
+        @param conn Connection to the database
+    */
+    
+    public RecordModify(DatabaseConnection conn)
     {
+        connection = conn;
         sql = "";
     }
     
@@ -201,12 +207,11 @@ public class RecordModify
         
         Timeframe time = new Timeframe(s, e);
         
-        ResultSetParser rsp = new ResultSetParser(q.queryReservation(
-                reservation.getLocationName(), time));
+//        ResultSetParser rsp = new ResultSetParser(q.queryReservation(
+//                reservation.getLocationName(), time));
         
-        if (!rsp.isEmpty())
-        {
-            String timeframeID = "(SELECT Timeframes.TimeframeID " +
+        
+        String timeframeID = "(SELECT Timeframes.TimeframeID " +
                              "FROM Timeframes " +
                              "WHERE Timeframes.StartDate = '" +
                                 reservation.getStartDate() + "' " +
@@ -217,15 +222,12 @@ public class RecordModify
                              "AND Timeframes.EndTime = '" +
                                 reservation.getEndTime() + "')";
             
-            sql = "UPDATE Reservations " +
-                  "SET Reservations.Reviewed = " + reviewed + " " +
-                  "WHERE Reservations.LocationName = '" + reservation.getLocationName() + "' " +
-                  "AND Reservations.TimeframeID = " + timeframeID;
-            
-            ReserveDB.getInstance().modifyRecord(this);
-        }
-        else
-            throw new RecordNotExistsException();
+        sql = "UPDATE Reservations " +
+              "SET Reservations.Reviewed = " + reviewed + " " +
+              "WHERE Reservations.LocationName = '" + reservation.getLocationName() + "' " +
+              "AND Reservations.TimeframeID = " + timeframeID;
+
+        connection.modifyRecord(this);
     }
     
     /**

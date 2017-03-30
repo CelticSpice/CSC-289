@@ -6,34 +6,43 @@
 
 package edu.faytechcc.student.mccanns0131.database;
 
-import edu.faytechcc.student.burnst9091.data.SystemUtil;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class ReserveDB
+public class DatabaseConnection
 {
-    // Fields
-    private static String dbOptions;
+    // Fields    
+    private static final String DB = "ReserveDB";
     
-    private static final String DB_NAME = "ReserveDB";
-    
-    private Connection connection;
-    private static ReserveDB db;
+    private Connection conn;
     
     /**
-        Constructor
+        Constructs a new DatabaseConnection with the given username & password
+        used to connect to the database
+    
+        @param user The username
+        @param pass The password
         @throws SQLException There was an error connecting to the database
     */
     
-    private ReserveDB() throws SQLException
+    private DatabaseConnection(String user, String pass) throws SQLException
     {
-        dbOptions = "jdbc:mariadb://localhost?user=" + SystemUtil.getDBUser() +
-             "&password=" + SystemUtil.getDBPass();
+        String dbOptions;
         
-        connection = DriverManager.getConnection(dbOptions);
+        if (user != null && pass != null && !user.isEmpty() && !pass.isEmpty())
+            dbOptions = "jdbc:mariadb://localhost/" + DB + "?user=" + user +
+             "&password=" + pass;
+        else if (user != null && !user.isEmpty())
+            dbOptions = "jdbc:mariadb://localhost/" + DB + "?user=" + user;
+        else if (pass != null && !pass.isEmpty())
+            dbOptions = "jdbc:mariadb://localhost/" + DB + "?password=" + pass;
+        else
+            dbOptions = "jdbc:mariadb://localhost/" + DB;
+        
+        conn = DriverManager.getConnection(dbOptions);
     }
     
     /*
@@ -76,7 +85,7 @@ public class ReserveDB
 //    }
     
     /**
-        AddRecord - Add a record to the database
+        Adds a record to the database
     
         @param recordAdd The adding of a record
         @throws SQLException There was an error adding a record
@@ -84,10 +93,19 @@ public class ReserveDB
     
     public void addRecord(RecordAdd recordAdd) throws SQLException
     {
-        Statement stmt = connection.createStatement();
-        stmt.execute("USE " + DB_NAME);
-        
+        Statement stmt = conn.createStatement();
         stmt.executeUpdate(recordAdd.toString());
+    }
+    
+    /**
+        Closes the connection
+    
+        @throws SQLException Error closing connection
+    */
+    
+    public void close() throws SQLException
+    {
+        conn.close();
     }
     
     /**
@@ -187,7 +205,7 @@ public class ReserveDB
     }
     
     /**
-        DeleteRecord - Delete a record from the database
+        Deletes a record from the database
     
         @param recordDelete The deletion of a record
         @throws SQLException Error deleting record from database
@@ -195,9 +213,7 @@ public class ReserveDB
     
     public void deleteRecord(RecordDelete recordDelete) throws SQLException
     {
-        Statement stmt = connection.createStatement();
-        stmt.execute("USE " + DB_NAME);
-        
+        Statement stmt = conn.createStatement();
         stmt.executeUpdate(recordDelete.toString());
     }
     
@@ -222,32 +238,31 @@ public class ReserveDB
     }
     
     /**
-        GetInstance - Return an instance of the database
+        Returns a DatabaseConnection object with the specified username &
+        password to authenticate with
     
-        @throws SQLException There was an error getting an instance of the
-                             database
-        @return An instance of the database
+        @param user The username
+        @param pass The password
+        @throws SQLException There was an error connecting to the database
+        @return A DatabaseConnect object
     */
     
-    public static ReserveDB getInstance() throws SQLException
+    public static DatabaseConnection getConnection(String user, String pass)
+            throws SQLException
     {
-        if (db == null)
-            db = new ReserveDB();
-        
-        return db;
+        return new DatabaseConnection(user, pass);
     }
     
     /**
-     * ModifyRecord - Modify a record in the database
-     * 
-     * @param recordModify The modification of the record
-     * @throws SQLException Error modify record in the database
-     */
+          Modifies a record in the database
+
+          @param recordModify The modification of the record
+          @throws SQLException Error modifying record in the database
+    */
+    
     public void modifyRecord(RecordModify recordModify) throws SQLException
     {
-        Statement stmt = connection.createStatement();
-        stmt.execute("USE " + DB_NAME);
-        
+        Statement stmt = conn.createStatement();
         stmt.executeUpdate(recordModify.toString());
     }
     
@@ -270,7 +285,7 @@ public class ReserveDB
     }
     
     /**
-        RunQuery - Run the query provided and return the result set
+        Runs the query provided & returns the result set
     
         @param query The query to run
         @throws SQLException There was an error running the query
@@ -279,9 +294,7 @@ public class ReserveDB
     
     public ResultSet runQuery(Query query) throws SQLException
     {
-        Statement stmt = connection.createStatement();
-        stmt.execute("USE " + DB_NAME);
-        
+        Statement stmt = conn.createStatement();
         return stmt.executeQuery(query.toString());
     }
 }

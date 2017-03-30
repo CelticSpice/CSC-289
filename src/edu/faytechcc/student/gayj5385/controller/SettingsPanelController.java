@@ -6,10 +6,10 @@
 
 package edu.faytechcc.student.gayj5385.controller;
 
+import edu.faytechcc.student.burnst9091.data.SHA256SaltHasher;
 import edu.faytechcc.student.burnst9091.data.SMTPProperties;
 import edu.faytechcc.student.burnst9091.data.SMTPValidator;
 import edu.faytechcc.student.burnst9091.data.SystemPreferences;
-import edu.faytechcc.student.burnst9091.data.SystemUtil;
 import edu.faytechcc.student.gayj5385.gui.SettingsPanel;
 import edu.faytechcc.student.gayj5385.gui.UpdatePasswordDialog;
 import java.awt.event.ActionEvent;
@@ -19,20 +19,28 @@ public class SettingsPanelController implements ActionListener
 {
     // Fields
     private SettingsPanel view;
+    private SystemPreferences preferences;
+    private SHA256SaltHasher saltHasher;
     
     /**
-        Constructor - Accepts the view to control buttons for
+        Constructs a new SettingsPanelController to control the given view,
+        initialized with the given system preferences & salt-hasher
     
         @param v The view
+        @param prefs System preferences
+        @param saltHash Salt-hasher
     */
     
-    public SettingsPanelController(SettingsPanel v)
+    public SettingsPanelController(SettingsPanel v, SystemPreferences prefs,
+            SHA256SaltHasher saltHash)
     {
         view = v;
+        preferences = prefs;
+        saltHasher = saltHash;
     }
     
     /**
-        Handle the clicking of a button
+        Responds to an action event
     
         @param e The action event
     */
@@ -46,7 +54,7 @@ public class SettingsPanelController implements ActionListener
                 saveSettings();
                 break;
             case "Update Password":
-                showUpdatePassDialog();
+                showUpdatePasswordDialog();
                 break;
             case "Cancel":
                 cancelChanges();
@@ -60,13 +68,11 @@ public class SettingsPanelController implements ActionListener
     
     private void cancelChanges()
     {
-        SystemPreferences systemPrefs = new SystemPreferences();
-        
-        SMTPProperties adminProps = systemPrefs.getAdminSMTPProperties();
-        SMTPProperties guestProps = systemPrefs.getGuestSMTPProperties();
-        String adminGetAddress = systemPrefs.getAdminGetAddress();
-        String dbUser = systemPrefs.getDBUser();
-        String dbPass = systemPrefs.getDBPass();
+        SMTPProperties adminProps = preferences.getAdminSMTPProperties();
+        SMTPProperties guestProps = preferences.getGuestSMTPProperties();
+        String adminGetAddress = preferences.getAdminGetAddress();
+        String dbUser = preferences.getDBUser();
+        String dbPass = preferences.getDBPass();
         
         view.setEmailFields(adminProps, guestProps, adminGetAddress);
         view.setDatabaseFields(dbUser, dbPass);
@@ -76,15 +82,13 @@ public class SettingsPanelController implements ActionListener
         Shows the dialog for the user to update the administrator password
     */
     
-    private void showUpdatePassDialog()
+    private void showUpdatePasswordDialog()
     {
-        UpdatePasswordDialog dialog = new UpdatePasswordDialog();
-        dialog.registerController(new UpdatePasswordController(dialog));
-        dialog.setVisible(true);
+        new UpdatePasswordDialog(preferences, saltHasher).setVisible(true);
     }
     
     /**
-        Save settings
+        Saves settings
     */
     
     private void saveSettings()
@@ -93,11 +97,11 @@ public class SettingsPanelController implements ActionListener
         if (validateInput())
         {
             // Update settings
-            SystemUtil.setAdminSMTPPrefs(view.getAdminSMTPProperties());
-            SystemUtil.setGuestSMTPPrefs(view.getGuestSMTPProperties());
-            SystemUtil.setAdminGetAddress(view.getAdminGetAddress());
-            SystemUtil.setDBUser(view.getDBUser());
-            SystemUtil.setDBPass(String.valueOf(view.getDBPass()));
+            preferences.setAdminSMTPPrefs(view.getAdminSMTPProperties());
+            preferences.setGuestSMTPPrefs(view.getGuestSMTPProperties());
+            preferences.setAdminGetAddress(view.getAdminGetAddress());
+            preferences.setDBUser(view.getDBUser());
+            preferences.setDBPass(String.valueOf(view.getDBPass()));
             
             // Inform of success in saving settings
             view.showMessage("Settings saved");
@@ -105,7 +109,7 @@ public class SettingsPanelController implements ActionListener
     }
     
     /**
-        Validate the admin's email settings
+        Validates the admin's email settings
     
         @param v The SMTP validator to validate SMTP settings
     */
@@ -138,14 +142,12 @@ public class SettingsPanelController implements ActionListener
         }
         
         // Validate get address
-        SMTPProperties props = new SMTPProperties();
-        props.setAddress(view.getAdminGetAddress());
-        v.setSMTPProperties(props);
+        String pattern = "\\b[\\w\\.-]+@[\\w\\.-]+\\.\\w{2,4}\\b";
         
-        goodSoFar = v.validateAddress();
+        goodSoFar = view.getAdminGetAddress().matches(pattern);
         if (!goodSoFar)
         {
-            view.showMessage("Bad getting address for administrator");
+            view.showMessage("Bad get address for administrator");
             return goodSoFar;
         }
         
@@ -189,7 +191,7 @@ public class SettingsPanelController implements ActionListener
     }
     
     /**
-        Validate that fields have been input appropriate data
+        Validates that fields have been input appropriate data
     
         @return If all fields have been input appropriate data
     */

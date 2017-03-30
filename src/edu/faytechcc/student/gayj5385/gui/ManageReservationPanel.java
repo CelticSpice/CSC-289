@@ -35,7 +35,7 @@ public class ManageReservationPanel extends JPanel
 {
     // Fields
     private DefaultListModel<Reservation> reservations;
-    private JButton searchBtn, clear, update, contact, reviewed, cancel, logout;
+    private JButton searchBtn, clear, update, contact, reviewed, cancel;
     private JComboBox<Location> locations;
     private JList<Reservation> reservationList;
     private JTextField capacity, search, startDate, startTime, endDate, endTime,
@@ -43,21 +43,16 @@ public class ManageReservationPanel extends JPanel
                        contactPhone;
     
     /**
-        Constructs a new ManageReservationPanel initialized with the given
-        list of locations & reservations
-    
-        @param locs The locations
-        @param res The reservations
+        Constructs a new ManageReservationPanel
     */
     
-    public ManageReservationPanel(List<Location> locs, List<Reservation> res)
+    public ManageReservationPanel()
     {
         super(new BorderLayout());
         
-        Location[] locArray = locs.toArray(new Location[locs.size()]);
         
-        add(buildTopPanel(locArray), BorderLayout.NORTH);
-        add(buildMidPanel(res), BorderLayout.CENTER);
+        add(buildTopPanel(), BorderLayout.NORTH);
+        add(buildMidPanel(), BorderLayout.CENTER);
         add(buildBottomPanel(), BorderLayout.SOUTH);
     }
     
@@ -69,37 +64,24 @@ public class ManageReservationPanel extends JPanel
     
     private JPanel buildBottomPanel()
     {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
-        // Build main button panel
-        JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        btnPanel.add(update = new JButton("Update"));
-        btnPanel.add(contact = new JButton("Contact"));
-        btnPanel.add(reviewed = new JButton("Reviewed"));
-        btnPanel.add(cancel = new JButton("Cancel"));
-        
-        // Build logout button panel
-        JPanel logoutPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        logoutPanel.add(logout = new JButton("Logout"));
-        
-        panel.add(btnPanel);
-        panel.add(Box.createHorizontalGlue());
-        panel.add(logoutPanel);
+        panel.add(update = new JButton("Update"));
+        panel.add(contact = new JButton("Contact"));
+        panel.add(reviewed = new JButton("Reviewed"));
+        panel.add(cancel = new JButton("Cancel"));
         
         return panel;
     }
     
     /**
-        Builds & return the middle panel of this panel, initialized with the
-        given list of reservations
+        Builds & return the middle panel of this panel
     
-        @param res List of reservations
         @return The built panel
     */
     
-    private JPanel buildMidPanel(List<Reservation> res)
+    private JPanel buildMidPanel()
     {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
@@ -108,8 +90,6 @@ public class ManageReservationPanel extends JPanel
         reservationList.setCellRenderer(new ReservationRenderer());
         JScrollPane scrollPane = new JScrollPane(reservationList);
         scrollPane.setPreferredSize(new Dimension(255, 225));
-        
-        setReservations(res);
         
         // Build reservation detail panels
         JPanel reservationDetailPanel1 = new JPanel(new GridLayout(5, 2, 0, 5));        
@@ -157,14 +137,12 @@ public class ManageReservationPanel extends JPanel
     }
     
     /**
-        Builds & return the top panel of this panel, initialized with the
-        given array of locations
+        Builds & returns the top panel of this panel
     
-        @param locs The locations
         @return The built panel
     */
     
-    private JPanel buildTopPanel(Location[] locs)
+    private JPanel buildTopPanel()
     {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
@@ -184,7 +162,7 @@ public class ManageReservationPanel extends JPanel
         gbc.gridx = 1;
         gbc.insets = new Insets(0, 0, 5, 0);
         gbc.ipadx = 125;
-        locationComponentPanel.add(locations = new JComboBox(locs), gbc);
+        locationComponentPanel.add(locations = new JComboBox(), gbc);
         
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -196,9 +174,6 @@ public class ManageReservationPanel extends JPanel
         gbc.insets = new Insets(0, 0, 0, 0);
         gbc.anchor = GridBagConstraints.WEST;
         locationComponentPanel.add(capacity = new JTextField(5), gbc);
-        
-        if (locs.length > 0)
-            capacity.setText(String.valueOf(locs[0].getCapacity()));
         
         capacity.setEditable(false);
         
@@ -269,7 +244,6 @@ public class ManageReservationPanel extends JPanel
         contact.addActionListener(controller);
         reviewed.addActionListener(controller);
         cancel.addActionListener(controller);
-        logout.addActionListener(controller);
     }
     
     /**

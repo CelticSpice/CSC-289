@@ -6,12 +6,13 @@
 
 package edu.faytechcc.student.gayj5385.controller;
 
-import edu.faytechcc.student.burnst9091.data.Admin;
 import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reservable;
+import edu.faytechcc.student.burnst9091.data.SystemPreferences;
 import edu.faytechcc.student.burnst9091.data.Timeframe;
-import edu.faytechcc.student.burnst9091.exception.RecordExistsException;
 import edu.faytechcc.student.gayj5385.gui.AddReservableDialog;
+import edu.faytechcc.student.mccanns0131.database.DatabaseConnection;
+import edu.faytechcc.student.mccanns0131.database.RecordAdd;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
@@ -26,22 +27,26 @@ public class ReservableAddButtonController implements ActionListener
     private static final int START = 0;
     private static final int END = 1;
 
-    private List<Location> locations;
     private AddReservableDialog view;
+    private List<Location> locations;
+    private SystemPreferences preferences;
 
     /**
         Constructs a new ReservableAddButtonController to manage the buttons
-        on the given view with the given set of existing locations
+        on the given view with the given set of existing locations & system
+        preferences
 
         @param v The view
         @param locs The locations
+        @param prefs System preferences
     */
 
     public ReservableAddButtonController(AddReservableDialog v,
-            List<Location> locs)
+            List<Location> locs, SystemPreferences prefs)
     {
         view = v;
         locations = locs;
+        preferences = prefs;
     }
 
     /**
@@ -75,10 +80,19 @@ public class ReservableAddButtonController implements ActionListener
         {
             try
             {
+                String user = preferences.getDBUser();
+                String pass = preferences.getDBPass();
+                DatabaseConnection conn = DatabaseConnection.getConnection(
+                        user, pass);
+                        
                 Location loc = parseLocation();
                 Timeframe timeframe = parseTimeframe();
+                
+                Reservable reservable = new Reservable(loc, timeframe);
 
-                Admin.addReservable(new Reservable(loc, timeframe));
+                new RecordAdd(conn).addReservable(reservable);
+                
+                conn.close();
 
                 loc.addTimeframe(timeframe);
 
@@ -92,15 +106,11 @@ public class ReservableAddButtonController implements ActionListener
                 JOptionPane.showMessageDialog(view,
                         "Error adding record to database");
             }
-            catch (RecordExistsException ex)
-            {
-                JOptionPane.showMessageDialog(view, ex.getMessage());
-            }
         }
     }
 
     /**
-        Add a location to the model
+        Adds a location to the model
 
         @param loc The location to add
     */

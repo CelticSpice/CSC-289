@@ -61,19 +61,19 @@ public class SettingsPanel extends JPanel
         panel.setBorder(BorderFactory.createTitledBorder("Admin Email"));
         
         panel.add(new JLabel("Send Address:"));
-        panel.add(adminSendAddress = new JTextField());
+        panel.add(adminSendAddress = new JTextField(12));
         panel.add(new JLabel("Host:"));
-        panel.add(adminHost = new JTextField());
+        panel.add(adminHost = new JTextField(12));
         panel.add(new JLabel("Security:"));
         panel.add(adminSecurity = new JComboBox());
         panel.add(new JLabel("Port:"));
-        panel.add(adminPort = new JTextField());
+        panel.add(adminPort = new JTextField(12));
         panel.add(new JLabel("User:"));
-        panel.add(adminUser = new JTextField());
+        panel.add(adminUser = new JTextField(12));
         panel.add(new JLabel("Pass:"));
-        panel.add(adminPass = new JPasswordField());
+        panel.add(adminPass = new JPasswordField(12));
         panel.add(new JLabel("Get Address:"));
-        panel.add(adminGetAddress = new JTextField());
+        panel.add(adminGetAddress = new JTextField(12));
         
         return panel;
     }
@@ -108,9 +108,9 @@ public class SettingsPanel extends JPanel
         panel.setBorder(BorderFactory.createTitledBorder("Database"));
         
         panel.add(new JLabel("Database User:"));
-        panel.add(dbUser = new JTextField());
+        panel.add(dbUser = new JTextField(12));
         panel.add(new JLabel("Database Pass:"));
-        panel.add(dbPass = new JPasswordField());
+        panel.add(dbPass = new JPasswordField(12));
                 
         return panel;
     }
@@ -127,17 +127,17 @@ public class SettingsPanel extends JPanel
         panel.setBorder(BorderFactory.createTitledBorder("Guest Email"));
         
         panel.add(new JLabel("Send Address:"));
-        panel.add(guestSendAddress = new JTextField());
+        panel.add(guestSendAddress = new JTextField(12));
         panel.add(new JLabel("Host:"));
-        panel.add(guestHost = new JTextField());
+        panel.add(guestHost = new JTextField(12));
         panel.add(new JLabel("Security:"));
         panel.add(guestSecurity = new JComboBox());
         panel.add(new JLabel("Port:"));
-        panel.add(guestPort = new JTextField());
+        panel.add(guestPort = new JTextField(12));
         panel.add(new JLabel("User:"));
-        panel.add(guestUser = new JTextField());
+        panel.add(guestUser = new JTextField(12));
         panel.add(new JLabel("Pass:"));
-        panel.add(guestPass = new JPasswordField());
+        panel.add(guestPass = new JPasswordField(12));
         
         return panel;
     }

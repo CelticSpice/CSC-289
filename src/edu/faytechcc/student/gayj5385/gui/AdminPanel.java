@@ -15,6 +15,7 @@ import edu.faytechcc.student.burnst9091.data.SecurityOption;
 import edu.faytechcc.student.burnst9091.data.SystemPreferences;
 import edu.faytechcc.student.burnst9091.data.Timeframe;
 import edu.faytechcc.student.burnst9091.data.search.Filter;
+import edu.faytechcc.student.gayj5385.controller.AdminPanelController;
 import edu.faytechcc.student.gayj5385.controller.reservable.ManageReservableButtonController;
 import edu.faytechcc.student.gayj5385.controller.reservable.ManageReservableComboBoxController;
 import edu.faytechcc.student.gayj5385.controller.reservable.ManageReservableListController;
@@ -67,6 +68,8 @@ public class AdminPanel extends JPanel
         
         tabbedPane = new JTabbedPane();
         tabbedPane.setBorder(BorderFactory.createEtchedBorder());
+        
+        tabbedPane.addChangeListener(new AdminPanelController(this));
         
         buildManageReservablePanel(locations, prefs);
         buildManageReservationPanel(reservations, prefs);

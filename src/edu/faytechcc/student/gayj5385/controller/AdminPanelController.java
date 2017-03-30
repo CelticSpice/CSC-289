@@ -8,10 +8,9 @@ package edu.faytechcc.student.gayj5385.controller;
 
 import edu.faytechcc.student.burnst9091.data.SMTPProperties;
 import edu.faytechcc.student.burnst9091.data.SecurityOption;
+import edu.faytechcc.student.burnst9091.data.SystemPreferences;
 import edu.faytechcc.student.burnst9091.data.SystemUtil;
 import edu.faytechcc.student.gayj5385.gui.AdminPanel;
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -43,22 +42,24 @@ public class AdminPanelController implements ChangeListener
         switch (view.getActiveTab())
         {
             case "Settings":
-                setSettingsFields();
+                initSettingsFields();
                 break;
         }
     }
     
     /**
-        Set the fields for the settings panel
+        Initializes the fields for the settings panel
     */
     
-    private void setSettingsFields()
+    private void initSettingsFields()
     {
-        SMTPProperties adminSMTP = SystemUtil.getAdminSMTPProperties();
-        SMTPProperties guestSMTP = SystemUtil.getGuestSMTPProperties();
-        String adminGet = SystemUtil.getAdminGetAddress();
-        String dbUser = SystemUtil.getDBUser();
-        String dbPass = SystemUtil.getDBPass();
+        SystemPreferences systemPrefs = new SystemPreferences();
+        
+        SMTPProperties adminSMTP = systemPrefs.getAdminSMTPProperties();
+        SMTPProperties guestSMTP = systemPrefs.getGuestSMTPProperties();
+        String adminGet = systemPrefs.getAdminGetAddress();
+        String dbUser = systemPrefs.getDBUser();
+        String dbPass = systemPrefs.getDBPass();
         
         view.setSettingsSecurityOptions(SecurityOption.values());
         view.setSettingsEmailFields(adminSMTP, guestSMTP, adminGet);

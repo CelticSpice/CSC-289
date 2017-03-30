@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -26,7 +27,7 @@ public class UpdatePasswordDialog extends JDialog
     private JPasswordField oldPass, newPass, verifiedNewPass;
     
     /**
-        Constructor
+        Constructs a new UpdatePasswordDialog
     */
     
     public UpdatePasswordDialog()
@@ -55,7 +56,7 @@ public class UpdatePasswordDialog extends JDialog
     }
     
     /**
-        Build & return the panel containing the buttons
+        Builds & returns the panel containing the buttons
     
         @return The built panel
     */
@@ -71,7 +72,7 @@ public class UpdatePasswordDialog extends JDialog
     }
     
     /**
-        Build & return the panel allowing the input of the old & new passwords
+        Builds & returns the panel allowing the input of the old & new passwords
     
         @return The built panel
     */
@@ -152,40 +153,40 @@ public class UpdatePasswordDialog extends JDialog
     }
     
     /**
-        Return the input new password
+        Returns the input new password
     
         @return The input new password
     */
     
-    public char[] getNewPass()
+    public String getNewPass()
     {
-        return newPass.getPassword();
+        return new String(newPass.getPassword());
     }
     
     /**
-        Return the input old password
+        Returns the input old password
     
         @return The input old password
     */
     
-    public char[] getOldPass()
+    public String getOldPass()
     {
-        return oldPass.getPassword();
+        return new String(oldPass.getPassword());
     }
     
     /**
-        Return the input verified new password
+        Returns the input verified new password
     
         @return The input verified new password
     */
     
-    public char[] getVerifiedNewPass()
+    public String getVerifiedNewPass()
     {
-        return verifiedNewPass.getPassword();
+        return new String(verifiedNewPass.getPassword());
     }
     
     /**
-        Register a controller to the buttons
+        Registers a controller to the buttons
     
         @param controller The controller to register to the buttons
     */
@@ -206,5 +207,24 @@ public class UpdatePasswordDialog extends JDialog
     {
         message.setText(mes);
         message.setForeground(Color.RED);
+    }
+    
+    /**
+        Controller class for dialog buttons
+    */
+    
+    private class ButtonController implements ActionListener
+    {
+        /**
+            Responds to an action event
+        
+            @param e The action event
+        */
+        
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            
+        }
     }
 }

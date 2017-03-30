@@ -14,7 +14,7 @@ public class SMTPProperties
     private Properties props;
     
     /**
-        Constructor
+        Constructs a new SMTPProperties
     */
     
     public SMTPProperties()
@@ -23,11 +23,9 @@ public class SMTPProperties
     }
     
     /**
-        AsSessionProperties - Derive properties suitable for instantiating
-        an email session with
+        Derives properties suitable for instantiating an email session
     
-        @return sessionProps Properties suitable for instantiating an email
-                             session with
+        @return Properties suitable for instantiating an email session with
     */
     
     public Properties asSessionProperties()
@@ -59,7 +57,7 @@ public class SMTPProperties
     }
     
     /**
-        GetAddress - Return the address of the sender
+        Returns the address of the sender
     
         @return The address of the sender
     */
@@ -70,7 +68,7 @@ public class SMTPProperties
     }
     
     /**
-        GetHost - Return the SMTP host
+        Returns the SMTP host
     
         @return The SMTP host
     */
@@ -81,9 +79,9 @@ public class SMTPProperties
     }
     
     /**
-        GetPassword - Return the password to access the SMTP server
+        Returns the password to authenticate to the SMTP server
     
-        @return Password to access the SMTP server
+        @return Password to authenticate to the SMTP server
     */
     
     public String getPassword()
@@ -92,7 +90,7 @@ public class SMTPProperties
     }
     
     /**
-        GetPort - Return the port of the SMTP server
+        Returns the port of the SMTP server
     
         @return The port of the SMTP server
     */
@@ -103,21 +101,21 @@ public class SMTPProperties
     }
     
     /**
-        GetSecurity - Return the security protocol to be used
+        Returns the security protocol to be used
     
         @return The security protocol to be used
     */
     
     public SecurityOption getSecurity()
     {
-        return (SecurityOption) props.getOrDefault
-            ("Security", SecurityOption.NONE);
+        return (SecurityOption) props.getOrDefault(
+                "Security", SecurityOption.NONE);
     }
     
     /**
-        GetUser - Return the username to access the SMTP server
+        Returns the username to authenticate to the SMTP server
     
-        @return The username to access the SMTP server
+        @return The username to authenticate to the SMTP server
     */
     
     public String getUser()
@@ -126,7 +124,7 @@ public class SMTPProperties
     }
     
     /**
-        SetAddress - Set the address of the sender
+        Sets the address of the sender
     
         @param address Address of sender
     */
@@ -137,7 +135,7 @@ public class SMTPProperties
     }
     
     /**
-        SetHost - Set the SMTP host
+        Sets the SMTP host
     
         @param host The SMTP host
     */
@@ -148,9 +146,9 @@ public class SMTPProperties
     }
     
     /**
-        SetPassword - Set the password to access the SMTP server
+        Sets the password to authenticate to the SMTP server
     
-        @param pass The password to access the SMTP server
+        @param pass The password to authenticate to the SMTP server
     */
     
     public void setPassword(String pass)
@@ -159,7 +157,7 @@ public class SMTPProperties
     }
     
     /**
-        SetPort - Set the port of the SMTP server
+        Sets the port of the SMTP server
     
         @param port Port of SMTP server
     */
@@ -170,7 +168,7 @@ public class SMTPProperties
     }
     
     /**
-        SetPort - Set the port of the SMTP server
+        Sets the port of the SMTP server
     
         @param port Port of SMTP server
     */
@@ -181,7 +179,7 @@ public class SMTPProperties
     }
     
     /**
-        SetSecurity - Set the security protocol to be used
+        Sets the security protocol to be used
     
         @param security The security protocol to be used
     */
@@ -192,9 +190,9 @@ public class SMTPProperties
     }
     
     /**
-        SetUser - Set the username to access the SMTP server
+        Sets the username to authenticate to the SMTP server
     
-        @param user The username to access the SMTP server
+        @param user The username to authenticate to the SMTP server
     */
     
     public void setUser(String user)

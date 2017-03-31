@@ -191,25 +191,25 @@ public class ManageReservableButtonController implements ActionListener
     */
     
     private void doSearch(String criteria)
-    {      
-        if (validateSearch(criteria))
-        {
-            SearchActualizer search = new SearchActualizer();
-            
-            switch (numSearchLocations(criteria))
+    {
+        SearchActualizer search = new SearchActualizer(criteria);
+        
+        if (search.validateSearch())
+        {            
+            switch (search.getNumSearchLocations())
             {
                 case 0:
                     if (criteria.toLowerCase().contains("cap:") ||
                         criteria.toLowerCase().contains("capacity:"))
-                        searchOnMultipleLocations(search, criteria);
+                        searchOnMultipleLocations(search);
                     else
-                        searchOnSelectedLocation(search, criteria);
+                        searchOnSelectedLocation(search);
                     break;
                 case 1:
-                    searchOnOneLocation(search, criteria);
+                    searchOnOneLocation(search);
                     break;
                 default:
-                    searchOnMultipleLocations(search, criteria);
+                    searchOnMultipleLocations(search);
                     break;
             }
         }
@@ -256,14 +256,14 @@ public class ManageReservableButtonController implements ActionListener
      * @param s The SearchActualizer to perform the search with
      * @param criteria The search criteria
      */
-    private void searchOnMultipleLocations(SearchActualizer s, String criteria)
+    private void searchOnMultipleLocations(SearchActualizer s)
     {
-        locationFilter.setPredicate(s.searchLocations(criteria));
+        locationFilter.setPredicate(s.searchLocations());
         setLocations();
         
         if (timeframeFilter.getPredicate() != null)
         {
-            timeframeFilter.setPredicate(s.searchTimeframes(criteria));
+            timeframeFilter.setPredicate(s.searchTimeframes());
             setTimeframes(timeframeFilter.filter(view.getSelectedLocation()
                     .getTimeframes()));
         }
@@ -275,14 +275,14 @@ public class ManageReservableButtonController implements ActionListener
      * @param s The SearchActualizer to perform the search with
      * @param criteria The search criteria
      */
-    private void searchOnOneLocation(SearchActualizer s, String criteria)
+    private void searchOnOneLocation(SearchActualizer s)
     {
-        locationFilter.setPredicate(s.searchLocations(criteria));
+        locationFilter.setPredicate(s.searchLocations());
         setLocations();
             
         if (view.getSelectedLocation() != null)
         {
-            timeframeFilter.setPredicate(s.searchTimeframes(criteria));
+            timeframeFilter.setPredicate(s.searchTimeframes());
             setTimeframes(timeframeFilter.filter(view.getSelectedLocation()
                     .getTimeframes()));
         }
@@ -299,11 +299,11 @@ public class ManageReservableButtonController implements ActionListener
      * @param s The SearchActualizer to perform the search with
      * @param criteria The search criteria
      */
-    private void searchOnSelectedLocation(SearchActualizer s, String criteria)
+    private void searchOnSelectedLocation(SearchActualizer s)
     {
         if (view.getSelectedLocation() != null)
         {
-            timeframeFilter.setPredicate(s.searchTimeframes(criteria));
+            timeframeFilter.setPredicate(s.searchTimeframes());
             
             List<Timeframe> timeframes = view.getSelectedLocation()
                     .getTimeframes(timeframeFilter.getPredicate());
@@ -365,218 +365,5 @@ public class ManageReservableButtonController implements ActionListener
         d.setVisible(true);
         
         view.setLocations(locations);
-    }
-
-    /**
-     * Validate the capacity input
-     * 
-     * @param capacity The capacity
-     * @return If the capacity input is valid
-     */
-    private boolean validateCapacity(String capacity)
-    {
-        boolean valid = capacity.matches("([<>]=|[<>=])\\d+");
-
-        if (valid)
-        {
-            valid = Integer.parseInt(capacity.replaceFirst("([<>]=|[<>=])", "")) > 0;
-
-            if (!valid)
-                JOptionPane.showMessageDialog(view,
-                    "Capacity must be greater than 0");
-        }
-        else
-            JOptionPane.showMessageDialog(view, "Invalid input for capacity");
-        
-        setLocations();
-
-        return valid;
-    }
-    
-    /**
-     * Validate the cost input
-     * 
-     * @param cost The cost
-     * @return If the cost is valid
-     */
-    private boolean validateCost(String cost)
-    {
-        boolean valid = cost.matches("\\d+.\\d{2}");
-        
-        if (valid)
-        {
-            valid = Double.parseDouble(cost) >= 0.00;
-            
-            if (!valid)
-                JOptionPane.showMessageDialog(view,
-                        "Cost must be greater than or equal to 0.00");
-        }
-        else
-            JOptionPane.showMessageDialog(view, "Invalid input for cost");
-        
-        return valid;
-    }
-    
-    /**
-     * Validate the end date input
-     * 
-     * @param date The end date
-     * @return If the end date is valid
-     */
-    private boolean validateEndDate(String date)
-    {
-        return date.matches("\\d{4}-\\d{2}-\\d{2}");
-    }
-    
-    /**
-     * Validate the end time input
-     * 
-     * @param time The end time
-     * @return If the end time is valid
-     */
-    private boolean validateEndTime(String time)
-    {
-        
-        return time.matches("\\d{2}:\\d{2}");
-    }
-    
-    /**
-     * Validates the location name input
-     * 
-     * @param name The location name
-     * @return Whether the location is valid or not
-     */
-    private boolean validateLocationName(String name)
-    {
-        for (char c : name.toCharArray())
-        {
-            if (!Character.isLetterOrDigit(c) && !Character.isSpaceChar(c))
-            {
-                JOptionPane.showMessageDialog(view,
-                        "A location name consists only of letters, digits," +
-                                " and/or spaces");
-                
-                return false;
-            }
-        }
-        
-        return true;
-    }
-    
-    /**
-     * Validate the entire search
-     * @param criteria The search criteria
-     * @return If the search is valid
-     */
-    private boolean validateSearch(String criteria)
-    {
-        List<String> acceptedKeys = new ArrayList();
-        acceptedKeys.add("locationname");
-        acceptedKeys.add("location");
-        acceptedKeys.add("loc");
-        acceptedKeys.add("capacity");
-        acceptedKeys.add("cap");
-        acceptedKeys.add("startdate");
-        acceptedKeys.add("starttime");
-        acceptedKeys.add("enddate");
-        acceptedKeys.add("endtime");
-        acceptedKeys.add("cost");
-        acceptedKeys.add("price");
-        
-        // Split search criteria
-        String[] filterArray = criteria.split(";");
-        
-        try
-        {
-            for (String f : filterArray)
-            {
-                // Split keys and values
-                String[] constraint = f.split(":");
-                
-                String key = constraint[0].trim(), 
-                       val = constraint[1].trim();
-
-                if (!key.equals("") && acceptedKeys.contains(key))
-                {
-                    switch(key.toLowerCase())
-                    {
-                        case "locationname":
-                        case "location name":
-                        case "location":
-                        case "loc":
-                            if (!validateLocationName(val))
-                                return false;
-                            break;
-                        case "capacity":
-                        case "cap":
-                            if (!validateCapacity(val))
-                                return false;
-                            break;
-                        case "startdate":
-                        case "start date":
-                            if (!validateStartDate(val))
-                                return false;
-                            break;
-                        case "starttime":
-                        case "start time":
-                            if (!validateStartTime(val))
-                                return false;
-                            break;
-                        case "enddate":
-                        case "end date":
-                            if (!validateEndDate(val))
-                                return false;
-                            break;
-                        case "endtime":
-                        case "end time":
-                            if (!validateEndTime(val))
-                                return false;
-                            break;
-                        case "cost":
-                        case "price":
-                            if (!validateCost(val))
-                                return false;
-                            break;
-                    }
-                }
-                else
-                {
-                    JOptionPane.showMessageDialog(view,
-                            "Missing or misspelled key (i.e. \"start time\")");
-                    return false;
-                }
-            }
-        }
-        catch (NullPointerException | ArrayIndexOutOfBoundsException ex)
-        {
-            JOptionPane.showMessageDialog(view, "Invalid search" +
-                    "\nEnsure your search keys (i.e. \"start time\") and " + 
-                    " parameters (i.e. \"12:00\") are correct.");
-            return false;
-        }
-        
-        return true;
-    }
-    
-    /**
-     * Validate the start date input
-     * 
-     * @param date The start date
-     * @return If the start date is valid
-     */
-    private boolean validateStartDate(String date)
-    {
-        return date.matches("\\d{4}-\\d{2}-\\d{2}");
-    }
-    
-    /**
-     * Validate the start time input
-     * 
-     * @param time The start time
-     * @return If the start time is valid
-     */
-    private boolean validateStartTime(String time)
-    {
-        return time.matches("\\d{2}:\\d{2}");
     }
 }

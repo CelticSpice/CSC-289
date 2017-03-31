@@ -197,7 +197,11 @@ public class UpdatePasswordDialog extends JDialog
                 try
                 {
                     oldPassword = saltHasher.saltHash(oldPassword);
+                    
                     String currentPassword = prefs.getAdminPassword();
+                    if (currentPassword.isEmpty())
+                        currentPassword = saltHasher.saltHash(currentPassword);
+                    
 
                     if (oldPassword.equals(currentPassword))
                     {

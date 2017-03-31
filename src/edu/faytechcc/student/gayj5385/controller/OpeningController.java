@@ -105,13 +105,17 @@ public class OpeningController implements ActionListener
         {
             SystemPreferences prefs = SystemPreferences.getInstance();
             SHA256SaltHasher saltHasher = new SHA256SaltHasher();
+            
             // Validate password
             String password = new String(passwordField.getPassword());
             
             try
             {
                 password = saltHasher.saltHash(password);
+                
                 String currentPassword = prefs.getAdminPassword();
+                if (currentPassword.isEmpty())
+                    currentPassword = saltHasher.saltHash(currentPassword);
                 
                 if (password.equals(currentPassword))
                     showAdminView();

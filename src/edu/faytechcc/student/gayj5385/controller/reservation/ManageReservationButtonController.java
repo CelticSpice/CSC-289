@@ -80,6 +80,10 @@ public class ManageReservationButtonController implements ActionListener
             case "Cancel":
                 cancel();
                 break;
+            case "Search":
+                break;
+            case "Clear":
+                break;
             case "Logout":
                 System.exit(0);
                 break;

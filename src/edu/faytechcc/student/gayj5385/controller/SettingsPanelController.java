@@ -10,7 +10,7 @@ import edu.faytechcc.student.burnst9091.data.SMTPProperties;
 import edu.faytechcc.student.burnst9091.data.SMTPValidator;
 import edu.faytechcc.student.burnst9091.data.SystemPreferences;
 import edu.faytechcc.student.gayj5385.gui.SettingsPanel;
-import edu.faytechcc.student.gayj5385.gui.UpdatePasswordDialog;
+import edu.faytechcc.student.gayj5385.gui.dialog.UpdatePasswordDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 

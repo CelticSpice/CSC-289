@@ -10,7 +10,7 @@ import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reservable;
 import edu.faytechcc.student.burnst9091.data.SystemPreferences;
 import edu.faytechcc.student.burnst9091.data.Timeframe;
-import edu.faytechcc.student.gayj5385.gui.AddReservableDialog;
+import edu.faytechcc.student.gayj5385.gui.dialog.AddReservableDialog;
 import edu.faytechcc.student.mccanns0131.database.DatabaseConnection;
 import edu.faytechcc.student.mccanns0131.database.RecordAdd;
 import java.awt.event.ActionEvent;

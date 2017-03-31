@@ -8,8 +8,6 @@ package edu.faytechcc.student.gayj5385.gui;
 
 import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reservation;
-import edu.faytechcc.student.burnst9091.data.SHA256SaltHasher;
-import edu.faytechcc.student.burnst9091.data.SystemPreferences;
 import edu.faytechcc.student.gayj5385.controller.OpeningController;
 import java.awt.CardLayout;
 import java.util.ArrayList;

@@ -7,7 +7,7 @@
 package edu.faytechcc.student.gayj5385.controller;
 
 import edu.faytechcc.student.burnst9091.data.Location;
-import edu.faytechcc.student.gayj5385.gui.AddReservableDialog;
+import edu.faytechcc.student.gayj5385.gui.dialog.AddReservableDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 

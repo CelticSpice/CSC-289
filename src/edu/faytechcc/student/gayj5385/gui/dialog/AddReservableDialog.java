@@ -4,7 +4,7 @@
     @author Timothy Burns
 */
 
-package edu.faytechcc.student.gayj5385.gui;
+package edu.faytechcc.student.gayj5385.gui.dialog;
 
 import edu.faytechcc.student.burnst9091.data.Location;
 import java.awt.FlowLayout;

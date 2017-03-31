@@ -17,7 +17,7 @@ import edu.faytechcc.student.gayj5385.controller.ReservableAddButtonController;
 import edu.faytechcc.student.gayj5385.controller.ReservableAddComboBoxController;
 import edu.faytechcc.student.gayj5385.controller.ReservableAddRadioController;
 import edu.faytechcc.student.gayj5385.gui.ManageReservablePanel;
-import edu.faytechcc.student.gayj5385.gui.AddReservableDialog;
+import edu.faytechcc.student.gayj5385.gui.dialog.AddReservableDialog;
 import edu.faytechcc.student.mccanns0131.database.DatabaseConnection;
 import edu.faytechcc.student.mccanns0131.database.RecordDelete;
 import java.awt.event.ActionEvent;

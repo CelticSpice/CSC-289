@@ -12,7 +12,7 @@ import edu.faytechcc.student.burnst9091.data.SHA256SaltHasher;
 import edu.faytechcc.student.burnst9091.data.SystemPreferences;
 import edu.faytechcc.student.gayj5385.gui.MainPanel;
 import edu.faytechcc.student.gayj5385.gui.OpenPanel;
-import edu.faytechcc.student.gayj5385.gui.SendEmailDialog;
+import edu.faytechcc.student.gayj5385.gui.dialog.SendEmailDialog;
 import edu.faytechcc.student.mccanns0131.database.DatabaseConnection;
 import edu.faytechcc.student.mccanns0131.database.LocationQuery;
 import edu.faytechcc.student.mccanns0131.database.ReservationQuery;

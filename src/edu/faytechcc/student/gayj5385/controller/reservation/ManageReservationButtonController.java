@@ -13,7 +13,7 @@ import edu.faytechcc.student.burnst9091.data.SystemPreferences;
 import edu.faytechcc.student.burnst9091.data.search.Filter;
 import edu.faytechcc.student.burnst9091.exception.RecordNotExistsException;
 import edu.faytechcc.student.gayj5385.gui.ManageReservationPanel;
-import edu.faytechcc.student.gayj5385.gui.SendEmailDialog;
+import edu.faytechcc.student.gayj5385.gui.dialog.SendEmailDialog;
 import edu.faytechcc.student.mccanns0131.database.DatabaseConnection;
 import edu.faytechcc.student.mccanns0131.database.RecordDelete;
 import edu.faytechcc.student.mccanns0131.database.RecordModify;

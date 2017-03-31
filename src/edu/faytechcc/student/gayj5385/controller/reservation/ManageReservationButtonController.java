@@ -11,6 +11,7 @@ import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.Reserver;
 import edu.faytechcc.student.burnst9091.data.search.Filter;
+import edu.faytechcc.student.burnst9091.data.search.SearchActualizer;
 import edu.faytechcc.student.burnst9091.exception.RecordNotExistsException;
 import edu.faytechcc.student.gayj5385.gui.ManageReservationPanel;
 import edu.faytechcc.student.gayj5385.gui.SendEmailDialog;
@@ -78,8 +79,11 @@ public class ManageReservationButtonController implements ActionListener
                 cancel();
                 break;
             case "Search":
+                if (!view.getSearchCriteria().isEmpty())
+                    search(view.getSearchCriteria());
                 break;
             case "Clear":
+                clear();
                 break;
             case "Logout":
                 System.exit(0);
@@ -135,6 +139,14 @@ public class ManageReservationButtonController implements ActionListener
     }
     
     /**
+     * Clears search results
+     */
+    private void clear()
+    {
+        
+    }
+    
+    /**
         Shows the dialog enabling the administrator to send an email to a
         reserver    
     */
@@ -184,6 +196,91 @@ public class ManageReservationButtonController implements ActionListener
             JOptionPane.showMessageDialog(view, 
                 "Can only review or reassess one reservation", "Warning",
                     JOptionPane.WARNING_MESSAGE);
+    }
+    
+    /**
+     * Searches existing reservations that match search criteria
+     */
+    private void search(String criteria)
+    {
+        SearchActualizer search = new SearchActualizer(criteria);
+        
+        if (search.validateSearch())
+        {
+            switch (search.getNumSearchLocations())
+            {
+                case 0:
+                    searchOnSelectedLocation(search);
+                    break;
+                case 1:
+                    searchOnOneLocation(search);
+                    break;
+                default:
+                    searchOnMultipleLocations(search);
+                    break;
+            }
+        }
+    }
+    
+    /**
+     * Performs a search on two or more locations
+     * 
+     * @param s The SearchActualizer to perform the search with
+     * @param criteria The search criteria
+     */
+    private void searchOnMultipleLocations(SearchActualizer s)
+    {
+        locationFilter.setPredicate(s.searchLocations());
+        setLocations();
+        
+        if (reservationFilter.getPredicate() != null)
+        {
+            reservationFilter.setPredicate(s.searchReservations());
+            setReservations(reservationFilter.filter(reservations.get(view.getSelectedLocation())));
+        }
+    }
+    
+    /**
+     * Performs a search on one specified location
+     * 
+     * @param s The SearchActualizer to perform the search with
+     * @param criteria The search criteria
+     */
+    private void searchOnOneLocation(SearchActualizer s)
+    {
+        locationFilter.setPredicate(s.searchLocations());
+        setLocations();
+            
+        if (view.getSelectedLocation() != null)
+        {
+            reservationFilter.setPredicate(s.searchReservations());
+            setReservations(reservationFilter.filter(reservations.get(view.getSelectedLocation())));
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(view, "No such location exists");
+//            clear();
+        }
+    }
+    
+    /**
+     * Performs a search on the currently selected location
+     * 
+     * @param s The SearchActualizer to perform the search with
+     * @param criteria The search criteria
+     */
+    private void searchOnSelectedLocation(SearchActualizer s)
+    {
+        if (view.getSelectedLocation() != null)
+        {
+            reservationFilter.setPredicate(s.searchReservations());
+            
+            List<Reservation> reserves = reservations.get(view.getSelectedLocation());
+
+            setReservations(reserves);
+        }
+        else
+            JOptionPane.showMessageDialog(view, "No location selected");
     }
     
     /**

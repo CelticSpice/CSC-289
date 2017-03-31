@@ -134,7 +134,7 @@ public class OpeningController implements ActionListener
 
             locations.clear();
             locations.addAll(parser.parseLocations());
-
+            
             ReservationQuery q = new ReservationQuery();
             for (Location loc : locations)
             {

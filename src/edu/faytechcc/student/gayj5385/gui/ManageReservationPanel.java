@@ -234,6 +234,16 @@ public class ManageReservationPanel extends JPanel
     }
     
     /**
+     * Returns the search criteria in the search text field
+     * 
+     * @return search criteria
+     */
+    public String getSearchCriteria()
+    {
+        return search.getText();
+    }
+    
+    /**
         Return the selected location
     
         @return The selected location

@@ -6,6 +6,7 @@
 package edu.faytechcc.student.burnst9091.data.search;
 
 import edu.faytechcc.student.burnst9091.data.Location;
+import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.Timeframe;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,13 +18,34 @@ public class SearchActualizer
     // Fields
     String criteria;
     int numLocations;
+    List<String> acceptedKeys;
     
     /**
      * Constructor
+     * 
+     * @param c Search criteria
      */
     public SearchActualizer(String c)
     {
         criteria = c;
+        acceptedKeys = new ArrayList();
+        
+        acceptedKeys.add("locationname");
+        acceptedKeys.add("location name");
+        acceptedKeys.add("location");
+        acceptedKeys.add("loc");
+        acceptedKeys.add("capacity");
+        acceptedKeys.add("cap");
+        acceptedKeys.add("startdate");
+        acceptedKeys.add("start date");
+        acceptedKeys.add("starttime");
+        acceptedKeys.add("start time");
+        acceptedKeys.add("enddate");
+        acceptedKeys.add("end date");
+        acceptedKeys.add("endtime");
+        acceptedKeys.add("end time");
+        acceptedKeys.add("cost");
+        acceptedKeys.add("price");
     }
     
     public int getNumSearchLocations()
@@ -34,7 +56,6 @@ public class SearchActualizer
     /**
      * Return a predicate that checks for a match with a given location
      * 
-     * @param criteria The search criteria
      * @return A timeframe predicate
      */
     public Predicate<Location> searchLocations()
@@ -43,10 +64,15 @@ public class SearchActualizer
         return search.search(criteria);
     }
     
+    public Predicate<Reservation> searchReservations()
+    {
+        ReservationSearch search = new ReservationSearch();
+        return search.search(criteria);
+    }
+    
     /**
      * Return a predicate that checks for a match with a given timeframe
      * 
-     * @param criteria The search criteria
      * @return A timeframe predicate
      */
     public Predicate<Timeframe> searchTimeframes()
@@ -151,24 +177,11 @@ public class SearchActualizer
     
     /**
      * Validate the entire search
-     * @param criteria The search criteria
+     * 
      * @return If the search is valid
      */
     public boolean validateSearch()
-    {
-        List<String> acceptedKeys = new ArrayList();
-        acceptedKeys.add("locationname");
-        acceptedKeys.add("location");
-        acceptedKeys.add("loc");
-        acceptedKeys.add("capacity");
-        acceptedKeys.add("cap");
-        acceptedKeys.add("startdate");
-        acceptedKeys.add("starttime");
-        acceptedKeys.add("enddate");
-        acceptedKeys.add("endtime");
-        acceptedKeys.add("cost");
-        acceptedKeys.add("price");
-        
+    {        
         // Split search criteria
         String[] filterArray = criteria.split(";");
         
@@ -182,7 +195,7 @@ public class SearchActualizer
                 String key = constraint[0].trim(), 
                        val = constraint[1].trim();
 
-                if (!key.equals("") && acceptedKeys.contains(key))
+                if (!key.isEmpty() && acceptedKeys.contains(key))
                 {
                     switch(key.toLowerCase())
                     {

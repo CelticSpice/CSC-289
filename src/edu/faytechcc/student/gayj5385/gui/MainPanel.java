@@ -41,12 +41,10 @@ public class MainPanel extends JPanel
         
         List<Location> locations = new ArrayList<>();
         HashMap<Location, List<Reservation>> reservations = new HashMap<>();
-        SystemPreferences prefs = new SystemPreferences();
-        SHA256SaltHasher saltHasher = new SHA256SaltHasher();
         
-        buildOpenPanel(locations, reservations, prefs, saltHasher);
-        buildAdminPanel(locations, reservations, prefs, saltHasher);        
-        buildReservationPanel(locations, prefs);
+        buildOpenPanel(locations, reservations);
+        buildAdminPanel(locations, reservations);        
+        buildReservationPanel(locations);
     }
     
     /**
@@ -54,11 +52,9 @@ public class MainPanel extends JPanel
     */
     
     private void buildAdminPanel(List<Location> locations,
-        HashMap<Location, List<Reservation>> reservations,
-        SystemPreferences prefs, SHA256SaltHasher saltHasher)
+        HashMap<Location, List<Reservation>> reservations)
     {
-        adminPanel = new AdminPanel(locations, reservations, prefs,
-                saltHasher);
+        adminPanel = new AdminPanel(locations, reservations);
         
         add(adminPanel, CARDS[1]);
     }
@@ -68,14 +64,12 @@ public class MainPanel extends JPanel
     */
     
     private void buildOpenPanel(List<Location> locations,
-        HashMap<Location, List<Reservation>> reservations,
-        SystemPreferences prefs,
-        SHA256SaltHasher saltHash)
+        HashMap<Location, List<Reservation>> reservations)
     {
         openPanel = new OpenPanel();
         
         openPanel.registerButtonListener(new OpeningController(this, openPanel,
-            locations, reservations, prefs, saltHash));
+            locations, reservations));
         
         add(openPanel, CARDS[0]);
     }
@@ -87,34 +81,13 @@ public class MainPanel extends JPanel
         @param locs The locations
     */
     
-    private void buildReservationPanel(List<Location> locs,
-            SystemPreferences prefs)
+    private void buildReservationPanel(List<Location> locs)
     {
         final int CARD_INDEX = 2;
         
         GuestReservationPanel panel = new GuestReservationPanel(locs);
         
         add(panel, CARDS[CARD_INDEX]);
-    }
-    
-    /**
-        Derives locations available to be reserved from a list of locations
-    
-        @param locs The list of locations
-        @return List of locations available to reserve
-    */
-    
-    private List<Location> deriveAvailableLocs(List<Location> locs)
-    {
-        List<Location> locations = new ArrayList<>();
-        
-        for (Location loc : locs)
-        {
-            if (!loc.deriveReservableTimeframes().isEmpty())
-                locations.add(loc);
-        }
-        
-        return locations;
     }
     
     /**

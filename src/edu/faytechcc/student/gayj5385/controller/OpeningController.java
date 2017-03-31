@@ -33,31 +33,24 @@ public class OpeningController implements ActionListener
     private List<Location> locations;
     private MainPanel mainPanel;
     private OpenPanel view;
-    private SystemPreferences preferences;
-    private SHA256SaltHasher saltHasher;
     
     /**
         Constructs a new OpeningController initialized with the given panels,
-        location & reservation listings, system preferences, and salt-hashes
+        location & reservation listings
     
         @param main Main panel
         @param v The view
         @param locs The locations
         @param reserves The reservations
-        @param prefs System preferences
-        @param saltHash Salt-hasher
     */
     
     public OpeningController(MainPanel main, OpenPanel v, List<Location> locs,
-        HashMap<Location, List<Reservation>> reserves, SystemPreferences prefs,
-        SHA256SaltHasher saltHash)
+        HashMap<Location, List<Reservation>> reserves)
     {
         mainPanel = main;
         view = v;
         locations = locs;
         reservations = reserves;
-        preferences = prefs;
-        saltHasher = saltHash;
     }
     
     /**
@@ -110,13 +103,15 @@ public class OpeningController implements ActionListener
         
         if (action == JOptionPane.OK_OPTION)
         {
+            SystemPreferences prefs = SystemPreferences.getInstance();
+            SHA256SaltHasher saltHasher = new SHA256SaltHasher();
             // Validate password
             String password = new String(passwordField.getPassword());
             
             try
             {
                 password = saltHasher.saltHash(password);
-                String currentPassword = preferences.getAdminPassword();
+                String currentPassword = prefs.getAdminPassword();
                 
                 if (password.equals(currentPassword))
                     showAdminView();
@@ -138,11 +133,13 @@ public class OpeningController implements ActionListener
     
     private void showAdminView()
     {
+        SystemPreferences prefs = SystemPreferences.getInstance();
+        
         try
         {
             // Update locations & reservations
-            String user = preferences.getDBUser();
-            String pass = preferences.getDBPass();
+            String user = prefs.getDBUser();
+            String pass = prefs.getDBPass();
             DatabaseConnection conn = DatabaseConnection.getConnection(
                     user, pass);
             

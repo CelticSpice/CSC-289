@@ -29,24 +29,20 @@ public class ReservableAddButtonController implements ActionListener
 
     private AddReservableDialog view;
     private List<Location> locations;
-    private SystemPreferences preferences;
 
     /**
         Constructs a new ReservableAddButtonController to manage the buttons
-        on the given view with the given set of existing locations & system
-        preferences
+        on the given view with the given set of existing locations
 
         @param v The view
         @param locs The locations
-        @param prefs System preferences
     */
 
     public ReservableAddButtonController(AddReservableDialog v,
-            List<Location> locs, SystemPreferences prefs)
+            List<Location> locs)
     {
         view = v;
         locations = locs;
-        preferences = prefs;
     }
 
     /**
@@ -80,8 +76,9 @@ public class ReservableAddButtonController implements ActionListener
         {
             try
             {
-                String user = preferences.getDBUser();
-                String pass = preferences.getDBPass();
+                SystemPreferences prefs = SystemPreferences.getInstance();
+                String user = prefs.getDBUser();
+                String pass = prefs.getDBPass();
                 DatabaseConnection conn = DatabaseConnection.getConnection(
                         user, pass);
                         

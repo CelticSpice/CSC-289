@@ -48,18 +48,14 @@ public class AdminPanel extends JPanel
     
     /**
         Constructs a new AdminPanel initialized with the given listing of
-        locations & mapping of reservations, system preferences,
-        and salt-hasher
+        locations & mapping of reservations
     
         @param locs The locations
         @param reserves The reservations
-        @param prefs System preferences
-        @param saltHasher Salt-hasher
     */
     
     public AdminPanel(List<Location> locs,
-        HashMap<Location, List<Reservation>> reserves,
-        SystemPreferences prefs, SHA256SaltHasher saltHasher)
+        HashMap<Location, List<Reservation>> reserves)
     {
         super(new BorderLayout());
         
@@ -71,9 +67,9 @@ public class AdminPanel extends JPanel
         
         tabbedPane.addChangeListener(new AdminPanelController(this));
         
-        buildManageReservablePanel(locations, prefs);
-        buildManageReservationPanel(reservations, prefs);
-        buildSettingsPanel(prefs, saltHasher);
+        buildManageReservablePanel(locations);
+        buildManageReservationPanel(reservations);
+        buildSettingsPanel();
         buildBottomPanel();
         
         tabbedPane.add("Manage Reservables", mngReservablePanel);
@@ -108,14 +104,12 @@ public class AdminPanel extends JPanel
     
     /**
         Builds the panel to manage reservables on. initialized with the given
-        list of locations and the system preferences
+        list of locations
     
         @param locations The locations
-        @param prefs System preferences
     */
     
-    private void buildManageReservablePanel(List<Location> locations,
-            SystemPreferences prefs)
+    private void buildManageReservablePanel(List<Location> locations)
     {
         mngReservablePanel = new ManageReservablePanel();
         
@@ -124,7 +118,7 @@ public class AdminPanel extends JPanel
         
         mngReservablePanel.registerButtonController(
             new ManageReservableButtonController(mngReservablePanel,
-                locations, timeframeFilter, locationFilter, prefs));
+                locations, timeframeFilter, locationFilter));
         
         mngReservablePanel.registerComboBoxController(
             new ManageReservableComboBoxController(mngReservablePanel,
@@ -136,16 +130,14 @@ public class AdminPanel extends JPanel
     
     /**
         Builds the panel to manage reservations on, initialized with
-        the given mapping of reservations & system preferences
+        the given mapping of reservations
     
         @param reservations Location reservation mapping
-        @param prefs System preferences
         @return The built panel
     */
     
     private void buildManageReservationPanel(
-            HashMap<Location, List<Reservation>> reservations,
-            SystemPreferences prefs)
+            HashMap<Location, List<Reservation>> reservations)
     {   
         mngReservationPanel = new ManageReservationPanel();
         
@@ -154,7 +146,7 @@ public class AdminPanel extends JPanel
         
         mngReservationPanel.registerButtonController(
             new ManageReservationButtonController(mngReservationPanel,
-                reservations, locationFilter, reservationFilter, prefs));
+                reservations, locationFilter, reservationFilter));
         
         mngReservationPanel.registerComboBoxController(
             new ManageReservationComboBoxController(mngReservationPanel,
@@ -165,20 +157,16 @@ public class AdminPanel extends JPanel
     }
     
     /**
-        Builds the panel allowing updates to settings to be made, initialized
-        with the given system preferences & salt-hasher
+        Builds the panel allowing updates to settings to be made
     
-        @param prefs System preferences
-        @param saltHasher Salt-hasher
         @return The built panel
     */
     
-    private void buildSettingsPanel(SystemPreferences prefs,
-            SHA256SaltHasher saltHasher)
+    private void buildSettingsPanel()
     {
         settingsPanel = new SettingsPanel();
         settingsPanel.registerController(
-            new SettingsPanelController(settingsPanel, prefs, saltHasher));
+            new SettingsPanelController(settingsPanel));
     }
     
     /**

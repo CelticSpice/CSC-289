@@ -31,16 +31,10 @@ public class UpdatePasswordDialog extends JDialog
     private JPasswordField oldPass, newPass, verifiedNewPass;
     
     /**
-        Constructs a new UpdatePasswordDialog backed by the given system
-        preferences & initialized with the given salt-hasher, for updating &
-        validating against current password
-    
-        @param prefs System preferences
-        @param saltHash The salt-hasher
+        Constructs a new UpdatePasswordDialog
     */
     
-    public UpdatePasswordDialog(SystemPreferences prefs,
-            SHA256SaltHasher saltHash)
+    public UpdatePasswordDialog()
     {
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -60,30 +54,23 @@ public class UpdatePasswordDialog extends JDialog
         
         gbc.gridy = 2;
         gbc.insets = new Insets(0, 10, 10, 10);
-        add(buildButtonPanel(prefs, saltHash), gbc);
+        add(buildButtonPanel(), gbc);
         
         pack();
     }
     
     /**
-        Builds & returns the panel containing the buttons. Accepts the
-        system preferences & salt-hasher for the controller to use in validating
-        against & updating the current password
-    
-        @param prefs System preferences
-        @param saltHash Salt-hasher
-        @return The built panel
+        Builds & returns the panel containing the buttons
     */
     
-    private JPanel buildButtonPanel(SystemPreferences prefs,
-            SHA256SaltHasher saltHash)
+    private JPanel buildButtonPanel()
     {
         JPanel panel = new JPanel();
         
         panel.add(update = new JButton("Update"));
         panel.add(exit = new JButton("Exit"));
         
-        ButtonController controller = new ButtonController(prefs, saltHash);
+        ButtonController controller = new ButtonController();
         
         update.addActionListener(controller);
         exit.addActionListener(controller);
@@ -190,26 +177,6 @@ public class UpdatePasswordDialog extends JDialog
     
     private class ButtonController implements ActionListener
     {
-        // Fields
-        private SystemPreferences preferences;
-        private SHA256SaltHasher saltHasher;
-        
-        /**
-            Constructs a new ButtonController initialized with the given
-            system preferences & salt-hasher for validating against & updating
-            the current password
-        
-            @param prefs SystemPreferences
-            @param saltHash Salt-hasher
-        */
-        
-        public ButtonController(SystemPreferences prefs,
-                SHA256SaltHasher saltHash)
-        {
-            preferences = prefs;
-            saltHasher = saltHash;
-        }
-        
         /**
             Responds to an action event
         
@@ -221,13 +188,16 @@ public class UpdatePasswordDialog extends JDialog
         {
             if (e.getSource() == update)
             {
+                SystemPreferences prefs = SystemPreferences.getInstance();
+                SHA256SaltHasher saltHasher = new SHA256SaltHasher();
+                
                 // Check that old password matches
                 String oldPassword = new String(oldPass.getPassword());
                 
                 try
                 {
                     oldPassword = saltHasher.saltHash(oldPassword);
-                    String currentPassword = preferences.getAdminPassword();
+                    String currentPassword = prefs.getAdminPassword();
 
                     if (oldPassword.equals(currentPassword))
                     {
@@ -242,7 +212,7 @@ public class UpdatePasswordDialog extends JDialog
 
                         if (newPassword.equals(verifiedNewPassword))
                         {
-                            preferences.updateAdminPassword(newPassword);
+                            prefs.updateAdminPassword(newPassword);
                             setMessage("Password updated");
                         }
                         else

@@ -16,7 +16,6 @@ import edu.faytechcc.student.burnst9091.data.search.Filter;
 import edu.faytechcc.student.gayj5385.controller.ReservableAddButtonController;
 import edu.faytechcc.student.gayj5385.controller.ReservableAddComboBoxController;
 import edu.faytechcc.student.gayj5385.controller.ReservableAddRadioController;
-import edu.faytechcc.student.gayj5385.gui.MainPanel;
 import edu.faytechcc.student.gayj5385.gui.ManageReservablePanel;
 import edu.faytechcc.student.gayj5385.gui.AddReservableDialog;
 import edu.faytechcc.student.mccanns0131.database.DatabaseConnection;
@@ -35,29 +34,26 @@ public class ManageReservableButtonController implements ActionListener
     private ManageReservablePanel view;
     private Filter<Timeframe> timeframeFilter;
     private Filter<Location> locationFilter;
-    private SystemPreferences preferences;
     
     /**
         Constructs a new ManageReservableButtonController to manage the
         given view's buttons and accepts a list of locations, filters for
-        filtering timeframes & locations, and the system preferences
+        filtering timeframes & locations
 
         @param v The view
         @param locs The locations
         @param timeFilter Timeframe filter
         @param locFilter Location filter
-        @param prefs System preferences
     */
     
     public ManageReservableButtonController(ManageReservablePanel v,
             List<Location> locs, Filter<Timeframe> timeFilter,
-            Filter<Location> locFilter, SystemPreferences prefs)
+            Filter<Location> locFilter)
     {
         view = v;
         locations = locs;
         timeframeFilter = timeFilter;
         locationFilter = locFilter;
-        preferences = prefs;
     }
 
     /**
@@ -121,8 +117,9 @@ public class ManageReservableButtonController implements ActionListener
 
         try
         {
-            String user = preferences.getDBUser();
-            String pass = preferences.getDBPass();
+            SystemPreferences prefs = SystemPreferences.getInstance();
+            String user = prefs.getDBUser();
+            String pass = prefs.getDBPass();
             DatabaseConnection conn = DatabaseConnection.getConnection(
                     user, pass);
             
@@ -367,7 +364,7 @@ public class ManageReservableButtonController implements ActionListener
         AddReservableDialog d = new AddReservableDialog(locations);
 
         d.registerButtonController(new ReservableAddButtonController(d,
-            locations, preferences));
+            locations));
         d.registerRadioButtonController(new ReservableAddRadioController(d));
         d.registerComboBoxController(new ReservableAddComboBoxController(d));
 

@@ -44,7 +44,7 @@ public class EmailUtil
             address.setPersonal(senderName);
         
         // Get the properties for the guest to send email
-        SystemPreferences prefs = new SystemPreferences();
+        SystemPreferences prefs = SystemPreferences.getInstance();
         SMTPProperties props = prefs.getGuestSMTPProperties();
         
         // Get address, username, password from properties
@@ -104,7 +104,7 @@ public class EmailUtil
             throws AddressException, MessagingException
     {
         // Get the properties for the admin to send email
-        SystemPreferences prefs = new SystemPreferences();
+        SystemPreferences prefs = SystemPreferences.getInstance();
         SMTPProperties props = prefs.getAdminSMTPProperties();
         
         // Get address, username, password from properties

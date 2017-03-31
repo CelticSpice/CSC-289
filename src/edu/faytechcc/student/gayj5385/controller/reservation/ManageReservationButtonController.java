@@ -32,30 +32,26 @@ public class ManageReservationButtonController implements ActionListener
     private Filter<Reservation> reservationFilter;
     private HashMap<Location, List<Reservation>> reservations;
     private ManageReservationPanel view;
-    private SystemPreferences preferences;
     
     /**
         Constructs a new ManageReservationButtonController to control buttons
         on the given view, initialized with a mapping of location reservations
-        & filters for locations & reservations, and the system preferences
+        & filters for locations & reservations
     
         @param v The view
         @param reserves The reservation mapping
         @param locFilter Location filter
         @param resFilter Reservation filter
-        @param prefs System preferences
     */
     
     public ManageReservationButtonController(ManageReservationPanel v,
             HashMap<Location, List<Reservation>> reserves,
-            Filter<Location> locFilter, Filter<Reservation> resFilter,
-            SystemPreferences prefs)
+            Filter<Location> locFilter, Filter<Reservation> resFilter)
     {
         view = v;
         reservations = reserves;
         locationFilter = locFilter;
         reservationFilter = resFilter;
-        preferences = prefs;
     }
     
     /**
@@ -110,8 +106,9 @@ public class ManageReservationButtonController implements ActionListener
                 
                 try
                 {
-                    String user = preferences.getDBUser();
-                    String pass = preferences.getDBPass();
+                    SystemPreferences prefs = SystemPreferences.getInstance();
+                    String user = prefs.getDBUser();
+                    String pass = prefs.getDBPass();
                     DatabaseConnection conn = DatabaseConnection.getConnection(
                             user, pass);
                     
@@ -179,8 +176,9 @@ public class ManageReservationButtonController implements ActionListener
         {
             try
             {
-                String user = preferences.getDBUser();
-                String pass = preferences.getDBPass();
+                SystemPreferences prefs = SystemPreferences.getInstance();
+                String user = prefs.getDBUser();
+                String pass = prefs.getDBPass();
                 DatabaseConnection conn = DatabaseConnection.getConnection(
                         user, pass);
                 
@@ -188,7 +186,10 @@ public class ManageReservationButtonController implements ActionListener
                 new RecordModify(conn).modifyReservationReviewed(
                         reservation, reviewed);
                 
-                reservation.reviewed();
+                if (reviewed)
+                    reservation.reviewed();
+                else
+                    reservation.notReviewed();
                 
                 conn.close();
                 

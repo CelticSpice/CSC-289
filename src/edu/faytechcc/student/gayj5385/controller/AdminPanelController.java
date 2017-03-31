@@ -40,13 +40,13 @@ public class AdminPanelController implements ChangeListener
     {
         if (view.getActiveTab().equals("Settings"))
         {
-            SystemPreferences systemPrefs = new SystemPreferences();
+            SystemPreferences prefs = SystemPreferences.getInstance();
         
-            SMTPProperties adminSMTP = systemPrefs.getAdminSMTPProperties();
-            SMTPProperties guestSMTP = systemPrefs.getGuestSMTPProperties();
-            String adminGet = systemPrefs.getAdminGetAddress();
-            String dbUser = systemPrefs.getDBUser();
-            String dbPass = systemPrefs.getDBPass();
+            SMTPProperties adminSMTP = prefs.getAdminSMTPProperties();
+            SMTPProperties guestSMTP = prefs.getGuestSMTPProperties();
+            String adminGet = prefs.getAdminGetAddress();
+            String dbUser = prefs.getDBUser();
+            String dbPass = prefs.getDBPass();
 
             view.setSettingsSecurityOptions(SecurityOption.values());
             view.setSettingsEmailFields(adminSMTP, guestSMTP, adminGet);

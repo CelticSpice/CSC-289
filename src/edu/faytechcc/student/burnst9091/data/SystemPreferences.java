@@ -20,7 +20,7 @@ public class SystemPreferences
         Constructs a new SystemPreferences
     */
     
-    public SystemPreferences()
+    private SystemPreferences()
     {
         prefs = Preferences.userRoot().node(ROOT);
         emailPrefs = new EmailPreferences(prefs.absolutePath() + "/Email");
@@ -46,6 +46,17 @@ public class SystemPreferences
     public String getAdminPassword()
     {
         return prefs.get("AdminPass", "");
+    }
+    
+    /**
+        Returns an instance of SystemPreferences
+    
+        @return A SystemPreferences instance
+    */
+    
+    public static SystemPreferences getInstance()
+    {
+        return new SystemPreferences();
     }
     
     /**

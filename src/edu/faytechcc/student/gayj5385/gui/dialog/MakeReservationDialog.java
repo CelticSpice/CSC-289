@@ -6,6 +6,8 @@
 
 package edu.faytechcc.student.gayj5385.gui.dialog;
 
+import edu.faytechcc.student.burnst9091.data.Reservable;
+import edu.faytechcc.student.burnst9091.data.Reserver;
 import edu.faytechcc.student.burnst9091.data.SystemPreferences;
 import edu.faytechcc.student.mccanns0131.database.DatabaseConnection;
 import java.awt.BorderLayout;
@@ -13,6 +15,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -29,10 +32,13 @@ public class MakeReservationDialog extends JDialog
             endTime, cost, firstName, lastName, email, phone;
     
     /**
-        Constructs a new MakeReservationDialog
+        Constructs a new MakeReservationDialog, initialized with the specified
+        reservable that is to be reserved
+    
+        @param r The reservable to be reserved
     */
     
-    public MakeReservationDialog()
+    public MakeReservationDialog(Reservable r)
     {
         setLayout(new BorderLayout());
         setTitle("Make Reservation");
@@ -41,26 +47,28 @@ public class MakeReservationDialog extends JDialog
         setResizable(false);
         setLocationRelativeTo(null);
         
-        add(buildMainPanel(), BorderLayout.CENTER);
-        add(buildButtonPanel(), BorderLayout.SOUTH);
+        add(buildMainPanel(r), BorderLayout.CENTER);
+        add(buildButtonPanel(r), BorderLayout.SOUTH);
         
         pack();
     }
     
     /**
-        Builds & returns the button panel of the dialog
+        Builds & returns the button panel of the dialog, initialized with the
+        reservable that is to be reserved
         
+        @param r The reservable to be reserved
         @return The built panel
     */
     
-    private JPanel buildButtonPanel()
+    private JPanel buildButtonPanel(Reservable r)
     {
         JPanel panel = new JPanel();
         
         panel.add(reserve = new JButton("Reserve"));
         panel.add(cancel = new JButton("Cancel"));
         
-        ButtonController controller = new ButtonController();
+        ButtonController controller = new ButtonController(r);
         
         reserve.addActionListener(controller);
         cancel.addActionListener(controller);
@@ -69,16 +77,20 @@ public class MakeReservationDialog extends JDialog
     }
     
     /**
-        Builds & returns the lower panel of the reservable info panel
-        
+        Builds & returns the lower panel of the reservable info panel,
+        initialized with the specified reservable that is to be reserved
+    
+        @param r The reservable to be reserved
         @return The built panel
     */
     
-    private JPanel buildLowerReservableInfoPanel()
+    private JPanel buildLowerReservableInfoPanel(Reservable r)
     {
         JPanel panel = new JPanel();
         
         panel.add(cost = new JTextField(5));
+        
+        cost.setText(r.getTimeframe().getCostString());
         
         cost.setEditable(false);
         
@@ -86,29 +98,33 @@ public class MakeReservationDialog extends JDialog
     }
     
     /**
-        Builds & returns the main panel of the dialog
+        Builds & returns the main panel of the dialog, initialized with the
+        specified reservable that is to be reserved
     
+        @param r The reservable to be reserved
         @return The built panel
     */
     
-    private JPanel buildMainPanel()
+    private JPanel buildMainPanel(Reservable r)
     {
         JPanel panel = new JPanel();
         panel.setBorder(BorderFactory.createEtchedBorder());
         
-        panel.add(buildReservableInfoPanel());
+        panel.add(buildReservableInfoPanel(r));
         panel.add(buildReservationInfoPanel());
         
         return panel;
     }
     
     /**
-        Builds & returns the middle panel of the reservable info panel
+        Builds & returns the middle panel of the reservable info panel,
+        initialized with the specified reservable that is to be reserved
     
+        @param r The reservable to be reserved
         @return The built panel
     */
     
-    private JPanel buildMidReservableInfoPanel()
+    private JPanel buildMidReservableInfoPanel(Reservable r)
     {
         JPanel panel = new JPanel();
         
@@ -130,6 +146,11 @@ public class MakeReservationDialog extends JDialog
         endDateTimePanel.add(new JLabel("End Time:"));
         endDateTimePanel.add(endTime = new JTextField(7));
         
+        startDate.setText(r.getStartDate().toString());
+        startTime.setText(r.getStartTime().toString());
+        endDate.setText(r.getEndDate().toString());
+        endTime.setText(r.getEndTime().toString());
+        
         startDate.setEditable(false);
         startTime.setEditable(false);
         endDate.setEditable(false);
@@ -143,19 +164,21 @@ public class MakeReservationDialog extends JDialog
     }
     
     /**
-        Builds & returns the panel containing information about the reservable
+        Builds & returns the panel containing information about the reservable,
+        initialized with the specified reservable that is to be reserved
     
+        @param r The reservable to be reserved
         @return The built panel
     */
     
-    private JPanel buildReservableInfoPanel()
+    private JPanel buildReservableInfoPanel(Reservable r)
     {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createTitledBorder("Reservable Info"));
         
-        panel.add(buildUpperReservableInfoPanel(), BorderLayout.NORTH);
-        panel.add(buildMidReservableInfoPanel(), BorderLayout.CENTER);
-        panel.add(buildLowerReservableInfoPanel(), BorderLayout.SOUTH);
+        panel.add(buildUpperReservableInfoPanel(r), BorderLayout.NORTH);
+        panel.add(buildMidReservableInfoPanel(r), BorderLayout.CENTER);
+        panel.add(buildLowerReservableInfoPanel(r), BorderLayout.SOUTH);
         
         return panel;
     }
@@ -187,12 +210,14 @@ public class MakeReservationDialog extends JDialog
     }
     
     /**
-        Builds & returns the upper panel of the reservable info panel
+        Builds & returns the upper panel of the reservable info panel,
+        initialized with the specified reservable that is to be reserved
     
+        @param r The reservable to be reserved
         @return The built panel
     */
     
-    private JPanel buildUpperReservableInfoPanel()
+    private JPanel buildUpperReservableInfoPanel(Reservable r)
     {
         JPanel panel = new JPanel(new GridLayout(2, 2, 5, 5));
         
@@ -201,6 +226,9 @@ public class MakeReservationDialog extends JDialog
         
         panel.add(new JLabel("Capacity:"));
         panel.add(capacity = new JTextField(3));
+        
+        location.setText(r.getName());
+        capacity.setText(String.valueOf(r.getCapacity()));
         
         location.setEditable(false);
         capacity.setEditable(false);
@@ -214,6 +242,20 @@ public class MakeReservationDialog extends JDialog
     
     private class ButtonController implements ActionListener
     {
+        private Reservable reservable;
+        
+        /**
+            Constructs a new ButtonController initialized with the specified
+            reservable that is to be reserved
+        
+            @param r The reservable to be reserved
+        */
+        
+        public ButtonController(Reservable r)
+        {
+            reservable = r;
+        }
+        
         /**
             Performs an action on a button being clicked
         
@@ -254,12 +296,29 @@ public class MakeReservationDialog extends JDialog
         private void makeReservation()
         {
             SystemPreferences prefs = SystemPreferences.getInstance();
-            String dbUser = prefs.getDBUser();
-            String dbPass = prefs.getDBPass();
             
-            DatabaseConnection conn = DatabaseConnection.getConnection(
-                    dbUser, dbPass);
-            
+            try
+            {
+                DatabaseConnection conn = DatabaseConnection.getConnection(
+                    prefs.getDBSettings());
+                
+                // Create reserver
+                String fName = firstName.getText();
+                String lName = lastName.getText();
+                String e = email.getText();
+                String p = phone.getText();
+                Reserver reserver = new Reserver(fName, lName, e, p);
+                
+                // Get reservation info
+                String 
+                
+                // Create reservation
+                
+            }
+            catch (SQLException ex)
+            {
+                
+            }
         }
         
         /**

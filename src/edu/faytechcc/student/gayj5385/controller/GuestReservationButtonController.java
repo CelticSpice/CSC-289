@@ -7,6 +7,8 @@
 package edu.faytechcc.student.gayj5385.controller;
 
 import edu.faytechcc.student.burnst9091.data.Location;
+import edu.faytechcc.student.burnst9091.data.Reservable;
+import edu.faytechcc.student.burnst9091.data.Timeframe;
 import edu.faytechcc.student.gayj5385.gui.GuestReservationPanel;
 import edu.faytechcc.student.gayj5385.gui.MainPanel;
 import java.awt.event.ActionEvent;
@@ -45,7 +47,7 @@ public class GuestReservationButtonController implements ActionListener
         switch (e.getActionCommand())
         {
             case "Reserve":
-                // Do this
+                showMakeReservationDialog();
                 break;
             case "Search":
                 // Do this
@@ -56,6 +58,24 @@ public class GuestReservationButtonController implements ActionListener
             case "Exit":
                 exit();
                 break;
+        }
+    }
+    
+    /**
+        Displays the dialog for the guest to provide details & confirm
+        making a reservation
+    */
+    
+    private void showMakeReservationDialog()
+    {
+        List<Timeframe> timeframes = view.getSelectedTimeframes();
+        
+        if (timeframes.size() == 1)
+        {
+            Location loc = view.getSelectedLocation();
+            Reservable reservable = new Reservable(loc, timeframes.get(0));
+            
+            new MakeReservationDialog(reservable).
         }
     }
     

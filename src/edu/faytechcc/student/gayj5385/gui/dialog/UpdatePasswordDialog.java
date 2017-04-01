@@ -216,7 +216,7 @@ public class UpdatePasswordDialog extends JDialog
 
                         if (newPassword.equals(verifiedNewPassword))
                         {
-                            prefs.updateAdminPassword(newPassword);
+                            prefs.setAdminPassword(newPassword);
                             setMessage("Password updated");
                         }
                         else

@@ -6,13 +6,12 @@
 
 package edu.faytechcc.student.gayj5385.gui;
 
+import edu.faytechcc.student.burnst9091.data.DatabaseSettings;
+import edu.faytechcc.student.burnst9091.data.EmailSettings;
 import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reservation;
-import edu.faytechcc.student.burnst9091.data.SHA256SaltHasher;
-import edu.faytechcc.student.gayj5385.controller.SettingsPanelController;
-import edu.faytechcc.student.burnst9091.data.SMTPProperties;
 import edu.faytechcc.student.burnst9091.data.SecurityOption;
-import edu.faytechcc.student.burnst9091.data.SystemPreferences;
+import edu.faytechcc.student.gayj5385.controller.SettingsPanelController;
 import edu.faytechcc.student.burnst9091.data.Timeframe;
 import edu.faytechcc.student.burnst9091.data.search.Filter;
 import edu.faytechcc.student.gayj5385.controller.AdminPanelController;
@@ -181,40 +180,22 @@ public class AdminPanel extends JPanel
     }
     
     /**
-        Set the database fields for the settings panel
-    
-        @param dbName Database username
-        @param dbPass Database password
+        Updates the settings panel's current settings input
+        
+        @param adminEmail Settings for the administrator's email
+        @param guestEmail Settings for the guest's email
+        @param db Settings for the database
+        @param securityOptions Available security options to choose from
     */
     
-    public void setSettingsDBFields(String dbName, String dbPass)
+    public void setSettingsSettings(EmailSettings adminEmail,
+            EmailSettings guestEmail, DatabaseSettings db,
+            SecurityOption[] securityOptions)
     {
-        settingsPanel.setDatabaseFields(dbName, dbPass);
-    }
-    
-    /**
-        Populate the email fields in the settings tab
-    
-        @param adminSMTP Admin SMTP properties
-        @param guestSMTP Guest SMTP properties
-        @param adminGet Address for admin to receive email at
-    */
-    
-    public void setSettingsEmailFields(SMTPProperties adminSMTP,
-                                       SMTPProperties guestSMTP,String adminGet)
-    {
-        settingsPanel.setEmailFields(adminSMTP, guestSMTP, adminGet);
-    }
-    
-    /**
-        Set the security options available to choose from on the settings panel
-    
-        @param options The options available to choose from
-    */
-    
-    public void setSettingsSecurityOptions(SecurityOption[] options)
-    {
-        settingsPanel.setSecurityOptions(options);
+        settingsPanel.setSecurityOptions(securityOptions);
+        settingsPanel.setAdminEmailSettings(adminEmail);
+        settingsPanel.setGuestEmailSettings(guestEmail);
+        settingsPanel.setDBSettings(db);
     }
     
     /**

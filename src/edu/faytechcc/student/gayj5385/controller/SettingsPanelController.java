@@ -6,13 +6,14 @@
 
 package edu.faytechcc.student.gayj5385.controller;
 
-import edu.faytechcc.student.burnst9091.data.SMTPProperties;
-import edu.faytechcc.student.burnst9091.data.SMTPValidator;
+import edu.faytechcc.student.burnst9091.data.DatabaseSettings;
+import edu.faytechcc.student.burnst9091.data.EmailSettings;
 import edu.faytechcc.student.burnst9091.data.SystemPreferences;
 import edu.faytechcc.student.gayj5385.gui.SettingsPanel;
 import edu.faytechcc.student.gayj5385.gui.dialog.UpdatePasswordDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.JOptionPane;
 
 public class SettingsPanelController implements ActionListener
 {
@@ -54,21 +55,28 @@ public class SettingsPanelController implements ActionListener
     }
     
     /**
-        Resets the fields to current values
+        Displays a warning message
+    
+        @param mesg Message to display
+    */
+    
+    private void displayWarning(String mesg)
+    {
+        JOptionPane.showMessageDialog(view, mesg, "Warning",
+                JOptionPane.WARNING_MESSAGE);
+    }
+    
+    /**
+        Resets the fields to current settings
     */
     
     private void cancelChanges()
     {
         SystemPreferences prefs = SystemPreferences.getInstance();
         
-        SMTPProperties adminProps = prefs.getAdminSMTPProperties();
-        SMTPProperties guestProps = prefs.getGuestSMTPProperties();
-        String adminGetAddress = prefs.getAdminGetAddress();
-        String dbUser = prefs.getDBUser();
-        String dbPass = prefs.getDBPass();
-        
-        view.setEmailFields(adminProps, guestProps, adminGetAddress);
-        view.setDatabaseFields(dbUser, dbPass);
+        view.setAdminEmailSettings(prefs.getAdminEmailSettings());
+        view.setGuestEmailSettings(prefs.getGuestEmailSettings());
+        view.setDBSettings(prefs.getDBSettings());
     }
     
     /**
@@ -92,97 +100,88 @@ public class SettingsPanelController implements ActionListener
             // Update settings
             SystemPreferences prefs = SystemPreferences.getInstance();
             
-            prefs.setAdminSMTPPrefs(view.getAdminSMTPProperties());
-            prefs.setGuestSMTPPrefs(view.getGuestSMTPProperties());
-            prefs.setAdminGetAddress(view.getAdminGetAddress());
-            prefs.setDBUser(view.getDBUser());
-            prefs.setDBPass(String.valueOf(view.getDBPass()));
+            prefs.setAdminEmailSettings(view.getAdminEmailSettings());
+            prefs.setGuestEmailSettings(view.getGuestEmailSettings());
+            prefs.setDBSettings(view.getDBSettings());
             
             // Inform of success in saving settings
-            view.showMessage("Settings saved");
+            JOptionPane.showMessageDialog(view, "Settings saved");
         }
     }
     
     /**
-        Validates the admin's email settings
+        Validates the database settings
     
-        @param v The SMTP validator to validate SMTP settings
+        @return If the database settings are valid
     */
     
-    private boolean validateAdminEmailSettings(SMTPValidator v)
+    private boolean validateDatabaseSettings()
     {
-        boolean goodSoFar = v.validateAddress();
+        DatabaseSettings settings = view.getDBSettings();
         
-        // Validate address
-        if (!goodSoFar)
+        // Validate database name
+        if (settings.getDBName().isEmpty())
         {
-            view.showMessage("Bad sending address for administrator");
-            return goodSoFar;
+            displayWarning("Database name must be entered");
+            return false;
         }
         
-        // Validate host
-        goodSoFar = v.validateHost();
-        if (!goodSoFar)
+        // Validate database host
+        if (settings.getDBHost().isEmpty())
         {
-            view.showMessage("Bad host for administrator");
-            return goodSoFar;
+            displayWarning("Database host must be entered");
+            return false;
         }
         
-        // Validate port
-        goodSoFar = v.validatePort();
-        if (!goodSoFar)
-        {
-            view.showMessage("Bad port for administrator");
-            return goodSoFar;
-        }
+        return true;
+    }
+    
+    /**
+        Validates the email settings
+   
+        @param role One of "Admin" or "Guest", specifying whose settings to
+                    validate
+        @return If the email settings for the specified role are valid
+    */
+    
+    private boolean validateEmailSettings(String role)
+    {
+        final String ADMIN = "Admin";
         
-        // Validate get address
+        EmailSettings settings;
+        if (role.equals(ADMIN))
+            settings = view.getAdminEmailSettings();
+        else
+            settings = view.getGuestEmailSettings();
+        
+        // Validate sending address
         String pattern = "\\b[\\w\\.-]+@[\\w\\.-]+\\.\\w{2,4}\\b";
-        
-        goodSoFar = view.getAdminGetAddress().matches(pattern);
-        if (!goodSoFar)
+        if (!settings.getSendAddress().matches(pattern))
         {
-            view.showMessage("Bad get address for administrator");
-            return goodSoFar;
+            displayWarning("Invalid sending address for " + role);
+            return false;
         }
         
-        return goodSoFar;
-    }
-    
-    /**
-        Validate the guest's email settings
-    
-        @param v The SMTP validator to validate SMTP settings
-    */
-    
-    private boolean validateGuestEmailSettings(SMTPValidator v)
-    {
-        boolean goodSoFar = v.validateAddress();
-        
-        // Validate address
-        if (!goodSoFar)
+        // Validate SMTP host address
+        pattern = "([A-Za-z0-9-]+\\.[A-Za-z]+)(\\.\\w+)?((\\.[A-Za-z]+)?)?";
+        if (!settings.getSMTPHost().matches(pattern))
         {
-            view.showMessage("Bad sending address for administrator");
-            return goodSoFar;
+            displayWarning("Invalid SMTP host for " + role);
+            return false;
         }
         
-        // Validate host
-        goodSoFar = v.validateHost();
-        if (!goodSoFar)
+        if (role.equals(ADMIN))
         {
-            view.showMessage("Bad host for administrator");
-            return goodSoFar;
+            // Validate getting address
+            pattern = "\\b[\\w\\.-]+@[\\w\\.-]+\\.\\w{2,4}\\b";
+            if (!settings.getGetAddress().matches(pattern))
+            {
+                displayWarning("Invalid getting address for administrator");
+                return false;
+            }
         }
         
-        // Validate port
-        goodSoFar = v.validatePort();
-        if (!goodSoFar)
-        {
-            view.showMessage("Bad port for administrator");
-            return goodSoFar;
-        }
-        
-        return goodSoFar;
+        return true;
     }
     
     /**
@@ -194,26 +193,14 @@ public class SettingsPanelController implements ActionListener
     private boolean validateInput()
     {        
         // Validate admin email settings
-        SMTPValidator valid = new SMTPValidator(view.getAdminSMTPProperties());
-        boolean good = validateAdminEmailSettings(valid);
+        if (!validateEmailSettings("Admin"))
+            return false;
         
         // Validate guest email settings
-        if (good)
-        {
-            valid.setSMTPProperties(view.getGuestSMTPProperties());
-            good = validateGuestEmailSettings(valid);
-        }
+        if (!validateEmailSettings("Guest"))
+            return false;
         
         // Validate database settings
-        if (good)
-        {
-            good = !(view.getDBUser().isEmpty() &&
-                    (String.valueOf(view.getDBPass()).isEmpty()));
-            
-            if (!good)
-                view.showMessage("Bad database username or password");
-        }
-        
-        return good;
+        return validateDatabaseSettings();
     }
 }

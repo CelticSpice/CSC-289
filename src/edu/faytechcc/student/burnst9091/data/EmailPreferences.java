@@ -1,5 +1,5 @@
 /**
-    The email preferences for the system
+    The email preferences of the system
     CSC-289 - Group 4
     @author Timothy Burns
 */
@@ -14,7 +14,8 @@ public class EmailPreferences
     private Preferences prefs;
     
     /**
-        Constructs a new EmailPreferences at the given node
+        Constructs a new EmailPreferences with preferences stored at the given
+        node
     
         @param node The node of the email preferences
     */
@@ -25,102 +26,82 @@ public class EmailPreferences
     }
     
     /**
-        Returns the address the administrator will receive email at
+        Returns the settings for the administrator's email
     
-        @return The address the administrator will receive email at
+        @return The administrator's email settings
     */
     
-    public String getAdminGetAddress()
+    public EmailSettings getAdminEmailSettings()
     {
-        return prefs.get("AdminGetAddress", "foo@bar.com");
-    }
-    
-    /**
-        Returns properties of the administrator's SMTP server
-    
-        @return Properties of the administrator's SMTP server
-    */
-    
-    public SMTPProperties getAdminSMTPProperties()
-    {
-        SMTPProperties props = new SMTPProperties();
+        EmailSettings settings = new EmailSettings();
         
-        props.setAddress(prefs.get("AdminSendAddress", "foo@bar.com"));
-        props.setHost(prefs.get("AdminSMTPHost", "smtp.foo.com"));
+        settings.setSendAddress(prefs.get("AdminSendAddress", "foo@bar.com"));
+        settings.setSMTPHost(prefs.get("AdminSMTPHost", "smtp.foo.com"));
         
-        props.setSecurity(SecurityOption.valueOf
+        settings.setSMTPSecurity(SecurityOption.valueOf
             (prefs.get("AdminSMTPSecurity", "NONE")));
         
-        props.setPort(prefs.get("AdminSMTPPort", "587"));
-        props.setUser(prefs.get("AdminSMTPUser", "foobar"));
-        props.setPassword(prefs.get("AdminSMTPPass", "password"));
+        settings.setSMTPPort(prefs.getInt("AdminSMTPPort", 587));
+        settings.setSMTPUser(prefs.get("AdminSMTPUser", "foobar"));
+        settings.setSMTPPass(prefs.get("AdminSMTPPass", "password"));
+        settings.setGetAddress(prefs.get("AdminGetAddress", "foo@bar.com"));
         
-        return props;
+        return settings;
     }
     
     /**
-        Returns properties of the guest's SMTP server
+        Returns the settings for the guest's email
     
-        @return props Properties of the guest's SMTP server
+        @return The guest's email settings
     */
     
-    public SMTPProperties getGuestSMTPProperties()
+    public EmailSettings getGuestEmailSettings()
     {
-        SMTPProperties props = new SMTPProperties();
+        EmailSettings settings = new EmailSettings();
         
-        props.setAddress(prefs.get("GuestSendAddress", "foo@bar.com"));
-        props.setHost(prefs.get("GuestSMTPHost", "smtp.foo.com"));
+        settings.setSendAddress(prefs.get("GuestSendAddress", "foo@bar.com"));
+        settings.setSMTPHost(prefs.get("GuestSMTPHost", "smtp.foo.com"));
         
-        props.setSecurity(SecurityOption.valueOf
+        settings.setSMTPSecurity(SecurityOption.valueOf
             (prefs.get("GuestSMTPSecurity", "NONE")));
         
-        props.setPort(prefs.get("GuestSMTPPort", "587"));
-        props.setUser(prefs.get("GuestSMTPUser", "foobar"));
-        props.setPassword(prefs.get("GuestSMTPPass", "password"));
+        settings.setSMTPPort(prefs.getInt("GuestSMTPPort", 587));
+        settings.setSMTPUser(prefs.get("GuestSMTPUser", "foobar"));
+        settings.setSMTPPass(prefs.get("GuestSMTPPass", "password"));
         
-        return props;
+        return settings;
     }
     
     /**
-        Sets the address the administrator will receive email at
+        Sets the administrator's email settings
     
-        @param address Address the administrator will receive emails at
+        @param settings The administrator's email settings
     */
     
-    public void setAdminGetAddress(String address)
+    public void setAdminEmailSettings(EmailSettings settings)
     {
-        prefs.put("AdminGetAddress", address);
+        prefs.put("AdminSendAddress", settings.getSendAddress());
+        prefs.put("AdminSMTPHost", settings.getSMTPHost());
+        prefs.put("AdminSMTPSecurity", settings.getSMTPSecurity().toString());
+        prefs.putInt("AdminSMTPPort", settings.getSMTPPort());
+        prefs.put("AdminSMTPUser", settings.getSMTPUser());
+        prefs.put("AdminSMTPPass", settings.getSMTPPass());
+        prefs.put("AdminGetAddress", settings.getGetAddress());
     }
     
     /**
-        Sets preferences of the administrator's SMTP server
+        Sets the guest's email settings
     
-        @param props Preferences of the administrator's SMTP server
+        @param settings The guest's email settings
     */
     
-    public void setAdminSMTPPrefs(SMTPProperties props)
+    public void setGuestEmailSettings(EmailSettings settings)
     {
-        prefs.put("AdminSendAddress", props.getAddress());
-        prefs.put("AdminSMTPHost", props.getHost());
-        prefs.put("AdminSMTPSecurity", props.getSecurity().toString());
-        prefs.put("AdminSMTPPort", props.getPort());
-        prefs.put("AdminSMTPUser", props.getUser());
-        prefs.put("AdminSMTPPass", props.getPassword());
-    }
-    
-    /**
-        Sets preferences of the guest's SMTP server
-    
-        @param props Preferences of the guest's SMTP server
-    */
-    
-    public void setGuestSMTPPrefs(SMTPProperties props)
-    {
-        prefs.put("GuestSendAddress", props.getAddress());
-        prefs.put("GuestSMTPHost", props.getHost());
-        prefs.put("GuestSMTPSecurity", props.getSecurity().toString());
-        prefs.put("GuestSMTPPort", props.getPort());
-        prefs.put("GuestSMTPUser", props.getUser());
-        prefs.put("GuestSMTPPass", props.getPassword());
+        prefs.put("GuestSendAddress", settings.getSendAddress());
+        prefs.put("GuestSMTPHost", settings.getSMTPHost());
+        prefs.put("GuestSMTPSecurity", settings.getSMTPSecurity().toString());
+        prefs.putInt("GuestSMTPPort", settings.getSMTPPort());
+        prefs.put("GuestSMTPUser", settings.getSMTPUser());
+        prefs.put("GuestSMTPPass", settings.getSMTPPass());
     }
 }

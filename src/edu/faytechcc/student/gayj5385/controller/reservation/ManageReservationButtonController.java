@@ -115,10 +115,8 @@ public class ManageReservationButtonController implements ActionListener
                 try
                 {
                     SystemPreferences prefs = SystemPreferences.getInstance();
-                    String user = prefs.getDBUser();
-                    String pass = prefs.getDBPass();
                     DatabaseConnection conn = DatabaseConnection.getConnection(
-                            user, pass);
+                            prefs.getDBSettings());
                     
                     new RecordDelete(conn).deleteReservation(reservation);
                     
@@ -193,10 +191,8 @@ public class ManageReservationButtonController implements ActionListener
             try
             {
                 SystemPreferences prefs = SystemPreferences.getInstance();
-                String user = prefs.getDBUser();
-                String pass = prefs.getDBPass();
                 DatabaseConnection conn = DatabaseConnection.getConnection(
-                        user, pass);
+                        prefs.getDBSettings());
                 
                 Reservation reservation = reserves.get(0);
                 new RecordModify(conn).modifyReservationReviewed(

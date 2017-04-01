@@ -77,10 +77,8 @@ public class ReservableAddButtonController implements ActionListener
             try
             {
                 SystemPreferences prefs = SystemPreferences.getInstance();
-                String user = prefs.getDBUser();
-                String pass = prefs.getDBPass();
                 DatabaseConnection conn = DatabaseConnection.getConnection(
-                        user, pass);
+                        prefs.getDBSettings());
                         
                 Location loc = parseLocation();
                 Timeframe timeframe = parseTimeframe();

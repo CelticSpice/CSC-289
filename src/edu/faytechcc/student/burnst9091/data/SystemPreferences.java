@@ -11,30 +11,37 @@ import java.util.prefs.Preferences;
 public class SystemPreferences
 {
     // Fields
-    private final String ROOT = "EventReservationSystem";
+    private final String ROOT = "event_reservation_system";
     
+    private static SystemPreferences systemPrefs;
+    
+    private DatabasePreferences dbPrefs;
     private EmailPreferences emailPrefs;
     private Preferences prefs;
     
     /**
-        Constructs a new SystemPreferences
+        Constructs a new SystemPreferences with preferences stored at the
+        default node, which will be under the user's root
     */
     
     private SystemPreferences()
     {
         prefs = Preferences.userRoot().node(ROOT);
-        emailPrefs = new EmailPreferences(prefs.absolutePath() + "/Email");
+        emailPrefs = new EmailPreferences(ROOT + "/email");
+        dbPrefs = new DatabasePreferences(ROOT + "/db");
     }
     
     /**
-        Returns the address for the administrator to receive email at
+        Returns an instance of the system preferences
     
-        @return The address for the administrator to receive email at
+        @return A SystemPreferences instance
     */
     
-    public String getAdminGetAddress()
+    public static SystemPreferences getInstance()
     {
-        return emailPrefs.getAdminGetAddress();
+        if (systemPrefs == null)
+            systemPrefs = new SystemPreferences();
+        return systemPrefs;
     }
     
     /**
@@ -49,123 +56,79 @@ public class SystemPreferences
     }
     
     /**
-        Returns an instance of SystemPreferences
+        Returns the database settings
     
-        @return A SystemPreferences instance
+        @return The database settings
     */
     
-    public static SystemPreferences getInstance()
+    public DatabaseSettings getDBSettings()
     {
-        return new SystemPreferences();
+        return dbPrefs.getDBSettings();
     }
     
     /**
-        Returns properties of the administrator's SMTP server
+        Returns the administrator's email settings
     
-        @return Properties of the administrator's SMTP server
+        @return The administrator's email settings
     */
     
-    public SMTPProperties getAdminSMTPProperties()
+    public EmailSettings getAdminEmailSettings()
     {
-        return emailPrefs.getAdminSMTPProperties();
+        return emailPrefs.getAdminEmailSettings();
     }
     
     /**
-        Returns the password for the database
+        Returns the guest's email settings
     
-        @return The password for the database
+        @return The guest's email settings
     */
     
-    public String getDBPass()
+    public EmailSettings getGuestEmailSettings()
     {
-        return prefs.get("DBPass", "Password");
+        return emailPrefs.getGuestEmailSettings();
     }
     
     /**
-        Returns the username for the database
+        Sets the administrator's password
     
-        @return The username for the database
+        @param pass The administrator password
     */
     
-    public String getDBUser()
-    {
-        return prefs.get("DBUser", "Username");
-    }
-    
-    /**
-        Returns properties of the guest's SMTP server
-    
-        @return Properties of the guest's SMTP server
-    */
-    
-    public SMTPProperties getGuestSMTPProperties()
-    {
-        return emailPrefs.getGuestSMTPProperties();
-    }
-    
-    /**
-        Sets the address the administrator will receive emails at
-    
-        @param address Address the administrator will receive emails at
-    */
-    
-    public void setAdminGetAddress(String address)
-    {
-        emailPrefs.setAdminGetAddress(address);
-    }
-    
-    /**
-        Sets preferences for the administrator's SMTP server
-    
-        @param props Preferences of the administrator's SMTP server
-    */
-    
-    public void setAdminSMTPPrefs(SMTPProperties props)
-    {
-        emailPrefs.setAdminSMTPPrefs(props);
-    }
-    
-    /**
-        Sets the password for the database
-    
-        @param pass The password for the database
-    */
-    
-    public void setDBPass(String pass)
-    {
-        prefs.put("DBPass", pass);
-    }
-    
-    /**
-        Sets the username for the database
-    
-        @param user The username for the database
-    */
-    
-    public void setDBUser(String user)
-    {
-        prefs.put("DBUser", user);
-    }
-    
-    /**
-        Sets preferences for the guest's SMTP server
-    
-        @param props Preferences of the guest's SMTP server
-    */
-    
-    public void setGuestSMTPPrefs(SMTPProperties props)
-    {
-        emailPrefs.setGuestSMTPPrefs(props);
-    }
-    
-    /**
-        Updates the administrator's password
-    
-        @param pass The updated administrator password
-    */
-    
-    public void updateAdminPassword(String pass)
+    public void setAdminPassword(String pass)
     {
         prefs.put("AdminPass", pass);
+    }
+    
+    /**
+        Sets the database settings
+    
+        @param settings The database settings
+    */
+    
+    public void setDBSettings(DatabaseSettings settings)
+    {
+        dbPrefs.setDBSettings(settings);
+    }
+    
+    /**
+        Sets the administrator's email settings
+    
+        @param settings The administrator's email settings
+    */
+    
+    public void setAdminEmailSettings(EmailSettings settings)
+    {
+        emailPrefs.setAdminEmailSettings(settings);
+    }
+    
+    /**
+        Sets the guest's email settings
+    
+        @param settings The guest's email settings
+    */
+    
+    public void setGuestEmailSettings(EmailSettings settings)
+    {
+        emailPrefs.setGuestEmailSettings(settings);
     }
 }

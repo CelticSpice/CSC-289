@@ -6,7 +6,8 @@
 
 package edu.faytechcc.student.gayj5385.controller;
 
-import edu.faytechcc.student.burnst9091.data.SMTPProperties;
+import edu.faytechcc.student.burnst9091.data.DatabaseSettings;
+import edu.faytechcc.student.burnst9091.data.EmailSettings;
 import edu.faytechcc.student.burnst9091.data.SecurityOption;
 import edu.faytechcc.student.burnst9091.data.SystemPreferences;
 import edu.faytechcc.student.gayj5385.gui.AdminPanel;
@@ -42,15 +43,12 @@ public class AdminPanelController implements ChangeListener
         {
             SystemPreferences prefs = SystemPreferences.getInstance();
         
-            SMTPProperties adminSMTP = prefs.getAdminSMTPProperties();
-            SMTPProperties guestSMTP = prefs.getGuestSMTPProperties();
-            String adminGet = prefs.getAdminGetAddress();
-            String dbUser = prefs.getDBUser();
-            String dbPass = prefs.getDBPass();
-
-            view.setSettingsSecurityOptions(SecurityOption.values());
-            view.setSettingsEmailFields(adminSMTP, guestSMTP, adminGet);
-            view.setSettingsDBFields(dbUser, dbPass);
+            EmailSettings adminEmail = prefs.getAdminEmailSettings();
+            EmailSettings guestEmail = prefs.getGuestEmailSettings();
+            DatabaseSettings db = prefs.getDBSettings();
+            SecurityOption[] options = SecurityOption.values();
+            
+            view.setSettingsSettings(adminEmail, guestEmail, db, options);
         }
     }
 }

@@ -1,11 +1,12 @@
 /**
-    The database
+    A connection to a database
     CSC-289 - Group 4
     @author Timothy Burns
 */
 
 package edu.faytechcc.student.mccanns0131.database;
 
+import edu.faytechcc.student.burnst9091.data.DatabaseSettings;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -14,33 +15,33 @@ import java.sql.Statement;
 
 public class DatabaseConnection
 {
-    // Fields    
-    private static final String DB = "ReserveDB";
-    
+    // Fields        
     private Connection conn;
     
     /**
-        Constructs a new DatabaseConnection with the given username & password
-        used to connect to the database
+        Constructs a new DatabaseConnection using the given database settings
     
-        @param user The username
-        @param pass The password
+        @param settings Database settings
         @throws SQLException There was an error connecting to the database
     */
     
-    private DatabaseConnection(String user, String pass) throws SQLException
+    private DatabaseConnection(DatabaseSettings settings) throws SQLException
     {
-        String dbOptions;
+        String dbOptions = "jdbc:mariadb://" + settings.getDBHost();
+        dbOptions += ":" + settings.getDBPort();
+        dbOptions += "/" + settings.getDBName();
+
+        String user = settings.getDBUser();
+        String pass = settings.getDBPass();
         
-        if (user != null && pass != null && !user.isEmpty() && !pass.isEmpty())
-            dbOptions = "jdbc:mariadb://localhost/" + DB + "?user=" + user +
-             "&password=" + pass;
-        else if (user != null && !user.isEmpty())
-            dbOptions = "jdbc:mariadb://localhost/" + DB + "?user=" + user;
-        else if (pass != null && !pass.isEmpty())
-            dbOptions = "jdbc:mariadb://localhost/" + DB + "?password=" + pass;
-        else
-            dbOptions = "jdbc:mariadb://localhost/" + DB;
+        if (!user.isEmpty() && !pass.isEmpty())
+            dbOptions += "?user=" + user + "&password=" + pass;
+        
+        if (!user.isEmpty() && pass.isEmpty())
+            dbOptions += "?user=" + user;
+        
+        if (!pass.isEmpty() && user.isEmpty())
+            dbOptions += "?password=" + pass;
         
         conn = DriverManager.getConnection(dbOptions);
     }
@@ -238,19 +239,18 @@ public class DatabaseConnection
     }
     
     /**
-        Returns a DatabaseConnection object with the specified username &
-        password to authenticate with
+        Gets & returns a connection to a database using the specified
+        database settings
     
-        @param user The username
-        @param pass The password
+        @param settings Database settings
         @throws SQLException There was an error connecting to the database
-        @return A DatabaseConnect object
+        @return A DatabaseConnection object
     */
     
-    public static DatabaseConnection getConnection(String user, String pass)
+    public static DatabaseConnection getConnection(DatabaseSettings settings)
             throws SQLException
     {
-        return new DatabaseConnection(user, pass);
+        return new DatabaseConnection(settings);
     }
     
     /**

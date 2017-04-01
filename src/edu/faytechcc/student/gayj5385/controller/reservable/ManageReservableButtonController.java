@@ -23,7 +23,6 @@ import edu.faytechcc.student.mccanns0131.database.RecordDelete;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 
@@ -118,10 +117,8 @@ public class ManageReservableButtonController implements ActionListener
         try
         {
             SystemPreferences prefs = SystemPreferences.getInstance();
-            String user = prefs.getDBUser();
-            String pass = prefs.getDBPass();
             DatabaseConnection conn = DatabaseConnection.getConnection(
-                    user, pass);
+                    prefs.getDBSettings());
             
             RecordDelete delete = new RecordDelete(conn);
             

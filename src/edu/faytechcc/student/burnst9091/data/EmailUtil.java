@@ -22,7 +22,7 @@ import javax.mail.internet.MimeMessage;
 public class EmailUtil
 {
     /**
-        EmailAdmin - Send an email to the administrator of the system
+        Sends an email to the administrator of the system
     
         @param subject The subject
         @param senderName Name of sender
@@ -43,21 +43,22 @@ public class EmailUtil
         if (senderName != null && !senderName.isEmpty())
             address.setPersonal(senderName);
         
-        // Get the properties for the guest to send email
+        // Get the settings for the guest to send email
         SystemPreferences prefs = SystemPreferences.getInstance();
-        SMTPProperties props = prefs.getGuestSMTPProperties();
+        EmailSettings settings = prefs.getGuestEmailSettings();
         
-        // Get address, username, password from properties
-        InternetAddress from = new InternetAddress(props.getAddress());
-        String username = props.getUser();
-        String password = props.getPassword();
-        
-        // Get the address for the administrator to receive email at
-        InternetAddress to = new InternetAddress
-            (prefs.getAdminGetAddress());
+        // Get address, username, password from settings
+        InternetAddress from = new InternetAddress(settings.getSendAddress());
+        String username = settings.getSMTPUser();
+        String password = settings.getSMTPPass();
         
         // Prepare SMTP properties for session
-        Properties smtpProps = props.asSessionProperties();
+        Properties smtpProps = settings.deriveSessionProperties();
+        
+        // Get the address for the administrator to receive email at
+        settings = prefs.getAdminEmailSettings();
+        InternetAddress to = new InternetAddress
+            (settings.getGetAddress());
         
         // Build authenticator
         Authenticator auth = null;
@@ -103,20 +104,20 @@ public class EmailUtil
                                      String body)
             throws AddressException, MessagingException
     {
-        // Get the properties for the admin to send email
+        // Get the settings for the admin to send email
         SystemPreferences prefs = SystemPreferences.getInstance();
-        SMTPProperties props = prefs.getAdminSMTPProperties();
+        EmailSettings settings = prefs.getAdminEmailSettings();
         
-        // Get address, username, password from properties
-        InternetAddress from = new InternetAddress(props.getAddress());
-        String username = props.getUser();
-        String password = props.getPassword();
+        // Get address, username, password from settings
+        InternetAddress from = new InternetAddress(settings.getSendAddress());
+        String username = settings.getSMTPUser();
+        String password = settings.getSMTPPass();
         
         // Get the address for the reserver to receive email at
         InternetAddress to = new InternetAddress(reserver.getEmailAddress());
         
         // Prepare SMTP properties for session
-        Properties smtpProps = props.asSessionProperties();
+        Properties smtpProps = settings.deriveSessionProperties();
         
         // Build authenticator
         Authenticator auth = null;

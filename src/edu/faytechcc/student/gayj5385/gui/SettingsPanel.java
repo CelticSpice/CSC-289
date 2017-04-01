@@ -1,43 +1,46 @@
 /**
-    Panel to setup system preferences
+    Panel to set system settings
     CSC-289 - Group 4
     @author Timothy Burns
 */
 
 package edu.faytechcc.student.gayj5385.gui;
 
-import edu.faytechcc.student.burnst9091.data.SMTPProperties;
+import edu.faytechcc.student.burnst9091.data.DatabaseSettings;
+import edu.faytechcc.student.burnst9091.data.EmailSettings;
 import edu.faytechcc.student.burnst9091.data.SecurityOption;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.text.MaskFormatter;
 
 public class SettingsPanel extends JPanel
 {
     // Fields
     private JButton save, updatePasswd, cancel;
-    private JComboBox adminSecurity, guestSecurity;
+    private JComboBox<SecurityOption> adminSecurity, guestSecurity;
     private JPasswordField adminPass, guestPass, dbPass;
-    private JTextField adminSendAddress, adminHost, adminPort,
-                       adminUser, adminGetAddress,
-                       guestSendAddress, guestHost, guestPort,
-                       guestUser, dbUser;
+    private JTextField adminSendAddress, adminHost, adminUser, adminGetAddress,
+                       guestSendAddress, guestHost, guestUser,
+                       dbName, dbHost, dbUser;
+    private JFormattedTextField adminPort, guestPort, dbPort;
     
     /**
-        Constructor
+        Constructs a new SettingsPanel
     */
     
     public SettingsPanel()
@@ -49,7 +52,7 @@ public class SettingsPanel extends JPanel
     }
     
     /**
-        Build & return the panel allowing the editing of administrator email
+        Builds & returns the panel allowing the editing of administrator email
         settings
     
         @return The built panel
@@ -60,18 +63,36 @@ public class SettingsPanel extends JPanel
         JPanel panel = new JPanel(new GridLayout(7, 2, 5, 5));
         panel.setBorder(BorderFactory.createTitledBorder("Admin Email"));
         
+        MaskFormatter fmtr = null;
+        try
+        {
+            fmtr = new MaskFormatter("#****");
+            fmtr.setPlaceholder("0\0\0\0\0");
+            fmtr.setValidCharacters("0123456789\0 ");
+        }
+        catch (ParseException ex)
+        {
+            // Do nothing - we know all is well, and no exception will throw
+        }
+        
         panel.add(new JLabel("Send Address:"));
         panel.add(adminSendAddress = new JTextField(12));
+        
         panel.add(new JLabel("Host:"));
         panel.add(adminHost = new JTextField(12));
+        
         panel.add(new JLabel("Security:"));
         panel.add(adminSecurity = new JComboBox());
+        
         panel.add(new JLabel("Port:"));
-        panel.add(adminPort = new JTextField(12));
-        panel.add(new JLabel("User:"));
+        panel.add(adminPort = new JFormattedTextField(fmtr));
+        
+        panel.add(new JLabel("Username:"));
         panel.add(adminUser = new JTextField(12));
-        panel.add(new JLabel("Pass:"));
+        
+        panel.add(new JLabel("Password:"));
         panel.add(adminPass = new JPasswordField(12));
+        
         panel.add(new JLabel("Get Address:"));
         panel.add(adminGetAddress = new JTextField(12));
         
@@ -79,7 +100,7 @@ public class SettingsPanel extends JPanel
     }
     
     /**
-        Build & return the bottom panel of this panel
+        Builds & returns the bottom panel of this panel
     
         @return The built panel
     */
@@ -97,26 +118,48 @@ public class SettingsPanel extends JPanel
     }
     
     /**
-        Build & return the panel allowing updates to database information
+        Builds & returns the panel allowing updates to database information
     
         @return The built panel
     */
     
     private JPanel buildDBPanel()
     {
-        JPanel panel = new JPanel(new GridLayout(2, 2, 5 ,5));
+        JPanel panel = new JPanel(new GridLayout(5, 5, 5 ,5));
         panel.setBorder(BorderFactory.createTitledBorder("Database"));
         
-        panel.add(new JLabel("Database User:"));
+        MaskFormatter fmtr = null;
+        try
+        {
+            fmtr = new MaskFormatter("#****");
+            fmtr.setPlaceholder("0\0\0\0\0");
+            fmtr.setValidCharacters("0123456789\0 ");
+        }
+        catch (ParseException ex)
+        {
+            // Do nothing - we know all is well, and no exception will throw
+        }
+        
+        panel.add(new JLabel("Database Name:"));
+        panel.add(dbName = new JTextField(12));
+        
+        panel.add(new JLabel("Host:"));
+        panel.add(dbHost = new JTextField(12));
+        
+        panel.add(new JLabel("Port:"));
+        panel.add(dbPort = new JFormattedTextField(fmtr));
+        
+        panel.add(new JLabel("Username:"));
         panel.add(dbUser = new JTextField(12));
-        panel.add(new JLabel("Database Pass:"));
+        
+        panel.add(new JLabel("Password:"));
         panel.add(dbPass = new JPasswordField(12));
                 
         return panel;
     }
     
     /**
-        Build & return the panel allowing the editing of guest email settings
+        Builds & returns the panel allowing the editing of guest email settings
     
         @return The built panel
     */
@@ -126,24 +169,41 @@ public class SettingsPanel extends JPanel
         JPanel panel = new JPanel(new GridLayout(7, 2, 5, 5));
         panel.setBorder(BorderFactory.createTitledBorder("Guest Email"));
         
+        MaskFormatter fmtr = null;
+        try
+        {
+            fmtr = new MaskFormatter("#****");
+            fmtr.setPlaceholder("0\0\0\0\0");
+            fmtr.setValidCharacters("0123456789\0 ");
+        }
+        catch (ParseException ex)
+        {
+            // Do nothing - we know all is well, and no exception will throw
+        }
+        
         panel.add(new JLabel("Send Address:"));
         panel.add(guestSendAddress = new JTextField(12));
+        
         panel.add(new JLabel("Host:"));
         panel.add(guestHost = new JTextField(12));
+        
         panel.add(new JLabel("Security:"));
         panel.add(guestSecurity = new JComboBox());
+        
         panel.add(new JLabel("Port:"));
-        panel.add(guestPort = new JTextField(12));
-        panel.add(new JLabel("User:"));
+        panel.add(guestPort = new JFormattedTextField(fmtr));
+        
+        panel.add(new JLabel("Username:"));
         panel.add(guestUser = new JTextField(12));
-        panel.add(new JLabel("Pass:"));
+        
+        panel.add(new JLabel("Password:"));
         panel.add(guestPass = new JPasswordField(12));
         
         return panel;
     }
     
     /**
-        Build & return the main panel of this panel
+        Builds & returns the main panel of this panel
     
         @return The built panel
     */
@@ -152,7 +212,7 @@ public class SettingsPanel extends JPanel
     {
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        panel.setBorder(BorderFactory.createEtchedBorder());
         
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -171,76 +231,69 @@ public class SettingsPanel extends JPanel
     }
     
     /**
-        Return the set admin SMTP properties
+        Returns the input administrator email settings
     
-        @return The admin's set SMTP properties
+        @return The input administrator email settings
     */
     
-    public SMTPProperties getAdminSMTPProperties()
+    public EmailSettings getAdminEmailSettings()
     {
-        SMTPProperties props = new SMTPProperties();
+        EmailSettings settings = new EmailSettings();
         
-        props.setAddress(adminSendAddress.getText());
-        props.setHost(adminHost.getText());
-        props.setSecurity((SecurityOption) adminSecurity.getSelectedItem());
-        props.setPort(adminPort.getText());
-        props.setUser(adminUser.getText());
-        props.setPassword(String.valueOf(adminPass.getPassword()));
+        settings.setSendAddress(adminSendAddress.getText());
+        settings.setSMTPHost(adminHost.getText());
+        settings.setSMTPPort(Integer.parseInt(adminPort.getText().trim()));
         
-        return props;
+        settings.setSMTPSecurity(
+                (SecurityOption) adminSecurity.getSelectedItem());
+        
+        settings.setSMTPUser(adminUser.getText());
+        settings.setSMTPPass(new String(adminPass.getPassword()));
+        settings.setGetAddress(adminGetAddress.getText());
+        
+        return settings;
     }
     
     /**
-        Return the admin's set address to receive email at
+        Returns the input database settings
     
-        @return The admin's set address to receive email at
+        @return The input database settings
     */
     
-    public String getAdminGetAddress()
+    public DatabaseSettings getDBSettings()
     {
-        return adminGetAddress.getText();
-    }
-    
-    /**
-        Returns the set database password
-    
-        @return The set database password
-    */
-    
-    public String getDBPass()
-    {
-        return new String(dbPass.getPassword());
-    }
-    
-    /**
-        Return the set database username
-    
-        @return The set database username
-    */
-    
-    public String getDBUser()
-    {
-        return dbUser.getText();
-    }
-    
-    /**
-        Return the set guest SMTP properties
-    
-        @return The guest's set SMTP properties
-    */
-    
-    public SMTPProperties getGuestSMTPProperties()
-    {
-        SMTPProperties props = new SMTPProperties();
+        DatabaseSettings settings = new DatabaseSettings();
         
-        props.setAddress(guestSendAddress.getText());
-        props.setHost(guestHost.getText());
-        props.setSecurity((SecurityOption) guestSecurity.getSelectedItem());
-        props.setPort(guestPort.getText());
-        props.setUser(guestUser.getText());
-        props.setPassword(String.valueOf(guestPass.getPassword()));
+        settings.setDBName(dbName.getText());
+        settings.setDBHost(dbHost.getText());
+        settings.setDBPort(Integer.parseInt(dbPort.getText().trim()));
+        settings.setDBUser(dbUser.getText());
+        settings.setDBPass(new String(dbPass.getPassword()));
         
-        return props;
+        return settings;
+    }
+    
+    /**
+        Returns the input guest email settings
+    
+        @return The input guest email settings
+    */
+    
+    public EmailSettings getGuestEmailSettings()
+    {
+        EmailSettings settings = new EmailSettings();
+        
+        settings.setSendAddress(guestSendAddress.getText());
+        settings.setSMTPHost(guestHost.getText());
+        settings.setSMTPPort(Integer.parseInt(guestPort.getText().trim()));
+        
+        settings.setSMTPSecurity(
+                (SecurityOption) guestSecurity.getSelectedItem());
+        
+        settings.setSMTPUser(guestUser.getText());
+        settings.setSMTPPass(new String(guestPass.getPassword()));
+        
+        return settings;
     }
     
     /**
@@ -257,48 +310,55 @@ public class SettingsPanel extends JPanel
     }
     
     /**
-        Populate the database settings fields with the given data
+        Sets the input administrator email settings
     
-        @param user Database username
-        @param pass Database password
+        @param settings Input administrator email settings
     */
     
-    public void setDatabaseFields(String user, String pass)
+    public void setAdminEmailSettings(EmailSettings settings)
     {
-        dbUser.setText(user);
-        dbPass.setText(pass);
+        adminSendAddress.setText(settings.getSendAddress());
+        adminHost.setText(settings.getSMTPHost());
+        adminPort.setText(settings.getSMTPPort().toString());
+        adminSecurity.setSelectedItem(settings.getSMTPSecurity());
+        adminUser.setText(settings.getSMTPUser());
+        adminPass.setText(settings.getSMTPPass());
+        adminGetAddress.setText(settings.getGetAddress());
     }
     
     /**
-        Populate the email settings fields with the given data
+        Sets the input database settings
     
-        @param adminSMTP Admin SMTP properties
-        @param guestSMTP Guest SMTP properties
-        @param adminGet Address for admin to receive email at
+        @param settings Input database settings
     */
     
-    public void setEmailFields(SMTPProperties adminSMTP,
-                               SMTPProperties guestSMTP, String adminGet)
+    public void setDBSettings(DatabaseSettings settings)
     {
-        adminSendAddress.setText(adminSMTP.getAddress());
-        adminHost.setText(adminSMTP.getHost());
-        adminSecurity.setSelectedItem(adminSMTP.getSecurity());
-        adminPort.setText(adminSMTP.getPort());
-        adminUser.setText(adminSMTP.getUser());
-        adminPass.setText(adminSMTP.getPassword());
-        
-        adminGetAddress.setText(adminGet);
-        
-        guestSendAddress.setText(guestSMTP.getAddress());
-        guestHost.setText(guestSMTP.getHost());
-        guestSecurity.setSelectedItem(guestSMTP.getSecurity());
-        guestPort.setText(guestSMTP.getPort());
-        guestUser.setText(guestSMTP.getUser());
-        guestPass.setText(guestSMTP.getPassword());
+        dbName.setText(settings.getDBName());
+        dbHost.setText(settings.getDBHost());
+        dbPort.setText(settings.getDBPort().toString());
+        dbUser.setText(settings.getDBUser());
+        dbPass.setText(settings.getDBPass());
+    }
+    
+     /**
+        Sets the input guest email settings
+    
+        @param settings Input guest email settings
+    */
+    
+    public void setGuestEmailSettings(EmailSettings settings)
+    {
+        guestSendAddress.setText(settings.getSendAddress());
+        guestHost.setText(settings.getSMTPHost());
+        guestPort.setText(settings.getSMTPPort().toString());
+        guestSecurity.setSelectedItem(settings.getSMTPSecurity());
+        guestUser.setText(settings.getSMTPUser());
+        guestPass.setText(settings.getSMTPPass());
     }
     
     /**
-        Set the available SMTP security protocol options to choose from
+        Sets the available SMTP security protocol options to choose from
     
         @param options Security protocol options available to choose from
     */

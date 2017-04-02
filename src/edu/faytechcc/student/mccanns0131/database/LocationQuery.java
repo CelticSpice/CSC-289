@@ -18,17 +18,15 @@ public class LocationQuery extends Query
     }
     
     /**
-        Prepares the query to return data on locations
-    
-        @return This query, prepared
+        Prepares the query to query all locations
     */
     
-    public LocationQuery queryLocations()
+    public void queryAll()
     {
         sql = "SELECT Locations.LocationName, Locations.Capacity, " +
               "Timeframes.StartDate, Timeframes.StartTime, " +
               "Timeframes.EndDate, Timeframes.EndTime, Reservables.Cost, " +
-              "Reservations.LocationName AS 'ReservedLocationName' " +
+              "Reservations.TimeframeID AS 'ReservedTimeframeID' " +
               "FROM Locations " +
               "INNER JOIN Reservables " +
               "ON Locations.LocationName = Reservables.LocationName " +
@@ -37,21 +35,8 @@ public class LocationQuery extends Query
               "LEFT JOIN Reservations " +
               "ON Reservables.LocationName = Reservations.LocationName " +
               "AND Reservables.TimeframeID = Reservations.TimeframeID " +
-              "ORDER BY Locations.LocationName";
-        
-        return this;
-    }
-    
-    /**
-        Prepares the query to return the capacity of the named location
-    
-        @param locName Name of the location to get the capacity of
-    */
-    
-    public void queryLocationCapacity(String locName)
-    {
-        sql = "SELECT Locations.Capacity " +
-              "FROM Locations " +
-              "WHERE Locations.LocationName = '" + locName + "'";        
+              "ORDER BY Locations.LocationName, Timeframes.StartDate, " +
+              "Timeframes.StartTime, Timeframes.EndDate, Timeframes.EndTime, " +
+              "Reservables.Cost";
     }
 }

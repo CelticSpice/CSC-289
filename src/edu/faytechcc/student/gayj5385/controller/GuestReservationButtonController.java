@@ -11,6 +11,7 @@ import edu.faytechcc.student.burnst9091.data.Reservable;
 import edu.faytechcc.student.burnst9091.data.Timeframe;
 import edu.faytechcc.student.gayj5385.gui.GuestReservationPanel;
 import edu.faytechcc.student.gayj5385.gui.MainPanel;
+import edu.faytechcc.student.gayj5385.gui.dialog.MakeReservationDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -75,7 +76,9 @@ public class GuestReservationButtonController implements ActionListener
             Location loc = view.getSelectedLocation();
             Reservable reservable = new Reservable(loc, timeframes.get(0));
             
-            new MakeReservationDialog(reservable).
+            new MakeReservationDialog(reservable).setVisible(true);
+            
+            
         }
     }
     

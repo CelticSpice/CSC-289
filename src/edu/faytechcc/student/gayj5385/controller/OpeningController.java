@@ -6,6 +6,7 @@
 
 package edu.faytechcc.student.gayj5385.controller;
 
+import edu.faytechcc.student.burnst9091.data.DatabaseSettings;
 import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.SHA256SaltHasher;
@@ -13,10 +14,8 @@ import edu.faytechcc.student.burnst9091.data.SystemPreferences;
 import edu.faytechcc.student.gayj5385.gui.MainPanel;
 import edu.faytechcc.student.gayj5385.gui.OpenPanel;
 import edu.faytechcc.student.gayj5385.gui.dialog.SendEmailDialog;
-import edu.faytechcc.student.mccanns0131.database.DatabaseConnection;
-import edu.faytechcc.student.mccanns0131.database.LocationQuery;
-import edu.faytechcc.student.mccanns0131.database.ReservationQuery;
-import edu.faytechcc.student.mccanns0131.database.ResultSetParser;
+import edu.faytechcc.student.mccanns0131.database.LocationSQLDAO;
+import edu.faytechcc.student.mccanns0131.database.ReservationSQLDAO;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.security.NoSuchAlgorithmException;
@@ -138,33 +137,26 @@ public class OpeningController implements ActionListener
     private void showAdminView()
     {
         SystemPreferences prefs = SystemPreferences.getInstance();
+        DatabaseSettings settings = prefs.getDBSettings();
         
         try
         {
             // Update locations & reservations
-            DatabaseConnection conn = DatabaseConnection.getConnection(
-                    prefs.getDBSettings());
-            
-            ResultSetParser parser = new ResultSetParser();
-            LocationQuery locQuery = new LocationQuery();
-            locQuery.queryLocations();
-            parser.setResultSet(conn.runQuery(locQuery));
-
+            LocationSQLDAO locationDAO = new LocationSQLDAO(settings);
             locations.clear();
-            locations.addAll(parser.parseLocations());
-            
+            locations.addAll(locationDAO.getAll());
+            locationDAO.close();
+
+            ReservationSQLDAO reservationDAO = new ReservationSQLDAO(settings);
             reservations.clear();
-            ReservationQuery reserveQuery = new ReservationQuery();
             for (Location loc : locations)
             {
-                reserveQuery.queryReservations(loc.getName());
-                parser.setResultSet(conn.runQuery(reserveQuery));
+                List<Reservation> res = reservationDAO.getByLocation(loc);
                 
-                if (!parser.isEmpty())
-                    reservations.put(loc, parser.parseReservations(loc));
+                if (!res.isEmpty())
+                    reservations.put(loc, res);
             }
-            
-            conn.close();
+            reservationDAO.close();
         }
         catch (SQLException ex)
         {
@@ -182,6 +174,9 @@ public class OpeningController implements ActionListener
     
     private void showGuestReservationPanel()
     {
+        // Update availbable reervables
+        
+        
         mainPanel.showGuestReservationPanel();
     }
 }

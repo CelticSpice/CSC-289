@@ -254,16 +254,16 @@ public class DatabaseConnection
     }
     
     /**
-          Modifies a record in the database
+          Updates a record in the database
 
-          @param recordModify The modification of the record
-          @throws SQLException Error modifying record in the database
+          @param recordUpdate The record update
+          @throws SQLException Error updating record in the database
     */
     
-    public void modifyRecord(RecordModify recordModify) throws SQLException
+    public void updateRecord(RecordUpdate recordUpdate) throws SQLException
     {
         Statement stmt = conn.createStatement();
-        stmt.executeUpdate(recordModify.toString());
+        stmt.executeUpdate(recordUpdate.toString());
     }
     
     /**

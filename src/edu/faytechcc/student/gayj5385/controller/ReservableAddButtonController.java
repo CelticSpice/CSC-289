@@ -6,13 +6,13 @@
 
 package edu.faytechcc.student.gayj5385.controller;
 
+import edu.faytechcc.student.burnst9091.data.DatabaseSettings;
 import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reservable;
 import edu.faytechcc.student.burnst9091.data.SystemPreferences;
 import edu.faytechcc.student.burnst9091.data.Timeframe;
 import edu.faytechcc.student.gayj5385.gui.dialog.AddReservableDialog;
-import edu.faytechcc.student.mccanns0131.database.DatabaseConnection;
-import edu.faytechcc.student.mccanns0131.database.RecordAdd;
+import edu.faytechcc.student.mccanns0131.database.ReservableSQLDAO;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
@@ -77,17 +77,16 @@ public class ReservableAddButtonController implements ActionListener
             try
             {
                 SystemPreferences prefs = SystemPreferences.getInstance();
-                DatabaseConnection conn = DatabaseConnection.getConnection(
-                        prefs.getDBSettings());
+                DatabaseSettings settings = prefs.getDBSettings();
                         
                 Location loc = parseLocation();
                 Timeframe timeframe = parseTimeframe();
                 
                 Reservable reservable = new Reservable(loc, timeframe);
 
-                new RecordAdd(conn).addReservable(reservable);
-                
-                conn.close();
+                ReservableSQLDAO reservableDAO = new ReservableSQLDAO(settings);
+                reservableDAO.addReservable(reservable);
+                reservableDAO.close();
 
                 loc.addTimeframe(timeframe);
 

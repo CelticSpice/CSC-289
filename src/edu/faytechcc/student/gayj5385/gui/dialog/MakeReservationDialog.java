@@ -6,10 +6,13 @@
 
 package edu.faytechcc.student.gayj5385.gui.dialog;
 
+import edu.faytechcc.student.burnst9091.data.DatabaseSettings;
 import edu.faytechcc.student.burnst9091.data.Reservable;
+import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.Reserver;
 import edu.faytechcc.student.burnst9091.data.SystemPreferences;
 import edu.faytechcc.student.mccanns0131.database.DatabaseConnection;
+import edu.faytechcc.student.mccanns0131.database.ReservationSQLDAO;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -29,7 +32,7 @@ public class MakeReservationDialog extends JDialog
 {
     private JButton reserve, cancel;
     private JTextField location, capacity, startDate, startTime, endDate,
-            endTime, cost, firstName, lastName, email, phone;
+            endTime, cost, event, attendence, firstName, lastName, email, phone;
     
     /**
         Constructs a new MakeReservationDialog, initialized with the specified
@@ -191,8 +194,14 @@ public class MakeReservationDialog extends JDialog
     
     private JPanel buildReservationInfoPanel()
     {
-        JPanel panel = new JPanel(new GridLayout(4, 2, 5, 5));
+        JPanel panel = new JPanel(new GridLayout(6, 2, 5, 5));
         panel.setBorder(BorderFactory.createTitledBorder("Reservation Info"));
+        
+        panel.add(new JLabel("Event Type:"));
+        panel.add(event = new JTextField(7));
+        
+        panel.add(new JLabel("Expected Attendence:"));
+        panel.add(attendence = new JTextField(7));
         
         panel.add(new JLabel("First Name:"));
         panel.add(firstName = new JTextField(7));
@@ -296,12 +305,10 @@ public class MakeReservationDialog extends JDialog
         private void makeReservation()
         {
             SystemPreferences prefs = SystemPreferences.getInstance();
+            DatabaseSettings settings = prefs.getDBSettings();
             
             try
             {
-                DatabaseConnection conn = DatabaseConnection.getConnection(
-                    prefs.getDBSettings());
-                
                 // Create reserver
                 String fName = firstName.getText();
                 String lName = lastName.getText();
@@ -310,14 +317,24 @@ public class MakeReservationDialog extends JDialog
                 Reserver reserver = new Reserver(fName, lName, e, p);
                 
                 // Get reservation info
-                String 
+                int numAttending = Integer.parseInt(attendence.getText());
+                String eventType = event.getText();
                 
                 // Create reservation
+                Reservation reservation = new Reservation(reserver, reservable,
+                        numAttending, eventType, false);
                 
+                ReservationSQLDAO resDAO = new ReservationSQLDAO(settings);
+                resDAO.addReservation(reservation);
+                resDAO.close();
+                
+                // Show confirmation
+                JOptionPane.showMessageDialog(null, "Reservation made");
             }
             catch (SQLException ex)
             {
-                
+                JOptionPane.showMessageDialog(null, "Error making reservation",
+                        "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
         
@@ -329,6 +346,28 @@ public class MakeReservationDialog extends JDialog
         
         private boolean validateInput()
         {
+            if (event.getText().isEmpty())
+            {
+                displayWarning("Event type must be entered");
+                return false;
+            }
+            
+            String pattern = "\\b\\d+\\b";
+            
+            if (!attendence.getText().matches(pattern))
+            {
+                displayWarning("Expected attendence must be entered");
+                return false;
+            }
+            
+            pattern = "\\b0+\\b";
+            
+            if (attendence.getText().matches(pattern))
+            {
+                displayWarning("Attendence must be greater than 0");
+                return false;
+            }
+            
             if (firstName.getText().isEmpty())
             {
                 displayWarning("First name must be entered");
@@ -341,7 +380,7 @@ public class MakeReservationDialog extends JDialog
                 return false;
             }
             
-            String pattern = "\\b[\\w\\.-]+@[\\w\\.-]+\\.\\w{2,4}\\b";
+            pattern = "\\b[\\w\\.-]+@[\\w\\.-]+\\.\\w{2,4}\\b";
             
             if (!email.getText().matches(pattern))
             {

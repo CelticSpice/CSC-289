@@ -6,6 +6,7 @@
 
 package edu.faytechcc.student.mccanns0131.database;
 
+import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Timeframe;
 
 public class ReservableQuery extends Query
@@ -20,29 +21,27 @@ public class ReservableQuery extends Query
     }
     
     /**
-        Prepares the query to query reservables for the given location name
+        Prepares the query to query for a distinct reservable at the specified
+        location
     
-        @param name Name of reservable
-        @return This query, prepared
+        @param loc The location to query a distinct reservable at
     */
     
-    public ReservableQuery queryReservableName(String name)
+    public void queryDistinctByLocation(Location loc)
     {
         sql = "SELECT DISTINCT Reservables.LocationName " +
               "FROM Reservables " +
-              "WHERE Reservables.LocationName = '" + name + "'";
-        
-        return this;
+              "WHERE Reservables.LocationName = '" + loc.getName() + "'";
     }
     
     /**
-        Prepares the query to query reservables for the ID of the given
+        Prepares the query to query for a distinct reservable at the specified
         timeframe
     
-        @param timeframe The timeframe to query ID of
+        @param timeframe The timeframe to query a distinct reservable at
     */
     
-    public void queryReservableTimeframeID(Timeframe timeframe)
+    public void queryDistinctByTimeframe(Timeframe timeframe)
     {
         String timeframeID = "(SELECT Timeframes.TimeframeID " +
                              "FROM Timeframes " +

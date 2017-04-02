@@ -1,7 +1,7 @@
 /**
- * A modification of a record in the database
- * CSC-289 - Group 4
- * @author Shane McCann
+    An update of a record in a database
+    CSC-289 - Group 4
+    @author Shane McCann
  */
 package edu.faytechcc.student.mccanns0131.database;
 
@@ -15,23 +15,58 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
-public class RecordModify
+public class RecordUpdate
 {
     // Fields
     private DatabaseConnection connection;
     private String sql;
     
     /**
-        Constructs a new RecordModify initialized with the given database
+        Constructs a new RecordUpdate initialized with the given database
         connection
     
-        @param conn Connection to the database
+        @param conn Connection to a database
     */
     
-    public RecordModify(DatabaseConnection conn)
+    public RecordUpdate(DatabaseConnection conn)
     {
         connection = conn;
         sql = "";
+    }
+    
+    /**
+        Updates a record of a reservation in a database
+    
+        @param reservation The updated reservation
+        @throws SQLException Error updating record of reservation
+    */
+    
+    public void updateReservation(Reservation reservation) throws SQLException
+    {
+        String timeframeID = "(SELECT Timeframes.TimeframeID " +
+                             "FROM Timeframes " +
+                             "WHERE Timeframes.StartDate = '" +
+                                reservation.getStartDate() + "' " +
+                             "AND Timeframes.StartTime = '" +
+                                reservation.getStartTime() + "' " +
+                             "AND Timeframes.EndDate = '" +
+                                reservation.getEndDate() + "' " +
+                             "AND Timeframes.EndTime = '" +
+                                reservation.getEndTime() + "')";
+        
+        sql = "UPDATE Reservations " +
+              "SET Reservations.EventType = '" +
+                reservation.getEventType() + "', " +
+              "Reservations.NumberAttending = " +
+                reservation.getNumberAttending() + ", " +
+              "Reservations.Reviewed = " +
+                reservation.isReviewed() + " " +
+              "WHERE Reservations.LocationName = '" +
+                reservation.getLocationName() + "' " +
+              "AND Reservations.TimeframeID = " +
+                timeframeID;
+        
+        connection.updateRecord(this);
     }
     
     /**

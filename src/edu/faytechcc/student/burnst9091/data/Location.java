@@ -7,6 +7,7 @@
 package edu.faytechcc.student.burnst9091.data;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
@@ -76,6 +77,17 @@ public class Location
     public void addTimeframe(Timeframe timeframe)
     {
         timeframes.add(timeframe);
+    }
+    
+    /**
+        Adds a collection of timeframes that this location can be reserved for
+    
+        @param times Timeframes location can be reserved for
+    */
+    
+    public void addTimeframes(Collection<Timeframe> times)
+    {
+        timeframes.addAll(times);
     }
     
     /**

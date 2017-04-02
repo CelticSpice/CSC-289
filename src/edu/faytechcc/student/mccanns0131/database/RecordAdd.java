@@ -21,7 +21,7 @@ public class RecordAdd
     
     /**
         Constructs a new RecordAdd initialized with the given connection to
-        the database
+        a database
     
         @param conn Connection to database
     */
@@ -33,13 +33,13 @@ public class RecordAdd
     }
     
     /**
-        Adds a record of a location to the database
+        Adds a record of a location to a database
     
         @param location The location to add
         @throws SQLException Error adding record to database
     */
     
-    private void addLocation(Location location) throws SQLException
+    public void addLocation(Location location) throws SQLException
     {
         sql = "INSERT INTO Locations " +
               "VALUES ('" + location.getName() + "', " +
@@ -49,7 +49,7 @@ public class RecordAdd
     }
     
     /**
-        Adds a record of a reservable to the database
+        Adds a record of a reservable to a database
     
         @param reservable The reservable to add
         @throws SQLException Error adding record to database
@@ -57,23 +57,6 @@ public class RecordAdd
     
     public void addReservable(Reservable reservable) throws SQLException
     {        
-        // Check if a record of a location should be added
-        ResultSetParser parser = new ResultSetParser();
-        ReservableQuery q = new ReservableQuery();
-        q.queryReservableName(reservable.getName());
-        parser.setResultSet(connection.runQuery(q));
-        
-        if (parser.isEmpty())
-            addLocation(reservable.getLocation());
-        
-        // Check if a record of a timeframe should be added
-        q.queryReservableTimeframeID(reservable.getTimeframe());
-        parser.setResultSet(connection.runQuery(q));
-        
-        if (parser.isEmpty())
-            addTimeframe(reservable.getTimeframe());
-        
-        // Add record of reservable
         String timeframeID = "(SELECT Timeframes.TimeframeID " +
                              "FROM Timeframes " +
                              "WHERE Timeframes.StartDate = '" +
@@ -94,7 +77,7 @@ public class RecordAdd
     }
     
     /**
-        Adds a record of a reservation to the database
+        Adds a record of a reservation to a database
     
         @param reservation The reservation to add
         @throws SQLException Error adding record to database
@@ -102,16 +85,6 @@ public class RecordAdd
     
     public void addReservation(Reservation reservation) throws SQLException
     {
-        // Check if a record of a reserver should be added
-        ResultSetParser parser = new ResultSetParser();
-        ReservationQuery q = new ReservationQuery();
-        q.queryReservationReserverID(reservation.getReserver());
-        parser.setResultSet(connection.runQuery(q));
-        
-        if (parser.isEmpty())
-            addReserver(reservation.getReserver());
-        
-        // Add record of reservation
         String reserverID = "(SELECT Reservers.ReserverID " +
                             "FROM Reservers " +
                             "WHERE Reservers.FirstName = '" +
@@ -146,13 +119,13 @@ public class RecordAdd
     }
     
     /**
-        Adds a record of a reserver to the database
+        Adds a record of a reserver to a database
        
         @param reserver The reserver to add
         @throws SQLException Error adding record to database
      */
     
-    private void addReserver(Reserver reserver) throws SQLException
+    public void addReserver(Reserver reserver) throws SQLException
     {
         String fields = "(FirstName, LastName, Email, Phone)";
         
@@ -166,13 +139,13 @@ public class RecordAdd
     }
     
     /**
-        Adds a record of a timeframe to the database
+        Adds a record of a timeframe to a database
     
         @param timeframe The timeframe to add
         @throws SQLException Error adding record to database
     */
     
-    private void addTimeframe(Timeframe timeframe) throws SQLException
+    public void addTimeframe(Timeframe timeframe) throws SQLException
     {
         String fields = "(StartDate, StartTime, EndDate, EndTime)";
         

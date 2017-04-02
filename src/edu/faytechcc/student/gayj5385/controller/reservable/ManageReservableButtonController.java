@@ -7,6 +7,7 @@
 
 package edu.faytechcc.student.gayj5385.controller.reservable;
 
+import edu.faytechcc.student.burnst9091.data.DatabaseSettings;
 import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reservable;
 import edu.faytechcc.student.burnst9091.data.SystemPreferences;
@@ -18,8 +19,7 @@ import edu.faytechcc.student.gayj5385.controller.ReservableAddComboBoxController
 import edu.faytechcc.student.gayj5385.controller.ReservableAddRadioController;
 import edu.faytechcc.student.gayj5385.gui.ManageReservablePanel;
 import edu.faytechcc.student.gayj5385.gui.dialog.AddReservableDialog;
-import edu.faytechcc.student.mccanns0131.database.DatabaseConnection;
-import edu.faytechcc.student.mccanns0131.database.RecordDelete;
+import edu.faytechcc.student.mccanns0131.database.ReservableSQLDAO;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -117,18 +117,15 @@ public class ManageReservableButtonController implements ActionListener
         try
         {
             SystemPreferences prefs = SystemPreferences.getInstance();
-            DatabaseConnection conn = DatabaseConnection.getConnection(
-                    prefs.getDBSettings());
+            DatabaseSettings settings = prefs.getDBSettings();
             
-            RecordDelete delete = new RecordDelete(conn);
-            
+            ReservableSQLDAO reservableDAO = new ReservableSQLDAO(settings);
             for (Timeframe timeframe : timeframes)
             {
-                delete.deleteReservable(new Reservable(loc, timeframe));
+                reservableDAO.removeReservable(new Reservable(loc, timeframe));
                 loc.removeTimeframe(timeframe);
             }
-            
-            conn.close();
+            reservableDAO.close();
         }
         catch (SQLException ex)
         {

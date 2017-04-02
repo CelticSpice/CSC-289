@@ -6,6 +6,7 @@
 
 package edu.faytechcc.student.gayj5385.controller.reservation;
 
+import edu.faytechcc.student.burnst9091.data.DatabaseSettings;
 import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.Reserver;
@@ -17,7 +18,8 @@ import edu.faytechcc.student.gayj5385.gui.ManageReservationPanel;
 import edu.faytechcc.student.gayj5385.gui.dialog.SendEmailDialog;
 import edu.faytechcc.student.mccanns0131.database.DatabaseConnection;
 import edu.faytechcc.student.mccanns0131.database.RecordDelete;
-import edu.faytechcc.student.mccanns0131.database.RecordModify;
+import edu.faytechcc.student.mccanns0131.database.RecordUpdate;
+import edu.faytechcc.student.mccanns0131.database.ReservationSQLDAO;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -115,12 +117,11 @@ public class ManageReservationButtonController implements ActionListener
                 try
                 {
                     SystemPreferences prefs = SystemPreferences.getInstance();
-                    DatabaseConnection conn = DatabaseConnection.getConnection(
-                            prefs.getDBSettings());
+                    DatabaseSettings settings = prefs.getDBSettings();
                     
-                    new RecordDelete(conn).deleteReservation(reservation);
-                    
-                    conn.close();
+                    ReservationSQLDAO resDAO = new ReservationSQLDAO(settings);
+                    resDAO.removeReservation(reservation);
+                    resDAO.close();
                     
                     reservation.cancel();
                     
@@ -191,26 +192,25 @@ public class ManageReservationButtonController implements ActionListener
             try
             {
                 SystemPreferences prefs = SystemPreferences.getInstance();
-                DatabaseConnection conn = DatabaseConnection.getConnection(
-                        prefs.getDBSettings());
+                DatabaseSettings settings = prefs.getDBSettings();
                 
                 Reservation reservation = reserves.get(0);
-                new RecordModify(conn).modifyReservationReviewed(
-                        reservation, reviewed);
                 
                 if (reviewed)
                     reservation.reviewed();
                 else
                     reservation.notReviewed();
                 
-                conn.close();
-                
+                ReservationSQLDAO resDAO = new ReservationSQLDAO(settings);
+                resDAO.updateReservation(reservation);
+                resDAO.close();
+                                
                 String btnText = (reviewed) ? "Reassess" : "Reviewed";
                 view.setReviewedButtonText(btnText);
                 
                 setReservations(reservations.get(view.getSelectedLocation()));
             }
-            catch (SQLException | RecordNotExistsException ex)
+            catch (SQLException ex)
             {
                 JOptionPane.showMessageDialog(view, "Error updating database",
                     "Error", JOptionPane.ERROR_MESSAGE);

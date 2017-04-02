@@ -83,7 +83,36 @@ public class ResultSetParser
     }
     
     /**
-        Parses data on locations
+        Parses a location
+    
+        @throws SQLException Error parsing the result set
+        @return Parsed location
+    */
+    
+    public Location parseLocation() throws SQLException
+    {
+        Location loc = null;
+        
+        String name;
+        int capacity;
+        List<Timeframe> timeframes;
+        
+        if (rs.next())
+        {
+            name = rs.getString("LocationName");
+            capacity = rs.getInt("Capacity");
+            
+            rs.beforeFirst();
+            timeframes = parseTimeframes();
+            
+            loc = new Location(name, capacity, timeframes);
+        }
+        
+        return loc;
+    }
+    
+    /**
+        Parses locations
     
         @throws SQLException Error parsing the result set
         @return List of locations
@@ -129,7 +158,8 @@ public class ResultSetParser
             eDateTime = LocalDateTime.of(endDate, endTime);
             
             // Check if timeframe is reserved
-            rs.getString("ReservedLocationName");
+            rs.getInt("ReservedTimeframeID");
+            
             if (rs.wasNull())
                 timeframe = new Timeframe(sDateTime, eDateTime, cost);
             else
@@ -215,7 +245,66 @@ public class ResultSetParser
     }
     
     /**
-        Parses data on a location's timeframes
+        Parses a reserver
+    
+        @throws SQLException Error parsing the result set
+        @return Parsed reserver
+    */
+    
+    public Reserver parseReserver() throws SQLException
+    {
+        Reserver reserver = null;
+        
+        String firstName, lastName, email, phone;
+        
+        if (rs.next())
+        {
+            firstName = rs.getString("FirstName");
+            lastName = rs.getString("LastName");
+            email = rs.getString("Email");
+            phone = rs.getString("Phone");
+            
+            reserver = new Reserver(firstName, lastName, email, phone);
+        }
+        
+        return reserver;
+    }
+    
+    /**
+        Parses a timeframe
+    
+        @throws SQLException Error parsing the result set
+        @return Parsed timeframe
+    */
+    
+    public Timeframe parseTimeframe() throws SQLException
+    {
+        Timeframe timeframe = null;
+        
+        LocalDate startDate, endDate;
+        LocalTime startTime, endTime;
+        BigDecimal cost;
+        LocalDateTime start, end;
+        
+        if (rs.next())
+        {
+            startDate = rs.getDate("StartDate").toLocalDate();
+            startTime = rs.getTime("StartTime").toLocalTime();
+            endDate = rs.getDate("EndDate").toLocalDate();
+            endTime = rs.getTime("EndTime").toLocalTime();
+            cost = rs.getBigDecimal("Cost");
+            
+            start = LocalDateTime.of(startDate, startTime);
+            end = LocalDateTime.of(endDate, endTime);
+            
+            timeframe = new Timeframe(start, end, cost);
+        }
+        
+        return timeframe;
+    }
+    
+    /**
+        Parses location timeframes
     
         @throws SQLException Error parsing the result set
         @return List of timeframes
@@ -241,11 +330,11 @@ public class ResultSetParser
             start = LocalDateTime.of(startDate, startTime);
             end = LocalDateTime.of(endDate, endTime);
             
-            // Check if the location's name appears as reserved
-            rs.getString("ReservedLocationName");
+            // Check if the timeframe is reserved
+            rs.getInt("ReservedTimeframeID");
             
             if (rs.wasNull())
-                timeframes.add(new Timeframe(start, end, cost, false));
+                timeframes.add(new Timeframe(start, end, cost));
             else
                 timeframes.add(new Timeframe(start, end, cost, true));
         }

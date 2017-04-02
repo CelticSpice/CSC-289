@@ -39,26 +39,27 @@ public class MainFrame extends JFrame
                 
         LookAndFeelInfo[] lookAndFeels = UIManager.getInstalledLookAndFeels();
         
-        boolean lookAndFeelSet = false;
+        boolean done = false;
         int i = 0;
-        while (!lookAndFeelSet && i < lookAndFeels.length)
+        while (!done && i < lookAndFeels.length)
         {
             if (lookAndFeels[i].getName().equals(WANTED_LOOK_AND_FEEL))
             {
                 try
                 {
                     UIManager.setLookAndFeel(lookAndFeels[i].getClassName());
-                    lookAndFeelSet = true;
+                    done = true;
                 }
                 catch (Exception ex)
                 {
                     JOptionPane.showMessageDialog(null,
                         "Failed setting Nimbus look & feel", "Error",
                             JOptionPane.ERROR_MESSAGE);
+                    done = true;
                 }
             }
-            
-            i++;
+            else
+                i++;
         }
     }
 }

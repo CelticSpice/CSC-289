@@ -21,9 +21,9 @@ public class RecordDelete
     
     /**
         Constructs a new RecordDelete initialized with the given connection
-        to the database
+        to a database
     
-        @param conn Connection to the database
+        @param conn Connection to a database
     */
     
     public RecordDelete(DatabaseConnection conn)
@@ -33,13 +33,13 @@ public class RecordDelete
     }
     
     /**
-        Removes a record of a location from the database
+        Removes a record of a location from a database
     
         @param loc The location to remove
         @throws SQLException Error removing record from database
     */
     
-    private void deleteLocation(Location loc) throws SQLException
+    public void deleteLocation(Location loc) throws SQLException
     {
         sql = "DELETE FROM Locations " +
               "WHERE Locations.LocationName = '" + loc.getName() + "'";
@@ -48,7 +48,7 @@ public class RecordDelete
     }
     
     /**
-        Removes a record of a reservable from the database
+        Removes a record of a reservable from a database
     
         @param reservable The reservable to remove
         @throws SQLException Error removing record from database
@@ -74,30 +74,12 @@ public class RecordDelete
                 timeframeID;
         
         connection.deleteRecord(this);
-        
-        // Check if we should delete a record of a location with the same name
-        // as the reservable
-        ResultSetParser parser = new ResultSetParser();
-        ReservableQuery q = new ReservableQuery();
-        q.queryReservableName(reservable.getName());
-        parser.setResultSet(connection.runQuery(q));
-        
-        if (parser.isEmpty())
-            deleteLocation(reservable.getLocation());
-        
-        // Check if we should delete a record of a timeframe with the same
-        // timeframe as the reservable
-        q.queryReservableTimeframeID(reservable.getTimeframe());
-        parser.setResultSet(connection.runQuery(q));
-        
-        if (parser.isEmpty())
-            deleteTimeframe(reservable.getTimeframe());
     }
     
     /**
-        Removes a record of a reservation from the database
+        Removes a record of a reservation from a database
     
-        @param reservation The reservation to remove from the database
+        @param reservation The reservation to remove from a database
         @throws SQLException Error removing record from database
     */
     
@@ -121,25 +103,16 @@ public class RecordDelete
                 timeframeID;
         
         connection.deleteRecord(this);
-        
-        // Check if a record of a reserver should also be deleted
-        ResultSetParser parser = new ResultSetParser();
-        ReservationQuery q = new ReservationQuery();
-        q.queryReservationReserverID(reservation.getReserver());
-        parser.setResultSet(connection.runQuery(q));
-        
-        if (parser.isEmpty())
-            deleteReserver(reservation.getReserver());
     }
     
     /**
-        Removes a record of a reserver from the database
+        Removes a record of a reserver from a database
     
-        @param reserver Reserver to remove from the database
+        @param reserver Reserver to remove from a database
         @throws SQLException Error removing record from database
     */
     
-    private void deleteReserver(Reserver reserver) throws SQLException
+    public void deleteReserver(Reserver reserver) throws SQLException
     {
         sql = "DELETE FROM Reservers " +
               "WHERE Reservers.FirstName = '" + reserver.getFirstName() + "' " +
@@ -151,13 +124,13 @@ public class RecordDelete
     }
     
     /**
-        DeleteTimeframe - Remove a record of a timeframe from the database
+        Removes a record of a timeframe from a database
     
-        @param timeframe The timeframe to remove from the database
+        @param timeframe The timeframe to remove from a database
         @throws SQLException Error removing record from database
     */
     
-    private void deleteTimeframe(Timeframe timeframe) throws SQLException
+    public void deleteTimeframe(Timeframe timeframe) throws SQLException
     {
         sql = "DELETE FROM Timeframes " +
               "WHERE Timeframes.StartDate = '" +

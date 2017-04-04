@@ -217,7 +217,6 @@ public class MakeReservationDialog extends JDialog
                 if (validateInput())
                 {
                     makeReservation();
-                    setVisible(false);
                     dispose();
                 }
             }
@@ -243,9 +242,6 @@ public class MakeReservationDialog extends JDialog
         
         private void makeReservation()
         {
-            SystemPreferences prefs = SystemPreferences.getInstance();
-            DatabaseSettings settings = prefs.getDBSettings();
-            
             try
             {
                 // Create reserver
@@ -262,6 +258,9 @@ public class MakeReservationDialog extends JDialog
                 // Create reservation
                 Reservation reservation = new Reservation(reserver, reservable,
                         numAttending, eventType, false);
+                
+                SystemPreferences prefs = SystemPreferences.getInstance();
+                DatabaseSettings settings = prefs.getDBSettings();
                 
                 ReservationSQLDAO resDAO = new ReservationSQLDAO(settings);
                 resDAO.addReservation(reservation);
@@ -301,11 +300,18 @@ public class MakeReservationDialog extends JDialog
                 return false;
             }
             
-            pattern = "\\b0+\\b";
+            pattern = "\\b0+\\b|";
             
             if (attendence.getText().matches(pattern))
             {
                 displayWarning("Attendence must be greater than 0");
+                return false;
+            }
+            
+            if (!(Integer.parseInt(attendence.getText()) <=
+                    reservable.getCapacity()))
+            {
+                displayWarning("Attendence must not exceed location capacity");
                 return false;
             }
             

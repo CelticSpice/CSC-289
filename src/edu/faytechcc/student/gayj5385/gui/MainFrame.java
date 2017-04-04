@@ -48,15 +48,14 @@ public class MainFrame extends JFrame
                 try
                 {
                     UIManager.setLookAndFeel(lookAndFeels[i].getClassName());
-                    done = true;
                 }
                 catch (Exception ex)
                 {
                     JOptionPane.showMessageDialog(null,
                         "Failed setting Nimbus look & feel", "Error",
                             JOptionPane.ERROR_MESSAGE);
-                    done = true;
                 }
+                done = true;
             }
             else
                 i++;

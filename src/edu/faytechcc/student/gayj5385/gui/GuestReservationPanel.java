@@ -29,6 +29,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionListener;
 
 public class GuestReservationPanel extends JPanel
@@ -42,18 +43,14 @@ public class GuestReservationPanel extends JPanel
                        cost;
     
     /**
-        Constructs a new GuestReservationPanel initialized with the given
-        list of locations
-    
-        @param locs The locations
+        Constructs a new GuestReservationPanel
     */
     
-    public GuestReservationPanel(List<Location> locs)
+    public GuestReservationPanel()
     {
         super(new BorderLayout());
 
-        Location[] locArray = locs.toArray(new Location[locs.size()]);
-        add(buildTopPanel(locArray), BorderLayout.NORTH);
+        add(buildTopPanel(), BorderLayout.NORTH);
         add(buildMidPanel(), BorderLayout.CENTER);
         add(buildBottomPanel(), BorderLayout.SOUTH);
     }
@@ -93,14 +90,7 @@ public class GuestReservationPanel extends JPanel
         JScrollPane scrollPane = new JScrollPane(timeframeList);
         scrollPane.setPreferredSize(new Dimension(255, 225));
 
-        // If the list of locations used to construct the GuestReservationPanel
-        // is not empty, display the first location's timeframes initially
-        Location loc = (Location) locations.getSelectedItem();
-        if (loc != null)
-        {
-            List<Timeframe> times = loc.deriveReservableTimeframes();
-            setTimeframes(times);
-        }
+        timeframeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         // Build timeframe detail panel
         JPanel timeframeDetailPanel = new JPanel(new GridLayout(5, 2, 5, 10));
@@ -129,14 +119,12 @@ public class GuestReservationPanel extends JPanel
     }
 
     /**
-        Builds & returns the top panel of this panel, initialized with
-        the given location data
-
-        @param locs The locations
+        Builds & returns the top panel of this panel
+    
         @return The built panel
     */
 
-    private JPanel buildTopPanel(Location[] locs)
+    private JPanel buildTopPanel()
     {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
@@ -156,7 +144,7 @@ public class GuestReservationPanel extends JPanel
         gbc.gridx = 1;
         gbc.insets = new Insets(0, 0, 10, 0);
         gbc.ipadx = 125;
-        locationComponentPanel.add(locations = new JComboBox(locs), gbc);
+        locationComponentPanel.add(locations = new JComboBox(), gbc);
         
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -169,11 +157,6 @@ public class GuestReservationPanel extends JPanel
         gbc.anchor = GridBagConstraints.WEST;
         locationComponentPanel.add(capacity = new JTextField(5), gbc);
         
-        // If there are locations in the list of locations the
-        // GuestReservationPanel was constructed with, display the first
-        // location's capacity initially
-        if (locs.length > 0)
-            capacity.setText(String.valueOf(locs[0].getCapacity()));
 
         capacity.setEditable(false);
 

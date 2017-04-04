@@ -7,9 +7,12 @@
 
 package edu.faytechcc.student.gayj5385.controller;
 
+import edu.faytechcc.student.burnst9091.data.Location;
+import edu.faytechcc.student.burnst9091.data.Timeframe;
 import edu.faytechcc.student.gayj5385.gui.GuestReservationPanel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class GuestReservationComboBoxController implements ActionListener
 {
@@ -36,6 +39,13 @@ public class GuestReservationComboBoxController implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e)
     {
+        Location loc = view.getSelectedLocation();
         
+        if (loc != null)
+        {
+            view.setCapacity(String.valueOf(loc.getCapacity()));
+            List<Timeframe> timeframes = loc.deriveReservableTimeframes();
+            view.setTimeframes(timeframes);
+        }
     }
 }

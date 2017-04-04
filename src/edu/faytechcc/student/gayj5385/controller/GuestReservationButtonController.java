@@ -14,6 +14,7 @@ import edu.faytechcc.student.gayj5385.gui.MainPanel;
 import edu.faytechcc.student.gayj5385.gui.dialog.MakeReservationDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GuestReservationButtonController implements ActionListener
@@ -78,7 +79,7 @@ public class GuestReservationButtonController implements ActionListener
             
             new MakeReservationDialog(reservable).setVisible(true);
             
-            
+            updateLocations();
         }
     }
     
@@ -90,5 +91,21 @@ public class GuestReservationButtonController implements ActionListener
     {
         MainPanel parent = ((MainPanel) view.getParent());
         parent.showOpenPanel();
+    }
+    
+    /**
+        Updates the list of locations available to be reserved
+    */
+    
+    private void updateLocations()
+    {
+        List<Location> availLocs = new ArrayList<>();
+        for (Location loc : locations)
+        {
+            List<Timeframe> timeframes = loc.deriveReservableTimeframes();
+            if (timeframes.size() > 0)
+                availLocs.add(loc);
+        }
+        view.setLocations(availLocs);
     }
 }

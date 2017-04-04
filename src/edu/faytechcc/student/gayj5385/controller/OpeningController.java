@@ -20,6 +20,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -174,9 +175,31 @@ public class OpeningController implements ActionListener
     
     private void showGuestReservationPanel()
     {
-        // Update availbable reervables
+        SystemPreferences prefs = SystemPreferences.getInstance();
+        DatabaseSettings settings = prefs.getDBSettings();
         
+        try
+        {
+            // Update locations & reservations
+            LocationSQLDAO locationDAO = new LocationSQLDAO(settings);
+            locations.clear();
+            locations.addAll(locationDAO.getAll());
+            locationDAO.close();
+        }
+        catch (SQLException ex)
+        {
+            JOptionPane.showMessageDialog(view,
+                "Failed updating location data", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
         
-        mainPanel.showGuestReservationPanel();
+        List<Location> availLocs = new ArrayList<>();
+        for (Location loc : locations)
+        {
+            if (loc.deriveReservableTimeframes().size() > 0)
+                availLocs.add(loc);
+        }
+        
+        mainPanel.showGuestReservationPanel(availLocs);
     }
 }

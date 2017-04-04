@@ -11,16 +11,13 @@ import edu.faytechcc.student.burnst9091.data.Reservable;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.Reserver;
 import edu.faytechcc.student.burnst9091.data.SystemPreferences;
-import edu.faytechcc.student.mccanns0131.database.DatabaseConnection;
 import edu.faytechcc.student.mccanns0131.database.ReservationSQLDAO;
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -80,27 +77,6 @@ public class MakeReservationDialog extends JDialog
     }
     
     /**
-        Builds & returns the lower panel of the reservable info panel,
-        initialized with the specified reservable that is to be reserved
-    
-        @param r The reservable to be reserved
-        @return The built panel
-    */
-    
-    private JPanel buildLowerReservableInfoPanel(Reservable r)
-    {
-        JPanel panel = new JPanel();
-        
-        panel.add(cost = new JTextField(5));
-        
-        cost.setText(r.getTimeframe().getCostString());
-        
-        cost.setEditable(false);
-        
-        return panel;
-    }
-    
-    /**
         Builds & returns the main panel of the dialog, initialized with the
         specified reservable that is to be reserved
     
@@ -120,34 +96,44 @@ public class MakeReservationDialog extends JDialog
     }
     
     /**
-        Builds & returns the middle panel of the reservable info panel,
+        Builds & returns the panel containing information about the reservable,
         initialized with the specified reservable that is to be reserved
     
         @param r The reservable to be reserved
         @return The built panel
     */
     
-    private JPanel buildMidReservableInfoPanel(Reservable r)
+    private JPanel buildReservableInfoPanel(Reservable r)
     {
-        JPanel panel = new JPanel();
+        JPanel panel = new JPanel(new GridLayout(7, 2, 5, 5));
+        panel.setBorder(BorderFactory.createTitledBorder("Reservable Info"));
         
-        // Build start datetime panel
-        JPanel startDateTimePanel = new JPanel(new GridLayout(2, 2, 5, 5));
+        panel.add(new JLabel("Location:"));
+        panel.add(location = new JTextField(9));
         
-        startDateTimePanel.add(new JLabel("Start Date:"));
-        startDateTimePanel.add(startDate = new JTextField(7));
+        panel.add(new JLabel("Capacity:"));
+        panel.add(capacity = new JTextField(9));
         
-        startDateTimePanel.add(new JLabel("Start Time:"));
-        startDateTimePanel.add(startTime = new JTextField(7));
+        panel.add(new JLabel("Start Date:"));
+        panel.add(startDate = new JTextField(9));
         
-        // Build end datetime panel
-        JPanel endDateTimePanel = new JPanel(new GridLayout(2, 2, 5, 5));
+        panel.add(new JLabel("Start Time:"));
+        panel.add(startTime = new JTextField(9));
         
-        endDateTimePanel.add(new JLabel("End Date:"));
-        endDateTimePanel.add(endDate = new JTextField(7));
+        panel.add(new JLabel("End Date:"));
+        panel.add(endDate = new JTextField(9));
         
-        endDateTimePanel.add(new JLabel("End Time:"));
-        endDateTimePanel.add(endTime = new JTextField(7));
+        panel.add(new JLabel("End Time:"));
+        panel.add(endTime = new JTextField(9));
+        
+        panel.add(new JLabel("Cost:"));
+        panel.add(cost = new JTextField(9));
+        
+        location.setText(r.getName());
+        capacity.setText(String.valueOf(r.getCapacity()));
+        
+        location.setEditable(false);
+        capacity.setEditable(false);
         
         startDate.setText(r.getStartDate().toString());
         startTime.setText(r.getStartTime().toString());
@@ -159,29 +145,8 @@ public class MakeReservationDialog extends JDialog
         endDate.setEditable(false);
         endTime.setEditable(false);
         
-        panel.add(startDateTimePanel);
-        panel.add(Box.createRigidArea(new Dimension(5, 0)));
-        panel.add(endDateTimePanel);
-        
-        return panel;
-    }
-    
-    /**
-        Builds & returns the panel containing information about the reservable,
-        initialized with the specified reservable that is to be reserved
-    
-        @param r The reservable to be reserved
-        @return The built panel
-    */
-    
-    private JPanel buildReservableInfoPanel(Reservable r)
-    {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createTitledBorder("Reservable Info"));
-        
-        panel.add(buildUpperReservableInfoPanel(r), BorderLayout.NORTH);
-        panel.add(buildMidReservableInfoPanel(r), BorderLayout.CENTER);
-        panel.add(buildLowerReservableInfoPanel(r), BorderLayout.SOUTH);
+        cost.setText(r.getTimeframe().getCostString());
+        cost.setEditable(false);
         
         return panel;
     }
@@ -194,7 +159,7 @@ public class MakeReservationDialog extends JDialog
     
     private JPanel buildReservationInfoPanel()
     {
-        JPanel panel = new JPanel(new GridLayout(6, 2, 5, 5));
+        JPanel panel = new JPanel(new GridLayout(7, 2, 5, 5));
         panel.setBorder(BorderFactory.createTitledBorder("Reservation Info"));
         
         panel.add(new JLabel("Event Type:"));
@@ -214,33 +179,6 @@ public class MakeReservationDialog extends JDialog
         
         panel.add(new JLabel("Phone:"));
         panel.add(phone = new JTextField(7));
-        
-        return panel;
-    }
-    
-    /**
-        Builds & returns the upper panel of the reservable info panel,
-        initialized with the specified reservable that is to be reserved
-    
-        @param r The reservable to be reserved
-        @return The built panel
-    */
-    
-    private JPanel buildUpperReservableInfoPanel(Reservable r)
-    {
-        JPanel panel = new JPanel(new GridLayout(2, 2, 5, 5));
-        
-        panel.add(new JLabel("Location:"));
-        panel.add(location = new JTextField(7));
-        
-        panel.add(new JLabel("Capacity:"));
-        panel.add(capacity = new JTextField(3));
-        
-        location.setText(r.getName());
-        capacity.setText(String.valueOf(r.getCapacity()));
-        
-        location.setEditable(false);
-        capacity.setEditable(false);
         
         return panel;
     }
@@ -279,6 +217,7 @@ public class MakeReservationDialog extends JDialog
                 if (validateInput())
                 {
                     makeReservation();
+                    setVisible(false);
                     dispose();
                 }
             }
@@ -327,6 +266,8 @@ public class MakeReservationDialog extends JDialog
                 ReservationSQLDAO resDAO = new ReservationSQLDAO(settings);
                 resDAO.addReservation(reservation);
                 resDAO.close();
+                
+                reservable.getTimeframe().reserve();
                 
                 // Show confirmation
                 JOptionPane.showMessageDialog(null, "Reservation made");

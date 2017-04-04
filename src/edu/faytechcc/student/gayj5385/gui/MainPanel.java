@@ -8,6 +8,9 @@ package edu.faytechcc.student.gayj5385.gui;
 
 import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reservation;
+import edu.faytechcc.student.gayj5385.controller.GuestReservationButtonController;
+import edu.faytechcc.student.gayj5385.controller.GuestReservationComboBoxController;
+import edu.faytechcc.student.gayj5385.controller.GuestReservationListController;
 import edu.faytechcc.student.gayj5385.controller.OpeningController;
 import java.awt.CardLayout;
 import java.util.ArrayList;
@@ -20,6 +23,7 @@ public class MainPanel extends JPanel
     // Fields
     private AdminPanel adminPanel;
     private CardLayout layout;
+    private GuestReservationPanel guestReservePanel;
     private MainFrame parent;
     private OpenPanel openPanel;
     
@@ -36,7 +40,6 @@ public class MainPanel extends JPanel
         parent = p;
         
         setLayout(layout = new CardLayout());
-        
         List<Location> locations = new ArrayList<>();
         HashMap<Location, List<Reservation>> reservations = new HashMap<>();
         
@@ -83,9 +86,18 @@ public class MainPanel extends JPanel
     {
         final int CARD_INDEX = 2;
         
-        GuestReservationPanel panel = new GuestReservationPanel(locs);
+        guestReservePanel = new GuestReservationPanel();
         
-        add(panel, CARDS[CARD_INDEX]);
+        guestReservePanel.registerButtonController(
+                new GuestReservationButtonController(guestReservePanel, locs));
+        
+        guestReservePanel.registerComboBoxController(
+                new GuestReservationComboBoxController(guestReservePanel));
+        
+        guestReservePanel.registerTimeframeListController(
+                new GuestReservationListController(guestReservePanel));
+        
+        add(guestReservePanel, CARDS[CARD_INDEX]);
     }
     
     /**
@@ -119,12 +131,17 @@ public class MainPanel extends JPanel
     }
     
     /**
-        Shows the guest reservation panel
+        Shows the guest reservation panel with the updated list of locations
+        that can be reserved
+    
+        @param availLocs Locations that can be reserved
     */
     
-    public void showGuestReservationPanel()
+    public void showGuestReservationPanel(List<Location> availLocs)
     {
         final int CARD_INDEX = 2;
+        
+        guestReservePanel.setLocations(availLocs);
         
         layout.show(this, CARDS[CARD_INDEX]);
         

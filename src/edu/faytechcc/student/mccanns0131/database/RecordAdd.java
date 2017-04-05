@@ -21,7 +21,7 @@ public class RecordAdd
     
     /**
         Constructs a new RecordAdd initialized with the given connection to
-        a database
+        the database
     
         @param conn Connection to database
     */
@@ -33,7 +33,7 @@ public class RecordAdd
     }
     
     /**
-        Adds a record of a location to a database
+        Adds a record of a location to the database
     
         @param location The location to add
         @throws SQLException Error adding record to database
@@ -41,7 +41,9 @@ public class RecordAdd
     
     public void addLocation(Location location) throws SQLException
     {
-        sql = "INSERT INTO Locations " +
+        String fields = "(LocationName, Capacity)";
+        
+        sql = "INSERT INTO Locations " + fields + " " +
               "VALUES ('" + location.getName() + "', " +
                             location.getCapacity() + ")";
         
@@ -49,7 +51,7 @@ public class RecordAdd
     }
     
     /**
-        Adds a record of a reservable to a database
+        Adds a record of a reservable to the database
     
         @param reservable The reservable to add
         @throws SQLException Error adding record to database
@@ -57,27 +59,16 @@ public class RecordAdd
     
     public void addReservable(Reservable reservable) throws SQLException
     {        
-        String timeframeID = "(SELECT Timeframes.TimeframeID " +
-                             "FROM Timeframes " +
-                             "WHERE Timeframes.StartDate = '" +
-                                reservable.getStartDate() + "' " +
-                             "AND Timeframes.StartTime = '" +
-                                reservable.getStartTime() + "' " +
-                             "AND Timeframes.EndDate = '" +
-                                reservable.getEndDate() + "' " +
-                             "AND Timeframes.EndTime = '" +
-                                reservable.getEndTime() + "')";
-
         sql = "INSERT INTO Reservables " +
-              "VALUES ('" + reservable.getName() + "', " +
-                            timeframeID + ", " +
+              "VALUES ('" + reservable.getLocationID() + "', " +
+                            reservable.getTimeframeID() + ", " +
                             reservable.getCost() + ")";
         
         connection.addRecord(this);
     }
     
     /**
-        Adds a record of a reservation to a database
+        Adds a record of a reservation to the database
     
         @param reservation The reservation to add
         @throws SQLException Error adding record to database
@@ -85,32 +76,10 @@ public class RecordAdd
     
     public void addReservation(Reservation reservation) throws SQLException
     {
-        String reserverID = "(SELECT Reservers.ReserverID " +
-                            "FROM Reservers " +
-                            "WHERE Reservers.FirstName = '" +
-                                reservation.getReserverFirstName() + "' " +
-                            "AND Reservers.LastName = '" +
-                                reservation.getReserverLastName() + "' " +
-                            "AND Reservers.Email = '" +
-                                reservation.getReserverEmail() + "' " +
-                            "AND Reservers.Phone = '" +
-                                reservation.getReserverPhone() + "')";
-            
-        String timeframeID = "(SELECT Timeframes.TimeframeID " +
-                             "FROM Timeframes " +
-                             "WHERE Timeframes.StartDate = '" +
-                                reservation.getStartDate() + "' " +
-                             "AND Timeframes.StartTime = '" +
-                                reservation.getStartTime() + "' " +
-                             "AND Timeframes.EndDate = '" +
-                                reservation.getEndDate() + "' " +
-                             "AND Timeframes.EndTime = '" +
-                                reservation.getEndTime() + "')";
-
         sql = "INSERT INTO Reservations " +
-              "VALUES ('" + reservation.getLocationName() + "', " +
-                            timeframeID + ", " +
-                            reserverID + ", '" +
+              "VALUES ('" + reservation.getLocationID() + "', " +
+                            reservation.getTimeframeID() + ", " +
+                            reservation.getReserverID() + ", '" +
                             reservation.getEventType() + "', " +
                             reservation.getNumberAttending() + ", " +
                             false + ")";
@@ -119,7 +88,7 @@ public class RecordAdd
     }
     
     /**
-        Adds a record of a reserver to a database
+        Adds a record of a reserver to the database
        
         @param reserver The reserver to add
         @throws SQLException Error adding record to database
@@ -139,7 +108,7 @@ public class RecordAdd
     }
     
     /**
-        Adds a record of a timeframe to a database
+        Adds a record of a timeframe to the database
     
         @param timeframe The timeframe to add
         @throws SQLException Error adding record to database

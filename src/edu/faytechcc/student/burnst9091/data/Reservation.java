@@ -126,6 +126,17 @@ public class Reservation
     }
     
     /**
+        Returns the ID of the reservation's location
+    
+        @return ID of reservation's location
+    */
+    
+    public int getLocationID()
+    {
+        return reservable.getLocationID();
+    }
+    
+    /**
         GetLocationName - Return the name of the location reserved
     
         @return The name of the location reserved
@@ -181,6 +192,17 @@ public class Reservation
     }
     
     /**
+        Returns the ID of the reservation's reserver
+    
+        @return ID of reservation's reserver
+    */
+    
+    public int getReserverID()
+    {
+        return reserver.getID();
+    }
+    
+    /**
         Returns the last name of the reserver
     
         @return The reserver's last name
@@ -233,6 +255,17 @@ public class Reservation
     public LocalTime getStartTime()
     {
         return reservable.getStartTime();
+    }
+    
+    /**
+        Returns the ID of the reservation's timeframe
+    
+        @return ID of reservation's timeframe
+    */
+    
+    public int getTimeframeID()
+    {
+        return reservable.getTimeframeID();
     }
     
     /**

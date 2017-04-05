@@ -95,6 +95,17 @@ public class Reservable
     }
     
     /**
+        Returns the ID of the reservable's location
+    
+        @return ID of reservable's location
+    */
+    
+    public int getLocationID()
+    {
+        return location.getID();
+    }
+    
+    /**
         GetName - Return the location name of the reservable
     
         @return The name of the reservable
@@ -136,6 +147,17 @@ public class Reservable
     public Timeframe getTimeframe()
     {
         return timeframe;
+    }
+    
+    /**
+        Returns the ID of the reservable's timeframe
+    
+        @return ID of reservable's timeframe
+    */
+    
+    public int getTimeframeID()
+    {
+        return timeframe.getID();
     }
     
     /**

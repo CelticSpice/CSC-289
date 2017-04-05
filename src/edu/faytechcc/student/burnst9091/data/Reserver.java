@@ -9,10 +9,11 @@ package edu.faytechcc.student.burnst9091.data;
 public class Reserver
 {
     // Fields
+    private int id;
     private String firstName, lastName, email, phone;
     
     /**
-        Constructs a new Reserver with the given first & last names,
+        Constructs a new Reserver initialized with the given first & last names,
         email address, & phone number
     
         @param fName First name
@@ -23,6 +24,27 @@ public class Reserver
     
     public Reserver(String fName, String lName, String e, String p)
     {
+        id = -1;
+        firstName = fName;
+        lastName = lName;
+        email = e;
+        phone = p;
+    }
+    
+    /**
+        Constructs a new Reserver initialized with the given first & last names,
+        email address, phone number, & ID
+    
+        @param fName First name
+        @param lName Last name
+        @param e Email address
+        @param p Phone number
+        @param id ID
+    */
+    
+    public Reserver(String fName, String lName, String e, String p, int id)
+    {
+        this.id = id;
         firstName = fName;
         lastName = lName;
         email = e;
@@ -49,6 +71,17 @@ public class Reserver
     public String getFirstName()
     {
         return firstName;
+    }
+    
+    /**
+        Returns the reserver's ID
+    
+        @return The reserver's ID
+    */
+    
+    public int getID()
+    {
+        return id;
     }
     
     /**

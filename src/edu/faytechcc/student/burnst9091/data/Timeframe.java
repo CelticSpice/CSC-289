@@ -20,11 +20,12 @@ public class Timeframe
     // Fields
     private BigDecimal cost;
     private boolean reserved;
+    private int id;
     private LocalDateTime startDateTime, endDateTime;
     
     /**
-        Constructor - Accepts the starting & ending dates & times of the
-        timeframe
+        Constructs a new Timeframe initialized with the given starting & ending
+        datetimes
     
         @param sDateTime The starting date & time
         @param eDateTime The ending date & time
@@ -44,24 +45,26 @@ public class Timeframe
             throw new IllegalArgumentException
                 ("End datetime before or equal to start datetime");
         
+        id = -1;
         cost = new BigDecimal(0);
         reserved = false;
     }
     
     /**
-        Constructor - Accepts the starting & ending dates & times of the
-        timeframe, and the cost to reserve it
+        Constructs a new Timeframe initialized with the given starting & ending
+        datetimes, the cost to reserve it, & the ID
     
         @param sDateTime The starting date & time
         @param eDateTime The ending date & time
         @param c The cost to reserve the timeframe
+        @param id The timeframe ID
         @throws IllegalArgumentException Starting datetime after or equal to
                                          ending datetime or the cost is less
                                          than $0.00
     */
     
     public Timeframe(LocalDateTime sDateTime, LocalDateTime eDateTime,
-            BigDecimal c)
+            BigDecimal c, int id)
     {
         // We ignore nanoseconds & seconds
         startDateTime = sDateTime.withNano(0).withSecond(0);
@@ -76,25 +79,28 @@ public class Timeframe
         if (!(c.compareTo(new BigDecimal(0.00)) >= 0))
             throw new IllegalArgumentException("Cost less than $0.00");
         
+        this.id = id;
         cost = c;
         reserved = false;
     }
     
     /**
-        Constructor - Accepts the starting & ending dates & times of the
-        timeframe, the cost to reserve it, and whether it is reserved
+        Constructs a new Timeframe initialized with the given starting & ending
+        datetimes, the cost to reserve it, whether the timeframe is reserved, &
+        ID
     
         @param sDateTime The starting date & time
         @param eDateTime The ending date & time
         @param c The cost to reserve the timeframe
         @param isRsrvd If the timeframe is reserved
+        @param id The timeframe ID
         @throws IllegalArgumentException Starting datetime after or equal to
                                          ending datetime or the cost is less
                                          than $0.00
     */
     
     public Timeframe(LocalDateTime sDateTime, LocalDateTime eDateTime,
-            BigDecimal c, boolean isRsrvd)
+            BigDecimal c, boolean isRsrvd, int id)
     {
         // We ignore nanoseconds & seconds
         startDateTime = sDateTime.withNano(0).withSecond(0);
@@ -109,6 +115,7 @@ public class Timeframe
         if (!(c.compareTo(new BigDecimal(0.00)) >= 0))
             throw new IllegalArgumentException("Cost less than $0.00");
         
+        this.id = id;
         cost = c;
         reserved = isRsrvd;
     }
@@ -252,6 +259,17 @@ public class Timeframe
     public String getEndDateTimeString(DateTimeFormatter format)
     {
         return endDateTime.format(format);
+    }
+    
+    /**
+        Returns the timeframe's ID
+    
+        @return The timeframe's ID
+    */
+    
+    public int getID()
+    {
+        return id;
     }
     
     /**

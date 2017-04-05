@@ -48,7 +48,10 @@ public class TimeframeSQLDAO
     
     public void addTimeframe(Timeframe timeframe) throws SQLException
     {
-        new RecordAdd(connection).addTimeframe(timeframe);
+        ResultSetParser parser = new ResultSetParser();
+        parser.setResultSet(new RecordAdd(connection).addTimeframe(timeframe));
+        int id = parser.parseID();
+        timeframe.setID(id);
     }
     
     /**

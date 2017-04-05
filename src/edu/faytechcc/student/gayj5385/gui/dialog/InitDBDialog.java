@@ -24,7 +24,7 @@ import javax.swing.JTextField;
 
 public class InitDBDialog extends JDialog
 {
-    private JButton ok, exit;
+    private JButton ok;
     private JPasswordField password;
     private JTextField host, port, username;
     
@@ -62,12 +62,8 @@ public class InitDBDialog extends JDialog
         JPanel panel = new JPanel();
         
         panel.add(ok = new JButton("OK"));
-        panel.add(exit = new JButton("Exit"));
-        
-        ButtonController controller = new ButtonController();
-        
-        ok.addActionListener(controller);
-        exit.addActionListener(controller);
+                
+        ok.addActionListener(new ButtonController());
         
         return panel;
     }
@@ -115,25 +111,21 @@ public class InitDBDialog extends JDialog
         @Override
         public void actionPerformed(ActionEvent e)
         {
-            if (e.getSource() == ok)
+            if (validateInput())
             {
-                if (validateInput())
-                {
-                    SystemPreferences prefs = SystemPreferences.getInstance();
-                    DatabaseSettings settings = new DatabaseSettings();
-                    
-                    settings.setDBHost(host.getText());
-                    settings.setDBPort(Integer.parseInt(port.getText()));
-                    settings.setDBUser(username.getText());
-                    settings.setDBPass(new String(password.getPassword()));
-                    
-                    prefs.setDBSettings(settings);
-                    
-                    dispose();
-                }
+                SystemPreferences prefs = SystemPreferences.getInstance();
+                DatabaseSettings settings = new DatabaseSettings();
+
+                settings.setDBHost(host.getText());
+                settings.setDBPort(Integer.parseInt(port.getText()));
+                settings.setDBUser(username.getText());
+                settings.setDBPass(new String(password.getPassword()));
+
+                prefs.setDBSettings(settings);
+                prefs.setInitSetupRun(true);
+
+                dispose();
             }
-            else
-                System.exit(0);
         }
         
         /**

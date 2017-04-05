@@ -9,6 +9,7 @@ package edu.faytechcc.student.mccanns0131.database;
 import edu.faytechcc.student.burnst9091.data.DatabaseSettings;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -94,16 +95,18 @@ public class DatabaseConnection
 //    }
     
     /**
-        Adds a record to the database
+        Adds a record to the database, returning the generated ID
     
         @param recordAdd The adding of a record
         @throws SQLException There was an error adding a record
+        @return The ID of the newly inserted record
     */
     
-    public void addRecord(RecordAdd recordAdd) throws SQLException
+    public ResultSet addRecord(RecordAdd recordAdd) throws SQLException
     {
         Statement stmt = connection.createStatement();
         stmt.executeUpdate(recordAdd.toString());
+        return stmt.getGeneratedKeys();
     }
     
     /**

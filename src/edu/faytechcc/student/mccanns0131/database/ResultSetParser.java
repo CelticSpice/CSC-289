@@ -70,6 +70,19 @@ public class ResultSetParser
     }
     
     /**
+        Parses an ID
+        
+        @throws SQLException Error parsing the result set
+        @return ID
+    */
+    
+    public int parseID() throws SQLException
+    {
+        rs.next();
+        return rs.getInt(1);
+    }
+    
+    /**
         Parses locations
     
         @throws SQLException Error parsing the result set

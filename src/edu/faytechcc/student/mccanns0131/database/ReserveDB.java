@@ -23,19 +23,12 @@ public class ReserveDB
     private static void create(DatabaseConnection connection)
             throws SQLException
     {
-        if (exists(connection))
-        {
-            String sql = "DROP DATABASE ReserveDB";
-            connection.executeSQL(sql);
-        }
-        
         String sql = "CREATE DATABASE " + NAME;
         connection.executeSQL(sql);
         
         sql = "USE ReserveDB";
         connection.executeSQL(sql);
         
-        dropTables(connection);
         createTables(connection);
     }
     
@@ -127,42 +120,20 @@ public class ReserveDB
     }
     
     /**
-        Drops existing tables
+        Returns if the database exists, connecting using the given database
+        settings
     
-        @param connection Database connection
-        @throws SQLException Error dropping the database tables
-    */
-    
-    private static void dropTables(DatabaseConnection connection)
-            throws SQLException
-    {
-        String sql = "DROP TABLE IF EXISTS Reservations";
-        connection.executeSQL(sql);
-        
-        sql = "DROP TABLE IF EXISTS Reservables";
-        connection.executeSQL(sql);
-        
-        sql = "DROP TABLE IF EXISTS Reservers";
-        connection.executeSQL(sql);
-        
-        sql = "DROP TABLE IF EXISTS Timeframes";
-        connection.executeSQL(sql);
-        
-        sql = "DROP TABLE IF EXISTS Locations";
-        connection.executeSQL(sql);
-    }
-    
-    /**
-        Returns if the database exists
-    
-        @param connection Database connection
-        @throws SQLException Error running query
+        @param settings Database settings
+        @throws SQLException Error checking if database exists
         @return If the database exists
     */
     
-    private static boolean exists(DatabaseConnection connection)
+    public static boolean exists(DatabaseSettings settings)
             throws SQLException
     {
+        DatabaseConnection connection = DatabaseConnection
+                .getConnection(settings, false);
+        
         String sql = "SELECT SCHEMA_NAME " +
                      "FROM INFORMATION_SCHEMA.SCHEMATA " +
                      "WHERE SCHEMA_NAME = '" + NAME + "'";
@@ -171,11 +142,15 @@ public class ReserveDB
         
         ResultSetParser parser = new ResultSetParser();
         parser.setResultSet(connection.runQuery(query));
+        
+        connection.close();
+        
         return !parser.isResultSetEmpty();
     }
     
     /**
-        Initializes the database, connecting using the given database settings
+        Initializes the database, connecting using the given database settings &
+        creating the database
     
         @param settings Database settings
         @throws SQLException Error initializing the database
@@ -187,5 +162,7 @@ public class ReserveDB
                 .getConnection(settings, false);
         
         create(connection);
+        
+        connection.close();
     }
 }

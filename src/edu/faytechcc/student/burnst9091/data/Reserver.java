@@ -116,4 +116,15 @@ public class Reserver
     {
         return phone;
     }
+    
+    /**
+        Sets the reserver's ID
+    
+        @param id The reserver's ID
+    */
+    
+    public void setID(int id)
+    {
+        this.id = id;
+    }
 }

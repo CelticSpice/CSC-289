@@ -368,6 +368,17 @@ public class Timeframe
     }
     
     /**
+        Sets the timeframe's ID
+    
+        @param id The timeframe's ID
+    */
+    
+    public void setID(int id)
+    {
+        this.id = id;
+    }
+    
+    /**
         StartsOnDate - Return whether the timeframe starts on the given date
     
         @param date Date to check if the timeframe starts on

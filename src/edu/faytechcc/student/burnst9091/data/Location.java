@@ -344,6 +344,17 @@ public class Location
     }
     
     /**
+        Sets the location's ID
+    
+        @param id The location's ID
+    */
+    
+    public void setID(int id)
+    {
+        this.id = id;
+    }
+    
+    /**
         Sets the name of the location
     
         @param n The name of the location

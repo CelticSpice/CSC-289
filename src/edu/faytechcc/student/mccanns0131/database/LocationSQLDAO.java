@@ -49,7 +49,10 @@ public class LocationSQLDAO
     
     public void addLocation(Location loc) throws SQLException
     {
-        new RecordAdd(connection).addLocation(loc);
+        ResultSetParser parser = new ResultSetParser();
+        parser.setResultSet((new RecordAdd(connection).addLocation(loc)));
+        int id = parser.parseID();
+        loc.setID(id);
     }
     
     /**

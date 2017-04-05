@@ -26,31 +26,24 @@ public class Application
     {
         setLookAndFeel();
         
-        // Check if database setup
         SystemPreferences prefs = SystemPreferences.getInstance();
         
-        if (!prefs.getIsDBSetup())
-        {
+        if (!prefs.getInitSetupRun())
             new InitDBDialog().setVisible(true);
-            
-            // Attempt to create database
+        
+        if (prefs.getInitSetupRun())
+        {
             DatabaseSettings settings = prefs.getDBSettings();
             
             try
             {
-                ReserveDB.init(settings);
-                
-                prefs.setIsDBSetup(true);
-                
-                JOptionPane.showMessageDialog(null,
-                        "Database created successfully");
+                if (!ReserveDB.exists(settings))
+                    ReserveDB.init(settings);
             }
             catch (SQLException ex)
             {
                 JOptionPane.showMessageDialog(null, "Failed to create database",
                         "Error", JOptionPane.ERROR_MESSAGE);
-                
-                System.exit(1);
             }
         }
         

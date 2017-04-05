@@ -11,6 +11,7 @@ import edu.faytechcc.student.burnst9091.data.Reservable;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.Reserver;
 import edu.faytechcc.student.burnst9091.data.Timeframe;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class RecordAdd
@@ -33,13 +34,15 @@ public class RecordAdd
     }
     
     /**
-        Adds a record of a location to the database
+        Adds a record of a location to the database, returning the generated
+        ID
     
         @param location The location to add
         @throws SQLException Error adding record to database
+        @return The generated ID
     */
     
-    public void addLocation(Location location) throws SQLException
+    public ResultSet addLocation(Location location) throws SQLException
     {
         String fields = "(LocationName, Capacity)";
         
@@ -47,7 +50,7 @@ public class RecordAdd
               "VALUES ('" + location.getName() + "', " +
                             location.getCapacity() + ")";
         
-        connection.addRecord(this);
+        return connection.addRecord(this);
     }
     
     /**
@@ -88,13 +91,15 @@ public class RecordAdd
     }
     
     /**
-        Adds a record of a reserver to the database
+        Adds a record of a reserver to the database, returning the generated
+        ID
        
         @param reserver The reserver to add
         @throws SQLException Error adding record to database
+        @return The generated ID
      */
     
-    public void addReserver(Reserver reserver) throws SQLException
+    public ResultSet addReserver(Reserver reserver) throws SQLException
     {
         String fields = "(FirstName, LastName, Email, Phone)";
         
@@ -104,17 +109,19 @@ public class RecordAdd
                             reserver.getEmailAddress()  + "', '" +
                             reserver.getPhoneNumber()   + "')";
         
-        connection.addRecord(this);
+        return connection.addRecord(this);
     }
     
     /**
-        Adds a record of a timeframe to the database
+        Adds a record of a timeframe to the database, returning the generated
+        ID
     
         @param timeframe The timeframe to add
         @throws SQLException Error adding record to database
+        @return The generated ID
     */
     
-    public void addTimeframe(Timeframe timeframe) throws SQLException
+    public ResultSet addTimeframe(Timeframe timeframe) throws SQLException
     {
         String fields = "(StartDate, StartTime, EndDate, EndTime)";
         
@@ -124,7 +131,7 @@ public class RecordAdd
                             timeframe.getEndDate()   + "', '" +
                             timeframe.getEndTime() + "')";
         
-        connection.addRecord(this);
+        return connection.addRecord(this);
     }
     
     /**

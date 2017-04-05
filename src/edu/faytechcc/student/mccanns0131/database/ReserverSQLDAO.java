@@ -48,7 +48,10 @@ public class ReserverSQLDAO
     
     public void addReserver(Reserver reserver) throws SQLException
     {
-        new RecordAdd(connection).addReserver(reserver);
+        ResultSetParser parser = new ResultSetParser();
+        parser.setResultSet(new RecordAdd(connection).addReserver(reserver));
+        int id = parser.parseID();
+        reserver.setID(id);
     }
     
     /**

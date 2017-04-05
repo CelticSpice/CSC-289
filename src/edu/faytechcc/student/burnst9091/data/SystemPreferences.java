@@ -89,14 +89,14 @@ public class SystemPreferences
     }
     
     /**
-        Returns if the database has been setup
+        Returns if initial setup was run
     
-        @return If the database has been setup
+        @return If initial setup was run
     */
     
-    public boolean getIsDBSetup()
+    public boolean getInitSetupRun()
     {
-        return prefs.getBoolean("IsDBSetup", false);
+        return prefs.getBoolean("InitSetupRun", false);
     }
     
     /**
@@ -122,14 +122,14 @@ public class SystemPreferences
     }
     
     /**
-        Sets if the database has been setup
+        Sets if initial setup was run
     
-        @param setup If the database has been setup
+        @param setup If initial setup was run
     */
     
-    public void setIsDBSetup(boolean setup)
+    public void setInitSetupRun(boolean setup)
     {
-        prefs.putBoolean("IsDBSetup", setup);
+        prefs.putBoolean("InitSetupRun", setup);
     }
     
     /**

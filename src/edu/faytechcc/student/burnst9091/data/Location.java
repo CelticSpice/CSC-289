@@ -45,6 +45,32 @@ public class Location
     }
     
     /**
+        Constructs a new Location initialized with the given name, capacity, &
+        ID
+    
+        @param n The location name
+        @param cap The location capacity
+        @param id The location ID
+        @throws IllegalArgumentException Name is empty or capacity 0 or less
+    */
+    
+    public Location(String n, int cap, int id)
+    {
+        // Check that name is valid
+        if (n == null || n.isEmpty())
+            throw new IllegalArgumentException("Name is blank");
+        
+        // Check that capacity is valid
+        if (cap <= 0)
+            throw new IllegalArgumentException("Capacity 0 or less");
+        
+        this.id = id;
+        name = n;
+        capacity = cap;
+        timeframes = new ArrayList<>();
+    }
+    
+    /**
         Constructs a new Location initialized with the given name, capacity,
         list of timeframes the location can be reserved for, & ID
     

@@ -121,10 +121,10 @@ public class ResultSetParser
     public List<Location> parseLocations() throws SQLException
     {
         List<Location> locations = new ArrayList<>();
-        HashMap<String, Location> locationMap = new HashMap<>();
+        HashMap<Integer, Location> locationMap = new HashMap<>();
         
+        int capacity, locationID, timeframeID;
         String name;
-        int capacity;
         Location loc;
         Timeframe timeframe;
         BigDecimal cost;
@@ -135,19 +135,21 @@ public class ResultSetParser
         while (rs.next())
         {
             // Build location
+            locationID = rs.getInt("LocationID");
             name = rs.getString("LocationName");
             capacity = rs.getInt("Capacity");
             
-            if (locationMap.containsKey(name))
-                loc = locationMap.get(name);
+            if (locationMap.containsKey(locationID))
+                loc = locationMap.get(locationID);
             else
             {
-                loc = new Location(name, capacity);
-                locationMap.put(name, loc);
+                loc = new Location(name, capacity, locationID);
+                locationMap.put(locationID, loc);
                 locations.add(loc);
             }
             
             // Build timeframe
+            timeframeID = rs.getInt("TimeframeID");
             startDate = rs.getDate("StartDate").toLocalDate();
             startTime = rs.getTime("StartTime").toLocalTime();
             endDate = rs.getDate("EndDate").toLocalDate();
@@ -161,9 +163,11 @@ public class ResultSetParser
             rs.getInt("ReservedTimeframeID");
             
             if (rs.wasNull())
-                timeframe = new Timeframe(sDateTime, eDateTime, cost);
+                timeframe = new Timeframe(sDateTime, eDateTime, cost,
+                        timeframeID);
             else
-                timeframe = new Timeframe(sDateTime, eDateTime, cost, true);
+                timeframe = new Timeframe(sDateTime, eDateTime, cost, true,
+                        timeframeID);
             
             loc.addTimeframe(timeframe);            
         }

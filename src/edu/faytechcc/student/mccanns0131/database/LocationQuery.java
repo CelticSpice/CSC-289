@@ -23,17 +23,18 @@ public class LocationQuery extends Query
     
     public void queryAll()
     {
-        sql = "SELECT Locations.LocationName, Locations.Capacity, " +
+        sql = "SELECT Locations.LocationID, Locations.LocationName, " +
+              "Locations.Capacity, Timeframes.TimeframeID, " +
               "Timeframes.StartDate, Timeframes.StartTime, " +
               "Timeframes.EndDate, Timeframes.EndTime, Reservables.Cost, " +
               "Reservations.TimeframeID AS 'ReservedTimeframeID' " +
               "FROM Locations " +
               "INNER JOIN Reservables " +
-              "ON Locations.LocationName = Reservables.LocationName " +
+              "ON Locations.LocationID = Reservables.LocationID " +
               "INNER JOIN Timeframes " +
               "ON Timeframes.TimeframeID = Reservables.TimeframeID " +
               "LEFT JOIN Reservations " +
-              "ON Reservables.LocationName = Reservations.LocationName " +
+              "ON Reservables.LocationID = Reservations.LocationID " +
               "AND Reservables.TimeframeID = Reservations.TimeframeID " +
               "ORDER BY Locations.LocationName, Timeframes.StartDate, " +
               "Timeframes.StartTime, Timeframes.EndDate, Timeframes.EndTime, " +

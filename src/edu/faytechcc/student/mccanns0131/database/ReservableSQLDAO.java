@@ -1,5 +1,5 @@
 /**
-    DAO (Data Access Object) for accessing reservable data on a database
+    DAO (Data Access Object) for accessing reservable data on the database
     CSC-289 - Group 4
     @author Timothy Burns
 */
@@ -16,7 +16,7 @@ public class ReservableSQLDAO
     
     /**
         Constructs a new ReservableSQLDAO & attempts to establish a connection
-        to a database using the given database settings
+        to the database using the given database settings
     
         @param settings Database settings to connect to database with
         @throws SQLException Error connecting to database
@@ -28,7 +28,7 @@ public class ReservableSQLDAO
     }
     
     /**
-        Adds a record of a reservable to a database
+        Adds a record of a reservable to the database
     
         @param reservable Reservable to add
         @throws SQLException Error adding record
@@ -42,7 +42,7 @@ public class ReservableSQLDAO
         query.queryDistinctByLocation(reservable.getLocation());
         parser.setResultSet(connection.runQuery(query));
         
-        if (parser.isEmpty())
+        if (parser.isResultSetEmpty())
         {
             LocationSQLDAO locationDAO = new LocationSQLDAO(connection);
             locationDAO.addLocation(reservable.getLocation());
@@ -52,7 +52,7 @@ public class ReservableSQLDAO
         query.queryDistinctByTimeframe(reservable.getTimeframe());
         parser.setResultSet(connection.runQuery(query));
         
-        if (parser.isEmpty())
+        if (parser.isResultSetEmpty())
         {
             TimeframeSQLDAO timeframeDAO = new TimeframeSQLDAO(connection);
             timeframeDAO.addTimeframe(reservable.getTimeframe());
@@ -71,10 +71,11 @@ public class ReservableSQLDAO
     public void close() throws SQLException
     {
         connection.close();
+        connection = null;
     }
     
     /**
-        Removes a record of a reservable from a database
+        Removes a record of a reservable from the database
     
         @param reservable Reservable to remove
         @throws SQLException Error removing record
@@ -90,7 +91,7 @@ public class ReservableSQLDAO
         query.queryDistinctByLocation(reservable.getLocation());
         parser.setResultSet(connection.runQuery(query));
         
-        if (parser.isEmpty())
+        if (parser.isResultSetEmpty())
         {
             LocationSQLDAO locationDAO = new LocationSQLDAO(connection);
             locationDAO.removeLocation(reservable.getLocation());
@@ -100,10 +101,22 @@ public class ReservableSQLDAO
         query.queryDistinctByTimeframe(reservable.getTimeframe());
         parser.setResultSet(connection.runQuery(query));
         
-        if (parser.isEmpty())
+        if (parser.isResultSetEmpty())
         {
             TimeframeSQLDAO timeframeDAO = new TimeframeSQLDAO(connection);
             timeframeDAO.removeTimeframe(reservable.getTimeframe());
         }
+    }
+    
+    /**
+        Updates a record of a reservable on the database
+    
+        @param reservable Updated reservable
+        @throws SQLException Error updating record
+    */
+    
+    public void updateReservable(Reservable reservable) throws SQLException
+    {
+        new RecordUpdate(connection).updateReservable(reservable);
     }
 }

@@ -52,6 +52,34 @@ public class Timeframe
     
     /**
         Constructs a new Timeframe initialized with the given starting & ending
+        datetimes, & the cost to reserve it
+    
+        @param sDateTime The starting date & time
+        @param eDateTime The ending date & time
+        @param c The cost to reserve the timeframe
+        @throws IllegalArgumentException Starting datetime after or equal to
+                                         ending datetime
+    */
+    
+    public Timeframe(LocalDateTime sDateTime, LocalDateTime eDateTime,
+            BigDecimal c) throws IllegalArgumentException
+    {
+        // We ignore nanoseconds & seconds
+        startDateTime = sDateTime.withNano(0).withSecond(0);
+        endDateTime = eDateTime.withNano(0).withSecond(0);
+        
+        // Check that starting datetime before ending date time
+        if (!(startDateTime.compareTo(endDateTime) < 0))
+            throw new IllegalArgumentException
+                ("End datetime before or equal to start datetime");
+        
+        id = -1;
+        cost = c;
+        reserved = false;
+    }
+    
+    /**
+        Constructs a new Timeframe initialized with the given starting & ending
         datetimes, the cost to reserve it, & the ID
     
         @param sDateTime The starting date & time

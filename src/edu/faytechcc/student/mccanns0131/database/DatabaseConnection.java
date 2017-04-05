@@ -1,5 +1,5 @@
 /**
-    A connection to a database
+    A connection to the database
     CSC-289 - Group 4
     @author Timothy Burns
 */
@@ -16,7 +16,9 @@ import java.sql.Statement;
 public class DatabaseConnection
 {
     // Fields        
-    private Connection conn;
+    private static final String DB_NAME = "ReserveDB";
+    
+    private Connection connection;
     
     /**
         Constructs a new DatabaseConnection using the given database settings
@@ -29,7 +31,7 @@ public class DatabaseConnection
     {
         String dbOptions = "jdbc:mariadb://" + settings.getDBHost();
         dbOptions += ":" + settings.getDBPort();
-        dbOptions += "/" + settings.getDBName();
+        dbOptions += "/" + DB_NAME;
 
         String user = settings.getDBUser();
         String pass = settings.getDBPass();
@@ -43,7 +45,7 @@ public class DatabaseConnection
         if (!pass.isEmpty() && user.isEmpty())
             dbOptions += "?password=" + pass;
         
-        conn = DriverManager.getConnection(dbOptions);
+        connection = DriverManager.getConnection(dbOptions);
     }
     
     /*
@@ -94,7 +96,7 @@ public class DatabaseConnection
     
     public void addRecord(RecordAdd recordAdd) throws SQLException
     {
-        Statement stmt = conn.createStatement();
+        Statement stmt = connection.createStatement();
         stmt.executeUpdate(recordAdd.toString());
     }
     
@@ -106,7 +108,7 @@ public class DatabaseConnection
     
     public void close() throws SQLException
     {
-        conn.close();
+        connection.close();
     }
     
     /**
@@ -214,7 +216,7 @@ public class DatabaseConnection
     
     public void deleteRecord(RecordDelete recordDelete) throws SQLException
     {
-        Statement stmt = conn.createStatement();
+        Statement stmt = connection.createStatement();
         stmt.executeUpdate(recordDelete.toString());
     }
     
@@ -262,7 +264,7 @@ public class DatabaseConnection
     
     public void updateRecord(RecordUpdate recordUpdate) throws SQLException
     {
-        Statement stmt = conn.createStatement();
+        Statement stmt = connection.createStatement();
         stmt.executeUpdate(recordUpdate.toString());
     }
     
@@ -294,7 +296,7 @@ public class DatabaseConnection
     
     public ResultSet runQuery(Query query) throws SQLException
     {
-        Statement stmt = conn.createStatement();
+        Statement stmt = connection.createStatement();
         return stmt.executeQuery(query.toString());
     }
 }

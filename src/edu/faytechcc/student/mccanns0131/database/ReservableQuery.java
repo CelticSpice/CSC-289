@@ -29,9 +29,9 @@ public class ReservableQuery extends Query
     
     public void queryDistinctByLocation(Location loc)
     {
-        sql = "SELECT DISTINCT Reservables.LocationName " +
+        sql = "SELECT DISTINCT Reservables.LocationID " +
               "FROM Reservables " +
-              "WHERE Reservables.LocationName = '" + loc.getName() + "'";
+              "WHERE Reservables.LocationID = " + loc.getID();
     }
     
     /**
@@ -43,19 +43,8 @@ public class ReservableQuery extends Query
     
     public void queryDistinctByTimeframe(Timeframe timeframe)
     {
-        String timeframeID = "(SELECT Timeframes.TimeframeID " +
-                             "FROM Timeframes " +
-                             "WHERE Timeframes.StartDate = '" +
-                                timeframe.getStartDate() + "' " +
-                             "AND Timeframes.StartTime = '" +
-                                timeframe.getStartTime() + "' " +
-                             "AND Timeframes.EndDate = '" +
-                                timeframe.getEndDate() + "' " +
-                             "AND Timeframes.EndTime = '" +
-                                timeframe.getEndTime() + "')";
-        
         sql = "SELECT DISTINCT Reservables.TimeframeID " +
               "FROM Reservables " +
-              "WHERE Reservables.TimeframeID = " + timeframeID;
+              "WHERE Reservables.TimeframeID = " + timeframe.getID();
     }
 }

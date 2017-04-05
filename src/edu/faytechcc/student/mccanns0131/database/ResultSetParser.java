@@ -64,51 +64,9 @@ public class ResultSetParser
         @return If the parser's ResultSet is empty
     */
     
-    public boolean isEmpty() throws SQLException
+    public boolean isResultSetEmpty() throws SQLException
     {
         return !rs.isBeforeFirst();
-    }
-    
-    /**
-        Parses data on a location's capacity
-    
-        @throws SQLException Error parsing the result set
-        @return The location capacity
-    */
-    
-    public int parseLocationCapacity() throws SQLException
-    {
-        rs.next();
-        return rs.getInt(1);
-    }
-    
-    /**
-        Parses a location
-    
-        @throws SQLException Error parsing the result set
-        @return Parsed location
-    */
-    
-    public Location parseLocation() throws SQLException
-    {
-        Location loc = null;
-        
-        String name;
-        int capacity;
-        List<Timeframe> timeframes;
-        
-        if (rs.next())
-        {
-            name = rs.getString("LocationName");
-            capacity = rs.getInt("Capacity");
-            
-            rs.beforeFirst();
-            timeframes = parseTimeframes();
-            
-            loc = new Location(name, capacity, timeframes);
-        }
-        
-        return loc;
     }
     
     /**
@@ -176,21 +134,6 @@ public class ResultSetParser
     }
     
     /**
-        Parses data on location names
-    
-        @throws SQLException Error parsing the result set
-        @return List of location names
-    */
-    
-    public List<String> parseLocationNames() throws SQLException
-    {
-        List<String> names = new ArrayList<>();
-        while (rs.next())
-            names.add(rs.getString(1));
-        return names;
-    }
-    
-    /**
         Parses data on reservations made at the given location
     
         @param loc The location
@@ -203,36 +146,44 @@ public class ResultSetParser
         List<Reservation> reservations = new ArrayList<>();
         
         Reservable reservable;
-        Reserver reserver;
         Reservation reservation;
+        Reserver reserver;
         
+        int numAttending, reserverID, timeframeID;
+        BigDecimal cost;
         boolean reviewed;
         String firstName, lastName, email, phone, eventType;
-        int numAttending;
+        Timeframe timeframe;
         LocalDate startDate, endDate;
         LocalTime startTime, endTime;
         
         while (rs.next())
         {  
             // Build Reserver
+            reserverID = rs.getInt("ReserverID");
             firstName = rs.getString("FirstName");
             lastName = rs.getString("LastName");
             email = rs.getString("Email");
             phone = rs.getString("Phone");
-            reserver = new Reserver(firstName, lastName, email, phone);
+            reserver = new Reserver(firstName, lastName, email, phone,
+                    reserverID);
             
-            // Get Reservable from Location with matching datetimes
+            // Build Timeframe
+            timeframeID = rs.getInt("TimeframeID");
             startDate = rs.getDate("StartDate").toLocalDate();
             startTime = rs.getTime("StartTime").toLocalTime();
             endDate = rs.getDate("EndDate").toLocalDate();
             endTime = rs.getTime("EndTime").toLocalTime();
+            cost = rs.getBigDecimal("Cost");
             
             LocalDateTime sDateTime = LocalDateTime.of(startDate, startTime);
             LocalDateTime eDateTime = LocalDateTime.of(endDate, endTime);
             
-            reservable = loc.deriveReservable(
-                    r -> r.startsOnDatetime(sDateTime) &&
-                         r.endsOnDatetime(eDateTime));
+            timeframe = new Timeframe(sDateTime, eDateTime, cost, true,
+                    timeframeID);
+            
+            // Build Reservable
+            reservable = new Reservable(loc, timeframe);            
             
             // Build Reservation
             eventType = rs.getString("EventType");
@@ -246,104 +197,6 @@ public class ResultSetParser
         }
         
         return reservations;
-    }
-    
-    /**
-        Parses a reserver
-    
-        @throws SQLException Error parsing the result set
-        @return Parsed reserver
-    */
-    
-    public Reserver parseReserver() throws SQLException
-    {
-        Reserver reserver = null;
-        
-        String firstName, lastName, email, phone;
-        
-        if (rs.next())
-        {
-            firstName = rs.getString("FirstName");
-            lastName = rs.getString("LastName");
-            email = rs.getString("Email");
-            phone = rs.getString("Phone");
-            
-            reserver = new Reserver(firstName, lastName, email, phone);
-        }
-        
-        return reserver;
-    }
-    
-    /**
-        Parses a timeframe
-    
-        @throws SQLException Error parsing the result set
-        @return Parsed timeframe
-    */
-    
-    public Timeframe parseTimeframe() throws SQLException
-    {
-        Timeframe timeframe = null;
-        
-        LocalDate startDate, endDate;
-        LocalTime startTime, endTime;
-        BigDecimal cost;
-        LocalDateTime start, end;
-        
-        if (rs.next())
-        {
-            startDate = rs.getDate("StartDate").toLocalDate();
-            startTime = rs.getTime("StartTime").toLocalTime();
-            endDate = rs.getDate("EndDate").toLocalDate();
-            endTime = rs.getTime("EndTime").toLocalTime();
-            cost = rs.getBigDecimal("Cost");
-            
-            start = LocalDateTime.of(startDate, startTime);
-            end = LocalDateTime.of(endDate, endTime);
-            
-            timeframe = new Timeframe(start, end, cost);
-        }
-        
-        return timeframe;
-    }
-    
-    /**
-        Parses location timeframes
-    
-        @throws SQLException Error parsing the result set
-        @return List of timeframes
-    */
-    
-    public List<Timeframe> parseTimeframes() throws SQLException
-    {
-        List<Timeframe> timeframes = new ArrayList<>();
-        
-        LocalDate startDate, endDate;
-        LocalTime startTime, endTime;
-        BigDecimal cost;
-        LocalDateTime start, end;
-        
-        while (rs.next())
-        {
-            startDate = rs.getDate("StartDate").toLocalDate();
-            startTime = rs.getTime("StartTime").toLocalTime();
-            endDate = rs.getDate("EndDate").toLocalDate();
-            endTime = rs.getTime("EndTime").toLocalTime();
-            cost = rs.getBigDecimal("Cost");
-            
-            start = LocalDateTime.of(startDate, startTime);
-            end = LocalDateTime.of(endDate, endTime);
-            
-            // Check if the timeframe is reserved
-            rs.getInt("ReservedTimeframeID");
-            
-            if (rs.wasNull())
-                timeframes.add(new Timeframe(start, end, cost));
-            else
-                timeframes.add(new Timeframe(start, end, cost, true));
-        }
-        
-        return timeframes;
     }
     
     /**

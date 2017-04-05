@@ -7,6 +7,12 @@
 package edu.faytechcc.student.burnst9091.data;
 
 import edu.faytechcc.student.gayj5385.gui.MainFrame;
+import edu.faytechcc.student.gayj5385.gui.dialog.InitDBDialog;
+import edu.faytechcc.student.mccanns0131.database.ReserveDB;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 
 public class Application
 {    
@@ -18,6 +24,69 @@ public class Application
     
     public static void main(String[] args)
     {
+        setLookAndFeel();
+        
+        // Check if database setup
+        SystemPreferences prefs = SystemPreferences.getInstance();
+        
+        if (!prefs.getIsDBSetup())
+        {
+            new InitDBDialog().setVisible(true);
+            
+            // Attempt to create database
+            DatabaseSettings settings = prefs.getDBSettings();
+            
+            try
+            {
+                ReserveDB.init(settings);
+                
+                prefs.setIsDBSetup(true);
+                
+                JOptionPane.showMessageDialog(null,
+                        "Database created successfully");
+            }
+            catch (SQLException ex)
+            {
+                JOptionPane.showMessageDialog(null, "Failed to create database",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                
+                System.exit(1);
+            }
+        }
+        
         new MainFrame();
+    }
+    
+    /**
+        Sets the look and feel of the interface
+    */
+    
+    private static void setLookAndFeel()
+    {
+        final String WANTED_LOOK_AND_FEEL = "Nimbus";
+                
+        LookAndFeelInfo[] lookAndFeels = UIManager.getInstalledLookAndFeels();
+        
+        boolean done = false;
+        int i = 0;
+        while (!done && i < lookAndFeels.length)
+        {
+            if (lookAndFeels[i].getName().equals(WANTED_LOOK_AND_FEEL))
+            {
+                try
+                {
+                    UIManager.setLookAndFeel(lookAndFeels[i].getClassName());
+                }
+                catch (Exception ex)
+                {
+                    JOptionPane.showMessageDialog(null,
+                        "Failed setting Nimbus look & feel", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+                done = true;
+            }
+            else
+                i++;
+        }
     }
 }

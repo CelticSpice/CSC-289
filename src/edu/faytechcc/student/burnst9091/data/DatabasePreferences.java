@@ -35,7 +35,6 @@ public class DatabasePreferences
         DatabaseSettings settings = new DatabaseSettings();
         
         settings.setDBHost(prefs.get("DBHost", "localhost"));
-        settings.setDBName(prefs.get("DBName", "ReserveDB"));
         settings.setDBPort(prefs.getInt("DBPort", 3306));
         settings.setDBUser(prefs.get("DBUser", ""));
         settings.setDBPass(prefs.get("DBPass", ""));
@@ -52,7 +51,6 @@ public class DatabasePreferences
     public void setDBSettings(DatabaseSettings settings)
     {
         prefs.put("DBHost", settings.getDBHost());
-        prefs.put("DBName", settings.getDBName());
         prefs.putInt("DBPort", settings.getDBPort());
         prefs.put("DBUser", settings.getDBUser());
         prefs.put("DBPass", settings.getDBPass());

@@ -33,17 +33,6 @@ public class DatabaseSettings
     }
     
     /**
-        Gets & returns the database name
-    
-        @return The database name
-    */
-    
-    public String getDBName()
-    {
-        return props.getProperty("DBName", "");
-    }
-    
-    /**
         Gets & returns the database password
     
         @return The database password
@@ -85,17 +74,6 @@ public class DatabaseSettings
     public void setDBHost(String host)
     {
         props.put("DBHost", host);
-    }
-    
-    /**
-        Sets the database name
-    
-        @param name The database name
-    */
-    
-    public void setDBName(String name)
-    {
-        props.put("DBName", name);
     }
     
     /**

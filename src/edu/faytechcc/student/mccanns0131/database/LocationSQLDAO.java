@@ -1,5 +1,5 @@
 /**
-    DAO (Data Access Object) for accessing location data on a database
+    DAO (Data Access Object) for accessing location data on the database
     CSC-289 - Group 4
     @author Timothy Burns
 */
@@ -17,7 +17,7 @@ public class LocationSQLDAO
     
     /**
         Constructs a new LocationSQLDAO & attempts to establish a connection to
-        a database using the given database settings
+        the database using the given database settings
     
         @param settings Database settings to connect to database with
         @throws SQLException Error connecting to database
@@ -30,7 +30,7 @@ public class LocationSQLDAO
     
     /**
         Constructs a new LocationSQLDAO initialized with the given connection
-        to a database
+        to the database
     
         @param conn Connection to database
     */
@@ -41,7 +41,7 @@ public class LocationSQLDAO
     }
     
     /**
-        Adds a record of a location to a database
+        Adds a record of a location to the database
     
         @param loc Location to add
         @throws SQLException Error adding record
@@ -49,7 +49,10 @@ public class LocationSQLDAO
     
     public void addLocation(Location loc) throws SQLException
     {
-        new RecordAdd(connection).addLocation(loc);
+        ResultSetParser parser = new ResultSetParser();
+        parser.setResultSet((new RecordAdd(connection).addLocation(loc)));
+        int id = parser.parseID();
+        loc.setID(id);
     }
     
     /**
@@ -61,13 +64,14 @@ public class LocationSQLDAO
     public void close() throws SQLException
     {
         connection.close();
+        connection = null;
     }
     
      /**
-        Retrieves all locations from a database
+        Retrieves all locations from the database
     
         @throws SQLException Error retrieving locations
-        @return All locations in a database
+        @return All locations in the database
     */
     
     public List<Location> getAll() throws SQLException
@@ -81,7 +85,7 @@ public class LocationSQLDAO
     }
     
     /**
-        Removes a record of a location from a database
+        Removes a record of a location from the database
     
         @param loc Location to remove
         @throws SQLException Error removing record
@@ -90,5 +94,17 @@ public class LocationSQLDAO
     public void removeLocation(Location loc) throws SQLException
     {
         new RecordDelete(connection).deleteLocation(loc);
+    }
+    
+    /**
+        Updates a record of a location in the database
+    
+        @param loc Updated location
+        @throws SQLException Error updating record
+    */
+    
+    public void updateLocation(Location loc) throws SQLException
+    {
+        new RecordUpdate(connection).updateLocation(loc);
     }
 }

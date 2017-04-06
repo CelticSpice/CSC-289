@@ -29,40 +29,34 @@ public class ReservationQuery extends Query
     
     public void queryDistinctByReserver(Reserver reserver)
     {
-        String reserverID = "(SELECT Reservers.ReserverID " +
-                            "FROM Reservers " +
-                            "WHERE Reservers.FirstName = '" +
-                                reserver.getFirstName() + "' " +
-                            "AND Reservers.LastName = '" +
-                                reserver.getLastName() + "' " +
-                            "AND Reservers.Email = '" +
-                                reserver.getEmailAddress() + "' " +
-                            "AND Reservers.Phone = '" +
-                                reserver.getPhoneNumber() + "')";
-        
         sql = "SELECT DISTINCT Reservations.ReserverID " +
               "FROM Reservations " +
-              "WHERE Reservations.ReserverID = " + reserverID;
+              "WHERE Reservations.ReserverID = " + reserver.getID();
     }
     
     /**
-        Prepares the query to query reservations made at the specified location
+        Prepares the query to query for reservations made at the
+        specified location
     
-        @param loc The location to query reservations of
+        @param loc The location to query reservations made at
     */
     
     public void queryByLocation(Location loc)
     {
-        sql = "SELECT Reservers.FirstName, Reservers.LastName, " +
-              "Reservers.Email, Reservers.Phone, Timeframes.StartDate, " +
+        sql = "SELECT Reservers.ReserverID, Reservers.FirstName, " +
+              "Reservers.LastName, Reservers.Email, Reservers.Phone, " +
+              "Timeframes.TimeframeID, Timeframes.StartDate, " +
               "Timeframes.StartTime, Timeframes.EndDate, Timeframes.EndTime, " +
-              "Reservations.EventType, Reservations.NumberAttending, " +
-              "Reservations.Reviewed " +
+              "Reservables.Cost, Reservations.EventType, " +
+              "Reservations.NumberAttending, Reservations.Reviewed " +
               "FROM Reservers " +
               "INNER JOIN Reservations " +
               "ON Reservers.ReserverID = Reservations.ReserverID " +
+              "INNER JOIN Reservables " +
+              "ON Reservations.LocationID = Reservables.LocationID " +
+              "AND Reservations.TimeframeID = Reservables.TimeframeID " +
               "INNER JOIN Timeframes " +
-              "ON Reservations.TimeframeID = Timeframes.TimeframeID " +
-              "WHERE Reservations.LocationName = '" + loc.getName() + "'";        
+              "ON Reservables.TimeframeID = Timeframes.TimeframeID " +
+              "WHERE Reservations.LocationID = " + loc.getID(); 
     }
 }

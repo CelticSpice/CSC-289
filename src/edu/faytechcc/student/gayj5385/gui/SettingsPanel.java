@@ -35,8 +35,7 @@ public class SettingsPanel extends JPanel
     private JComboBox<SecurityOption> adminSecurity, guestSecurity;
     private JPasswordField adminPass, guestPass, dbPass;
     private JTextField adminSendAddress, adminHost, adminUser, adminGetAddress,
-                       guestSendAddress, guestHost, guestUser,
-                       dbName, dbHost, dbUser;
+                       guestSendAddress, guestHost, guestUser, dbHost, dbUser;
     private JFormattedTextField adminPort, guestPort, dbPort;
     
     /**
@@ -125,7 +124,7 @@ public class SettingsPanel extends JPanel
     
     private JPanel buildDBPanel()
     {
-        JPanel panel = new JPanel(new GridLayout(5, 5, 5 ,5));
+        JPanel panel = new JPanel(new GridLayout(4, 2, 5 ,5));
         panel.setBorder(BorderFactory.createTitledBorder("Database"));
         
         MaskFormatter fmtr = null;
@@ -139,9 +138,6 @@ public class SettingsPanel extends JPanel
         {
             // Do nothing - we know all is well, and no exception will throw
         }
-        
-        panel.add(new JLabel("Database Name:"));
-        panel.add(dbName = new JTextField(12));
         
         panel.add(new JLabel("Host:"));
         panel.add(dbHost = new JTextField(12));
@@ -264,7 +260,6 @@ public class SettingsPanel extends JPanel
     {
         DatabaseSettings settings = new DatabaseSettings();
         
-        settings.setDBName(dbName.getText());
         settings.setDBHost(dbHost.getText());
         settings.setDBPort(Integer.parseInt(dbPort.getText().trim()));
         settings.setDBUser(dbUser.getText());
@@ -334,7 +329,6 @@ public class SettingsPanel extends JPanel
     
     public void setDBSettings(DatabaseSettings settings)
     {
-        dbName.setText(settings.getDBName());
         dbHost.setText(settings.getDBHost());
         dbPort.setText(settings.getDBPort().toString());
         dbUser.setText(settings.getDBUser());

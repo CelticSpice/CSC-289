@@ -33,7 +33,7 @@ public class RecordDelete
     }
     
     /**
-        Removes a record of a location from a database
+        Removes a record of a location from the database
     
         @param loc The location to remove
         @throws SQLException Error removing record from database
@@ -42,13 +42,13 @@ public class RecordDelete
     public void deleteLocation(Location loc) throws SQLException
     {
         sql = "DELETE FROM Locations " +
-              "WHERE Locations.LocationName = '" + loc.getName() + "'";
+              "WHERE Locations.LocationID = " + loc.getID();
         
         connection.deleteRecord(this);
     }
     
     /**
-        Removes a record of a reservable from a database
+        Removes a record of a reservable from the database
     
         @param reservable The reservable to remove
         @throws SQLException Error removing record from database
@@ -56,28 +56,17 @@ public class RecordDelete
     
     public void deleteReservable(Reservable reservable) throws SQLException
     {
-        String timeframeID = "(SELECT Timeframes.TimeframeID " +
-                             "FROM Timeframes " +
-                             "WHERE Timeframes.StartDate = '" +
-                                reservable.getStartDate() + "' " +
-                             "AND Timeframes.StartTime = '" +
-                                reservable.getStartTime() + "' " +
-                             "AND Timeframes.EndDate = '" +
-                                reservable.getEndDate() + "' " +
-                             "AND Timeframes.EndTime = '" +
-                                reservable.getEndTime() + "')";
-        
         sql = "DELETE FROM Reservables " +
-              "WHERE Reservables.LocationName = '" + 
-                reservable.getName() + "' " +
+              "WHERE Reservables.LocationID = " +
+                reservable.getLocationID() + " " +
               "AND Reservables.TimeframeID = " +
-                timeframeID;
+                reservable.getTimeframeID();
         
         connection.deleteRecord(this);
     }
     
     /**
-        Removes a record of a reservation from a database
+        Removes a record of a reservation from the database
     
         @param reservation The reservation to remove from a database
         @throws SQLException Error removing record from database
@@ -85,28 +74,17 @@ public class RecordDelete
     
     public void deleteReservation(Reservation reservation) throws SQLException
     {
-        String timeframeID = "(SELECT Timeframes.TimeframeID " +
-                             "FROM Timeframes " +
-                             "WHERE Timeframes.StartDate = '" +
-                                reservation.getStartDate() + "' " +
-                             "AND Timeframes.StartTime = '" +
-                                reservation.getStartTime() + "' " +
-                             "AND Timeframes.EndDate = '" +
-                                reservation.getEndDate() + "' " +
-                             "AND Timeframes.EndTime = '" +
-                                reservation.getEndTime() + "')";
-        
         sql = "DELETE FROM Reservations " +
-              "WHERE Reservations.LocationName = '" +
-                reservation.getLocationName() + "' " +
+              "WHERE Reservations.LocationID = " +
+                reservation.getLocationID() + " " +
               "AND Reservations.TimeframeID = " +
-                timeframeID;
+                reservation.getTimeframeID();
         
         connection.deleteRecord(this);
     }
     
     /**
-        Removes a record of a reserver from a database
+        Removes a record of a reserver from the database
     
         @param reserver Reserver to remove from a database
         @throws SQLException Error removing record from database
@@ -115,38 +93,28 @@ public class RecordDelete
     public void deleteReserver(Reserver reserver) throws SQLException
     {
         sql = "DELETE FROM Reservers " +
-              "WHERE Reservers.FirstName = '" + reserver.getFirstName() + "' " +
-              "AND Reservers.LastName = '" + reserver.getLastName() + "' " +
-              "AND Reservers.Email = '" + reserver.getEmailAddress() + "' " +
-              "AND Reservers.Phone = '" + reserver.getPhoneNumber() + "'";
+              "WHERE Reservers.ReserverID = " + reserver.getID();
         
         connection.deleteRecord(this);
     }
     
     /**
-        Removes a record of a timeframe from a database
+        Removes a record of a timeframe from the database
     
-        @param timeframe The timeframe to remove from a database
+        @param timeframe The timeframe to remove from the database
         @throws SQLException Error removing record from database
     */
     
     public void deleteTimeframe(Timeframe timeframe) throws SQLException
     {
         sql = "DELETE FROM Timeframes " +
-              "WHERE Timeframes.StartDate = '" +
-                timeframe.getStartDate() + "' " +
-              "AND Timeframes.StartTime = '" +
-                timeframe.getStartTime() + "' " +
-              "AND Timeframes.EndDate = '" +
-                timeframe.getEndDate() + "' " +
-              "AND Timeframes.EndTime = '" +
-                timeframe.getEndTime() + "'";
+              "WHERE Timeframes.TimeframeID = " + timeframe.getID();
         
         connection.deleteRecord(this);
     }
     
     /**
-        ToString - Return a string representation of the object
+        Returns a string representation of the object
     
         @return A string representation of the object
     */

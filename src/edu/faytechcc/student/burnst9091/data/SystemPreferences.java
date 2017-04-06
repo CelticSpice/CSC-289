@@ -11,7 +11,7 @@ import java.util.prefs.Preferences;
 public class SystemPreferences
 {
     // Fields
-    private final String ROOT = "event_reservation_system";
+    private static final String ROOT = "event_reservation_system";
     
     private static SystemPreferences systemPrefs;
     
@@ -89,6 +89,17 @@ public class SystemPreferences
     }
     
     /**
+        Returns if initial setup was run
+    
+        @return If initial setup was run
+    */
+    
+    public boolean getInitSetupRun()
+    {
+        return prefs.getBoolean("InitSetupRun", false);
+    }
+    
+    /**
         Sets the administrator's password
     
         @param pass The administrator password
@@ -108,6 +119,17 @@ public class SystemPreferences
     public void setDBSettings(DatabaseSettings settings)
     {
         dbPrefs.setDBSettings(settings);
+    }
+    
+    /**
+        Sets if initial setup was run
+    
+        @param setup If initial setup was run
+    */
+    
+    public void setInitSetupRun(boolean setup)
+    {
+        prefs.putBoolean("InitSetupRun", setup);
     }
     
     /**

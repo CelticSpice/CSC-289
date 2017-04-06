@@ -1,5 +1,5 @@
 /**
-    DAO (Data Access Object) for accessing timeframe data on a database
+    DAO (Data Access Object) for accessing timeframe data on the database
     CSC-289 - Group 4
     @author Timothy Burns
 */
@@ -16,7 +16,7 @@ public class TimeframeSQLDAO
     
     /**
         Constructs a new TimeframeSQLDAO & attempts to establish a connection to
-        a database using the given database settings
+        the database using the given database settings
     
         @param settings Database settings to connect to database with
         @throws SQLException Error connecting to database
@@ -29,7 +29,7 @@ public class TimeframeSQLDAO
     
     /**
         Constructs a new TimeframeSQLDAO initialized with the given connection
-        to a database
+        to the database
     
         @param conn Connection to database
     */
@@ -40,7 +40,7 @@ public class TimeframeSQLDAO
     }
     
     /**
-        Adds a record of a timeframe to a database
+        Adds a record of a timeframe to the database
     
         @param timeframe Timeframe to add
         @throws SQLException Error adding record
@@ -48,11 +48,14 @@ public class TimeframeSQLDAO
     
     public void addTimeframe(Timeframe timeframe) throws SQLException
     {
-        new RecordAdd(connection).addTimeframe(timeframe);
+        ResultSetParser parser = new ResultSetParser();
+        parser.setResultSet(new RecordAdd(connection).addTimeframe(timeframe));
+        int id = parser.parseID();
+        timeframe.setID(id);
     }
     
     /**
-        Removes a record of a timeframe from a database
+        Removes a record of a timeframe from the database
     
         @param timeframe Timeframe to add
         @throws SQLException Error removing record

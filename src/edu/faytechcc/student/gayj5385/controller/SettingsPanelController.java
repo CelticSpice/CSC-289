@@ -119,13 +119,6 @@ public class SettingsPanelController implements ActionListener
     {
         DatabaseSettings settings = view.getDBSettings();
         
-        // Validate database name
-        if (settings.getDBName().isEmpty())
-        {
-            displayWarning("Database name must be entered");
-            return false;
-        }
-        
         // Validate database host
         if (settings.getDBHost().isEmpty())
         {

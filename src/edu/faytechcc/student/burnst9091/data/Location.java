@@ -16,12 +16,12 @@ import static java.util.stream.Collectors.toList;
 public class Location
 {
     // Fields
-    private int capacity;
+    private int capacity, id;
     private List<Timeframe> timeframes;
     private String name;
     
     /**
-        Constructor - Accepts the location's name & capacity
+        Constructs a new Location initialized with the given name & capacity
     
         @param n The location name
         @param cap The location capacity
@@ -38,22 +38,23 @@ public class Location
         if (cap <= 0)
             throw new IllegalArgumentException("Capacity 0 or less");
         
+        id = -1;
         name = n;
         capacity = cap;
         timeframes = new ArrayList<>();
     }
     
     /**
-        Constructor - Accepts the location's name, capacity, and a list of 
-        timeframes allocated to the location
+        Constructs a new Location initialized with the given name, capacity, &
+        ID
     
-        @param n The reservable location's name
-        @param cap The reservable location's capacity
-        @param times The location's allocated timeframes
+        @param n The location name
+        @param cap The location capacity
+        @param id The location ID
         @throws IllegalArgumentException Name is empty or capacity 0 or less
     */
     
-    public Location(String n, int cap, List<Timeframe> times)
+    public Location(String n, int cap, int id)
     {
         // Check that name is valid
         if (n == null || n.isEmpty())
@@ -63,6 +64,34 @@ public class Location
         if (cap <= 0)
             throw new IllegalArgumentException("Capacity 0 or less");
         
+        this.id = id;
+        name = n;
+        capacity = cap;
+        timeframes = new ArrayList<>();
+    }
+    
+    /**
+        Constructs a new Location initialized with the given name, capacity,
+        list of timeframes the location can be reserved for, & ID
+    
+        @param n The location name
+        @param cap The location capacity
+        @param times The location timeframes
+        @param id The location ID
+        @throws IllegalArgumentException Name is empty or capacity 0 or less
+    */
+    
+    public Location(String n, int cap, List<Timeframe> times, int id)
+    {
+        // Check that name is valid
+        if (n == null || n.isEmpty())
+            throw new IllegalArgumentException("Name is blank");
+        
+        // Check that capacity is valid
+        if (cap <= 0)
+            throw new IllegalArgumentException("Capacity 0 or less");
+        
+        this.id = id;
         name = n;
         capacity = cap;
         timeframes = times;
@@ -168,6 +197,17 @@ public class Location
     public int getCapacity()
     {
         return capacity;
+    }
+    
+    /**
+        Returns the location's ID
+    
+        @return The location's ID
+    */
+    
+    public int getID()
+    {
+        return id;
     }
     
     /**
@@ -301,6 +341,17 @@ public class Location
     public void setCapacity(int cap)
     {
         capacity = cap;
+    }
+    
+    /**
+        Sets the location's ID
+    
+        @param id The location's ID
+    */
+    
+    public void setID(int id)
+    {
+        this.id = id;
     }
     
     /**

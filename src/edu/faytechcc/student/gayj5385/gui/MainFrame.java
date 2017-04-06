@@ -7,9 +7,6 @@
 package edu.faytechcc.student.gayj5385.gui;
 
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.UIManager;
-import javax.swing.UIManager.LookAndFeelInfo;
 
 public class MainFrame extends JFrame
 {    
@@ -21,44 +18,10 @@ public class MainFrame extends JFrame
     {
         setTitle("Event Reservation System");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLookAndFeel();
+        setSize(350, 200);
 
         add(new MainPanel(this));
 
-        pack();
         setVisible(true);
-    }
-    
-    /**
-        Sets the look and feel of the interface
-    */
-    
-    private void setLookAndFeel()
-    {
-        final String WANTED_LOOK_AND_FEEL = "Nimbus";
-                
-        LookAndFeelInfo[] lookAndFeels = UIManager.getInstalledLookAndFeels();
-        
-        boolean done = false;
-        int i = 0;
-        while (!done && i < lookAndFeels.length)
-        {
-            if (lookAndFeels[i].getName().equals(WANTED_LOOK_AND_FEEL))
-            {
-                try
-                {
-                    UIManager.setLookAndFeel(lookAndFeels[i].getClassName());
-                }
-                catch (Exception ex)
-                {
-                    JOptionPane.showMessageDialog(null,
-                        "Failed setting Nimbus look & feel", "Error",
-                            JOptionPane.ERROR_MESSAGE);
-                }
-                done = true;
-            }
-            else
-                i++;
-        }
     }
 }

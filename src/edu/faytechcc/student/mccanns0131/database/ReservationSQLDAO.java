@@ -1,5 +1,5 @@
 /**
-    DAO (Data Access Object) for accessing reservation data on a database
+    DAO (Data Access Object) for accessing reservation data on the database
     CSC-289 - Group 4
     @author Timothy Burns
 */
@@ -18,7 +18,7 @@ public class ReservationSQLDAO
     
     /**
         Constructs a new ReservationSQLDAO & attempts to establish a connection
-        to a database using the given database settings
+        to the database using the given database settings
     
         @param settings Database settings to connect to database with
         @throws SQLException Error connecting to database
@@ -30,7 +30,7 @@ public class ReservationSQLDAO
     }
     
     /**
-        Adds a record of a reservation to a database
+        Adds a record of a reservation to the database
     
         @param reservation Reservation to add
         @throws SQLException Error adding record
@@ -44,7 +44,7 @@ public class ReservationSQLDAO
         query.queryDistinctByReserver(reservation.getReserver());
         parser.setResultSet(connection.runQuery(query));
         
-        if (parser.isEmpty())
+        if (parser.isResultSetEmpty())
         {
             ReserverSQLDAO reserverDAO = new ReserverSQLDAO(connection);
             reserverDAO.addReserver(reservation.getReserver());
@@ -63,10 +63,11 @@ public class ReservationSQLDAO
     public void close() throws SQLException
     {
         connection.close();
+        connection = null;
     }
     
     /**
-        Retrieves reservations made at the specified location from a database
+        Retrieves reservations made at the specified location from the database
     
         @param loc The location to retrieve reservations made at
         @throws SQLException Error retrieving reservations
@@ -84,7 +85,7 @@ public class ReservationSQLDAO
     }
     
     /**
-        Removes a record of a reservation from a database
+        Removes a record of a reservation from the database
     
         @param reservation Reservation to remove
         @throws SQLException Error removing record
@@ -100,7 +101,7 @@ public class ReservationSQLDAO
         query.queryDistinctByReserver(reservation.getReserver());
         parser.setResultSet(connection.runQuery(query));
         
-        if (parser.isEmpty())
+        if (parser.isResultSetEmpty())
         {
             ReserverSQLDAO reserverDAO = new ReserverSQLDAO(connection);
             reserverDAO.removeReserver(reservation.getReserver());
@@ -108,7 +109,7 @@ public class ReservationSQLDAO
     }
     
     /**
-        Updates a record of a reservation in a database
+        Updates a record of a reservation in the database
     
         @param reservation Reservation to update
         @throws SQLException Error removing record

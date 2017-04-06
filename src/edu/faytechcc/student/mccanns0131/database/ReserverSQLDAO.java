@@ -1,5 +1,5 @@
 /**
-    DAO (Data Access Object) for accessing reserver data on a database
+    DAO (Data Access Object) for accessing reserver data on the database
     CSC-289 - Group 4
     @author Timothy Burns
 */
@@ -16,7 +16,7 @@ public class ReserverSQLDAO
     
     /**
         Constructs a new ReserverSQLDAO & attempts to establish a connection to
-        a database using the given database settings
+        the database using the given database settings
     
         @param settings Database settings to connect to database with
         @throws SQLException Error connecting to database
@@ -29,7 +29,7 @@ public class ReserverSQLDAO
     
     /**
         Constructs a new ReserverSQLDAO initialized with the given connection
-        to a database
+        to the database
     
         @param conn Connection to database
     */
@@ -40,7 +40,7 @@ public class ReserverSQLDAO
     }
     
     /**
-        Adds a record of a reserver to a database
+        Adds a record of a reserver to the database
     
         @param reserver Reserver to add
         @throws SQLException Error adding record
@@ -48,11 +48,14 @@ public class ReserverSQLDAO
     
     public void addReserver(Reserver reserver) throws SQLException
     {
-        new RecordAdd(connection).addReserver(reserver);
+        ResultSetParser parser = new ResultSetParser();
+        parser.setResultSet(new RecordAdd(connection).addReserver(reserver));
+        int id = parser.parseID();
+        reserver.setID(id);
     }
     
     /**
-        Removes a record of a reserver from a database
+        Removes a record of a reserver from the database
     
         @param reserver Reserver to add
         @throws SQLException Error removing record
@@ -61,5 +64,17 @@ public class ReserverSQLDAO
     public void removeReserver(Reserver reserver) throws SQLException
     {
         new RecordDelete(connection).deleteReserver(reserver);
+    }
+    
+    /**
+        Updates a record of a reserver on the database
+    
+        @param reserver Updated reserver
+        @throws SQLException Error updating record
+    */
+    
+    public void updateReserver(Reserver reserver) throws SQLException
+    {
+        new RecordUpdate(connection).updateReserver(reserver);
     }
 }

@@ -6,7 +6,7 @@
 
 package edu.faytechcc.student.mccanns0131.database;
 
-public abstract class Query
+public class Query
 {
     // Fields
     protected String sql;
@@ -18,6 +18,17 @@ public abstract class Query
     public Query()
     {
         sql = "";
+    }
+    
+    /**
+        Constructs a new Query initialized with the given SQL
+    
+        @param initSQL SQL to initialize the Query with
+    */
+    
+    public Query(String initSQL)
+    {
+        sql = initSQL;
     }
     
     /**

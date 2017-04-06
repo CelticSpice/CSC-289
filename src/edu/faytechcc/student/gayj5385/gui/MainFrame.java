@@ -18,10 +18,10 @@ public class MainFrame extends JFrame
     {
         setTitle("Event Reservation System");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(350, 200);
 
         add(new MainPanel(this));
 
-        pack();
         setVisible(true);
     }
 }

@@ -50,5 +50,7 @@ public class AdminPanelController implements ChangeListener
             
             view.setSettingsSettings(adminEmail, guestEmail, db, options);
         }
+        else
+            view.updateModel();
     }
 }

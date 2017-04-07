@@ -75,18 +75,14 @@ public class ReservableAddButtonController implements ActionListener
         if (validateInput())
         {
             try
-            {
-                SystemPreferences prefs = SystemPreferences.getInstance();
-                DatabaseSettings settings = prefs.getDBSettings();
-                        
+            {                        
                 Location loc = parseLocation();
                 Timeframe timeframe = parseTimeframe();
                 
                 Reservable reservable = new Reservable(loc, timeframe);
 
-                ReservableSQLDAO reservableDAO = new ReservableSQLDAO(settings);
+                ReservableSQLDAO reservableDAO = new ReservableSQLDAO();
                 reservableDAO.addReservable(reservable);
-                reservableDAO.close();
 
                 loc.addTimeframe(timeframe);
 

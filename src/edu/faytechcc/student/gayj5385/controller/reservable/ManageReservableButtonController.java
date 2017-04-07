@@ -115,17 +115,13 @@ public class ManageReservableButtonController implements ActionListener
         Location loc = view.getSelectedLocation();
 
         try
-        {
-            SystemPreferences prefs = SystemPreferences.getInstance();
-            DatabaseSettings settings = prefs.getDBSettings();
-            
-            ReservableSQLDAO reservableDAO = new ReservableSQLDAO(settings);
+        {            
+            ReservableSQLDAO reservableDAO = new ReservableSQLDAO();
             for (Timeframe timeframe : timeframes)
             {
                 reservableDAO.removeReservable(new Reservable(loc, timeframe));
                 loc.removeTimeframe(timeframe);
             }
-            reservableDAO.close();
         }
         catch (SQLException ex)
         {

@@ -258,13 +258,9 @@ public class MakeReservationDialog extends JDialog
                 // Create reservation
                 Reservation reservation = new Reservation(reserver, reservable,
                         numAttending, eventType, false);
-                
-                SystemPreferences prefs = SystemPreferences.getInstance();
-                DatabaseSettings settings = prefs.getDBSettings();
-                
-                ReservationSQLDAO resDAO = new ReservationSQLDAO(settings);
+                                
+                ReservationSQLDAO resDAO = new ReservationSQLDAO();
                 resDAO.addReservation(reservation);
-                resDAO.close();
                 
                 reservable.getTimeframe().reserve();
                 

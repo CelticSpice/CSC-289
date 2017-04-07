@@ -6,53 +6,25 @@
 
 package edu.faytechcc.student.mccanns0131.database;
 
-import edu.faytechcc.student.burnst9091.data.DatabaseSettings;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DatabaseConnection
 {
-    // Fields        
-    private static final String DB_NAME = "ReserveDB";
-    
+    // Fields            
     private Connection connection;
     
     /**
-        Constructs a new DatabaseConnection using the given database settings,
-        with a flag indicating whether the DBMS should automatically be set
-        to use the correct database
+        Constructs a new DatabaseConnection
     
-        @param settings Database settings
-        @param use Whether DBMS should automatically be set to use the database
-        @throws SQLException There was an error connecting to the database
+        @param conn Connection
     */
     
-    private DatabaseConnection(DatabaseSettings settings, boolean use)
-            throws SQLException
+    public DatabaseConnection(Connection conn)
     {
-        String dbOptions = "jdbc:mariadb://" + settings.getDBHost();
-        dbOptions += ":" + settings.getDBPort();
-        
-        if (use)
-            dbOptions += "/" + DB_NAME;
-
-        String user = settings.getDBUser();
-        String pass = settings.getDBPass();
-        
-        if (!user.isEmpty() && !pass.isEmpty())
-            dbOptions += "?user=" + user + "&password=" + pass;
-        
-        if (!user.isEmpty() && pass.isEmpty())
-            dbOptions += "?user=" + user;
-        
-        if (!pass.isEmpty() && user.isEmpty())
-            dbOptions += "?password=" + pass;
-        
-        connection = DriverManager.getConnection(dbOptions);
+        connection = conn;
     }
     
     /*
@@ -95,18 +67,20 @@ public class DatabaseConnection
 //    }
     
     /**
-        Adds a record to the database, returning the generated ID
+        Adds a record to the database, returning the generated ID, if any
     
         @param recordAdd The adding of a record
         @throws SQLException There was an error adding a record
-        @return The ID of the newly inserted record
+        @return The ID of the newly inserted record, if any
     */
     
     public ResultSet addRecord(RecordAdd recordAdd) throws SQLException
     {
         Statement stmt = connection.createStatement();
         stmt.executeUpdate(recordAdd.toString());
-        return stmt.getGeneratedKeys();
+        ResultSet rs = stmt.getGeneratedKeys();
+        stmt.close();
+        return rs;
     }
     
     /**
@@ -131,6 +105,7 @@ public class DatabaseConnection
     {
         Statement stmt = connection.createStatement();
         stmt.executeUpdate(recordDelete.toString());
+        stmt.close();
     }
     
     /**
@@ -144,38 +119,7 @@ public class DatabaseConnection
     {
         Statement stmt = connection.createStatement();
         stmt.execute(sql);
-    }
-    
-    /**
-        Gets & returns a connection to the database using the specified
-        database settings
-    
-        @param settings Database settings
-        @throws SQLException There was an error connecting to the database
-        @return A DatabaseConnection object
-    */
-    
-    public static DatabaseConnection getConnection(DatabaseSettings settings)
-            throws SQLException
-    {
-        return new DatabaseConnection(settings, true);
-    }
-    
-    /**
-        Gets & returns a connection to the database using the specified
-        database settings, with a flag indicating whether the DBMS should
-        automatically set to use the database
-    
-        @param settings Database settings
-        @param use Whether DBMS should automatically be set to use the database
-        @throws SQLException There was an error connecting to the database
-        @return A DatabaseConnection object
-    */
-    
-    public static DatabaseConnection getConnection(DatabaseSettings settings,
-            boolean use) throws SQLException
-    {
-        return new DatabaseConnection(settings, use);
+        stmt.close();
     }
     
     /**
@@ -189,6 +133,7 @@ public class DatabaseConnection
     {
         Statement stmt = connection.createStatement();
         stmt.executeUpdate(recordUpdate.toString());
+        stmt.close();
     }
     
     /**
@@ -196,21 +141,21 @@ public class DatabaseConnection
      * 
      * @throws SQLException There was an error deleting the timeframe(s)
      */
-    public void removePassedTimeframes() throws SQLException
-    {
-        Statement stmt = connection.createStatement();
-        stmt.execute("USE " + DB_NAME);
-        
-        // Delete passed Timeframes.
-        String sql = "DELETE timeframes" +
-                     "FROM Timeframes" +
-                     "WHERE Timeframes.EndDate < CURDATE()";
-        
-        stmt.executeUpdate(sql);
-    }
+//    public void removePassedTimeframes() throws SQLException
+//    {
+//        Statement stmt = connection.createStatement();
+//        stmt.execute("USE " + DB_NAME);
+//        
+//        // Delete passed Timeframes.
+//        String sql = "DELETE timeframes" +
+//                     "FROM Timeframes" +
+//                     "WHERE Timeframes.EndDate < CURDATE()";
+//        
+//        stmt.executeUpdate(sql);
+//    }
     
     /**
-        Runs the query provided & returns the result set
+        Runs the query provided
     
         @param query The query to run
         @throws SQLException There was an error running the query
@@ -220,6 +165,8 @@ public class DatabaseConnection
     public ResultSet runQuery(Query query) throws SQLException
     {
         Statement stmt = connection.createStatement();
-        return stmt.executeQuery(query.toString());
+        ResultSet rs = stmt.executeQuery(query.toString());
+        stmt.close();
+        return rs;
     }
 }

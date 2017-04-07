@@ -6,25 +6,20 @@
 
 package edu.faytechcc.student.mccanns0131.database;
 
-import edu.faytechcc.student.burnst9091.data.DatabaseSettings;
 import edu.faytechcc.student.burnst9091.data.Reservable;
 import java.sql.SQLException;
 
 public class ReservableSQLDAO
 {
-    private DatabaseConnection connection;
+    private DatabaseDataSource source;
     
     /**
-        Constructs a new ReservableSQLDAO & attempts to establish a connection
-        to the database using the given database settings
-    
-        @param settings Database settings to connect to database with
-        @throws SQLException Error connecting to database
+        Constructs a new ReservableSQLDAO
     */
     
-    public ReservableSQLDAO(DatabaseSettings settings) throws SQLException
+    public ReservableSQLDAO()
     {
-        connection = DatabaseConnection.getConnection(settings);
+        source = new DatabaseDataSource();
     }
     
     /**
@@ -36,6 +31,8 @@ public class ReservableSQLDAO
     
     public void addReservable(Reservable reservable) throws SQLException
     {        
+        DatabaseConnection connection = source.getDBConnection();
+        
         // Check if a record of a location should be added
         ReservableQuery query = new ReservableQuery();
         ResultSetParser parser = new ResultSetParser();
@@ -44,7 +41,7 @@ public class ReservableSQLDAO
         
         if (parser.isResultSetEmpty())
         {
-            LocationSQLDAO locationDAO = new LocationSQLDAO(connection);
+            LocationSQLDAO locationDAO = new LocationSQLDAO();
             locationDAO.addLocation(reservable.getLocation());
         }   
         
@@ -54,24 +51,14 @@ public class ReservableSQLDAO
         
         if (parser.isResultSetEmpty())
         {
-            TimeframeSQLDAO timeframeDAO = new TimeframeSQLDAO(connection);
+            TimeframeSQLDAO timeframeDAO = new TimeframeSQLDAO();
             timeframeDAO.addTimeframe(reservable.getTimeframe());
         }
         
         // Add reservable
         new RecordAdd(connection).addReservable(reservable);
-    }
-    
-    /**
-        Closes the DAO's connection to the database
-    
-        @throws SQLException Error closing connection
-    */
-    
-    public void close() throws SQLException
-    {
+        
         connection.close();
-        connection = null;
     }
     
     /**
@@ -83,6 +70,8 @@ public class ReservableSQLDAO
     
     public void removeReservable(Reservable reservable) throws SQLException
     {
+        DatabaseConnection connection = source.getDBConnection();
+        
         new RecordDelete(connection).deleteReservable(reservable);
         
         // Check if a record of a location should also be removed
@@ -93,7 +82,7 @@ public class ReservableSQLDAO
         
         if (parser.isResultSetEmpty())
         {
-            LocationSQLDAO locationDAO = new LocationSQLDAO(connection);
+            LocationSQLDAO locationDAO = new LocationSQLDAO();
             locationDAO.removeLocation(reservable.getLocation());
         }
         
@@ -103,9 +92,11 @@ public class ReservableSQLDAO
         
         if (parser.isResultSetEmpty())
         {
-            TimeframeSQLDAO timeframeDAO = new TimeframeSQLDAO(connection);
+            TimeframeSQLDAO timeframeDAO = new TimeframeSQLDAO();
             timeframeDAO.removeTimeframe(reservable.getTimeframe());
         }
+        
+        connection.close();
     }
     
     /**
@@ -117,6 +108,8 @@ public class ReservableSQLDAO
     
     public void updateReservable(Reservable reservable) throws SQLException
     {
+        DatabaseConnection connection = source.getDBConnection();
         new RecordUpdate(connection).updateReservable(reservable);
+        connection.close();
     }
 }

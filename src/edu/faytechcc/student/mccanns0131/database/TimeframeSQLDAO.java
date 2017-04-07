@@ -6,37 +6,20 @@
 
 package edu.faytechcc.student.mccanns0131.database;
 
-import edu.faytechcc.student.burnst9091.data.DatabaseSettings;
 import edu.faytechcc.student.burnst9091.data.Timeframe;
 import java.sql.SQLException;
 
 public class TimeframeSQLDAO
 {
-    private DatabaseConnection connection;
+    private DatabaseDataSource source;
     
     /**
-        Constructs a new TimeframeSQLDAO & attempts to establish a connection to
-        the database using the given database settings
-    
-        @param settings Database settings to connect to database with
-        @throws SQLException Error connecting to database
+        Constructs a new TimeframeSQLDAO
     */
     
-    public TimeframeSQLDAO(DatabaseSettings settings) throws SQLException
+    public TimeframeSQLDAO()
     {
-        connection = DatabaseConnection.getConnection(settings);
-    }
-    
-    /**
-        Constructs a new TimeframeSQLDAO initialized with the given connection
-        to the database
-    
-        @param conn Connection to database
-    */
-    
-    public TimeframeSQLDAO(DatabaseConnection conn)
-    {
-        connection = conn;
+        source = new DatabaseDataSource();
     }
     
     /**
@@ -49,7 +32,9 @@ public class TimeframeSQLDAO
     public void addTimeframe(Timeframe timeframe) throws SQLException
     {
         ResultSetParser parser = new ResultSetParser();
+        DatabaseConnection connection = source.getDBConnection();
         parser.setResultSet(new RecordAdd(connection).addTimeframe(timeframe));
+        connection.close();
         int id = parser.parseID();
         timeframe.setID(id);
     }
@@ -63,6 +48,8 @@ public class TimeframeSQLDAO
     
     public void removeTimeframe(Timeframe timeframe) throws SQLException
     {
+        DatabaseConnection connection = source.getDBConnection();
         new RecordDelete(connection).deleteTimeframe(timeframe);
+        connection.close();
     }
 }

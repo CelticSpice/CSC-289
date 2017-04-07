@@ -103,7 +103,6 @@ public class OpeningController implements ActionListener
         
         if (action == JOptionPane.OK_OPTION)
         {
-            SystemPreferences prefs = SystemPreferences.getInstance();
             SHA256SaltHasher saltHasher = new SHA256SaltHasher();
             
             // Validate password
@@ -113,7 +112,7 @@ public class OpeningController implements ActionListener
             {
                 password = saltHasher.saltHash(password);
                 
-                String currentPassword = prefs.getAdminPassword();
+                String currentPassword = SystemPreferences.getAdminPassword();
                 if (currentPassword.isEmpty())
                     currentPassword = saltHasher.saltHash(currentPassword);
                 
@@ -136,19 +135,15 @@ public class OpeningController implements ActionListener
     */
     
     private void showAdminView()
-    {
-        SystemPreferences prefs = SystemPreferences.getInstance();
-        DatabaseSettings settings = prefs.getDBSettings();
-        
+    {        
         try
         {
             // Update locations & reservations
-            LocationSQLDAO locationDAO = new LocationSQLDAO(settings);
+            LocationSQLDAO locationDAO = new LocationSQLDAO();
             locations.clear();
             locations.addAll(locationDAO.getAll());
-            locationDAO.close();
 
-            ReservationSQLDAO reservationDAO = new ReservationSQLDAO(settings);
+            ReservationSQLDAO reservationDAO = new ReservationSQLDAO();
             reservations.clear();
             for (Location loc : locations)
             {
@@ -157,7 +152,6 @@ public class OpeningController implements ActionListener
                 if (!res.isEmpty())
                     reservations.put(loc, res);
             }
-            reservationDAO.close();
         }
         catch (SQLException ex)
         {
@@ -174,17 +168,13 @@ public class OpeningController implements ActionListener
     */
     
     private void showGuestReservationPanel()
-    {
-        SystemPreferences prefs = SystemPreferences.getInstance();
-        DatabaseSettings settings = prefs.getDBSettings();
-        
+    {        
         try
         {
             // Update locations & reservations
-            LocationSQLDAO locationDAO = new LocationSQLDAO(settings);
+            LocationSQLDAO locationDAO = new LocationSQLDAO();
             locations.clear();
             locations.addAll(locationDAO.getAll());
-            locationDAO.close();
         }
         catch (SQLException ex)
         {

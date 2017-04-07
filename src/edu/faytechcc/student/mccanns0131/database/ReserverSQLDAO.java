@@ -6,37 +6,20 @@
 
 package edu.faytechcc.student.mccanns0131.database;
 
-import edu.faytechcc.student.burnst9091.data.DatabaseSettings;
 import edu.faytechcc.student.burnst9091.data.Reserver;
 import java.sql.SQLException;
 
 public class ReserverSQLDAO
 {
-    private DatabaseConnection connection;
+    private DatabaseDataSource source;
     
     /**
-        Constructs a new ReserverSQLDAO & attempts to establish a connection to
-        the database using the given database settings
-    
-        @param settings Database settings to connect to database with
-        @throws SQLException Error connecting to database
+        Constructs a new ReserverSQLDAO
     */
     
-    public ReserverSQLDAO(DatabaseSettings settings) throws SQLException
+    public ReserverSQLDAO()
     {
-        connection = DatabaseConnection.getConnection(settings);
-    }
-    
-    /**
-        Constructs a new ReserverSQLDAO initialized with the given connection
-        to the database
-    
-        @param conn Connection to database
-    */
-    
-    public ReserverSQLDAO(DatabaseConnection conn)
-    {
-        connection = conn;
+        source = new DatabaseDataSource();
     }
     
     /**
@@ -49,7 +32,9 @@ public class ReserverSQLDAO
     public void addReserver(Reserver reserver) throws SQLException
     {
         ResultSetParser parser = new ResultSetParser();
+        DatabaseConnection connection = source.getDBConnection();
         parser.setResultSet(new RecordAdd(connection).addReserver(reserver));
+        connection.close();
         int id = parser.parseID();
         reserver.setID(id);
     }
@@ -63,7 +48,9 @@ public class ReserverSQLDAO
     
     public void removeReserver(Reserver reserver) throws SQLException
     {
+        DatabaseConnection connection = source.getDBConnection();
         new RecordDelete(connection).deleteReserver(reserver);
+        connection.close();
     }
     
     /**
@@ -75,6 +62,8 @@ public class ReserverSQLDAO
     
     public void updateReserver(Reserver reserver) throws SQLException
     {
+        DatabaseConnection connection = source.getDBConnection();
         new RecordUpdate(connection).updateReserver(reserver);
+        connection.close();
     }
 }

@@ -25,26 +25,28 @@ public class Application
     public static void main(String[] args)
     {
         setLookAndFeel();
-        
-        SystemPreferences prefs = SystemPreferences.getInstance();
-        
-        if (!prefs.getInitSetupRun())
+                
+        if (!SystemPreferences.getInitSetupRun())
             new InitDBDialog().setVisible(true);
         
-        if (prefs.getInitSetupRun())
+        boolean successfulInit = false;
+        
+        while (!successfulInit)
         {
-            DatabaseSettings settings = prefs.getDBSettings();
-            
             try
             {
-                if (!ReserveDB.exists(settings))
-                    ReserveDB.init(settings);
+                ReserveDB.init();
+                successfulInit = true;
             }
             catch (SQLException ex)
             {
-                JOptionPane.showMessageDialog(null, "Failed to create database",
+                JOptionPane.showMessageDialog(null,
+                    "Failed database initialization: Check database settings",
                         "Error", JOptionPane.ERROR_MESSAGE);
             }
+            
+            if (!successfulInit)
+                new InitDBDialog().setVisible(true);
         }
         
         new MainFrame();

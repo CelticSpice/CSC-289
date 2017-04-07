@@ -145,7 +145,7 @@ public class MainPanel extends JPanel
         
         layout.show(this, CARDS[CARD_INDEX]);
         
-        parent.pack();
+        parent.setSize(800, 425);
         parent.setLocationRelativeTo(null);
     }
 }

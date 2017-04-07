@@ -208,7 +208,6 @@ public class SettingsPanel extends JPanel
     {
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        panel.setBorder(BorderFactory.createEtchedBorder());
         
         gbc.gridx = 0;
         gbc.gridy = 0;

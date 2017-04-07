@@ -6,38 +6,21 @@
 
 package edu.faytechcc.student.mccanns0131.database;
 
-import edu.faytechcc.student.burnst9091.data.DatabaseSettings;
 import edu.faytechcc.student.burnst9091.data.Location;
 import java.sql.SQLException;
 import java.util.List;
 
 public class LocationSQLDAO
 {
-    private DatabaseConnection connection;
+    private DatabaseDataSource source;
     
     /**
-        Constructs a new LocationSQLDAO & attempts to establish a connection to
-        the database using the given database settings
-    
-        @param settings Database settings to connect to database with
-        @throws SQLException Error connecting to database
+        Constructs a new LocationSQLDAO
     */
     
-    public LocationSQLDAO(DatabaseSettings settings) throws SQLException
+    public LocationSQLDAO()
     {
-        connection = DatabaseConnection.getConnection(settings);
-    }
-    
-    /**
-        Constructs a new LocationSQLDAO initialized with the given connection
-        to the database
-    
-        @param conn Connection to database
-    */
-    
-    public LocationSQLDAO(DatabaseConnection conn)
-    {
-        connection = conn;
+        source = new DatabaseDataSource();
     }
     
     /**
@@ -50,21 +33,11 @@ public class LocationSQLDAO
     public void addLocation(Location loc) throws SQLException
     {
         ResultSetParser parser = new ResultSetParser();
+        DatabaseConnection connection = source.getDBConnection();
         parser.setResultSet((new RecordAdd(connection).addLocation(loc)));
+        connection.close();
         int id = parser.parseID();
         loc.setID(id);
-    }
-    
-    /**
-        Closes the DAO's connection to the database
-    
-        @throws SQLException Error closing connection
-    */
-    
-    public void close() throws SQLException
-    {
-        connection.close();
-        connection = null;
     }
     
      /**
@@ -79,7 +52,9 @@ public class LocationSQLDAO
         LocationQuery query = new LocationQuery();
         ResultSetParser parser = new ResultSetParser();
         query.queryAll();
+        DatabaseConnection connection = source.getDBConnection();
         parser.setResultSet(connection.runQuery(query));
+        connection.close();
         
         return parser.parseLocations();
     }
@@ -93,7 +68,9 @@ public class LocationSQLDAO
     
     public void removeLocation(Location loc) throws SQLException
     {
+        DatabaseConnection connection = source.getDBConnection();
         new RecordDelete(connection).deleteLocation(loc);
+        connection.close();
     }
     
     /**
@@ -105,6 +82,8 @@ public class LocationSQLDAO
     
     public void updateLocation(Location loc) throws SQLException
     {
+        DatabaseConnection connection = source.getDBConnection();
         new RecordUpdate(connection).updateLocation(loc);
+        connection.close();
     }
 }

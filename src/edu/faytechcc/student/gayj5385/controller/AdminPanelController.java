@@ -41,11 +41,12 @@ public class AdminPanelController implements ChangeListener
     {
         if (view.getActiveTab().equals("Settings"))
         {
-            SystemPreferences prefs = SystemPreferences.getInstance();
-        
-            EmailSettings adminEmail = prefs.getAdminEmailSettings();
-            EmailSettings guestEmail = prefs.getGuestEmailSettings();
-            DatabaseSettings db = prefs.getDBSettings();
+            EmailSettings adminEmail = SystemPreferences
+                    .getAdminEmailSettings();
+            EmailSettings guestEmail = SystemPreferences
+                    .getGuestEmailSettings();
+            
+            DatabaseSettings db = SystemPreferences.getDBSettings();
             SecurityOption[] options = SecurityOption.values();
             
             view.setSettingsSettings(adminEmail, guestEmail, db, options);

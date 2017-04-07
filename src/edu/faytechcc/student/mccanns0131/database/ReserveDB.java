@@ -6,55 +6,54 @@
 
 package edu.faytechcc.student.mccanns0131.database;
 
-import edu.faytechcc.student.burnst9091.data.DatabaseSettings;
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class ReserveDB
 {
     private static final String NAME = "ReserveDB";
     
     /**
-        Creates the database
+        Creates the database if it doesn't exist
     
-        @param connection Database connection
+        @param stmt Statement
         @throws SQLException Error creating the database
     */
     
-    private static void create(DatabaseConnection connection)
-            throws SQLException
+    private static void createDBIfNotExists(Statement stmt) throws SQLException
     {
-        String sql = "CREATE DATABASE " + NAME;
-        connection.executeSQL(sql);
+        String sql = "CREATE DATABASE IF NOT EXISTS " + NAME;
+        stmt.execute(sql);
         
-        sql = "USE ReserveDB";
-        connection.executeSQL(sql);
+        sql = "USE " + NAME;
+        stmt.execute(sql);
         
-        createTables(connection);
+        createTablesIfNotExists(stmt);
     }
     
     /**
-        Creates the database tables
+        Creates the database tables if they do not exist
     
-        @param connection Database connection
-        @throws SQLException Error creating the database tables
+        @param stmt Statement
+        @throws SQLException Table creation error
     */
     
-    private static void createTables(DatabaseConnection connection) 
+    private static void createTablesIfNotExists(Statement stmt)
             throws SQLException
     {
         // Create Locations table
-        String sql = "CREATE TABLE Locations (" +
+        String sql = "CREATE TABLE IF NOT EXISTS Locations (" +
                      "LocationID INT NOT NULL AUTO_INCREMENT, " +
                      "LocationName VARCHAR(20) NOT NULL UNIQUE, " +
                      "Capacity INT NOT NULL, " +
                      "PRIMARY KEY (LocationID)" +
                      ")";
         
-        connection.executeSQL(sql);
-        System.out.println("Created Locations table");
+        stmt.execute(sql);
         
         // Create Timeframe table
-        sql = "CREATE TABLE Timeframes (" +
+        sql = "CREATE TABLE IF NOT EXISTS Timeframes (" +
               "TimeframeID INT NOT NULL AUTO_INCREMENT, " +
               "StartDate DATE NOT NULL, " +
               "EndDate DATE NOT NULL, " +
@@ -65,11 +64,10 @@ public class ReserveDB
               "(StartDate, EndDate, StartTime, EndTime)" +
               ")";
 
-        connection.executeSQL(sql);
-        System.out.println("Created Timeframes table");
+        stmt.execute(sql);
         
         // Create Reservables table        
-        sql = "CREATE TABLE Reservables (" +
+        sql = "CREATE TABLE IF NOT EXISTS Reservables (" +
               "LocationID INT NOT NULL, " +
               "TimeframeID INT NOT NULL, " +
               "Cost DECIMAL(7,2) NOT NULL, " +
@@ -81,11 +79,10 @@ public class ReserveDB
               "(LocationID, TimeframeID)" +
               ")";
         
-        connection.executeSQL(sql);
-        System.out.println("Created Reservables table");
+        stmt.execute(sql);
         
         // Create Reservers table        
-        sql = "CREATE TABLE Reservers (" +
+        sql = "CREATE TABLE IF NOT EXISTS Reservers (" +
               "ReserverID INT NOT NULL AUTO_INCREMENT, " +
               "FirstName VARCHAR(35) NOT NULL, " +
               "LastName VARCHAR(35) NOT NULL, " +
@@ -94,11 +91,10 @@ public class ReserveDB
               "PRIMARY KEY (ReserverID)" +
               ")";
         
-        connection.executeSQL(sql);
-        System.out.println("Created Reservers table");
+        stmt.execute(sql);
         
         // Create Reservervations table        
-        sql = "CREATE TABLE Reservations (" +
+        sql = "CREATE TABLE IF NOT EXISTS Reservations (" +
               "LocationID INT NOT NULL, " +
               "TimeframeID INT NOT NULL, " +
               "ReserverID INT NOT NULL, " +
@@ -115,54 +111,24 @@ public class ReserveDB
               "(LocationID, TimeframeID)" +
               ")";
         
-        connection.executeSQL(sql);
-        System.out.println("Created Reservervations table");
+        stmt.execute(sql);
     }
     
     /**
-        Returns if the database exists, connecting using the given database
-        settings
+        Initializes the database
     
-        @param settings Database settings
-        @throws SQLException Error checking if database exists
-        @return If the database exists
+        @throws SQLException DBMS access error
     */
     
-    public static boolean exists(DatabaseSettings settings)
-            throws SQLException
+    public static void init() throws SQLException
     {
-        DatabaseConnection connection = DatabaseConnection
-                .getConnection(settings, false);
+        DatabaseDataSource source = new DatabaseDataSource();
+        Connection conn = source.getDBMSConnection();
+        Statement stmt = conn.createStatement();
         
-        String sql = "SELECT SCHEMA_NAME " +
-                     "FROM INFORMATION_SCHEMA.SCHEMATA " +
-                     "WHERE SCHEMA_NAME = '" + NAME + "'";
+        createDBIfNotExists(stmt);
         
-        Query query = new Query(sql);
-        
-        ResultSetParser parser = new ResultSetParser();
-        parser.setResultSet(connection.runQuery(query));
-        
-        connection.close();
-        
-        return !parser.isResultSetEmpty();
-    }
-    
-    /**
-        Initializes the database, connecting using the given database settings &
-        creating the database
-    
-        @param settings Database settings
-        @throws SQLException Error initializing the database
-    */
-    
-    public static void init(DatabaseSettings settings) throws SQLException
-    {
-        DatabaseConnection connection = DatabaseConnection
-                .getConnection(settings, false);
-        
-        create(connection);
-        
-        connection.close();
+        conn.close();
+        stmt.close();
     }
 }

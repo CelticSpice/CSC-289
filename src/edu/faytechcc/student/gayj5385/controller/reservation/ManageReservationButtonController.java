@@ -111,13 +111,9 @@ public class ManageReservationButtonController implements ActionListener
                 Reservation reservation = selectedReservations.get(0);
                 
                 try
-                {
-                    SystemPreferences prefs = SystemPreferences.getInstance();
-                    DatabaseSettings settings = prefs.getDBSettings();
-                    
-                    ReservationSQLDAO resDAO = new ReservationSQLDAO(settings);
+                {                    
+                    ReservationSQLDAO resDAO = new ReservationSQLDAO();
                     resDAO.removeReservation(reservation);
-                    resDAO.close();
                     
                     reservation.cancel();
                     
@@ -186,10 +182,7 @@ public class ManageReservationButtonController implements ActionListener
         if (reserves.size() == 1)
         {
             try
-            {
-                SystemPreferences prefs = SystemPreferences.getInstance();
-                DatabaseSettings settings = prefs.getDBSettings();
-                
+            {                
                 Reservation reservation = reserves.get(0);
                 
                 if (reviewed)
@@ -197,9 +190,8 @@ public class ManageReservationButtonController implements ActionListener
                 else
                     reservation.notReviewed();
                 
-                ReservationSQLDAO resDAO = new ReservationSQLDAO(settings);
+                ReservationSQLDAO resDAO = new ReservationSQLDAO();
                 resDAO.updateReservation(reservation);
-                resDAO.close();
                                 
                 String btnText = (reviewed) ? "Reassess" : "Reviewed";
                 view.setReviewedButtonText(btnText);

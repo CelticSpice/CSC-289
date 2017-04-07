@@ -113,7 +113,6 @@ public class InitDBDialog extends JDialog
         {
             if (validateInput())
             {
-                SystemPreferences prefs = SystemPreferences.getInstance();
                 DatabaseSettings settings = new DatabaseSettings();
 
                 settings.setDBHost(host.getText());
@@ -121,8 +120,8 @@ public class InitDBDialog extends JDialog
                 settings.setDBUser(username.getText());
                 settings.setDBPass(new String(password.getPassword()));
 
-                prefs.setDBSettings(settings);
-                prefs.setInitSetupRun(true);
+                SystemPreferences.setDBSettings(settings);
+                SystemPreferences.setInitSetupRun(true);
 
                 dispose();
             }

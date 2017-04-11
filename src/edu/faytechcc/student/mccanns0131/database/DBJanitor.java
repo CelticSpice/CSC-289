@@ -47,12 +47,11 @@ public class DBJanitor
         connection.executeSQL(sql);
         
         sql = "DELETE Locations FROM Locations " +
-              "INNER JOIN Reservables " +
+              "LEFT JOIN Reservables " +
               "ON Locations.LocationID = Reservables.LocationID " +
-              "LEFT JOIN Reservations " +
-              "ON Reservables.LocationID = Reservations.LocationID " +
-              "AND Reservables.TimeframeID = Reservations.TimeframeID " +
-              "WHERE Reservations.LocationID IS NULL";
+              "WHERE Reservables.LocationID IS NULL";
+        
+        connection.executeSQL(sql);
         
         connection.close();
     }

@@ -17,7 +17,7 @@ import java.sql.SQLException;
 public class RecordAdd
 {
     // Fields
-    private DatabaseConnection connection;
+    private DBConnection connection;
     private String sql;
     
     /**
@@ -27,7 +27,7 @@ public class RecordAdd
         @param conn Connection to database
     */
     
-    public RecordAdd(DatabaseConnection conn)
+    public RecordAdd(DBConnection conn)
     {
         connection = conn;
         sql = "";

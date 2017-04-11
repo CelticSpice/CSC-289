@@ -11,7 +11,8 @@ import java.sql.SQLException;
 
 public class ReserverSQLDAO
 {
-    private DatabaseDataSource source;
+    private DBConnection connection;
+    private DBDataSource source;
     
     /**
         Constructs a new ReserverSQLDAO
@@ -19,7 +20,20 @@ public class ReserverSQLDAO
     
     public ReserverSQLDAO()
     {
-        source = new DatabaseDataSource();
+        source = DBDataSource.getInstance();
+        connection = null;
+    }
+    
+    /**
+        Constructs a new ReserverSQLDAO initialized with the given connection
+    
+        @param conn DBConnection
+    */
+    
+    public ReserverSQLDAO(DBConnection conn)
+    {
+        source = null;
+        connection = conn;
     }
     
     /**
@@ -31,12 +45,24 @@ public class ReserverSQLDAO
     
     public void addReserver(Reserver reserver) throws SQLException
     {
+        if (connection == null)
+            connection = source.getConnection();
+        
         ResultSetParser parser = new ResultSetParser();
-        DatabaseConnection connection = source.getDBConnection();
         parser.setResultSet(new RecordAdd(connection).addReserver(reserver));
-        connection.close();
         int id = parser.parseID();
         reserver.setID(id);
+    }
+    
+    /**
+        Closes this SQLDAO resource
+    
+        @throws SQLException Error closing the SQLDAO connection
+    */
+    
+    public void close() throws SQLException
+    {
+        connection.close();
     }
     
     /**
@@ -48,9 +74,10 @@ public class ReserverSQLDAO
     
     public void removeReserver(Reserver reserver) throws SQLException
     {
-        DatabaseConnection connection = source.getDBConnection();
+        if (connection == null)
+            connection = source.getConnection();
+        
         new RecordDelete(connection).deleteReserver(reserver);
-        connection.close();
     }
     
     /**
@@ -62,8 +89,9 @@ public class ReserverSQLDAO
     
     public void updateReserver(Reserver reserver) throws SQLException
     {
-        DatabaseConnection connection = source.getDBConnection();
+        if (connection == null)
+            connection = source.getConnection();
+        
         new RecordUpdate(connection).updateReserver(reserver);
-        connection.close();
     }
 }

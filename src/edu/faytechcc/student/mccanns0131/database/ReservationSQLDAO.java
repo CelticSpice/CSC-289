@@ -13,7 +13,8 @@ import java.util.List;
 
 public class ReservationSQLDAO
 {
-    private DatabaseDataSource source;
+    private DBConnection connection;
+    private DBDataSource source;
     
     /**
         Constructs a new ReservationSQLDAO
@@ -21,7 +22,19 @@ public class ReservationSQLDAO
     
     public ReservationSQLDAO()
     {
-        source = new DatabaseDataSource();
+        source = DBDataSource.getInstance();
+    }
+    
+    /**
+        Constructs a new ReservationSQLDAO initialized with the given connection
+    
+        @param conn DBConnection
+    */
+    
+    public ReservationSQLDAO(DBConnection conn)
+    {
+        source = null;
+        connection = conn;
     }
     
     /**
@@ -33,7 +46,8 @@ public class ReservationSQLDAO
     
     public void addReservation(Reservation reservation) throws SQLException
     {        
-        DatabaseConnection connection = source.getDBConnection();
+        if (connection == null)
+            connection = source.getConnection();
         
         // Check if a record of a reserver should be added
         ReservationQuery query = new ReservationQuery();
@@ -43,13 +57,22 @@ public class ReservationSQLDAO
         
         if (parser.isResultSetEmpty())
         {
-            ReserverSQLDAO reserverDAO = new ReserverSQLDAO();
+            ReserverSQLDAO reserverDAO = new ReserverSQLDAO(connection);
             reserverDAO.addReserver(reservation.getReserver());
         }
         
         // Add reservation
         new RecordAdd(connection).addReservation(reservation);
-        
+    }
+    
+    /**
+        Closes this SQLDAO resource
+    
+        @throws SQLException Error closing the SQLDAO connection
+    */
+    
+    public void close() throws SQLException
+    {
         connection.close();
     }
     
@@ -63,13 +86,13 @@ public class ReservationSQLDAO
     
     public List<Reservation> getByLocation(Location loc) throws SQLException
     {
-        DatabaseConnection connection = source.getDBConnection();
+        if (connection == null)
+            connection = source.getConnection();
         
         ReservationQuery query = new ReservationQuery();
         ResultSetParser parser = new ResultSetParser();
         query.queryByLocation(loc);
         parser.setResultSet(connection.runQuery(query));
-        connection.close();
         
         return parser.parseReservations(loc);
     }
@@ -83,7 +106,8 @@ public class ReservationSQLDAO
     
     public void removeReservation(Reservation reservation) throws SQLException
     {
-        DatabaseConnection connection = source.getDBConnection();
+        if (connection == null)
+            connection = source.getConnection();
         
         new RecordDelete(connection).deleteReservation(reservation);
         
@@ -92,11 +116,10 @@ public class ReservationSQLDAO
         ResultSetParser parser = new ResultSetParser();
         query.queryDistinctByReserver(reservation.getReserver());
         parser.setResultSet(connection.runQuery(query));
-        connection.close();
         
         if (parser.isResultSetEmpty())
         {
-            ReserverSQLDAO reserverDAO = new ReserverSQLDAO();
+            ReserverSQLDAO reserverDAO = new ReserverSQLDAO(connection);
             reserverDAO.removeReserver(reservation.getReserver());
         }
     }
@@ -110,8 +133,9 @@ public class ReservationSQLDAO
     
     public void updateReservation(Reservation reservation) throws SQLException
     {
-        DatabaseConnection connection = source.getDBConnection();
+        if (connection == null)
+            connection = source.getConnection();
+        
         new RecordUpdate(connection).updateReservation(reservation);
-        connection.close();
     }
 }

@@ -8,7 +8,8 @@ package edu.faytechcc.student.burnst9091.data;
 
 import edu.faytechcc.student.gayj5385.gui.MainFrame;
 import edu.faytechcc.student.gayj5385.gui.dialog.InitDBDialog;
-import edu.faytechcc.student.mccanns0131.database.ReserveDB;
+import edu.faytechcc.student.mccanns0131.database.DBDemiurge;
+import edu.faytechcc.student.mccanns0131.database.DBJanitor;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -35,8 +36,9 @@ public class Application
         {
             try
             {
-                ReserveDB.init();
+                DBDemiurge.craft();
                 successfulInit = true;
+                DBJanitor.run();
             }
             catch (SQLException ex)
             {

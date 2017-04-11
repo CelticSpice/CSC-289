@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class DatabaseConnection
+public class DBConnection
 {
     // Fields            
     private Connection connection;
@@ -22,7 +22,7 @@ public class DatabaseConnection
         @param conn Connection
     */
     
-    public DatabaseConnection(Connection conn)
+    public DBConnection(Connection conn)
     {
         connection = conn;
     }

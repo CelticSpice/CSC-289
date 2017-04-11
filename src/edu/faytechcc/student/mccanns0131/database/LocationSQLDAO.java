@@ -12,7 +12,8 @@ import java.util.List;
 
 public class LocationSQLDAO
 {
-    private DatabaseDataSource source;
+    private DBConnection connection;
+    private DBDataSource source;
     
     /**
         Constructs a new LocationSQLDAO
@@ -20,7 +21,20 @@ public class LocationSQLDAO
     
     public LocationSQLDAO()
     {
-        source = new DatabaseDataSource();
+        source = DBDataSource.getInstance();
+        connection = null;
+    }
+    
+    /**
+        Constructs a new LocationSQLDAO initialized with the given connection
+    
+        @param conn DBConnection
+    */
+    
+    public LocationSQLDAO(DBConnection conn)
+    {
+        source = null;
+        connection = conn;
     }
     
     /**
@@ -32,12 +46,24 @@ public class LocationSQLDAO
     
     public void addLocation(Location loc) throws SQLException
     {
+        if (connection == null)
+            connection = source.getConnection();
+        
         ResultSetParser parser = new ResultSetParser();
-        DatabaseConnection connection = source.getDBConnection();
         parser.setResultSet((new RecordAdd(connection).addLocation(loc)));
-        connection.close();
         int id = parser.parseID();
         loc.setID(id);
+    }
+    
+    /**
+        Closes this SQLDAO resource
+    
+        @throws SQLException Error closing the SQLDAO connection
+    */
+    
+    public void close() throws SQLException
+    {
+        connection.close();
     }
     
      /**
@@ -49,12 +75,13 @@ public class LocationSQLDAO
     
     public List<Location> getAll() throws SQLException
     {
+        if (connection == null)
+            connection = source.getConnection();
+        
         LocationQuery query = new LocationQuery();
         ResultSetParser parser = new ResultSetParser();
         query.queryAll();
-        DatabaseConnection connection = source.getDBConnection();
         parser.setResultSet(connection.runQuery(query));
-        connection.close();
         
         return parser.parseLocations();
     }
@@ -68,9 +95,10 @@ public class LocationSQLDAO
     
     public void removeLocation(Location loc) throws SQLException
     {
-        DatabaseConnection connection = source.getDBConnection();
+        if (connection == null)
+            connection = source.getConnection();
+        
         new RecordDelete(connection).deleteLocation(loc);
-        connection.close();
     }
     
     /**
@@ -82,8 +110,9 @@ public class LocationSQLDAO
     
     public void updateLocation(Location loc) throws SQLException
     {
-        DatabaseConnection connection = source.getDBConnection();
+        if (connection == null)
+            connection = source.getConnection();
+        
         new RecordUpdate(connection).updateLocation(loc);
-        connection.close();
     }
 }

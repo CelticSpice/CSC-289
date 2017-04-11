@@ -292,6 +292,9 @@ public class AddReservableDialog extends JDialog
         ButtonGroup bg = new ButtonGroup();
         bg.add(newLocationRadio);
         bg.add(existingLocationsRadio);
+        
+        if (locs.length == 0)
+            existingLocationsRadio.setEnabled(false);
 
         return panel;
     }
@@ -774,6 +777,17 @@ public class AddReservableDialog extends JDialog
     public void setExistingLocationsEnabled(boolean enabled)
     {
         existingLocations.setEnabled(enabled);
+    }
+    
+    /**
+        Sets whether the existing location radio button is enabled
+    
+        @param enabled Whether the existing location radio button is enabled
+    */
+    
+    public void setExistingLocationsRadioEnabled(boolean enabled)
+    {
+        existingLocationsRadio.setEnabled(enabled);
     }
 
     /**

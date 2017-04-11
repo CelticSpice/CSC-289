@@ -16,7 +16,7 @@ import java.sql.SQLException;
 public class RecordDelete
 {
     // Fields
-    private DatabaseConnection connection;
+    private DBConnection connection;
     private String sql;
     
     /**
@@ -26,7 +26,7 @@ public class RecordDelete
         @param conn Connection to a database
     */
     
-    public RecordDelete(DatabaseConnection conn)
+    public RecordDelete(DBConnection conn)
     {
         connection = conn;
         sql = "";

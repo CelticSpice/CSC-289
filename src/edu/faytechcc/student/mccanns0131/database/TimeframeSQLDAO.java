@@ -11,7 +11,8 @@ import java.sql.SQLException;
 
 public class TimeframeSQLDAO
 {
-    private DatabaseDataSource source;
+    private DBConnection connection;
+    private DBDataSource source;
     
     /**
         Constructs a new TimeframeSQLDAO
@@ -19,7 +20,20 @@ public class TimeframeSQLDAO
     
     public TimeframeSQLDAO()
     {
-        source = new DatabaseDataSource();
+        source = DBDataSource.getInstance();
+        connection = null;
+    }
+    
+    /**
+        Constructs a new TimeframeSQLDAO initialized with the given connection
+    
+        @param conn DBConnection
+    */
+    
+    public TimeframeSQLDAO(DBConnection conn)
+    {
+        source = null;
+        connection = conn;
     }
     
     /**
@@ -31,12 +45,24 @@ public class TimeframeSQLDAO
     
     public void addTimeframe(Timeframe timeframe) throws SQLException
     {
+        if (connection == null)
+            connection = source.getConnection();
+        
         ResultSetParser parser = new ResultSetParser();
-        DatabaseConnection connection = source.getDBConnection();
         parser.setResultSet(new RecordAdd(connection).addTimeframe(timeframe));
-        connection.close();
         int id = parser.parseID();
         timeframe.setID(id);
+    }
+    
+    /**
+        Closes this SQLDAO resource
+    
+        @throws SQLException Error closing the SQLDAO connection
+    */
+    
+    public void close() throws SQLException
+    {
+        connection.close();
     }
     
     /**
@@ -48,8 +74,9 @@ public class TimeframeSQLDAO
     
     public void removeTimeframe(Timeframe timeframe) throws SQLException
     {
-        DatabaseConnection connection = source.getDBConnection();
+        if (connection == null)
+            connection = source.getConnection();
+        
         new RecordDelete(connection).deleteTimeframe(timeframe);
-        connection.close();
     }
 }

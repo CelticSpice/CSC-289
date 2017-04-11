@@ -1,46 +1,74 @@
 /**
-    The database
+    Creator of the database
     CSC-289 - Group 4
     @author Timothy Burns
 */
 
 package edu.faytechcc.student.mccanns0131.database;
 
+import edu.faytechcc.student.burnst9091.data.DatabaseSettings;
+import edu.faytechcc.student.burnst9091.data.SystemPreferences;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import org.mariadb.jdbc.MariaDbDataSource;
 
-public class ReserveDB
+public class DBDemiurge
 {
-    private static final String NAME = "ReserveDB";
+    /**
+        Creates the database & its tables
+    
+        @throws SQLException Error creating database or its tables
+    */
+    
+    public static void craft() throws SQLException
+    {
+        MariaDbDataSource source = new MariaDbDataSource();
+        
+        DatabaseSettings settings = SystemPreferences.getDBSettings();
+        
+        source.setServerName(settings.getDBHost());
+        source.setPort(settings.getDBPort());
+        source.setUserName(settings.getDBUser());
+        source.setPassword(settings.getDBPass());
+        
+        Connection conn = source.getConnection();
+        Statement stmt = conn.createStatement();
+        
+        craftDB(stmt);
+        
+        stmt.close();
+        conn.close();
+    }
     
     /**
-        Creates the database if it doesn't exist
+        Creates the database
     
         @param stmt Statement
         @throws SQLException Error creating the database
     */
     
-    private static void createDBIfNotExists(Statement stmt) throws SQLException
+    private static void craftDB(Statement stmt) throws SQLException
     {
-        String sql = "CREATE DATABASE IF NOT EXISTS " + NAME;
+        final String DB_NAME = "ReserveDB";
+        
+        String sql = "CREATE DATABASE IF NOT EXISTS " + DB_NAME;
         stmt.execute(sql);
         
-        sql = "USE " + NAME;
+        sql = "USE " + DB_NAME;
         stmt.execute(sql);
         
-        createTablesIfNotExists(stmt);
+        craftTables(stmt);
     }
     
     /**
-        Creates the database tables if they do not exist
+        Creates the database tables
     
         @param stmt Statement
-        @throws SQLException Table creation error
+        @throws SQLException Error creating tables
     */
     
-    private static void createTablesIfNotExists(Statement stmt)
-            throws SQLException
+    private static void craftTables(Statement stmt) throws SQLException
     {
         // Create Locations table
         String sql = "CREATE TABLE IF NOT EXISTS Locations (" +
@@ -112,23 +140,5 @@ public class ReserveDB
               ")";
         
         stmt.execute(sql);
-    }
-    
-    /**
-        Initializes the database
-    
-        @throws SQLException DBMS access error
-    */
-    
-    public static void init() throws SQLException
-    {
-        DatabaseDataSource source = new DatabaseDataSource();
-        Connection conn = source.getDBMSConnection();
-        Statement stmt = conn.createStatement();
-        
-        createDBIfNotExists(stmt);
-        
-        conn.close();
-        stmt.close();
     }
 }

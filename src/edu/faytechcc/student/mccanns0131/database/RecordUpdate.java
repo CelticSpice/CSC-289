@@ -15,7 +15,7 @@ import java.sql.SQLException;
 public class RecordUpdate
 {
     // Fields
-    private DatabaseConnection connection;
+    private DBConnection connection;
     private String sql;
     
     /**
@@ -25,7 +25,7 @@ public class RecordUpdate
         @param conn Connection to a database
     */
     
-    public RecordUpdate(DatabaseConnection conn)
+    public RecordUpdate(DBConnection conn)
     {
         connection = conn;
         sql = "";

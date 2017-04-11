@@ -6,10 +6,8 @@
 
 package edu.faytechcc.student.gayj5385.controller;
 
-import edu.faytechcc.student.burnst9091.data.DatabaseSettings;
 import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reservable;
-import edu.faytechcc.student.burnst9091.data.SystemPreferences;
 import edu.faytechcc.student.burnst9091.data.Timeframe;
 import edu.faytechcc.student.gayj5385.gui.dialog.AddReservableDialog;
 import edu.faytechcc.student.mccanns0131.database.ReservableSQLDAO;
@@ -90,6 +88,9 @@ public class ReservableAddButtonController implements ActionListener
                     addLocation(loc);
                                 
                 JOptionPane.showMessageDialog(view, "Reservable created");
+                
+                if (creatingNewLocation() && locations.size() == 1)
+                    view.setExistingLocationsRadioEnabled(true);
             }
             catch (SQLException ex)
             {

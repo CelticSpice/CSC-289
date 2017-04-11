@@ -192,22 +192,22 @@ public class ManageReservableButtonController implements ActionListener
         
         if (search.validateSearch())
         {            
-            switch (search.getNumSearchLocations())
-            {
-                case 0:
-                    if (criteria.toLowerCase().contains("cap:") ||
-                        criteria.toLowerCase().contains("capacity:"))
-                        searchOnMultipleLocations(search);
-                    else
-                        searchOnSelectedLocation(search);
-                    break;
-                case 1:
+//            switch (search.getNumSearchLocations())
+//            {
+//                case 0:
+//                    if (criteria.toLowerCase().contains("cap:") ||
+//                        criteria.toLowerCase().contains("capacity:"))
+//                        searchOnMultipleLocations(search);
+//                    else
+//                        searchOnSelectedLocation(search);
+//                    break;
+//                case 1:
                     searchOnOneLocation(search);
-                    break;
-                default:
-                    searchOnMultipleLocations(search);
-                    break;
-            }
+//                    break;
+//                default:
+//                    searchOnMultipleLocations(search);
+//                    break;
+//            }
         }
     }
     

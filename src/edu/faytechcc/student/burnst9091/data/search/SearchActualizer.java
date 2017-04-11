@@ -46,6 +46,10 @@ public class SearchActualizer
         acceptedKeys.add("end time");
         acceptedKeys.add("cost");
         acceptedKeys.add("price");
+        acceptedKeys.add("first");
+        acceptedKeys.add("last");
+        acceptedKeys.add("email");
+        acceptedKeys.add("phone");
     }
     
     public int getNumSearchLocations()

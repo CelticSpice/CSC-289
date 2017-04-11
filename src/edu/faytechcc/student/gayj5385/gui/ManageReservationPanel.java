@@ -208,6 +208,11 @@ public class ManageReservationPanel extends JPanel
         return panel;
     }
     
+    public void clearSearch()
+    {
+        search.setText(null);
+    }
+    
     /**
      * Returns the search criteria in the search text field
      * 

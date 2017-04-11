@@ -197,7 +197,7 @@ public class GuestReservationPanel extends JPanel
     
     public void clearSearch()
     {
-        search.setText("");
+        search.setText(null);
     }
 
     /**

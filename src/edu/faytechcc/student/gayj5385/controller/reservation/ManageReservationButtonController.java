@@ -6,11 +6,9 @@
 
 package edu.faytechcc.student.gayj5385.controller.reservation;
 
-import edu.faytechcc.student.burnst9091.data.DatabaseSettings;
 import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.Reserver;
-import edu.faytechcc.student.burnst9091.data.SystemPreferences;
 import edu.faytechcc.student.burnst9091.data.search.Filter;
 import edu.faytechcc.student.burnst9091.data.search.SearchActualizer;
 import edu.faytechcc.student.gayj5385.gui.ManageReservationPanel;
@@ -148,7 +146,11 @@ public class ManageReservationButtonController implements ActionListener
      */
     private void clear()
     {
+        reservationFilter.setPredicate(null);
+        locationFilter.setPredicate(null);
+        view.clearSearch();
         
+        setLocations();
     }
     
     /**
@@ -222,7 +224,14 @@ public class ManageReservationButtonController implements ActionListener
             switch (search.getNumSearchLocations())
             {
                 case 0:
-                    searchOnSelectedLocation(search);
+                    if (criteria.toLowerCase().contains("first:") ||
+                        criteria.toLowerCase().contains("last:")  ||
+                        criteria.toLowerCase().contains("email:") ||
+                        criteria.toLowerCase().contains("phone:"))
+                        
+                        searchOnOneLocation(search);
+                    else
+                        searchOnSelectedLocation(search);
                     break;
                 case 1:
                     searchOnOneLocation(search);
@@ -248,7 +257,8 @@ public class ManageReservationButtonController implements ActionListener
         if (reservationFilter.getPredicate() != null)
         {
             reservationFilter.setPredicate(s.searchReservations());
-            setReservations(reservationFilter.filter(reservations.get(view.getSelectedLocation())));
+            setReservations(reservationFilter.filter(reservations.get(
+                    view.getSelectedLocation())));
         }
     }
     
@@ -266,12 +276,13 @@ public class ManageReservationButtonController implements ActionListener
         if (view.getSelectedLocation() != null)
         {
             reservationFilter.setPredicate(s.searchReservations());
-            setReservations(reservationFilter.filter(reservations.get(view.getSelectedLocation())));
+            setReservations(reservationFilter.filter(reservations.get(
+                    view.getSelectedLocation())));
         }
         else
         {
-            JOptionPane.showMessageDialog(view, "No such location exists");
-//            clear();
+            JOptionPane.showMessageDialog(view, "No reservations found");
+            clear();
         }
     }
     
@@ -287,7 +298,8 @@ public class ManageReservationButtonController implements ActionListener
         {
             reservationFilter.setPredicate(s.searchReservations());
             
-            List<Reservation> reserves = reservations.get(view.getSelectedLocation());
+            List<Reservation> reserves = reservations.get(
+                    view.getSelectedLocation());
 
             setReservations(reserves);
         }

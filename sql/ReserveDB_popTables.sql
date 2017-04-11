@@ -1,36 +1,35 @@
 -- Insert test Locations records.
 
-INSERT INTO Locations (locationName, capacity)
-VALUES ('Deluxe Cabin 1', 6);
+INSERT INTO Locations (locationID, locationName, capacity)
+VALUES (1, 'Deluxe Cabin 1', 6);
 
-INSERT INTO Locations (locationName, capacity)
-VALUES ('Deluxe Cabin 2', 6);
+INSERT INTO Locations (locationID, locationName, capacity)
+VALUES (2, 'Deluxe Cabin 2', 6);
 
-INSERT INTO Locations (locationName, capacity)
-VALUES ('Small Cabin 1', 4);
+INSERT INTO Locations (locationID, locationName, capacity)
+VALUES (3, 'Small Cabin 1', 4);
 
-INSERT INTO Locations (locationName, capacity)
-VALUES ('Small Cabin 2', 4);
+INSERT INTO Locations (locationID, locationName, capacity)
+VALUES (4, 'Small Cabin 2', 4);
 
-INSERT INTO Locations (locationName, capacity)
-VALUES ('RV Lot 1', 6);
+INSERT INTO Locations (locationID, locationName, capacity)
+VALUES (5, 'RV Lot 1', 6);
 
-INSERT INTO Locations (locationName, capacity)
-VALUES ('RV Lot 2', 6);
+INSERT INTO Locations (locationID, locationName, capacity)
+VALUES (6, 'RV Lot 2', 6);
 
-INSERT INTO Locations (locationName, capacity)
-VALUES ('RV Lot 3', 6);
+INSERT INTO Locations (locationID, locationName, capacity)
+VALUES (7, 'RV Lot 3', 6);
 
-INSERT INTO Locations (locationName, capacity)
-VALUES ('RV Lot 4', 6);
+INSERT INTO Locations (locationID, locationName, capacity)
+VALUES (8, 'RV Lot 4', 6);
 
-INSERT INTO Locations (locationName, capacity)
-VALUES ('RV Lot 5', 6);
+INSERT INTO Locations (locationID, locationName, capacity)
+VALUES (9, 'RV Lot 5', 6);
 
 
 -- Insert test Timeframes records.
 
--- Cabins
 INSERT INTO Timeframes (startDate, endDate, startTime, endTime)
 VALUES ('2017-06-01', '2017-06-02', '14:00', '11:00');
 
@@ -214,815 +213,815 @@ VALUES ('2017-06-30', '2017-07-01', '13:00', '12:00');
 
 -- Insert test Reservables records.
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 1', 1, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (1, 1, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 1', 2, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (1, 2, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 1', 3, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (1, 3, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 1', 4, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (1, 4, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 1', 5, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (1, 5, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 1', 6, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (1, 6, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 1', 7, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (1, 7, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 1', 8, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (1, 8, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 1', 9, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (1, 9, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 1', 10, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (1, 10, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 1', 11, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (1, 11, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 1', 12, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (1, 12, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 1', 13, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (1, 13, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 1', 14, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (1, 14, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 1', 15, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (1, 15, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 1', 16, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (1, 16, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 1', 17, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (1, 17, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 1', 18, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (1, 18, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 1', 19, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (1, 19, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 1', 20, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (1, 20, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 1', 21, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (1, 21, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 1', 22, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (1, 22, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 1', 23, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (1, 23, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 1', 24, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (1, 24, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 1', 25, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (1, 25, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 1', 26, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (1, 26, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 1', 27, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (1, 27, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 1', 28, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (1, 28, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 1', 29, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (1, 29, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 1', 30, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (1, 30, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 2', 1, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (2, 1, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 2', 2, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (2, 2, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 2', 3, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (2, 3, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 2', 4, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (2, 4, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 2', 5, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (2, 5, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 2', 6, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (2, 6, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 2', 7, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (2, 7, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 2', 8, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (2, 8, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 2', 9, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (2, 9, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 2', 10, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (2, 10, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 2', 11, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (2, 11, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 2', 12, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (2, 12, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 2', 13, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (2, 13, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 2', 14, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (2, 14, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 2', 15, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (2, 15, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 2', 16, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (2, 16, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 2', 17, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (2, 17, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 2', 18, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (2, 18, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 2', 19, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (2, 19, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 2', 20, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (2, 20, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 2', 21, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (2, 21, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 2', 22, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (2, 22, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 2', 23, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (2, 23, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 2', 24, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (2, 24, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 2', 25, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (2, 25, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 2', 26, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (2, 26, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 2', 27, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (2, 27, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 2', 28, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (2, 28, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 2', 29, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (2, 29, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Deluxe Cabin 2', 30, 90);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (2, 30, 90);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 1', 1, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (3, 1, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 1', 2, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (3, 2, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 1', 3, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (3, 3, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 1', 4, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (3, 4, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 1', 5, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (3, 5, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 1', 6, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (3, 6, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 1', 7, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (3, 7, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 1', 8, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (3, 8, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 1', 9, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (3, 9, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 1', 10, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (3, 10, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 1', 11, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (3, 11, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 1', 12, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (3, 12, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 1', 13, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (3, 13, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 1', 14, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (3, 14, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 1', 15, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (3, 15, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 1', 16, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (3, 16, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 1', 17, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (3, 17, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 1', 18, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (3, 18, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 1', 19, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (3, 19, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 1', 20, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (3, 20, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 1', 21, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (3, 21, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 1', 22, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (3, 22, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 1', 23, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (3, 23, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 1', 24, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (3, 24, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 1', 25, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (3, 25, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 1', 26, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (3, 26, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 1', 27, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (3, 27, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 1', 28, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (3, 28, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 1', 29, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (3, 29, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 1', 30, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (3, 30, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 2', 1, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (4, 1, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 2', 2, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (4, 2, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 2', 3, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (4, 3, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 2', 4, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (4, 4, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 2', 5, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (4, 5, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 2', 6, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (4, 6, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 2', 7, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (4, 7, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 2', 8, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (4, 8, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 2', 9, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (4, 9, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 2', 10, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (4, 10, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 2', 11, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (4, 11, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 2', 12, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (4, 12, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 2', 13, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (4, 13, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 2', 14, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (4, 14, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 2', 15, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (4, 15, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 2', 16, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (4, 16, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 2', 17, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (4, 17, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 2', 18, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (4, 18, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 2', 19, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (4, 19, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 2', 20, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (4, 20, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 2', 21, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (4, 21, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 2', 22, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (4, 22, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 2', 23, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (4, 23, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 2', 24, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (4, 24, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 2', 25, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (4, 25, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 2', 26, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (4, 26, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 2', 27, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (4, 27, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 2', 28, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (4, 28, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 2', 29, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (4, 29, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('Small Cabin 2', 30, 60);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (4, 30, 60);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 1', 31, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (5, 31, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 1', 32, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (5, 32, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 1', 33, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (5, 33, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 1', 34, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (5, 34, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 1', 35, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (5, 35, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 1', 36, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (5, 36, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 1', 37, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (5, 37, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 1', 38, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (5, 38, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 1', 39, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (5, 39, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 1', 40, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (5, 40, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 1', 41, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (5, 41, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 1', 42, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (5, 42, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 1', 43, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (5, 43, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 1', 44, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (5, 44, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 1', 45, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (5, 45, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 1', 46, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (5, 46, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 1', 47, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (5, 47, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 1', 48, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (5, 48, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 1', 49, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (5, 49, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 1', 50, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (5, 50, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 1', 51, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (5, 51, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 1', 52, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (5, 52, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 1', 53, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (5, 53, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 1', 54, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (5, 54, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 1', 55, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (5, 55, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 1', 56, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (5, 56, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 1', 57, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (5, 57, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 1', 58, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (5, 58, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 1', 59, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (5, 59, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 1', 60, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (5, 60, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 2', 31, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (6, 31, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 2', 32, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (6, 32, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 2', 33, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (6, 33, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 2', 34, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (6, 34, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 2', 35, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (6, 35, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 2', 36, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (6, 36, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 2', 37, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (6, 37, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 2', 38, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (6, 38, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 2', 39, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (6, 39, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 2', 40, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (6, 40, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 2', 41, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (6, 41, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 2', 42, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (6, 42, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 2', 43, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (6, 43, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 2', 44, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (6, 44, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 2', 45, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (6, 45, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 2', 46, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (6, 46, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 2', 47, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (6, 47, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 2', 48, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (6, 48, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 2', 49, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (6, 49, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 2', 50, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (6, 50, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 2', 51, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (6, 51, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 2', 52, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (6, 52, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 2', 53, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (6, 53, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 2', 54, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (6, 54, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 2', 55, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (6, 55, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 2', 56, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (6, 56, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 2', 57, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (6, 57, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 2', 58, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (6, 58, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 2', 59, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (6, 59, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 2', 60, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (6, 60, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 3', 31, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (7, 31, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 3', 32, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (7, 32, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 3', 33, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (7, 33, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 3', 34, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (7, 34, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 3', 35, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (7, 35, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 3', 36, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (7, 36, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 3', 37, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (7, 37, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 3', 38, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (7, 38, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 3', 39, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (7, 39, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 3', 40, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (7, 40, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 3', 41, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (7, 41, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 3', 42, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (7, 42, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 3', 43, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (7, 43, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 3', 44, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (7, 44, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 3', 45, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (7, 45, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 3', 46, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (7, 46, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 3', 47, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (7, 47, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 3', 48, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (7, 48, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 3', 49, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (7, 49, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 3', 50, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (7, 50, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 3', 51, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (7, 51, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 3', 52, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (7, 52, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 3', 53, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (7, 53, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 3', 54, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (7, 54, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 3', 55, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (7, 55, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 3', 56, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (7, 56, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 3', 57, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (7, 57, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 3', 58, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (7, 58, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 3', 59, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (7, 59, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 3', 60, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (7, 60, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 4', 31, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (8, 31, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 4', 32, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (8, 32, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 4', 33, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (8, 33, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 4', 34, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (8, 34, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 4', 35, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (8, 35, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 4', 36, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (8, 36, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 4', 37, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (8, 37, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 4', 38, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (8, 38, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 4', 39, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (8, 39, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 4', 40, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (8, 40, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 4', 41, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (8, 41, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 4', 42, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (8, 42, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 4', 43, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (8, 43, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 4', 44, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (8, 44, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 4', 45, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (8, 45, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 4', 46, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (8, 46, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 4', 47, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (8, 47, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 4', 48, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (8, 48, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 4', 49, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (8, 49, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 4', 50, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (8, 50, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 4', 51, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (8, 51, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 4', 52, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (8, 52, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 4', 53, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (8, 53, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 4', 54, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (8, 54, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 4', 55, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (8, 55, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 4', 56, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (8, 56, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 4', 57, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (8, 57, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 4', 58, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (8, 58, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 4', 59, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (8, 59, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 4', 60, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (8, 60, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 5', 31, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (9, 31, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 5', 32, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (9, 32, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 5', 33, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (9, 33, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 5', 34, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (9, 34, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 5', 35, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (9, 35, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 5', 36, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (9, 36, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 5', 37, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (9, 37, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 5', 38, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (9, 38, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 5', 39, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (9, 39, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 5', 40, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (9, 40, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 5', 41, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (9, 41, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 5', 42, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (9, 42, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 5', 43, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (9, 43, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 5', 44, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (9, 44, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 5', 45, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (9, 45, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 5', 46, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (9, 46, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 5', 47, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (9, 47, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 5', 48, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (9, 48, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 5', 49, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (9, 49, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 5', 50, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (9, 50, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 5', 51, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (9, 51, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 5', 52, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (9, 52, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 5', 53, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (9, 53, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 5', 54, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (9, 54, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 5', 55, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (9, 55, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 5', 56, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (9, 56, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 5', 57, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (9, 57, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 5', 58, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (9, 58, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 5', 59, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (9, 59, 70);
 
-INSERT INTO Reservables (locationName, timeframeID, cost)
-VALUES ('RV Lot 5', 60, 70);
+INSERT INTO Reservables (locationID, timeframeID, cost)
+VALUES (9, 60, 70);
 
 
 -- Insert test Reservers records.
@@ -1060,32 +1059,32 @@ VALUES ('Bob', 'Steve', 'robSteph@email.com', '1646680023');
 
 -- Insert test Reservations records.
 
-INSERT INTO Reservations (locationName, timeframeID, reserverID, eventType, numberAttending)
-VALUES ('Deluxe Cabin 1', 24, 1, 'Camping', 5);
+INSERT INTO Reservations (locationID, timeframeID, reserverID, eventType, numberAttending)
+VALUES (1, 24, 1, 'Camping', 5);
 
-INSERT INTO Reservations (locationName, timeframeID, reserverID, eventType, numberAttending)
-VALUES ('RV Lot 4', 39, 8, 'Camping', 6);
+INSERT INTO Reservations (locationID, timeframeID, reserverID, eventType, numberAttending)
+VALUES (8, 39, 8, 'Camping', 6);
 
-INSERT INTO Reservations (locationName, timeframeID, reserverID, eventType, numberAttending)
-VALUES ('Deluxe Cabin 1', 5, 6, 'Camping', 4);
+INSERT INTO Reservations (locationID, timeframeID, reserverID, eventType, numberAttending)
+VALUES (1, 5, 6, 'Camping', 4);
 
-INSERT INTO Reservations (locationName, timeframeID, reserverID, eventType, numberAttending)
-VALUES ('Small Cabin 2', 2, 3, 'Camping', 3);
+INSERT INTO Reservations (locationID, timeframeID, reserverID, eventType, numberAttending)
+VALUES (4, 2, 3, 'Camping', 3);
 
-INSERT INTO Reservations (locationName, timeframeID, reserverID, eventType, numberAttending)
-VALUES ('Deluxe Cabin 1', 19, 5, 'Camping', 5);
+INSERT INTO Reservations (locationID, timeframeID, reserverID, eventType, numberAttending)
+VALUES (1, 19, 5, 'Camping', 5);
 
-INSERT INTO Reservations (locationName, timeframeID, reserverID, eventType, numberAttending)
-VALUES ('Deluxe Cabin 2', 24, 2, 'Camping', 4);
+INSERT INTO Reservations (locationID, timeframeID, reserverID, eventType, numberAttending)
+VALUES (2, 24, 2, 'Camping', 4);
 
-INSERT INTO Reservations (locationName, timeframeID, reserverID, eventType, numberAttending)
-VALUES ('Deluxe Cabin 1', 8, 4, 'Camping', 6);
+INSERT INTO Reservations (locationID, timeframeID, reserverID, eventType, numberAttending)
+VALUES (1, 8, 4, 'Camping', 6);
 
-INSERT INTO Reservations (locationName, timeframeID, reserverID, eventType, numberAttending)
-VALUES ('RV Lot 5', 55, 7, 'Camping', 4);
+INSERT INTO Reservations (locationID, timeframeID, reserverID, eventType, numberAttending)
+VALUES (9, 55, 7, 'Camping', 4);
 
-INSERT INTO Reservations (locationName, timeframeID, reserverID, eventType, numberAttending)
-VALUES ('Small Cabin 1', 29, 10, 'Camping', 2);
+INSERT INTO Reservations (locationID, timeframeID, reserverID, eventType, numberAttending)
+VALUES (3, 29, 10, 'Camping', 2);
 
-INSERT INTO Reservations (locationName, timeframeID, reserverID, eventType, numberAttending)
-VALUES ('RV Lot 2', 46, 9, 'Camping', 5);
+INSERT INTO Reservations (locationID, timeframeID, reserverID, eventType, numberAttending)
+VALUES (6, 46, 9, 'Camping', 5);

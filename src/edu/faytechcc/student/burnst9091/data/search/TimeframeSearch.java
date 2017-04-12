@@ -5,7 +5,7 @@
  */
 package edu.faytechcc.student.burnst9091.data.search;
 
-import edu.faytechcc.student.burnst9091.data.Timeframe;
+import edu.faytechcc.student.burnst9091.data.ReservableTimeframe;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -15,7 +15,7 @@ import java.util.function.Predicate;
 public class TimeframeSearch
 {
     // Fields
-    Predicate<Timeframe> startDate,
+    Predicate<ReservableTimeframe> startDate,
                          startTime,
                          endDate,
                          endTime,
@@ -35,7 +35,7 @@ public class TimeframeSearch
         finalPredicate = null;
     }
     
-    public Predicate<Timeframe> search(String criteria)
+    public Predicate<ReservableTimeframe> search(String criteria)
     {
         // Split search criteria
         String[] filters = criteria.split(";");
@@ -98,7 +98,7 @@ public class TimeframeSearch
      * @param value The start date
      * @return A predicate that checks for a match with the start date
      */
-    private Predicate<Timeframe> filterByStartDate(String value)
+    private Predicate<ReservableTimeframe> filterByStartDate(String value)
     {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate start = LocalDate.parse(value, format);
@@ -111,7 +111,7 @@ public class TimeframeSearch
      * @param value The start time
      * @return A predicate that checks for a match with the start time
      */
-    private Predicate<Timeframe> filterByStartTime(String value)
+    private Predicate<ReservableTimeframe> filterByStartTime(String value)
     {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm");
         LocalTime start = LocalTime.parse(value, format);
@@ -124,7 +124,7 @@ public class TimeframeSearch
      * @param value The end date
      * @return A predicate that checks for a match with the end date
      */
-    private Predicate<Timeframe> filterByEndDate(String value)
+    private Predicate<ReservableTimeframe> filterByEndDate(String value)
     {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate end = LocalDate.parse(value, format);
@@ -137,7 +137,7 @@ public class TimeframeSearch
      * @param value The end time
      * @return A predicate that checks for a match with the end time
      */
-    private Predicate<Timeframe> filterByEndTime(String value)
+    private Predicate<ReservableTimeframe> filterByEndTime(String value)
     {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm");
         LocalTime end = LocalTime.parse(value, format);
@@ -150,7 +150,7 @@ public class TimeframeSearch
      * @param value The cost
      * @return A predicate that checks for a match with the cost
      */
-    private Predicate<Timeframe> filterByCost(String value)
+    private Predicate<ReservableTimeframe> filterByCost(String value)
     {
         return t -> t.getCost().equals(new BigDecimal(value));
     }

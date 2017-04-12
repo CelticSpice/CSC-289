@@ -6,7 +6,7 @@
 
 package edu.faytechcc.student.gayj5385.gui;
 
-import edu.faytechcc.student.burnst9091.data.Location;
+import edu.faytechcc.student.burnst9091.data.ReservableLocation;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.gayj5385.controller.GuestReservationButtonController;
 import edu.faytechcc.student.gayj5385.controller.GuestReservationComboBoxController;
@@ -40,8 +40,8 @@ public class MainPanel extends JPanel
         parent = p;
         
         setLayout(layout = new CardLayout());
-        List<Location> locations = new ArrayList<>();
-        HashMap<Location, List<Reservation>> reservations = new HashMap<>();
+        List<ReservableLocation> locations = new ArrayList<>();
+        HashMap<ReservableLocation, List<Reservation>> reservations = new HashMap<>();
         
         buildOpenPanel(locations, reservations);
         buildAdminPanel(locations, reservations);        
@@ -52,8 +52,8 @@ public class MainPanel extends JPanel
         Builds the administrator's panel
     */
     
-    private void buildAdminPanel(List<Location> locations,
-        HashMap<Location, List<Reservation>> reservations)
+    private void buildAdminPanel(List<ReservableLocation> locations,
+        HashMap<ReservableLocation, List<Reservation>> reservations)
     {
         adminPanel = new AdminPanel(locations, reservations);
         
@@ -64,8 +64,8 @@ public class MainPanel extends JPanel
         Builds the opening panel
     */
     
-    private void buildOpenPanel(List<Location> locations,
-        HashMap<Location, List<Reservation>> reservations)
+    private void buildOpenPanel(List<ReservableLocation> locations,
+        HashMap<ReservableLocation, List<Reservation>> reservations)
     {
         openPanel = new OpenPanel();
         
@@ -82,7 +82,7 @@ public class MainPanel extends JPanel
         @param locs The locations
     */
     
-    private void buildReservationPanel(List<Location> locs)
+    private void buildReservationPanel(List<ReservableLocation> locs)
     {
         final int CARD_INDEX = 2;
         
@@ -137,7 +137,7 @@ public class MainPanel extends JPanel
         @param availLocs Locations that can be reserved
     */
     
-    public void showGuestReservationPanel(List<Location> availLocs)
+    public void showGuestReservationPanel(List<ReservableLocation> availLocs)
     {
         final int CARD_INDEX = 2;
         

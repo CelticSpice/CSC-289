@@ -7,12 +7,10 @@
 
 package edu.faytechcc.student.gayj5385.controller.reservable;
 
-import edu.faytechcc.student.burnst9091.data.DatabaseSettings;
-import edu.faytechcc.student.burnst9091.data.Location;
+import edu.faytechcc.student.burnst9091.data.ReservableLocation;
 import edu.faytechcc.student.burnst9091.data.Reservable;
-import edu.faytechcc.student.burnst9091.data.SystemPreferences;
 import edu.faytechcc.student.burnst9091.data.search.SearchActualizer;
-import edu.faytechcc.student.burnst9091.data.Timeframe;
+import edu.faytechcc.student.burnst9091.data.ReservableTimeframe;
 import edu.faytechcc.student.burnst9091.data.search.Filter;
 import edu.faytechcc.student.gayj5385.controller.ReservableAddButtonController;
 import edu.faytechcc.student.gayj5385.controller.ReservableAddComboBoxController;
@@ -29,10 +27,10 @@ import javax.swing.JOptionPane;
 public class ManageReservableButtonController implements ActionListener
 {
     // Fields
-    private List<Location> locations;
+    private List<ReservableLocation> locations;
     private ManageReservablePanel view;
-    private Filter<Timeframe> timeframeFilter;
-    private Filter<Location> locationFilter;
+    private Filter<ReservableTimeframe> timeframeFilter;
+    private Filter<ReservableLocation> locationFilter;
     
     /**
         Constructs a new ManageReservableButtonController to manage the
@@ -41,13 +39,13 @@ public class ManageReservableButtonController implements ActionListener
 
         @param v The view
         @param locs The locations
-        @param timeFilter Timeframe filter
-        @param locFilter Location filter
+        @param timeFilter ReservableTimeframe filter
+        @param locFilter ReservableLocation filter
     */
     
     public ManageReservableButtonController(ManageReservablePanel v,
-            List<Location> locs, Filter<Timeframe> timeFilter,
-            Filter<Location> locFilter)
+            List<ReservableLocation> locs, Filter<ReservableTimeframe> timeFilter,
+            Filter<ReservableLocation> locFilter)
     {
         view = v;
         locations = locs;
@@ -88,14 +86,14 @@ public class ManageReservableButtonController implements ActionListener
     /**
         Returns if any timeframe within a list of timeframes is reserved
 
-        @param timeframes Timeframe list to check for any reserved timeframes
+        @param timeframes ReservableTimeframe list to check for any reserved timeframes
         @return If any timeframe in the list is reserved
     */
 
-    private boolean isTimeframeReserved(List<Timeframe> timeframes)
+    private boolean isTimeframeReserved(List<ReservableTimeframe> timeframes)
     {
         boolean reserved = false;
-        for (Timeframe timeframe : timeframes)
+        for (ReservableTimeframe timeframe : timeframes)
             if (timeframe.isReserved())
             {
                 reserved = true;
@@ -110,14 +108,14 @@ public class ManageReservableButtonController implements ActionListener
         @param timeframes Timeframes to delete
     */
 
-    private void deleteTimeframes(List<Timeframe> timeframes)
+    private void deleteTimeframes(List<ReservableTimeframe> timeframes)
     {
-        Location loc = view.getSelectedLocation();
+        ReservableLocation loc = view.getSelectedLocation();
 
         try
         {            
             ReservableSQLDAO reservableDAO = new ReservableSQLDAO();
-            for (Timeframe timeframe : timeframes)
+            for (ReservableTimeframe timeframe : timeframes)
             {
                 reservableDAO.removeReservable(new Reservable(loc, timeframe));
                 loc.removeTimeframe(timeframe);
@@ -148,7 +146,7 @@ public class ManageReservableButtonController implements ActionListener
 
     private void doDelete()
     {
-        List<Timeframe> timeframes = view.getSelectedTimeframes();
+        List<ReservableTimeframe> timeframes = view.getSelectedTimeframes();
 
         if (!timeframes.isEmpty())
         {
@@ -163,7 +161,7 @@ public class ManageReservableButtonController implements ActionListener
                     deleteTimeframes(timeframes);
                     
                     // Check if location should be deleted as well
-                    Location loc = view.getSelectedLocation();
+                    ReservableLocation loc = view.getSelectedLocation();
                     if (loc.getNumTimeframes() == 0)
                     {
                         locations.remove(loc);
@@ -301,7 +299,7 @@ public class ManageReservableButtonController implements ActionListener
         {
             timeframeFilter.setPredicate(s.searchTimeframes());
             
-            List<Timeframe> timeframes = view.getSelectedLocation()
+            List<ReservableTimeframe> timeframes = view.getSelectedLocation()
                     .getTimeframes(timeframeFilter.getPredicate());
 
             view.setTimeframes(timeframes);
@@ -316,7 +314,7 @@ public class ManageReservableButtonController implements ActionListener
         @param loc The location to display
     */
     
-    private void showLocation(Location loc)
+    private void showLocation(ReservableLocation loc)
     {
         view.setSelectedLocation(loc);
     }
@@ -337,7 +335,7 @@ public class ManageReservableButtonController implements ActionListener
         Sets the timeframes on the view
     */
     
-    private void setTimeframes(List<Timeframe> timeframes)
+    private void setTimeframes(List<ReservableTimeframe> timeframes)
     {
         if (timeframeFilter.getPredicate() != null)
             view.setTimeframes(timeframeFilter.filter(timeframes));

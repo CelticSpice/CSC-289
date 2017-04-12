@@ -5,13 +5,13 @@
  */
 package edu.faytechcc.student.burnst9091.data.search;
 
-import edu.faytechcc.student.burnst9091.data.Location;
+import edu.faytechcc.student.burnst9091.data.ReservableLocation;
 import java.util.function.Predicate;
 
 public class LocationSearch
 {
     // Fields
-    private Predicate<Location> locationName,
+    private Predicate<ReservableLocation> locationName,
                                 capacity,
                                 finalPredicate;
     private int numLocations;
@@ -35,7 +35,7 @@ public class LocationSearch
      * @return A Predicate containing all relevant filters based on search
      *         constraints
      */
-    public Predicate<Location> search(String criteria)
+    public Predicate<ReservableLocation> search(String criteria)
     {
         // Split search criteria
         String[] filters = criteria.split(";");
@@ -85,7 +85,7 @@ public class LocationSearch
      * @param value The location name
      * @return A Predicate that checks for a match with the location name
      */
-    private Predicate<Location> filterByLocationName(String value)
+    private Predicate<ReservableLocation> filterByLocationName(String value)
     {
         return l -> l.getName().equalsIgnoreCase(value);
     }
@@ -96,7 +96,7 @@ public class LocationSearch
      * @param value The location capacity
      * @return A predicate that checks for a match with the location capacity
      */
-    private Predicate<Location> filterByCapacity(String value)
+    private Predicate<ReservableLocation> filterByCapacity(String value)
     {
         if (value.startsWith(">="))
             return l -> l.getCapacity() >= Integer.parseInt(value.replace(">=", ""));

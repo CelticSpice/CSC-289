@@ -7,7 +7,7 @@
 package edu.faytechcc.student.gayj5385.controller;
 
 import edu.faytechcc.student.burnst9091.data.DatabaseSettings;
-import edu.faytechcc.student.burnst9091.data.Location;
+import edu.faytechcc.student.burnst9091.data.ReservableLocation;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.SHA256SaltHasher;
 import edu.faytechcc.student.burnst9091.data.SystemPreferences;
@@ -29,8 +29,8 @@ import javax.swing.JPasswordField;
 public class OpeningController implements ActionListener
 {
     // Fields
-    private HashMap<Location, List<Reservation>> reservations;
-    private List<Location> locations;
+    private HashMap<ReservableLocation, List<Reservation>> reservations;
+    private List<ReservableLocation> locations;
     private MainPanel mainPanel;
     private OpenPanel view;
     
@@ -44,8 +44,8 @@ public class OpeningController implements ActionListener
         @param reserves The reservations
     */
     
-    public OpeningController(MainPanel main, OpenPanel v, List<Location> locs,
-        HashMap<Location, List<Reservation>> reserves)
+    public OpeningController(MainPanel main, OpenPanel v, List<ReservableLocation> locs,
+        HashMap<ReservableLocation, List<Reservation>> reserves)
     {
         mainPanel = main;
         view = v;
@@ -145,7 +145,7 @@ public class OpeningController implements ActionListener
 
             ReservationSQLDAO reservationDAO = new ReservationSQLDAO();
             reservations.clear();
-            for (Location loc : locations)
+            for (ReservableLocation loc : locations)
             {
                 List<Reservation> res = reservationDAO.getByLocation(loc);
                 
@@ -183,10 +183,10 @@ public class OpeningController implements ActionListener
                     JOptionPane.ERROR_MESSAGE);
         }
         
-        List<Location> availLocs = new ArrayList<>();
-        for (Location loc : locations)
+        List<ReservableLocation> availLocs = new ArrayList<>();
+        for (ReservableLocation loc : locations)
         {
-            if (loc.deriveReservableTimeframes().size() > 0)
+            if (loc.getReservableTimeframes().size() > 0)
                 availLocs.add(loc);
         }
         

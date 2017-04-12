@@ -6,11 +6,10 @@
 
 package edu.faytechcc.student.gayj5385.controller.reservation;
 
-import edu.faytechcc.student.burnst9091.data.DatabaseSettings;
 import edu.faytechcc.student.burnst9091.data.Location;
+import edu.faytechcc.student.burnst9091.data.ReservableLocation;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.Reserver;
-import edu.faytechcc.student.burnst9091.data.SystemPreferences;
 import edu.faytechcc.student.burnst9091.data.search.Filter;
 import edu.faytechcc.student.burnst9091.data.search.SearchActualizer;
 import edu.faytechcc.student.gayj5385.gui.ManageReservationPanel;
@@ -27,9 +26,9 @@ import javax.swing.JOptionPane;
 public class ManageReservationButtonController implements ActionListener
 {
     // Fields
-    private Filter<Location> locationFilter;
+    private Filter<ReservableLocation> locationFilter;
     private Filter<Reservation> reservationFilter;
-    private HashMap<Location, List<Reservation>> reservations;
+    private HashMap<ReservableLocation, List<Reservation>> reservations;
     private ManageReservationPanel view;
     
     /**
@@ -39,13 +38,13 @@ public class ManageReservationButtonController implements ActionListener
     
         @param v The view
         @param reserves The reservation mapping
-        @param locFilter Location filter
+        @param locFilter ReservableLocation filter
         @param resFilter Reservation filter
     */
     
     public ManageReservationButtonController(ManageReservationPanel v,
-            HashMap<Location, List<Reservation>> reserves,
-            Filter<Location> locFilter, Filter<Reservation> resFilter)
+            HashMap<ReservableLocation, List<Reservation>> reserves,
+            Filter<ReservableLocation> locFilter, Filter<Reservation> resFilter)
     {
         view = v;
         reservations = reserves;
@@ -117,7 +116,8 @@ public class ManageReservationButtonController implements ActionListener
                     
                     reservation.cancel();
                     
-                    Location loc = reservation.getLocation();
+                    ReservableLocation loc = reservation.getLocation();
+                    
                     reservations.get(loc).remove(reservation);
                     
                     if (reservations.get(loc).isEmpty())
@@ -301,7 +301,7 @@ public class ManageReservationButtonController implements ActionListener
     
     private void setLocations()
     {
-        List<Location> locs = new ArrayList<>(reservations.keySet());
+        List<ReservableLocation> locs = new ArrayList<>(reservations.keySet());
         if (locationFilter.getPredicate() != null)
             view.setLocations(locationFilter.filter(locs));
         else

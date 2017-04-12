@@ -7,11 +7,13 @@
 package edu.faytechcc.student.mccanns0131.database;
 
 import edu.faytechcc.student.burnst9091.data.Reservable;
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class ReservableSQLDAO
 {
-    private DBConnection connection;
+    private Connection connection;
     private DBDataSource source;
     
     /**
@@ -27,10 +29,10 @@ public class ReservableSQLDAO
     /**
         Constructs a new ReservableSQLDAO initialized with the given connection
     
-        @param conn DBConnection
+        @param conn Connection
     */
     
-    public ReservableSQLDAO(DBConnection conn)
+    public ReservableSQLDAO(Connection conn)
     {
         source = null;
         connection = conn;
@@ -49,29 +51,41 @@ public class ReservableSQLDAO
             connection = source.getConnection();
                 
         // Check if a record of a location should be added
-        ReservableQuery query = new ReservableQuery();
-        ResultSetParser parser = new ResultSetParser();
-        query.queryDistinctByLocation(reservable.getLocation());
-        parser.setResultSet(connection.runQuery(query));
+        String sql = "SELECT Locations.LocationID " +
+                      "FROM Locations " +
+                      "WHERE Locations.LocationID = " +
+                       reservable.getLocationID();
         
-        if (parser.isResultSetEmpty())
-        {
-            LocationSQLDAO locationDAO = new LocationSQLDAO(connection);
-            locationDAO.addLocation(reservable.getLocation());
-        }   
-        
-        // Check if a record of a timeframe should be added
-        query.queryDistinctByTimeframe(reservable.getTimeframe());
-        parser.setResultSet(connection.runQuery(query));
-        
-        if (parser.isResultSetEmpty())
-        {
-            TimeframeSQLDAO timeframeDAO = new TimeframeSQLDAO(connection);
-            timeframeDAO.addTimeframe(reservable.getTimeframe());
+        try (Statement stmt = connection.createStatement()) {
+            stmt.executeQuery(sql);
+            
+            if (!stmt.getResultSet().isBeforeFirst())
+            {
+                LocationSQLDAO locationDAO = new LocationSQLDAO(connection);
+                locationDAO.addLocation(reservable.getLocation());
+            }
+            
+            // Check if a record of a timeframe should be added
+            sql =   "SELECT Timeframes.TimeframeID " +
+                    "FROM Timeframes " +
+                    "WHERE Timeframes.TimeframeID = " +
+                    reservable.getTimeframeID();
+            
+            stmt.executeQuery(sql);
+            
+            if (!stmt.getResultSet().isBeforeFirst())
+            {
+                TimeframeSQLDAO timeframeDAO = new TimeframeSQLDAO(connection);
+                timeframeDAO.addTimeframe(reservable.getTimeframe());
+            }
+            
+            sql = "INSERT INTO Reservables " +
+                  "VALUES ('" + reservable.getLocationID() + "', " +
+                                reservable.getTimeframeID() + ", " +
+                                reservable.getCost() + ")";
+            
+            stmt.executeUpdate(sql);
         }
-        
-        // Add reservable
-        new RecordAdd(connection).addReservable(reservable);
     }
     
     /**
@@ -96,29 +110,43 @@ public class ReservableSQLDAO
     {
         if (connection == null)
             connection = source.getConnection();
-                
-        new RecordDelete(connection).deleteReservable(reservable);
         
-        // Check if a record of a location should also be removed
-        ReservableQuery query = new ReservableQuery();
-        ResultSetParser parser = new ResultSetParser();
-        query.queryDistinctByLocation(reservable.getLocation());
-        parser.setResultSet(connection.runQuery(query));
+        String sql = "DELETE FROM Reservables " +
+                     "WHERE Reservables.LocationID = " +
+                        reservable.getLocationID() + " " +
+                     "AND Reservables.TimeframeID = " +
+                        reservable.getTimeframeID();
         
-        if (parser.isResultSetEmpty())
-        {
-            LocationSQLDAO locationDAO = new LocationSQLDAO(connection);
-            locationDAO.removeLocation(reservable.getLocation());
-        }
-        
-        // Check if a record of a timeframe should also be removed
-        query.queryDistinctByTimeframe(reservable.getTimeframe());
-        parser.setResultSet(connection.runQuery(query));
-        
-        if (parser.isResultSetEmpty())
-        {
-            TimeframeSQLDAO timeframeDAO = new TimeframeSQLDAO(connection);
-            timeframeDAO.removeTimeframe(reservable.getTimeframe());
+        try (Statement stmt = connection.createStatement()) {
+            stmt.executeUpdate(sql);
+            
+            // Check if a record of a location should also be removed
+            sql = "SELECT Locations.LocationID " +
+                   "FROM Locations " +
+                   "WHERE Locations.LocationID = " +
+                    reservable.getLocationID();
+            
+            stmt.executeQuery(sql);
+            
+            if (!stmt.getResultSet().isBeforeFirst())
+            {
+                LocationSQLDAO locationDAO = new LocationSQLDAO(connection);
+                locationDAO.removeLocation(reservable.getLocation());
+            }
+            
+            // Check if a record of a timeframe should also be removed
+            sql = "SELECT Timeframes.TimeframeID " +
+                  "FROM Timeframes " +
+                  "WHERE Timeframes.TimeframeID = " +
+                  reservable.getTimeframeID();
+            
+            stmt.executeQuery(sql);
+            
+            if (!stmt.getResultSet().isBeforeFirst())
+            {
+                TimeframeSQLDAO timeframeDAO = new TimeframeSQLDAO(connection);
+                timeframeDAO.removeTimeframe(reservable.getTimeframe());
+            }
         }
     }
     
@@ -134,6 +162,16 @@ public class ReservableSQLDAO
         if (connection == null)
             connection = source.getConnection();
         
-        new RecordUpdate(connection).updateReservable(reservable);
+        String sql = "UPDATE Reservables " +
+                     "SET Reservables.Cost = " +
+                        reservable.getCost() + " " +
+                     "WHERE Reservables.LocationID = " +
+                        reservable.getLocationID() + " " +
+                     "AND Reservables.TimeframeID = " +
+                        reservable.getTimeframeID();
+
+        try (Statement stmt = connection.createStatement()) {
+            stmt.executeUpdate(sql);
+        }
     }
 }

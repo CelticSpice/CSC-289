@@ -6,17 +6,16 @@
 
 package edu.faytechcc.student.gayj5385.gui.dialog;
 
-import edu.faytechcc.student.burnst9091.data.DatabaseSettings;
 import edu.faytechcc.student.burnst9091.data.Reservable;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.Reserver;
-import edu.faytechcc.student.burnst9091.data.SystemPreferences;
 import edu.faytechcc.student.mccanns0131.database.ReservationSQLDAO;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.text.NumberFormat;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -145,7 +144,9 @@ public class MakeReservationDialog extends JDialog
         endDate.setEditable(false);
         endTime.setEditable(false);
         
-        cost.setText(r.getTimeframe().getCostString());
+        NumberFormat cFmt = NumberFormat.getCurrencyInstance();
+        
+        cost.setText(cFmt.format(r.getTimeframe().getCost()));
         cost.setEditable(false);
         
         return panel;

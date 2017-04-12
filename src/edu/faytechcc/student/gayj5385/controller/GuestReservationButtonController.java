@@ -6,9 +6,9 @@
 
 package edu.faytechcc.student.gayj5385.controller;
 
-import edu.faytechcc.student.burnst9091.data.Location;
+import edu.faytechcc.student.burnst9091.data.ReservableLocation;
 import edu.faytechcc.student.burnst9091.data.Reservable;
-import edu.faytechcc.student.burnst9091.data.Timeframe;
+import edu.faytechcc.student.burnst9091.data.ReservableTimeframe;
 import edu.faytechcc.student.gayj5385.gui.GuestReservationPanel;
 import edu.faytechcc.student.gayj5385.gui.MainPanel;
 import edu.faytechcc.student.gayj5385.gui.dialog.MakeReservationDialog;
@@ -20,7 +20,7 @@ import java.util.List;
 public class GuestReservationButtonController implements ActionListener
 {
     private GuestReservationPanel view;
-    private List<Location> locations;
+    private List<ReservableLocation> locations;
     
     /**
         Constructs a new GuestReservationButtonController initialized with
@@ -31,7 +31,7 @@ public class GuestReservationButtonController implements ActionListener
     */
     
     public GuestReservationButtonController(GuestReservationPanel v,
-            List<Location> locs)
+            List<ReservableLocation> locs)
     {
         view = v;
         locations = locs;
@@ -70,11 +70,11 @@ public class GuestReservationButtonController implements ActionListener
     
     private void showMakeReservationDialog()
     {
-        List<Timeframe> timeframes = view.getSelectedTimeframes();
+        List<ReservableTimeframe> timeframes = view.getSelectedTimeframes();
         
         if (timeframes.size() == 1)
         {
-            Location loc = view.getSelectedLocation();
+            ReservableLocation loc = view.getSelectedLocation();
             Reservable reservable = new Reservable(loc, timeframes.get(0));
             
             new MakeReservationDialog(reservable).setVisible(true);
@@ -99,10 +99,10 @@ public class GuestReservationButtonController implements ActionListener
     
     private void updateLocations()
     {
-        List<Location> availLocs = new ArrayList<>();
-        for (Location loc : locations)
+        List<ReservableLocation> availLocs = new ArrayList<>();
+        for (ReservableLocation loc : locations)
         {
-            List<Timeframe> timeframes = loc.deriveReservableTimeframes();
+            List<ReservableTimeframe> timeframes = loc.getReservableTimeframes();
             if (timeframes.size() > 0)
                 availLocs.add(loc);
         }

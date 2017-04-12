@@ -6,7 +6,7 @@
 
 package edu.faytechcc.student.gayj5385.controller.reservation;
 
-import edu.faytechcc.student.burnst9091.data.Location;
+import edu.faytechcc.student.burnst9091.data.ReservableLocation;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.search.Filter;
 import edu.faytechcc.student.gayj5385.gui.ManageReservationPanel;
@@ -19,7 +19,7 @@ public class ManageReservationComboBoxController implements ActionListener
 {
     // Fields
     private Filter<Reservation> filter;
-    private HashMap<Location, List<Reservation>> reservations;
+    private HashMap<ReservableLocation, List<Reservation>> reservations;
     private ManageReservationPanel view;
     
     /**
@@ -33,7 +33,7 @@ public class ManageReservationComboBoxController implements ActionListener
     */
     
     public ManageReservationComboBoxController(ManageReservationPanel v,
-                                HashMap<Location, List<Reservation>> reserves,
+                                HashMap<ReservableLocation, List<Reservation>> reserves,
                                 Filter<Reservation> f)
     {
         view = v;
@@ -50,7 +50,7 @@ public class ManageReservationComboBoxController implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        Location loc = view.getSelectedLocation();
+        ReservableLocation loc = view.getSelectedLocation();
         if (loc != null)
         {
             view.setCapacity(String.valueOf(loc.getCapacity()));

@@ -5,9 +5,9 @@
  */
 package edu.faytechcc.student.burnst9091.data.search;
 
-import edu.faytechcc.student.burnst9091.data.Location;
+import edu.faytechcc.student.burnst9091.data.ReservableLocation;
 import edu.faytechcc.student.burnst9091.data.Reservation;
-import edu.faytechcc.student.burnst9091.data.Timeframe;
+import edu.faytechcc.student.burnst9091.data.ReservableTimeframe;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -58,7 +58,7 @@ public class SearchActualizer
      * 
      * @return A timeframe predicate
      */
-    public Predicate<Location> searchLocations()
+    public Predicate<ReservableLocation> searchLocations()
     {
         LocationSearch search = new LocationSearch();
         return search.search(criteria);
@@ -75,7 +75,7 @@ public class SearchActualizer
      * 
      * @return A timeframe predicate
      */
-    public Predicate<Timeframe> searchTimeframes()
+    public Predicate<ReservableTimeframe> searchTimeframes()
     {
         TimeframeSearch search = new TimeframeSearch();
         return search.search(criteria);

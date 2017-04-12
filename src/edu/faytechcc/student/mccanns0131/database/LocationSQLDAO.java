@@ -7,12 +7,15 @@
 package edu.faytechcc.student.mccanns0131.database;
 
 import edu.faytechcc.student.burnst9091.data.Location;
+import edu.faytechcc.student.burnst9091.data.ReservableLocation;
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 public class LocationSQLDAO
 {
-    private DBConnection connection;
+    private Connection connection;
     private DBDataSource source;
     
     /**
@@ -28,10 +31,10 @@ public class LocationSQLDAO
     /**
         Constructs a new LocationSQLDAO initialized with the given connection
     
-        @param conn DBConnection
+        @param conn Connection
     */
     
-    public LocationSQLDAO(DBConnection conn)
+    public LocationSQLDAO(Connection conn)
     {
         source = null;
         connection = conn;
@@ -49,8 +52,18 @@ public class LocationSQLDAO
         if (connection == null)
             connection = source.getConnection();
         
-        ResultSetParser parser = new ResultSetParser();
-        parser.setResultSet((new RecordAdd(connection).addLocation(loc)));
+        String fields = "(LocationName, Capacity)";
+        
+        String sql = "INSERT INTO Locations " + fields + " " +
+                     "VALUES ('" + loc.getName() + "', " +
+                                   loc.getCapacity() + ")";
+        
+        ResultSetParser parser;
+        try (Statement stmt = connection.createStatement()) {
+            stmt.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+            parser = new ResultSetParser(stmt.getGeneratedKeys());
+        }
+        
         int id = parser.parseID();
         loc.setID(id);
     }
@@ -73,15 +86,33 @@ public class LocationSQLDAO
         @return All locations in the database
     */
     
-    public List<Location> getAll() throws SQLException
+    public List<ReservableLocation> getAll() throws SQLException
     {
         if (connection == null)
             connection = source.getConnection();
         
-        LocationQuery query = new LocationQuery();
-        ResultSetParser parser = new ResultSetParser();
-        query.queryAll();
-        parser.setResultSet(connection.runQuery(query));
+        String sql = "SELECT Locations.LocationID, Locations.LocationName, " +
+                     "Locations.Capacity, Timeframes.TimeframeID, " +
+                     "Timeframes.StartDate, Timeframes.StartTime, " +
+                     "Timeframes.EndDate, Timeframes.EndTime, " +
+                     "Reservables.Cost, " +
+                     "Reservations.TimeframeID AS 'ReservedTimeframeID' " +
+                     "FROM Locations " +
+                     "INNER JOIN Reservables " +
+                     "ON Locations.LocationID = Reservables.LocationID " +
+                     "INNER JOIN Timeframes " +
+                     "ON Timeframes.TimeframeID = Reservables.TimeframeID " +
+                     "LEFT JOIN Reservations " +
+                     "ON Reservables.LocationID = Reservations.LocationID " +
+                     "AND Reservables.TimeframeID = Reservations.TimeframeID " +
+                     "ORDER BY Locations.LocationName, Timeframes.StartDate, " +
+                     "Timeframes.StartTime, Timeframes.EndDate, " +
+                     "Timeframes.EndTime, Reservables.Cost";
+        
+        ResultSetParser parser;
+        try (Statement stmt = connection.createStatement()) {
+            parser = new ResultSetParser(stmt.executeQuery(sql));
+        }
         
         return parser.parseLocations();
     }
@@ -98,7 +129,12 @@ public class LocationSQLDAO
         if (connection == null)
             connection = source.getConnection();
         
-        new RecordDelete(connection).deleteLocation(loc);
+        String sql = "DELETE FROM Locations " +
+                     "WHERE Locations.LocationID = " + loc.getID();
+        
+        try (Statement stmt = connection.createStatement()) {
+            stmt.executeUpdate(sql);
+        }
     }
     
     /**
@@ -113,6 +149,16 @@ public class LocationSQLDAO
         if (connection == null)
             connection = source.getConnection();
         
-        new RecordUpdate(connection).updateLocation(loc);
+        String sql = "UPDATE Locations " +
+                     "SET Locations.LocationName = '" +
+                        loc.getName() + "', " +
+                     "Locations.Capacity = " +
+                        loc.getCapacity() + " " +
+                     "WHERE Locations.LocationID = " +
+                        loc.getID();
+        
+        try (Statement stmt = connection.createStatement()) {
+            stmt.executeUpdate(sql);
+        }
     }
 }

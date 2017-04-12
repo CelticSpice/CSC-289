@@ -7,11 +7,13 @@
 package edu.faytechcc.student.mccanns0131.database;
 
 import edu.faytechcc.student.burnst9091.data.Timeframe;
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class TimeframeSQLDAO
 {
-    private DBConnection connection;
+    private Connection connection;
     private DBDataSource source;
     
     /**
@@ -27,10 +29,10 @@ public class TimeframeSQLDAO
     /**
         Constructs a new TimeframeSQLDAO initialized with the given connection
     
-        @param conn DBConnection
+        @param conn Connection
     */
     
-    public TimeframeSQLDAO(DBConnection conn)
+    public TimeframeSQLDAO(Connection conn)
     {
         source = null;
         connection = conn;
@@ -48,8 +50,20 @@ public class TimeframeSQLDAO
         if (connection == null)
             connection = source.getConnection();
         
-        ResultSetParser parser = new ResultSetParser();
-        parser.setResultSet(new RecordAdd(connection).addTimeframe(timeframe));
+        String fields = "(StartDate, StartTime, EndDate, EndTime)";
+        
+        String sql = "INSERT INTO Timeframes " + fields + " " +
+                     "VALUES ('" + timeframe.getStartDate() + "', '" +
+                                   timeframe.getStartTime() + "', '" +
+                                   timeframe.getEndDate()   + "', '" +
+                                   timeframe.getEndTime() + "')";
+        
+        ResultSetParser parser;
+        try (Statement stmt = connection.createStatement()) {
+            stmt.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+            parser = new ResultSetParser(stmt.getGeneratedKeys());
+        }
+        
         int id = parser.parseID();
         timeframe.setID(id);
     }
@@ -68,7 +82,7 @@ public class TimeframeSQLDAO
     /**
         Removes a record of a timeframe from the database
     
-        @param timeframe Timeframe to add
+        @param timeframe ReservableTimeframe to add
         @throws SQLException Error removing record
     */
     
@@ -77,6 +91,11 @@ public class TimeframeSQLDAO
         if (connection == null)
             connection = source.getConnection();
         
-        new RecordDelete(connection).deleteTimeframe(timeframe);
+        String sql = "DELETE FROM Timeframes " +
+                     "WHERE Timeframes.TimeframeID = " + timeframe.getID();
+        
+        try (Statement stmt = connection.createStatement()) {
+            stmt.executeUpdate(sql);
+        }
     }
 }

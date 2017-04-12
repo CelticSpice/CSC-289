@@ -8,6 +8,7 @@ package edu.faytechcc.student.gayj5385.controller.reservation;
 
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.gayj5385.gui.ManageReservationPanel;
+import java.text.NumberFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.swing.event.ListSelectionEvent;
@@ -47,6 +48,7 @@ public class ManageReservationListController implements ListSelectionListener
                 "y-MMM-d");
             DateTimeFormatter tFmt = DateTimeFormatter.ofPattern(
                 "H:mm");
+            NumberFormat cFmt = NumberFormat.getCurrencyInstance();
             
             Reservation reservation = reservations.get(0);
             
@@ -54,7 +56,7 @@ public class ManageReservationListController implements ListSelectionListener
             view.setStartTime(reservation.getStartTime().format(tFmt));
             view.setEndDate(reservation.getEndDate().format(dFmt));
             view.setEndTime(reservation.getEndTime().format(tFmt));
-            view.setCost(reservation.getCostString());
+            view.setCost(cFmt.format(reservations.get(0).getCost()));
             view.setAttendees(String.valueOf(reservation.getNumberAttending()));
             view.setEvent(reservation.getEventType());
             view.setContactName(reservation.getReserverName());

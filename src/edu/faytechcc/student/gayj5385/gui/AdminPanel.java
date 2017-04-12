@@ -8,11 +8,11 @@ package edu.faytechcc.student.gayj5385.gui;
 
 import edu.faytechcc.student.burnst9091.data.DatabaseSettings;
 import edu.faytechcc.student.burnst9091.data.EmailSettings;
-import edu.faytechcc.student.burnst9091.data.Location;
+import edu.faytechcc.student.burnst9091.data.ReservableLocation;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.SecurityOption;
 import edu.faytechcc.student.gayj5385.controller.SettingsPanelController;
-import edu.faytechcc.student.burnst9091.data.Timeframe;
+import edu.faytechcc.student.burnst9091.data.ReservableTimeframe;
 import edu.faytechcc.student.burnst9091.data.search.Filter;
 import edu.faytechcc.student.gayj5385.controller.AdminPanelController;
 import edu.faytechcc.student.gayj5385.controller.reservable.ManageReservableButtonController;
@@ -39,8 +39,8 @@ public class AdminPanel extends JPanel
     // Fields
     private JButton logout;
     private JTabbedPane tabbedPane;
-    private List<Location> locations;
-    private HashMap<Location, List<Reservation>> reservations;
+    private List<ReservableLocation> locations;
+    private HashMap<ReservableLocation, List<Reservation>> reservations;
     private ManageReservablePanel mngReservablePanel;
     private ManageReservationPanel mngReservationPanel;
     private SettingsPanel settingsPanel;
@@ -53,8 +53,8 @@ public class AdminPanel extends JPanel
         @param reserves The reservations
     */
     
-    public AdminPanel(List<Location> locs,
-        HashMap<Location, List<Reservation>> reserves)
+    public AdminPanel(List<ReservableLocation> locs,
+        HashMap<ReservableLocation, List<Reservation>> reserves)
     {
         super(new BorderLayout());
         
@@ -108,12 +108,12 @@ public class AdminPanel extends JPanel
         @param locations The locations
     */
     
-    private void buildManageReservablePanel(List<Location> locations)
+    private void buildManageReservablePanel(List<ReservableLocation> locations)
     {
         mngReservablePanel = new ManageReservablePanel();
         
-        Filter<Timeframe> timeframeFilter = new Filter<>();
-        Filter<Location> locationFilter = new Filter<>();
+        Filter<ReservableTimeframe> timeframeFilter = new Filter<>();
+        Filter<ReservableLocation> locationFilter = new Filter<>();
         
         mngReservablePanel.registerButtonController(
             new ManageReservableButtonController(mngReservablePanel,
@@ -131,16 +131,16 @@ public class AdminPanel extends JPanel
         Builds the panel to manage reservations on, initialized with
         the given mapping of reservations
     
-        @param reservations Location reservation mapping
+        @param reservations ReservableLocation reservation mapping
         @return The built panel
     */
     
     private void buildManageReservationPanel(
-            HashMap<Location, List<Reservation>> reservations)
+            HashMap<ReservableLocation, List<Reservation>> reservations)
     {   
         mngReservationPanel = new ManageReservationPanel();
         
-        Filter<Location> locationFilter = new Filter<>();
+        Filter<ReservableLocation> locationFilter = new Filter<>();
         Filter<Reservation> reservationFilter = new Filter<>();
         
         mngReservationPanel.registerButtonController(
@@ -223,12 +223,12 @@ public class AdminPanel extends JPanel
         
         if (reservations.size() > 0)
         {
-            List<Location> reservedLocs = new ArrayList<>(
+            List<ReservableLocation> reservedLocs = new ArrayList<>(
                     reservations.keySet());
             
             mngReservationPanel.setLocations(reservedLocs);
             
-            Location loc = reservedLocs.get(0);
+            ReservableLocation loc = reservedLocs.get(0);
             mngReservationPanel.setReservations(reservations.get(loc));
         }
     }

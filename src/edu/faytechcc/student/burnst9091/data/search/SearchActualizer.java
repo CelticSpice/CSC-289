@@ -166,7 +166,7 @@ public class SearchActualizer
             for (String f : filterArray)
             {
                 // Split keys and values
-                String[] constraint = f.split(":");
+                String[] constraint = f.split("::");
                 
                 String key = constraint[0].trim(), 
                        val = constraint[1].trim();

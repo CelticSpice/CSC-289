@@ -30,7 +30,7 @@ public class ReservationSearch
         for (String filter : filters)
         {
             // Split keys and values
-            String[] constraint = filter.split(":");
+            String[] constraint = filter.split("::");
             
             String key = constraint[0].trim(), 
                    val = constraint[1].trim();

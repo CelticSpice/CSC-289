@@ -108,25 +108,37 @@ public class GuestReservationButtonController implements ActionListener
     
     private void search(String criteria)
     {
-        SearchActualizer search = new SearchActualizer(criteria);
+        List<String> acceptedKeys = new ArrayList();
+        
+        acceptedKeys.add("locationname");
+        acceptedKeys.add("location");
+        acceptedKeys.add("loc");
+        acceptedKeys.add("capacity");
+        acceptedKeys.add("cap");
+        acceptedKeys.add("startdate");
+        acceptedKeys.add("starttime");
+        acceptedKeys.add("enddate");
+        acceptedKeys.add("endtime");
+        acceptedKeys.add("cost");
+        acceptedKeys.add("price");
+        
+        SearchActualizer search = new SearchActualizer(criteria, acceptedKeys);
         
         if (search.validateSearch())
         {            
-            switch (search.getNumSearchLocations())
+            locationFilter.setPredicate(search.searchLocations());
+            view.setLocations(locationFilter.filter(locations));
+            
+            if (view.getSelectedLocation() != null)
+            {            
+                timeframeFilter.setPredicate(search.searchTimeframes());
+                view.setTimeframes(timeframeFilter.filter(
+                        view.getSelectedLocation().getTimeframes()));
+            }
+            else
             {
-                case 0:
-                    if (criteria.toLowerCase().contains("cap:") ||
-                        criteria.toLowerCase().contains("capacity:"))
-                        searchOnMultipleLocations(search);
-                    else
-                        searchOnSelectedLocation(search);
-                    break;
-                case 1:
-                    searchOnOneLocation(search);
-                    break;
-                default:
-                    searchOnMultipleLocations(search);
-                    break;
+                JOptionPane.showMessageDialog(view, "No locations found");
+                clear();
             }
         }
     }
@@ -139,70 +151,6 @@ public class GuestReservationButtonController implements ActionListener
     {
         MainPanel parent = ((MainPanel) view.getParent());
         parent.showOpenPanel();
-    }
-    
-    /**
-     * Performs a search on two or more locations
-     * 
-     * @param s The SearchActualizer to perform the search with
-     * @param criteria The search criteria
-     */
-    private void searchOnMultipleLocations(SearchActualizer s)
-    {
-        locationFilter.setPredicate(s.searchLocations());
-        view.setLocations(locationFilter.filter(locations));
-        
-        if (timeframeFilter.getPredicate() != null)
-        {
-            timeframeFilter.setPredicate(s.searchTimeframes());
-            view.setTimeframes(timeframeFilter.filter(view.getSelectedLocation()
-                    .getTimeframes()));
-        }
-    }
-    
-    /**
-     * Performs a search on one specified location
-     * 
-     * @param s The SearchActualizer to perform the search with
-     * @param criteria The search criteria
-     */
-    private void searchOnOneLocation(SearchActualizer s)
-    {
-        locationFilter.setPredicate(s.searchLocations());
-        view.setLocations(locationFilter.filter(locations));
-            
-        if (view.getSelectedLocation() != null)
-        {
-            timeframeFilter.setPredicate(s.searchTimeframes());
-            view.setTimeframes(timeframeFilter.filter(view.getSelectedLocation()
-                    .getTimeframes()));
-        }
-        else
-        {
-            JOptionPane.showMessageDialog(view, "No such location exists");
-            clear();
-        }
-    }
-    
-    /**
-     * Performs a search on the currently selected location
-     * 
-     * @param s The SearchActualizer to perform the search with
-     * @param criteria The search criteria
-     */
-    private void searchOnSelectedLocation(SearchActualizer s)
-    {
-        if (view.getSelectedLocation() != null)
-        {
-            timeframeFilter.setPredicate(s.searchTimeframes());
-            
-            List<Timeframe> timeframes = view.getSelectedLocation()
-                    .getTimeframes(timeframeFilter.getPredicate());
-
-            view.setTimeframes(timeframes);
-        }
-        else
-            JOptionPane.showMessageDialog(view, "No location selected");
     }
     
     /**

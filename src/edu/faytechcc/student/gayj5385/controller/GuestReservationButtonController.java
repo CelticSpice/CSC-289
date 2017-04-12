@@ -65,6 +65,9 @@ public class GuestReservationButtonController implements ActionListener
             case "Clear":
                 clear();
                 break;
+            case "Help":
+                // Search Help
+                break;
             case "Exit":
                 exit();
                 break;

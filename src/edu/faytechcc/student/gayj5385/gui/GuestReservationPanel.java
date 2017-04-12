@@ -36,7 +36,7 @@ public class GuestReservationPanel extends JPanel
 {
     // Fields
     private DefaultListModel timeframes;
-    private JButton reserve, exit, searchBtn, clear;
+    private JButton reserve, exit, searchBtn, clear, help;
     private JComboBox<Location> locations;
     private JList<Timeframe> timeframeList;
     private JTextField capacity, search, startDate, startTime, endDate, endTime,
@@ -177,7 +177,8 @@ public class GuestReservationPanel extends JPanel
 
         searchButtonsPanel.add(searchBtn = new JButton("Search"));
         searchButtonsPanel.add(clear = new JButton("Clear"));
-
+        searchButtonsPanel.add(help = new JButton("Help"));
+        
         gbc.gridy = 1;
         gbc.insets = new Insets(0, 0, 0, 0);
         searchComponentPanel.add(searchButtonsPanel, gbc);
@@ -245,6 +246,7 @@ public class GuestReservationPanel extends JPanel
         exit.addActionListener(controller);
         searchBtn.addActionListener(controller);
         clear.addActionListener(controller);
+        help.addActionListener(controller);
     }
 
     /**

@@ -49,7 +49,6 @@ public class ManageReservationButtonController implements ActionListener
         reservations = reserves;
         locationFilter = locFilter;
         reservationFilter = resFilter;
-//        reservations.
     }
     
     /**
@@ -84,6 +83,9 @@ public class ManageReservationButtonController implements ActionListener
                 break;
             case "Clear":
                 clear();
+                break;
+            case "Help":
+                // Search Help
                 break;
             case "Logout":
                 System.exit(0);

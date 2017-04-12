@@ -82,6 +82,8 @@ public class ManageReservableButtonController implements ActionListener
                 break;
             case "Clear":
                 doClear();
+            case "Help":
+                // Search Help
                 break;
         }
     }

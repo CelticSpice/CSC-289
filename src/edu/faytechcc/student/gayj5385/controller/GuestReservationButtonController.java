@@ -60,11 +60,13 @@ public class GuestReservationButtonController implements ActionListener
                 showMakeReservationDialog();
                 break;
             case "Search":
+                clear();
                 if (!view.getSearchCriteria().isEmpty())
                     search(view.getSearchCriteria());
                 break;
             case "Clear":
                 clear();
+                view.clearSearch();
                 break;
             case "Help":
                 new SearchHelpDialog().setVisible(true);
@@ -79,7 +81,6 @@ public class GuestReservationButtonController implements ActionListener
     {
         locationFilter.setPredicate(null);
         timeframeFilter.setPredicate(null);
-        view.clearSearch();
         
         updateLocations();
     }

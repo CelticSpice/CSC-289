@@ -6,11 +6,9 @@
 
 package edu.faytechcc.student.gayj5385.gui.dialog;
 
-import edu.faytechcc.student.burnst9091.data.DatabaseSettings;
 import edu.faytechcc.student.burnst9091.data.Reservable;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.Reserver;
-import edu.faytechcc.student.burnst9091.data.SystemPreferences;
 import edu.faytechcc.student.mccanns0131.database.ReservationSQLDAO;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;

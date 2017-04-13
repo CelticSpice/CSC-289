@@ -54,16 +54,19 @@ public class LocationSearch
                     if (finalPredicate == null)
                         finalPredicate = filterByLocationName(val);
                     else if (numLocations == 1)
-                        finalPredicate = finalPredicate.and(filterByLocationName(val));
+                        finalPredicate = finalPredicate.and(
+                                filterByLocationName(val));
                     else
-                        finalPredicate = finalPredicate.or(filterByLocationName(val));
+                        finalPredicate = finalPredicate.or(
+                                filterByLocationName(val));
                     break;
                 case "capacity":
                 case "cap":
                     if (finalPredicate == null)
                         finalPredicate = filterByCapacity(val);
                     else
-                        finalPredicate = finalPredicate.and(filterByCapacity(val));
+                        finalPredicate = finalPredicate.and(
+                                filterByCapacity(val));
                     break;
             }
         }
@@ -91,14 +94,19 @@ public class LocationSearch
     private Predicate<Location> filterByCapacity(String value)
     {
         if (value.startsWith(">="))
-            return l -> l.getCapacity() >= Integer.parseInt(value.replace(">=", ""));
+            return l -> l.getCapacity() >= Integer.parseInt(
+                    value.replace(">=", ""));
         else if (value.startsWith("<="))
-            return l -> l.getCapacity() <= Integer.parseInt(value.replace("<=", ""));
+            return l -> l.getCapacity() <= Integer.parseInt(
+                    value.replace("<=", ""));
         else if (value.startsWith(">"))
-            return l -> l.getCapacity() > Integer.parseInt(value.replace(">", ""));
+            return l -> l.getCapacity() > Integer.parseInt(
+                    value.replace(">", ""));
         else if (value.startsWith("<"))
-            return l -> l.getCapacity() < Integer.parseInt(value.replace("<", ""));
+            return l -> l.getCapacity() < Integer.parseInt(
+                    value.replace("<", ""));
         else
-            return l -> l.getCapacity() == Integer.parseInt(value);
+            return l -> l.getCapacity() == Integer.parseInt(
+                    value.replace("=", ""));
     }
 }

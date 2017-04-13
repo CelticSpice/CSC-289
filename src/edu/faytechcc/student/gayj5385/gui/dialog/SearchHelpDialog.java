@@ -4,6 +4,7 @@
  */
 package edu.faytechcc.student.gayj5385.gui.dialog;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -57,6 +58,7 @@ public class SearchHelpDialog extends JDialog
         
         keyList = new JList(keys = new DefaultListModel());
         JScrollPane scrollPane = new JScrollPane(keyList);
+        scrollPane.setPreferredSize(new Dimension(255, 225));
         
         gbc.gridy = 2;
         gbc.insets = new Insets(0, 0, 5, 0);

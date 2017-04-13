@@ -78,11 +78,13 @@ public class ManageReservableButtonController implements ActionListener
                 doDelete();
                 break;
             case "Search":
+                doClear();
                 if (!view.getSearchCriteria().isEmpty())
                     doSearch(view.getSearchCriteria());
                 break;
             case "Clear":
                 doClear();
+                view.clearSearch();
             case "Help":
                 new SearchHelpDialog().setVisible(true);
                 break;
@@ -141,7 +143,6 @@ public class ManageReservableButtonController implements ActionListener
     {
         timeframeFilter.setPredicate(null);
         locationFilter.setPredicate(null);
-        view.clearSearch();
         
         setLocations();
     }

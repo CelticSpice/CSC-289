@@ -79,10 +79,12 @@ public class ManageReservationButtonController implements ActionListener
                 cancel();
                 break;
             case "Search":
+                clear();
                 if (!view.getSearchCriteria().isEmpty())
                     search(view.getSearchCriteria());
                 break;
             case "Clear":
+                view.clearSearch();
                 clear();
                 break;
             case "Help":
@@ -152,7 +154,6 @@ public class ManageReservationButtonController implements ActionListener
     {
         reservationFilter.setPredicate(null);
         locationFilter.setPredicate(null);
-        view.clearSearch();
         
         setLocations();
     }

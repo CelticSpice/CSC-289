@@ -67,7 +67,7 @@ public class GuestReservationButtonController implements ActionListener
                 clear();
                 break;
             case "Help":
-//                new SearchHelpDialog().setVisible(true);
+                new SearchHelpDialog().setVisible(true);
                 break;
             case "Exit":
                 exit();

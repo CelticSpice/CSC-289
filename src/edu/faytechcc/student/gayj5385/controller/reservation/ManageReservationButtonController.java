@@ -12,6 +12,7 @@ import edu.faytechcc.student.burnst9091.data.Reserver;
 import edu.faytechcc.student.burnst9091.data.search.Filter;
 import edu.faytechcc.student.burnst9091.data.search.SearchActualizer;
 import edu.faytechcc.student.gayj5385.gui.ManageReservationPanel;
+import edu.faytechcc.student.gayj5385.gui.dialog.SearchHelpDialog;
 import edu.faytechcc.student.gayj5385.gui.dialog.SendEmailDialog;
 import edu.faytechcc.student.mccanns0131.database.ReservationSQLDAO;
 import java.awt.event.ActionEvent;
@@ -85,7 +86,7 @@ public class ManageReservationButtonController implements ActionListener
                 clear();
                 break;
             case "Help":
-                // Search Help
+                new SearchHelpDialog().setVisible(true);
                 break;
             case "Logout":
                 System.exit(0);

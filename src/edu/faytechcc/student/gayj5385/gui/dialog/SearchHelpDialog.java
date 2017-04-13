@@ -9,7 +9,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -25,7 +24,7 @@ public class SearchHelpDialog extends JDialog
     JList keyList;
     JButton okay;
     
-    public SearchHelpDialog(List<String> k)
+    public SearchHelpDialog()
     {
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();

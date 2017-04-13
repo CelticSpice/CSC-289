@@ -19,6 +19,7 @@ import edu.faytechcc.student.gayj5385.controller.ReservableAddComboBoxController
 import edu.faytechcc.student.gayj5385.controller.ReservableAddRadioController;
 import edu.faytechcc.student.gayj5385.gui.ManageReservablePanel;
 import edu.faytechcc.student.gayj5385.gui.dialog.AddReservableDialog;
+import edu.faytechcc.student.gayj5385.gui.dialog.SearchHelpDialog;
 import edu.faytechcc.student.mccanns0131.database.ReservableSQLDAO;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -83,7 +84,7 @@ public class ManageReservableButtonController implements ActionListener
             case "Clear":
                 doClear();
             case "Help":
-                // Search Help
+                new SearchHelpDialog().setVisible(true);
                 break;
         }
     }

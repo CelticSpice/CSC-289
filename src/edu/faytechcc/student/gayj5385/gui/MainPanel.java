@@ -8,6 +8,8 @@ package edu.faytechcc.student.gayj5385.gui;
 
 import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reservation;
+import edu.faytechcc.student.burnst9091.data.Timeframe;
+import edu.faytechcc.student.burnst9091.data.search.Filter;
 import edu.faytechcc.student.gayj5385.controller.GuestReservationButtonController;
 import edu.faytechcc.student.gayj5385.controller.GuestReservationComboBoxController;
 import edu.faytechcc.student.gayj5385.controller.GuestReservationListController;
@@ -91,8 +93,10 @@ public class MainPanel extends JPanel
         guestReservePanel.registerButtonController(
                 new GuestReservationButtonController(guestReservePanel, locs));
         
+        Filter<Timeframe> filter = new Filter();
         guestReservePanel.registerComboBoxController(
-                new GuestReservationComboBoxController(guestReservePanel));
+                new GuestReservationComboBoxController(guestReservePanel,
+                        filter));
         
         guestReservePanel.registerTimeframeListController(
                 new GuestReservationListController(guestReservePanel));

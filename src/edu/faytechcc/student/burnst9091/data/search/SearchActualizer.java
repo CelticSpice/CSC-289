@@ -17,6 +17,7 @@ public class SearchActualizer
     // Fields
     String criteria;
     List<String> acceptedKeys;
+    int numLocations;
     
     /**
      * Constructor
@@ -27,7 +28,13 @@ public class SearchActualizer
     {
         criteria = c;
         acceptedKeys = keys;
+        numLocations = 0;
     }
+    
+    public int getNumSearchLocations()
+    {
+        return numLocations;
+}
     
     /**
      * Return a predicate that checks for a match with a given location
@@ -36,14 +43,17 @@ public class SearchActualizer
      */
     public Predicate<Location> searchLocations()
     {
-        LocationSearch search = new LocationSearch();
-        return search.search(criteria);
+        return new LocationSearch().search(criteria);
     }
     
+    /**
+     * Return a predicate that checks for a match with a given reservation
+     * 
+     * @return A reservation predicate 
+     */
     public Predicate<Reservation> searchReservations()
     {
-        ReservationSearch search = new ReservationSearch();
-        return search.search(criteria);
+        return new ReservationSearch().search(criteria);
     }
     
     /**
@@ -53,8 +63,7 @@ public class SearchActualizer
      */
     public Predicate<Timeframe> searchTimeframes()
     {
-        TimeframeSearch search = new TimeframeSearch();
-        return search.search(criteria);
+        return new TimeframeSearch().search(criteria);
     }
 
     /**
@@ -147,6 +156,8 @@ public class SearchActualizer
                 return false;
             }
         }
+        
+        numLocations++;
         
         return true;
     }

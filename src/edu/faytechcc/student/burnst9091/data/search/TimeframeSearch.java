@@ -51,41 +51,36 @@ public class TimeframeSearch
             switch(key.toLowerCase())
             {
                 case "startdate":
-                    startDate = filterByStartDate(val);
                     if (finalPredicate == null)
-                        finalPredicate = startDate;
+                        finalPredicate = filterByStartDate(val);
                     else
-                        finalPredicate = finalPredicate.and(startDate);
+                        finalPredicate = finalPredicate.and(filterByStartDate(val));
                     break;
-                case "starttime":                        
-                    startTime = filterByStartTime(val);
+                case "starttime":
                     if (finalPredicate == null)
-                        finalPredicate = startTime;
+                        finalPredicate = filterByStartTime(val);
                     else
-                        finalPredicate = finalPredicate.and(startTime);
+                        finalPredicate = finalPredicate.and(filterByStartTime(val));
                     break;
                 case "enddate":
-                    endDate = filterByEndDate(val);
                     if (finalPredicate == null)
-                        finalPredicate = endDate;
+                        finalPredicate = filterByEndDate(val);
                     else
-                        finalPredicate = finalPredicate.and(endDate);
+                        finalPredicate = finalPredicate.and(filterByEndDate(val));
                     break;
                 case "endtime":
-                    endTime = filterByEndTime(val);
                     if (finalPredicate == null)
-                        finalPredicate = endTime;
+                        finalPredicate = filterByEndTime(val);
                     else
-                        finalPredicate = finalPredicate.and(endTime);
+                        finalPredicate = finalPredicate.and(filterByEndTime(val));
                     break;
                     //start=2017-03-20,13:00; end=2017-03-20,14:00
                 case "cost":
                 case "price":
-                    cost = filterByCost(val);
                     if (finalPredicate == null)
-                        finalPredicate = cost;
+                        finalPredicate = filterByCost(val);
                     else
-                        finalPredicate = finalPredicate.and(cost);
+                        finalPredicate = finalPredicate.and(filterByCost(val));
                     break;
             }
         }

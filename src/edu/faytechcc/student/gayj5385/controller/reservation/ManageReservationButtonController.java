@@ -25,7 +25,7 @@ import javax.swing.JOptionPane;
 public class ManageReservationButtonController implements ActionListener
 {
     // Fields
-    private Filter locationFilter;
+    private Filter<Location> locationFilter;
     private Filter<Reservation> reservationFilter;
     private HashMap<Location, List<Reservation>> reservations;
     private ManageReservationPanel view;
@@ -244,21 +244,100 @@ public class ManageReservationButtonController implements ActionListener
         
         if (search.validateSearch())
         {
-            locationFilter.setPredicate(search.searchLocations());
-            setLocations();
-            
-            if (view.getSelectedLocation() != null)
+//            locationFilter.setPredicate(search.searchLocations());
+//            setLocations();
+//            
+//            if (view.getSelectedLocation() != null)
+//            {
+//                reservationFilter.setPredicate(search.searchReservations());
+//                setReservations(reservationFilter.filter(reservations.get(
+//                        view.getSelectedLocation())));
+//            }
+//            else
+//            {
+//                JOptionPane.showMessageDialog(view, "No locations found");
+//                clear();
+//            }
+//        }
+          switch (search.getNumSearchLocations())
             {
-                reservationFilter.setPredicate(search.searchReservations());
-                setReservations(reservationFilter.filter(reservations.get(
-                        view.getSelectedLocation())));
-            }
-            else
-            {
-                JOptionPane.showMessageDialog(view, "No locations found");
-                clear();
+                case 0:
+                    searchOnSelectedLocation(search);
+                    break;
+                case 1:
+                    searchOnOneLocation(search);
+                    break;
+                default:
+                    searchOnMultipleLocations(search);
+                    break;
             }
         }
+    }
+    
+    /**
+     * Performs a search on two or more locations
+     * 
+     * @param s The SearchActualizer to perform the search with
+     * @param criteria The search criteria
+     */
+    private void searchOnMultipleLocations(SearchActualizer s)
+    {
+        locationFilter.setPredicate(s.searchLocations());
+        setLocations();
+        
+        reservationFilter.setPredicate(s.searchReservations());
+            
+        if (reservationFilter.getPredicate() != null)
+        {
+            view.setReservations(reservationFilter.filter(reservations.get(
+                        view.getSelectedLocation())));
+        }
+    }
+    
+    /**
+     * Performs a search on one specified location
+     * 
+     * @param s The SearchActualizer to perform the search with
+     * @param criteria The search criteria
+     */
+    private void searchOnOneLocation(SearchActualizer s)
+    {
+        locationFilter.setPredicate(s.searchLocations());
+        setLocations();
+        
+        reservationFilter.setPredicate(s.searchReservations());
+            
+        if (view.getSelectedLocation() != null)
+        {
+            reservationFilter.setPredicate(s.searchReservations());
+            view.setReservations(reservationFilter.filter(reservations.get(
+                        view.getSelectedLocation())));
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(view, "No such location exists");
+            clear();
+        }
+    }
+    
+    /**
+     * Performs a search on the currently selected location
+     * 
+     * @param s The SearchActualizer to perform the search with
+     * @param criteria The search criteria
+     */
+    private void searchOnSelectedLocation(SearchActualizer s)
+    {
+        if (view.getSelectedLocation() != null)
+        {
+            reservationFilter.setPredicate(s.searchReservations());
+            
+            List<Reservation> reserves = reservations.get(view.getSelectedLocation());
+
+            setReservations(reserves);
+        }
+        else
+            JOptionPane.showMessageDialog(view, "No location selected");
     }
     
     /**

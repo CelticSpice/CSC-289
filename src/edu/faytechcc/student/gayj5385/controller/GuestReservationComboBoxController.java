@@ -9,6 +9,7 @@ package edu.faytechcc.student.gayj5385.controller;
 
 import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Timeframe;
+import edu.faytechcc.student.burnst9091.data.search.Filter;
 import edu.faytechcc.student.gayj5385.gui.GuestReservationPanel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,6 +18,7 @@ import java.util.List;
 public class GuestReservationComboBoxController implements ActionListener
 {
     private GuestReservationPanel view;
+    private Filter<Timeframe> filter;
     
     /**
         Constructs a new GuestReservationComboBoxController initialized with
@@ -25,9 +27,11 @@ public class GuestReservationComboBoxController implements ActionListener
         @param v The view
     */
     
-    public GuestReservationComboBoxController(GuestReservationPanel v)
+    public GuestReservationComboBoxController(GuestReservationPanel v,
+            Filter<Timeframe> f)
     {
         view = v;
+        filter = f;
     }
     
     /**
@@ -44,8 +48,13 @@ public class GuestReservationComboBoxController implements ActionListener
         if (loc != null)
         {
             view.setCapacity(String.valueOf(loc.getCapacity()));
-            List<Timeframe> timeframes = loc.deriveReservableTimeframes();
-            view.setTimeframes(timeframes);
+            if (filter.getPredicate() != null)
+                view.setTimeframes(filter.filter(loc.getTimeframes()));
+            else
+            {
+                List<Timeframe> timeframes = loc.deriveReservableTimeframes();
+                view.setTimeframes(timeframes);
+            }
         }
     }
 }

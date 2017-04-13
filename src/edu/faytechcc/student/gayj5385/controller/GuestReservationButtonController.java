@@ -14,6 +14,7 @@ import edu.faytechcc.student.burnst9091.data.search.SearchActualizer;
 import edu.faytechcc.student.gayj5385.gui.GuestReservationPanel;
 import edu.faytechcc.student.gayj5385.gui.MainPanel;
 import edu.faytechcc.student.gayj5385.gui.dialog.MakeReservationDialog;
+import edu.faytechcc.student.gayj5385.gui.dialog.SearchHelpDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -66,7 +67,7 @@ public class GuestReservationButtonController implements ActionListener
                 clear();
                 break;
             case "Help":
-                // Search Help
+//                new SearchHelpDialog().setVisible(true);
                 break;
             case "Exit":
                 exit();
@@ -129,22 +130,105 @@ public class GuestReservationButtonController implements ActionListener
         
         if (search.validateSearch())
         {            
-            locationFilter.setPredicate(search.searchLocations());
-            view.setLocations(locationFilter.filter(locations));
-            
-            if (view.getSelectedLocation() != null)
-            {            
-                timeframeFilter.setPredicate(search.searchTimeframes());
-                view.setTimeframes(timeframeFilter.filter(
-                        view.getSelectedLocation().getTimeframes()));
-            }
-            else
+//            locationFilter.setPredicate(search.searchLocations());
+//            view.setLocations(locationFilter.filter(locations));
+//            
+//            if (view.getSelectedLocation() != null)
+//            {            
+//                timeframeFilter.setPredicate(search.searchTimeframes());
+//                view.setTimeframes(timeframeFilter.filter(
+//                        view.getSelectedLocation().getTimeframes()));
+//            }
+//            else
+//            {
+//                JOptionPane.showMessageDialog(view, "No locations found");
+//                clear();
+//            }
+            switch (search.getNumSearchLocations())
             {
-                JOptionPane.showMessageDialog(view, "No locations found");
-                clear();
+                case 0:
+                    if (criteria.toLowerCase().contains("cap::") ||
+                        criteria.toLowerCase().contains("capacity::"))
+                        searchOnMultipleLocations(search);
+                    else
+                        searchOnSelectedLocation(search);
+                    break;
+                case 1:
+                    searchOnOneLocation(search);
+                    break;
+                default:
+                    searchOnMultipleLocations(search);
+                    break;
             }
         }
     }
+    
+    /**
+     * Performs a search on two or more locations
+     * 
+     * @param s The SearchActualizer to perform the search with
+     * @param criteria The search criteria
+     */
+    private void searchOnMultipleLocations(SearchActualizer s)
+    {
+        locationFilter.setPredicate(s.searchLocations());
+        view.setLocations(locationFilter.filter(locations));
+        
+        timeframeFilter.setPredicate(s.searchTimeframes());
+            
+        if (timeframeFilter.getPredicate() != null)
+        {
+            view.setTimeframes(timeframeFilter.filter(view.getSelectedLocation()
+                    .getTimeframes()));
+        }
+    }
+    
+    /**
+     * Performs a search on one specified location
+     * 
+     * @param s The SearchActualizer to perform the search with
+     * @param criteria The search criteria
+     */
+    private void searchOnOneLocation(SearchActualizer s)
+    {
+        locationFilter.setPredicate(s.searchLocations());
+        view.setLocations(locationFilter.filter(locations));
+        
+        timeframeFilter.setPredicate(s.searchTimeframes());
+            
+        if (view.getSelectedLocation() != null)
+        {
+            timeframeFilter.setPredicate(s.searchTimeframes());
+            view.setTimeframes(timeframeFilter.filter(view.getSelectedLocation()
+                    .getTimeframes()));
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(view, "No such location exists");
+            clear();
+        }
+    }
+    
+    /**
+     * Performs a search on the currently selected location
+     * 
+     * @param s The SearchActualizer to perform the search with
+     * @param criteria The search criteria
+     */
+    private void searchOnSelectedLocation(SearchActualizer s)
+    {
+        if (view.getSelectedLocation() != null)
+        {
+            timeframeFilter.setPredicate(s.searchTimeframes());
+            
+            List<Timeframe> timeframes = view.getSelectedLocation()
+                    .getTimeframes(timeframeFilter.getPredicate());
+
+            view.setTimeframes(timeframes);
+        }
+        else
+            JOptionPane.showMessageDialog(view, "No location selected");
+}
     
     /**
         Exits the GuestReservationPanel

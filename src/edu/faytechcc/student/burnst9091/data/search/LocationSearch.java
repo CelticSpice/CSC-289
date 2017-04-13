@@ -11,9 +11,7 @@ import java.util.function.Predicate;
 public class LocationSearch
 {
     // Fields
-    private Predicate<Location> locationName,
-                                capacity,
-                                finalPredicate;
+    private Predicate<Location> finalPredicate;
     private int numLocations;
     
     /**
@@ -21,8 +19,6 @@ public class LocationSearch
      */
     public LocationSearch()
     {
-        locationName = null;
-        capacity = null;
         finalPredicate = null;
         numLocations = 0;
     }
@@ -55,23 +51,19 @@ public class LocationSearch
                 case "loc":
                     numLocations++;
                     
-                    locationName = filterByLocationName(val);
-                    
                     if (finalPredicate == null)
-                        finalPredicate = locationName;
+                        finalPredicate = filterByLocationName(val);
                     else if (numLocations == 1)
-                        finalPredicate = finalPredicate.and(locationName);
+                        finalPredicate = finalPredicate.and(filterByLocationName(val));
                     else
-                        finalPredicate = finalPredicate.or(locationName);
+                        finalPredicate = finalPredicate.or(filterByLocationName(val));
                     break;
                 case "capacity":
                 case "cap":
-                    capacity = filterByCapacity(val);
-                    
                     if (finalPredicate == null)
-                        finalPredicate = capacity;
+                        finalPredicate = filterByCapacity(val);
                     else
-                        finalPredicate = finalPredicate.and(capacity);
+                        finalPredicate = finalPredicate.and(filterByCapacity(val));
                     break;
             }
         }

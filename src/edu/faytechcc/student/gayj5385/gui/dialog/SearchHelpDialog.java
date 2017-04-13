@@ -4,41 +4,57 @@
  */
 package edu.faytechcc.student.gayj5385.gui.dialog;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 public class SearchHelpDialog extends JDialog
 {
     // Fields
     DefaultListModel keys;
-    JLabel info;
+    JLabel info, acceptedKeys;
     JList keyList;
     JButton okay;
     
-    public SearchHelpDialog()
+    public SearchHelpDialog(List<String> ks)
     {
-        setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
+        setLayout(new BorderLayout());
         setTitle("Search Help");
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setModalityType(ModalityType.APPLICATION_MODAL);
         setResizable(false);
         setLocationRelativeTo(null);
         
+        add(buildInfoPanel(), BorderLayout.WEST);
+        add(buildKeyListPanel(ks), BorderLayout.EAST);
+        add(okay = new JButton("Okay"), BorderLayout.SOUTH);
+        
+        ButtonController controller = new ButtonController();
+        okay.addActionListener(controller);
+        
+        setSize(450, 300);
+    }
+    
+    private JPanel buildInfoPanel()
+    {
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.insets = new Insets(15, 15, 15, 15);
-        gbc.anchor = GridBagConstraints.NORTH;
+        gbc.insets = new Insets(0, 15, 15, 15);
         
         info = new JLabel();
         info.setText("<html>" +
@@ -50,25 +66,42 @@ public class SearchHelpDialog extends JDialog
                      "values, enter a semi-colon after each value.<br>" +
                      "<br>" +
                      "<b>Example:</b><br>" +
-                     "startdate::2017-12-31; starttime::12:00");
-        add(info, gbc);
+                     "startdate :: 2017-12-31; starttime :: 12:00");
         
-        gbc.gridy = 1;
-        gbc.anchor = GridBagConstraints.CENTER;
+        panel.add(info, gbc);
+        
+        return panel;
+    }
+    
+    private JPanel buildKeyListPanel(List<String> ks)
+    {
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        
+        acceptedKeys = new JLabel();
+        acceptedKeys.setText("<html><b>Accepted Keys:</b>");
+                
+        panel.add(acceptedKeys, gbc);
         
         keyList = new JList(keys = new DefaultListModel());
+        
+        for (String k : ks)
+        {
+            keys.addElement(k);
+        }
+        
         JScrollPane scrollPane = new JScrollPane(keyList);
-        scrollPane.setPreferredSize(new Dimension(255, 225));
+        scrollPane.setPreferredSize(new Dimension(125, 175));
         
-        gbc.gridy = 2;
-        gbc.insets = new Insets(0, 0, 5, 0);
-        gbc.anchor = GridBagConstraints.SOUTH;
-        add(okay = new JButton("Okay"), gbc);
+        gbc.gridy = 1;        
+        gbc.insets = new Insets(7, 15, 15, 15);
         
-        ButtonController controller = new ButtonController();
-        okay.addActionListener(controller);
+        panel.add(scrollPane, gbc);
         
-        setSize(530, 425);
+        return panel;
     }
     
     private class ButtonController implements ActionListener

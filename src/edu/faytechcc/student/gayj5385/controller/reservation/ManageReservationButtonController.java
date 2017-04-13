@@ -30,6 +30,7 @@ public class ManageReservationButtonController implements ActionListener
     private Filter<Reservation> reservationFilter;
     private HashMap<Location, List<Reservation>> reservations;
     private ManageReservationPanel view;
+    private List<String> searchKeys;
     
     /**
         Constructs a new ManageReservationButtonController to control buttons
@@ -50,6 +51,25 @@ public class ManageReservationButtonController implements ActionListener
         reservations = reserves;
         locationFilter = locFilter;
         reservationFilter = resFilter;
+        searchKeys = new ArrayList();
+        
+        searchKeys.add("locationname");
+        searchKeys.add("location");
+        searchKeys.add("loc");
+        searchKeys.add("startdate");
+        searchKeys.add("starttime");
+        searchKeys.add("enddate");
+        searchKeys.add("endtime");
+        searchKeys.add("cost");
+        searchKeys.add("price");
+        searchKeys.add("firstname");
+        searchKeys.add("first");
+        searchKeys.add("lastname");
+        searchKeys.add("last");
+        searchKeys.add("emailaddress");
+        searchKeys.add("email");
+        searchKeys.add("phonenumber");
+        searchKeys.add("phone");
     }
     
     /**
@@ -88,7 +108,7 @@ public class ManageReservationButtonController implements ActionListener
                 clear();
                 break;
             case "Help":
-                new SearchHelpDialog().setVisible(true);
+                new SearchHelpDialog(searchKeys).setVisible(true);
                 break;
             case "Logout":
                 System.exit(0);
@@ -222,45 +242,10 @@ public class ManageReservationButtonController implements ActionListener
      */
     private void search(String criteria)
     {
-        List<String> acceptedKeys = new ArrayList();
-        
-        acceptedKeys.add("locationname");
-        acceptedKeys.add("location");
-        acceptedKeys.add("loc");
-        acceptedKeys.add("startdate");
-        acceptedKeys.add("starttime");
-        acceptedKeys.add("enddate");
-        acceptedKeys.add("endtime");
-        acceptedKeys.add("cost");
-        acceptedKeys.add("price");
-        acceptedKeys.add("firstname");
-        acceptedKeys.add("first");
-        acceptedKeys.add("lastname");
-        acceptedKeys.add("last");
-        acceptedKeys.add("emailaddress");
-        acceptedKeys.add("email");
-        acceptedKeys.add("phonenumber");
-        acceptedKeys.add("phone");
-        
-        SearchActualizer search = new SearchActualizer(criteria, acceptedKeys);
+        SearchActualizer search = new SearchActualizer(criteria, searchKeys);
         
         if (search.validateSearch())
         {
-//            locationFilter.setPredicate(search.searchLocations());
-//            setLocations();
-//            
-//            if (view.getSelectedLocation() != null)
-//            {
-//                reservationFilter.setPredicate(search.searchReservations());
-//                setReservations(reservationFilter.filter(reservations.get(
-//                        view.getSelectedLocation())));
-//            }
-//            else
-//            {
-//                JOptionPane.showMessageDialog(view, "No locations found");
-//                clear();
-//            }
-//        }
           switch (search.getNumSearchLocations())
             {
                 case 0:

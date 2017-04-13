@@ -35,6 +35,7 @@ public class ManageReservableButtonController implements ActionListener
     private ManageReservablePanel view;
     private Filter<Timeframe> timeframeFilter;
     private Filter<Location> locationFilter;
+    private List<String> searchKeys;
     
     /**
         Constructs a new ManageReservableButtonController to manage the
@@ -55,6 +56,19 @@ public class ManageReservableButtonController implements ActionListener
         locations = locs;
         timeframeFilter = timeFilter;
         locationFilter = locFilter;
+        searchKeys = new ArrayList();
+        
+        searchKeys.add("locationname");
+        searchKeys.add("location");
+        searchKeys.add("loc");
+        searchKeys.add("capacity");
+        searchKeys.add("cap");
+        searchKeys.add("startdate");
+        searchKeys.add("starttime");
+        searchKeys.add("enddate");
+        searchKeys.add("endtime");
+        searchKeys.add("cost");
+        searchKeys.add("price");
     }
 
     /**
@@ -86,7 +100,7 @@ public class ManageReservableButtonController implements ActionListener
                 doClear();
                 view.clearSearch();
             case "Help":
-                new SearchHelpDialog().setVisible(true);
+                new SearchHelpDialog(searchKeys).setVisible(true);
                 break;
         }
     }
@@ -192,22 +206,8 @@ public class ManageReservableButtonController implements ActionListener
     */
     
     private void doSearch(String criteria)
-    {
-        List<String> acceptedKeys = new ArrayList();
-        
-        acceptedKeys.add("locationname");
-        acceptedKeys.add("location");
-        acceptedKeys.add("loc");
-        acceptedKeys.add("capacity");
-        acceptedKeys.add("cap");
-        acceptedKeys.add("startdate");
-        acceptedKeys.add("starttime");
-        acceptedKeys.add("enddate");
-        acceptedKeys.add("endtime");
-        acceptedKeys.add("cost");
-        acceptedKeys.add("price");
-        
-        SearchActualizer search = new SearchActualizer(criteria, acceptedKeys);
+    {        
+        SearchActualizer search = new SearchActualizer(criteria, searchKeys);
         
         if (search.validateSearch())
         {            

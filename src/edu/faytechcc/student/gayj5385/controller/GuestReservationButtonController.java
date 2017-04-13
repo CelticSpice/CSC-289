@@ -37,12 +37,12 @@ public class GuestReservationButtonController implements ActionListener
     */
     
     public GuestReservationButtonController(GuestReservationPanel v,
-            List<Location> locs)
+            List<Location> locs, Filter<Location> lf, Filter<Timeframe> tf)
     {
         view = v;
         locations = locs;
-        locationFilter = new Filter();
-        timeframeFilter = new Filter();
+        locationFilter = lf;
+        timeframeFilter = tf;
     }
     
     /**

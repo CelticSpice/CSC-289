@@ -90,13 +90,16 @@ public class MainPanel extends JPanel
         
         guestReservePanel = new GuestReservationPanel();
         
-        guestReservePanel.registerButtonController(
-                new GuestReservationButtonController(guestReservePanel, locs));
+        Filter<Location> locationFilter = new Filter();
+        Filter<Timeframe> timeframeFilter = new Filter();
         
-        Filter<Timeframe> filter = new Filter();
+        guestReservePanel.registerButtonController(
+                new GuestReservationButtonController(guestReservePanel, locs,
+                locationFilter, timeframeFilter));
+        
         guestReservePanel.registerComboBoxController(
                 new GuestReservationComboBoxController(guestReservePanel,
-                        filter));
+                        timeframeFilter));
         
         guestReservePanel.registerTimeframeListController(
                 new GuestReservationListController(guestReservePanel));

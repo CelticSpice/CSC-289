@@ -6,49 +6,47 @@
 
 package edu.faytechcc.student.gayj5385.controller.reservation;
 
-import edu.faytechcc.student.burnst9091.data.Location;
+import edu.faytechcc.student.burnst9091.data.DataRepository;
+import edu.faytechcc.student.burnst9091.data.ReservableLocation;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.Reserver;
+import edu.faytechcc.student.burnst9091.data.ReserverInformant;
 import edu.faytechcc.student.burnst9091.data.search.Filter;
 import edu.faytechcc.student.burnst9091.data.search.SearchActualizer;
 import edu.faytechcc.student.gayj5385.gui.ManageReservationPanel;
 import edu.faytechcc.student.gayj5385.gui.dialog.SearchHelpDialog;
 import edu.faytechcc.student.gayj5385.gui.dialog.SendEmailDialog;
-import edu.faytechcc.student.mccanns0131.database.ReservationSQLDAO;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import javax.swing.JOptionPane;
 
 public class ManageReservationButtonController implements ActionListener
 {
     // Fields
-    private Filter<Location> locationFilter;
+    private DataRepository repo;
+    private Filter<ReservableLocation> locationFilter;
     private Filter<Reservation> reservationFilter;
-    private HashMap<Location, List<Reservation>> reservations;
     private ManageReservationPanel view;
     private List<String> searchKeys;
     
     /**
-        Constructs a new ManageReservationButtonController to control buttons
-        on the given view, initialized with a mapping of location reservations
-        & filters for locations & reservations
+        Constructs a new ManageReservationButtonController
     
         @param v The view
-        @param reserves The reservation mapping
-        @param locFilter Location filter
+        @param repo Data repository
+        @param locFilter ReservableLocation filter
         @param resFilter Reservation filter
     */
     
     public ManageReservationButtonController(ManageReservationPanel v,
-            HashMap<Location, List<Reservation>> reserves,
-            Filter<Location> locFilter, Filter<Reservation> resFilter)
+            DataRepository repo, Filter<ReservableLocation> locFilter,
+            Filter<Reservation> resFilter)
     {
         view = v;
-        reservations = reserves;
+        this.repo = repo;
         locationFilter = locFilter;
         reservationFilter = resFilter;
         searchKeys = new ArrayList();
@@ -128,7 +126,8 @@ public class ManageReservationButtonController implements ActionListener
         {
             // Confirm cancellation
             int choice = JOptionPane.showConfirmDialog(view,
-                "Are you sure you want to cancel the selected reservation?");
+                "Are you sure you want to cancel the selected reservation?",
+                "Select an Option", JOptionPane.YES_NO_OPTION);
             
             if (choice == JOptionPane.YES_OPTION)
             {
@@ -136,21 +135,13 @@ public class ManageReservationButtonController implements ActionListener
                 
                 try
                 {                    
-                    ReservationSQLDAO resDAO = new ReservationSQLDAO();
-                    resDAO.removeReservation(reservation);
-                    
+                    repo.removeReservation(reservation);
                     reservation.cancel();
                     
-                    Location loc = reservation.getLocation();
-                    reservations.get(loc).remove(reservation);
+                    ReserverInformant informant = new ReserverInformant(repo);
+                    informant.informOfReservationCancellation(reservation);
                     
-                    if (reservations.get(loc).isEmpty())
-                    {
-                        reservations.remove(loc);
-                        setLocations();
-                    }
-                    else
-                        setReservations(reservations.get(loc));
+                    setReservations();
                 }
                 catch (SQLException ex)
                 {
@@ -204,26 +195,25 @@ public class ManageReservationButtonController implements ActionListener
     
     private void reviewed(boolean reviewed)
     {
-        List<Reservation> reserves = view.getSelectedReservations();
+        List<Reservation> selectedReservations = view.getSelectedReservations();
         
-        if (reserves.size() == 1)
+        if (selectedReservations.size() == 1)
         {
             try
             {                
-                Reservation reservation = reserves.get(0);
+                Reservation reservation = selectedReservations.get(0);
                 
                 if (reviewed)
                     reservation.reviewed();
                 else
                     reservation.notReviewed();
                 
-                ReservationSQLDAO resDAO = new ReservationSQLDAO();
-                resDAO.updateReservation(reservation);
+                repo.updateReservation(reservation);
                                 
                 String btnText = (reviewed) ? "Reassess" : "Reviewed";
                 view.setReviewedButtonText(btnText);
                 
-                setReservations(reservations.get(view.getSelectedLocation()));
+                setReservations();
             }
             catch (SQLException ex)
             {
@@ -273,6 +263,7 @@ public class ManageReservationButtonController implements ActionListener
     }
     
     /**
+<<<<<<< HEAD
      * Performs a search on two or more locations
      * 
      * @param s The SearchActualizer to perform the search with
@@ -287,8 +278,8 @@ public class ManageReservationButtonController implements ActionListener
             
         if (reservationFilter.getPredicate() != null)
         {
-            view.setReservations(reservationFilter.filter(reservations.get(
-                        view.getSelectedLocation())));
+            view.setReservations(reservationFilter.filter(
+                    repo.getLocationReservations(view.getSelectedLocation())));
         }
     }
     
@@ -308,8 +299,8 @@ public class ManageReservationButtonController implements ActionListener
         if (view.getSelectedLocation() != null)
         {
             reservationFilter.setPredicate(s.searchReservations());
-            view.setReservations(reservationFilter.filter(reservations.get(
-                        view.getSelectedLocation())));
+            view.setReservations(reservationFilter.filter(
+                    repo.getLocationReservations(view.getSelectedLocation())));
         }
         else
         {
@@ -330,38 +321,38 @@ public class ManageReservationButtonController implements ActionListener
         {
             reservationFilter.setPredicate(s.searchReservations());
             
-            List<Reservation> reserves = reservations.get(
-                    view.getSelectedLocation());
-
-            setReservations(reserves);
+            view.setReservations(reservationFilter.filter(
+                    repo.getLocationReservations(view.getSelectedLocation())));
         }
         else
             JOptionPane.showMessageDialog(view, "No location selected");
     }
     
     /**
-        Sets locations on the view to the current location listing
+        Sets locations on the view
     */
     
     private void setLocations()
     {
-        List<Location> locs = new ArrayList<>(reservations.keySet());
-        
         if (locationFilter.getPredicate() != null)
-            view.setLocations(locationFilter.filter(locs));
+            view.setLocations(
+                    locationFilter.filter(repo.getReservedLocations()));
         else
-            view.setLocations(locs);
+            view.setLocations(repo.getReservedLocations());
     }
     
     /**
         Sets reservations on the view
     */
     
-    private void setReservations(List<Reservation> reservations)
+    private void setReservations()
     {
+        ReservableLocation loc = view.getSelectedLocation();
+        
         if (reservationFilter.getPredicate() != null)
-            view.setReservations(reservationFilter.filter(reservations));
+            view.setReservations(reservationFilter.filter(
+                    repo.getLocationReservations(loc)));
         else
-            view.setReservations(reservations);
+            view.setReservations(repo.getLocationReservations(loc));
     }
 }

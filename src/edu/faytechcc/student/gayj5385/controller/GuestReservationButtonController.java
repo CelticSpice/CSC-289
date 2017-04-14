@@ -6,9 +6,10 @@
 
 package edu.faytechcc.student.gayj5385.controller;
 
-import edu.faytechcc.student.burnst9091.data.Location;
+import edu.faytechcc.student.burnst9091.data.DataRepository;
+import edu.faytechcc.student.burnst9091.data.ReservableLocation;
 import edu.faytechcc.student.burnst9091.data.Reservable;
-import edu.faytechcc.student.burnst9091.data.Timeframe;
+import edu.faytechcc.student.burnst9091.data.ReservableTimeframe;
 import edu.faytechcc.student.burnst9091.data.search.Filter;
 import edu.faytechcc.student.burnst9091.data.search.SearchActualizer;
 import edu.faytechcc.student.gayj5385.gui.GuestReservationPanel;
@@ -23,27 +24,27 @@ import javax.swing.JOptionPane;
 
 public class GuestReservationButtonController implements ActionListener
 {
+    private DataRepository repo;
     private GuestReservationPanel view;
-    private List<Location> locations;
-    private Filter<Location> locationFilter;
-    private Filter<Timeframe> timeframeFilter;
     private List<String> searchKeys;
+    private Filter<ReservableLocation> locationFilter;
+    private Filter<ReservableTimeframe> timeframeFilter;
     
     /**
-        Constructs a new GuestReservationButtonController initialized with
-        the given GuestReservationPanel to control & a list of locations
+        Constructs a new GuestReservationButtonController
     
-        @param v The view, GuestReservationPanel
-        @param locs The locations
+        @param v The view
+        @param repo Data repository
     */
     
     public GuestReservationButtonController(GuestReservationPanel v,
-            List<Location> locs, Filter<Location> lf, Filter<Timeframe> tf)
+            DataRepository repo, Filter<ReservableLocation> lf, 
+            Filter<ReservableTimeframe> tf)
     {
         view = v;
-        locations = locs;
         locationFilter = lf;
         timeframeFilter = tf;
+        this.repo = repo;
         searchKeys = new ArrayList();
         
         searchKeys.add("locationname");
@@ -106,14 +107,14 @@ public class GuestReservationButtonController implements ActionListener
     
     private void showMakeReservationDialog()
     {
-        List<Timeframe> timeframes = view.getSelectedTimeframes();
+        List<ReservableTimeframe> timeframes = view.getSelectedTimeframes();
         
         if (timeframes.size() == 1)
         {
-            Location loc = view.getSelectedLocation();
+            ReservableLocation loc = view.getSelectedLocation();
             Reservable reservable = new Reservable(loc, timeframes.get(0));
             
-            new MakeReservationDialog(reservable).setVisible(true);
+            new MakeReservationDialog(reservable, repo).setVisible(true);
             
             updateLocations();
         }
@@ -130,21 +131,7 @@ public class GuestReservationButtonController implements ActionListener
         SearchActualizer search = new SearchActualizer(criteria, searchKeys);
         
         if (search.validateSearch())
-        {            
-//            locationFilter.setPredicate(search.searchLocations());
-//            view.setLocations(locationFilter.filter(locations));
-//            
-//            if (view.getSelectedLocation() != null)
-//            {            
-//                timeframeFilter.setPredicate(search.searchTimeframes());
-//                view.setTimeframes(timeframeFilter.filter(
-//                        view.getSelectedLocation().getTimeframes()));
-//            }
-//            else
-//            {
-//                JOptionPane.showMessageDialog(view, "No locations found");
-//                clear();
-//            }
+        {
             switch (search.getNumSearchLocations())
             {
                 case 0:
@@ -173,7 +160,7 @@ public class GuestReservationButtonController implements ActionListener
     private void searchOnMultipleLocations(SearchActualizer s)
     {
         locationFilter.setPredicate(s.searchLocations());
-        view.setLocations(locationFilter.filter(locations));
+        view.setLocations(locationFilter.filter(repo.getAvailableLocations()));
         
         timeframeFilter.setPredicate(s.searchTimeframes());
             
@@ -193,7 +180,7 @@ public class GuestReservationButtonController implements ActionListener
     private void searchOnOneLocation(SearchActualizer s)
     {
         locationFilter.setPredicate(s.searchLocations());
-        view.setLocations(locationFilter.filter(locations));
+        view.setLocations(locationFilter.filter(repo.getAvailableLocations()));
         
         timeframeFilter.setPredicate(s.searchTimeframes());
             
@@ -222,7 +209,7 @@ public class GuestReservationButtonController implements ActionListener
         {
             timeframeFilter.setPredicate(s.searchTimeframes());
             
-            List<Timeframe> timeframes = view.getSelectedLocation()
+            List<ReservableTimeframe> timeframes = view.getSelectedLocation()
                     .getTimeframes(timeframeFilter.getPredicate());
 
             view.setTimeframes(timeframes);
@@ -247,13 +234,6 @@ public class GuestReservationButtonController implements ActionListener
     
     private void updateLocations()
     {
-        List<Location> availLocs = new ArrayList<>();
-        for (Location loc : locations)
-        {
-            List<Timeframe> timeframes = loc.deriveReservableTimeframes();
-            if (timeframes.size() > 0)
-                availLocs.add(loc);
-        }
-        view.setLocations(availLocs);
+        view.setLocations(repo.getAvailableLocations());
     }
 }

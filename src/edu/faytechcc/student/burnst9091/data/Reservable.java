@@ -8,14 +8,12 @@ package edu.faytechcc.student.burnst9091.data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class Reservable
 {
-    // Fields
-    private Location location;
-    private Timeframe timeframe;
+    private ReservableLocation location;
+    private ReservableTimeframe timeframe;
     
     /**
         Constructs a new Reservable with the given location & timeframe
@@ -24,7 +22,7 @@ public class Reservable
         @param time The timeframe
     */
     
-    public Reservable(Location loc, Timeframe time)
+    public Reservable(ReservableLocation loc, ReservableTimeframe time)
     {
         location = loc;
         timeframe = time;
@@ -40,9 +38,9 @@ public class Reservable
     }
     
     /**
-        Returns the capacity of the Reservable
+        Returns the capacity of the reservable's location
     
-        @return The capacity of the Reservable
+        @return The capacity of the reservable's location
     */
     
     public int getCapacity()
@@ -51,9 +49,9 @@ public class Reservable
     }
     
     /**
-        Returns the cost of the Reservable
+        Returns the cost to reserve the reservable
     
-        @return The cost of the Reservable
+        @return The cost to reserve the reservable
     */
     
     public BigDecimal getCost()
@@ -62,7 +60,7 @@ public class Reservable
     }
     
     /**
-        GetEndDate - Return the ending date of the reservable
+        Returns the ending date of the reservable
     
         @return The ending date of the reservable
     */
@@ -73,7 +71,7 @@ public class Reservable
     }
     
     /**
-        GetEndTime - Return the ending time of the reservable
+        Returns the ending time of the reservable
     
         @return The ending time of the reservable
     */
@@ -84,12 +82,12 @@ public class Reservable
     }
     
     /**
-        Return the location of the reservable
+        Returns the location of the reservable
     
         @return The location of the reservable
     */
     
-    public Location getLocation()
+    public ReservableLocation getLocation()
     {
         return location;
     }
@@ -106,9 +104,9 @@ public class Reservable
     }
     
     /**
-        GetName - Return the location name of the reservable
+        Returns the location name of the reservable
     
-        @return The name of the reservable
+        @return The name of the reservable's location
     */
     
     public String getName()
@@ -117,7 +115,7 @@ public class Reservable
     }
     
     /**
-        GetStartDate - Return the starting date of the reservable
+        Returns the starting date of the reservable
     
         @return The starting date of the reservable
     */
@@ -128,7 +126,7 @@ public class Reservable
     }
     
     /**
-        GetStartTime - Return the starting time of the reservable
+        Returns the starting time of the reservable
     
         @return The starting time of the reservable
     */
@@ -139,12 +137,12 @@ public class Reservable
     }
     
     /**
-        GetTimeframe - Return the timeframe of the reservable
+        Returns the timeframe of the reservable
     
         @return The timeframe of the reservable
     */
     
-    public Timeframe getTimeframe()
+    public ReservableTimeframe getTimeframe()
     {
         return timeframe;
     }
@@ -172,26 +170,44 @@ public class Reservable
     }
     
     /**
-        Returns if the Reservable ends on the given datetime
-    
-        @param datetime Datetime to check if Reservable ends on
-        @return If the Reservable ends on the given datetime
+        Reserves the reservable
     */
     
-    public boolean endsOnDatetime(LocalDateTime datetime)
+    public void reserve()
     {
-        return timeframe.endsOnDatetime(datetime);
+        timeframe.reserve();
     }
     
     /**
-        Returns if the Reservable starts on the given datetime
+        Sets the capacity of the reservable's location's capacity
     
-        @param datetime Datetime to check if Reservable starts on
-        @return If the Reservable starts on the given datetime
+        @param cap The reservable's location's capacity
     */
     
-    public boolean startsOnDatetime(LocalDateTime datetime)
+    public void setLocationCapacity(int cap)
     {
-        return timeframe.startsOnDatetime(datetime);
+        location.setCapacity(cap);
+    }
+    
+    /**
+        Sets the cost of the reservable
+    
+        @param cost Cost of the reservable
+    */
+    
+    public void setCost(BigDecimal cost)
+    {
+        timeframe.setCost(cost);
+    }
+    
+    /**
+        Sets the name of the reservable's location
+    
+        @param name Name of reservable's location
+    */
+    
+    public void setLocationName(String name)
+    {
+        location.setName(name);
     }
 }

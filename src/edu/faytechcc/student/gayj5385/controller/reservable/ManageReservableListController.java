@@ -7,8 +7,9 @@
 
 package edu.faytechcc.student.gayj5385.controller.reservable;
 
-import edu.faytechcc.student.burnst9091.data.Timeframe;
+import edu.faytechcc.student.burnst9091.data.ReservableTimeframe;
 import edu.faytechcc.student.gayj5385.gui.ManageReservablePanel;
+import java.text.NumberFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.swing.event.ListSelectionEvent;
@@ -39,7 +40,7 @@ public class ManageReservableListController implements ListSelectionListener
     @Override
     public void valueChanged(ListSelectionEvent e)
     {
-        List<Timeframe> timeframes = view.getSelectedTimeframes();
+        List<ReservableTimeframe> timeframes = view.getSelectedTimeframes();
 
         if (timeframes.size() == 1)
         {
@@ -47,12 +48,13 @@ public class ManageReservableListController implements ListSelectionListener
                 "y-MMM-d");
             DateTimeFormatter tFmt = DateTimeFormatter.ofPattern(
                 "H:mm");
+            NumberFormat cFmt = NumberFormat.getCurrencyInstance();
 
-            view.setStartDate(timeframes.get(0).getStartDateTimeString(dFmt));
-            view.setStartTime(timeframes.get(0).getStartDateTimeString(tFmt));
-            view.setEndDate(timeframes.get(0).getEndDateTimeString(dFmt));
-            view.setEndTime(timeframes.get(0).getEndDateTimeString(tFmt));
-            view.setCost(timeframes.get(0).getCostString());
+            view.setStartDate(timeframes.get(0).getStartDate().format(dFmt));
+            view.setStartTime(timeframes.get(0).getStartTime().format(tFmt));
+            view.setEndDate(timeframes.get(0).getEndDate().format(dFmt));
+            view.setEndTime(timeframes.get(0).getEndTime().format(tFmt));
+            view.setCost(cFmt.format(timeframes.get(0).getCost()));
             view.setReserved((timeframes.get(0).isReserved()) ? "Reserved" :
                                                                 "Available");
         }

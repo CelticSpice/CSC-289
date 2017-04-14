@@ -8,12 +8,14 @@ package edu.faytechcc.student.mccanns0131.database;
 
 import edu.faytechcc.student.burnst9091.data.Location;
 import edu.faytechcc.student.burnst9091.data.Reservation;
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 public class ReservationSQLDAO
 {
-    private DBConnection connection;
+    private Connection connection;
     private DBDataSource source;
     
     /**
@@ -23,15 +25,16 @@ public class ReservationSQLDAO
     public ReservationSQLDAO()
     {
         source = DBDataSource.getInstance();
+        connection = null;
     }
     
     /**
         Constructs a new ReservationSQLDAO initialized with the given connection
     
-        @param conn DBConnection
+        @param conn Connection
     */
     
-    public ReservationSQLDAO(DBConnection conn)
+    public ReservationSQLDAO(Connection conn)
     {
         source = null;
         connection = conn;
@@ -50,19 +53,30 @@ public class ReservationSQLDAO
             connection = source.getConnection();
         
         // Check if a record of a reserver should be added
-        ReservationQuery query = new ReservationQuery();
-        ResultSetParser parser = new ResultSetParser();
-        query.queryDistinctByReserver(reservation.getReserver());
-        parser.setResultSet(connection.runQuery(query));
+        String sql = "SELECT Reservers.ReserverID " +
+                     "FROM Reservers " +
+                     "WHERE Reservers.ReserverID = " +
+                     reservation.getReserverID();
         
-        if (parser.isResultSetEmpty())
-        {
-            ReserverSQLDAO reserverDAO = new ReserverSQLDAO(connection);
-            reserverDAO.addReserver(reservation.getReserver());
+        try (Statement stmt = connection.createStatement()) {
+            stmt.executeQuery(sql);
+            
+            if (!stmt.getResultSet().isBeforeFirst())
+            {
+                ReserverSQLDAO reserverDAO = new ReserverSQLDAO(connection);
+                reserverDAO.addReserver(reservation.getReserver());
+            }
+            
+            sql = "INSERT INTO Reservations " +
+                  "VALUES ('" + reservation.getLocationID() + "', " +
+                                reservation.getTimeframeID() + ", " +
+                                reservation.getReserverID() + ", '" +
+                                reservation.getEventType() + "', " +
+                                reservation.getNumberAttending() + ", " +
+                                false + ")";
+            
+            stmt.executeUpdate(sql);
         }
-        
-        // Add reservation
-        new RecordAdd(connection).addReservation(reservation);
     }
     
     /**
@@ -89,10 +103,27 @@ public class ReservationSQLDAO
         if (connection == null)
             connection = source.getConnection();
         
-        ReservationQuery query = new ReservationQuery();
-        ResultSetParser parser = new ResultSetParser();
-        query.queryByLocation(loc);
-        parser.setResultSet(connection.runQuery(query));
+        String sql = "SELECT Reservers.ReserverID, Reservers.FirstName, " +
+                     "Reservers.LastName, Reservers.Email, Reservers.Phone, " +
+                     "Timeframes.TimeframeID, Timeframes.StartDate, " +
+                     "Timeframes.StartTime, Timeframes.EndDate, " +
+                     "Timeframes.EndTime, Reservables.Cost, " +
+                     "Reservations.EventType, Reservations.NumberAttending, " +
+                     "Reservations.Reviewed " +
+                     "FROM Reservers " +
+                     "INNER JOIN Reservations " +
+                     "ON Reservers.ReserverID = Reservations.ReserverID " +
+                     "INNER JOIN Reservables " +
+                     "ON Reservations.LocationID = Reservables.LocationID " +
+                     "AND Reservations.TimeframeID = Reservables.TimeframeID " +
+                     "INNER JOIN Timeframes " +
+                     "ON Reservables.TimeframeID = Timeframes.TimeframeID " +
+                     "WHERE Reservations.LocationID = " + loc.getID(); 
+        
+        ResultSetParser parser;
+        try (Statement stmt = connection.createStatement()) {
+            parser = new ResultSetParser(stmt.executeQuery(sql));
+        }
         
         return parser.parseReservations(loc);
     }
@@ -109,18 +140,28 @@ public class ReservationSQLDAO
         if (connection == null)
             connection = source.getConnection();
         
-        new RecordDelete(connection).deleteReservation(reservation);
+        String sql = "DELETE FROM Reservations " +
+                     "WHERE Reservations.LocationID = " +
+                        reservation.getLocationID() + " " +
+                     "AND Reservations.TimeframeID = " +
+                        reservation.getTimeframeID();
         
-        // Check if a record of a reserver should also be removed
-        ReservationQuery query = new ReservationQuery();
-        ResultSetParser parser = new ResultSetParser();
-        query.queryDistinctByReserver(reservation.getReserver());
-        parser.setResultSet(connection.runQuery(query));
-        
-        if (parser.isResultSetEmpty())
-        {
-            ReserverSQLDAO reserverDAO = new ReserverSQLDAO(connection);
-            reserverDAO.removeReserver(reservation.getReserver());
+        try (Statement stmt = connection.createStatement()) {
+            stmt.executeUpdate(sql);
+            
+            // Check if a record of a reserver should also be removed
+            sql = "SELECT Reservations.ReserverID " +
+                   "FROM Reservations " +
+                   "WHERE Reservations.ReserverID = " +
+                   reservation.getReserverID();
+            
+            stmt.executeQuery(sql);
+            
+            if (!stmt.getResultSet().isBeforeFirst())
+            {
+                ReserverSQLDAO reserverDAO = new ReserverSQLDAO(connection);
+                reserverDAO.removeReserver(reservation.getReserver());
+            }
         }
     }
     
@@ -136,6 +177,20 @@ public class ReservationSQLDAO
         if (connection == null)
             connection = source.getConnection();
         
-        new RecordUpdate(connection).updateReservation(reservation);
+        String sql = "UPDATE Reservations " +
+                     "SET Reservations.EventType = '" +
+                        reservation.getEventType() + "', " +
+                     "Reservations.NumberAttending = " +
+                        reservation.getNumberAttending() + ", " +
+                     "Reservations.Reviewed = " +
+                        reservation.isReviewed() + " " +
+                     "WHERE Reservations.LocationID = " +
+                        reservation.getLocationID() + " " +
+                     "AND Reservations.TimeframeID = " +
+                        reservation.getTimeframeID();
+        
+        try (Statement stmt = connection.createStatement()) {
+            stmt.executeUpdate(sql);
+        }
     }
 }

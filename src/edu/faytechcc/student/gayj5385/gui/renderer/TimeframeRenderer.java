@@ -6,9 +6,10 @@
 
 package edu.faytechcc.student.gayj5385.gui.renderer;
 
-import edu.faytechcc.student.burnst9091.data.Timeframe;
+import edu.faytechcc.student.burnst9091.data.ReservableTimeframe;
 import java.awt.Color;
 import java.awt.Component;
+import java.text.NumberFormat;
 import java.time.format.DateTimeFormatter;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
@@ -22,16 +23,17 @@ public class TimeframeRenderer extends DefaultListCellRenderer
         super.getListCellRendererComponent(list, value, index, isSelected,
             cellHasFocus);
         
-        Timeframe timeframe = (Timeframe) value;
+        ReservableTimeframe timeframe = (ReservableTimeframe) value;
         DateTimeFormatter dFmt = DateTimeFormatter.ofPattern("y-MMM-d");
         DateTimeFormatter tFmt = DateTimeFormatter.ofPattern("H:mm");
+        NumberFormat cFmt = NumberFormat.getCurrencyInstance();
         
         setText("<html>" +
                 "Start: " + dFmt.format(timeframe.getStartDate()) + ", " +
                             tFmt.format(timeframe.getStartTime()) + "<br>" +
                 "End: "   + dFmt.format(timeframe.getEndDate())   + ", " +
                             tFmt.format(timeframe.getEndTime())   + "<br>" +
-                "Cost: " + timeframe.getCostString() +
+                "Cost: " +  cFmt.format(timeframe.getCost()) +
                 "</html>");
         
         if (timeframe.isReserved())

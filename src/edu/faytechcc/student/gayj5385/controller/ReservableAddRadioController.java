@@ -6,7 +6,7 @@
 
 package edu.faytechcc.student.gayj5385.controller;
 
-import edu.faytechcc.student.burnst9091.data.Location;
+import edu.faytechcc.student.burnst9091.data.ReservableLocation;
 import edu.faytechcc.student.gayj5385.gui.dialog.AddReservableDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -67,7 +67,7 @@ public class ReservableAddRadioController implements ActionListener
         }
         else
         {
-            Location loc = view.getSelectedLocation();
+            ReservableLocation loc = view.getSelectedLocation();
             
             if (loc != null)
             {

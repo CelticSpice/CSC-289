@@ -6,7 +6,7 @@
 
 package edu.faytechcc.student.gayj5385.gui;
 
-import edu.faytechcc.student.burnst9091.data.Location;
+import edu.faytechcc.student.burnst9091.data.ReservableLocation;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.gayj5385.gui.renderer.ReservationRenderer;
 import java.awt.BorderLayout;
@@ -36,7 +36,7 @@ public class ManageReservationPanel extends JPanel
     // Fields
     private DefaultListModel<Reservation> reservations;
     private JButton searchBtn, clear, update, contact, reviewed, cancel, help;
-    private JComboBox<Location> locations;
+    private JComboBox<ReservableLocation> locations;
     private JList<Reservation> reservationList;
     private JTextField capacity, search, startDate, startTime, endDate, endTime,
                        cost, attendees, event, contactName, contactEmail,
@@ -230,9 +230,9 @@ public class ManageReservationPanel extends JPanel
         @return The selected location
     */
     
-    public Location getSelectedLocation()
+    public ReservableLocation getSelectedLocation()
     {
-        return (Location) locations.getSelectedItem();
+        return (ReservableLocation) locations.getSelectedItem();
     }
     
     /**
@@ -391,10 +391,10 @@ public class ManageReservationPanel extends JPanel
         @param locs Locations that have been reserved
     */
     
-    public void setLocations(List<Location> locs)
+    public void setLocations(List<ReservableLocation> locs)
     {
         locations.removeAllItems();
-        for (Location loc : locs)
+        for (ReservableLocation loc : locs)
             locations.addItem(loc);
     }
     

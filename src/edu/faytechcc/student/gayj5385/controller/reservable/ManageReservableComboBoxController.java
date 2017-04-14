@@ -7,8 +7,8 @@
 
 package edu.faytechcc.student.gayj5385.controller.reservable;
 
-import edu.faytechcc.student.burnst9091.data.Location;
-import edu.faytechcc.student.burnst9091.data.Timeframe;
+import edu.faytechcc.student.burnst9091.data.ReservableLocation;
+import edu.faytechcc.student.burnst9091.data.ReservableTimeframe;
 import edu.faytechcc.student.burnst9091.data.search.Filter;
 import edu.faytechcc.student.gayj5385.gui.ManageReservablePanel;
 import java.awt.event.ActionEvent;
@@ -18,7 +18,7 @@ public class ManageReservableComboBoxController implements ActionListener
 {
     // Fields
     private ManageReservablePanel view;
-    private Filter<Timeframe> filter;
+    private Filter<ReservableTimeframe> filter;
     
    /**
         Constructs a new ManageReservableComboBoxController initialized
@@ -29,7 +29,7 @@ public class ManageReservableComboBoxController implements ActionListener
     */
     
     public ManageReservableComboBoxController(ManageReservablePanel v,
-            Filter<Timeframe> f)
+            Filter<ReservableTimeframe> f)
     {
         view = v;
         filter = f;
@@ -44,7 +44,7 @@ public class ManageReservableComboBoxController implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        Location loc = view.getSelectedLocation();
+        ReservableLocation loc = view.getSelectedLocation();
         if (loc != null)
         {
             view.setCapacity(String.valueOf(loc.getCapacity()));

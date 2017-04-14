@@ -8,6 +8,7 @@ package edu.faytechcc.student.mccanns0131.database;
 
 import edu.faytechcc.student.burnst9091.data.DatabaseSettings;
 import edu.faytechcc.student.burnst9091.data.SystemPreferences;
+import java.sql.Connection;
 import java.sql.SQLException;
 import org.mariadb.jdbc.MariaDbDataSource;
 
@@ -42,9 +43,9 @@ public class DBDataSource
         @return Connection to the database
     */
     
-    public DBConnection getConnection() throws SQLException
+    public Connection getConnection() throws SQLException
     {
-        return new DBConnection(source.getConnection());
+        return source.getConnection();
     }
     
     /**

@@ -12,7 +12,6 @@ import java.time.LocalTime;
 
 public class Reservation
 {
-    // Fields
     private boolean reviewed;
     private int numberAttending;
     private Reservable reservable;
@@ -51,7 +50,7 @@ public class Reservation
     }
     
     /**
-        Reviewed - Approve the reservation
+        Marks the reservation as reviewed
     */
     
     public void reviewed()
@@ -60,7 +59,7 @@ public class Reservation
     }
     
     /**
-        GetCost - Return the cost of the reservation
+        Returns the cost of the reservation
     
         @return The cost of the reservation
     */
@@ -71,18 +70,7 @@ public class Reservation
     }
     
     /**
-        Returns the cost of the reservations as a string
-        
-        @return The cost of the reservation as a string
-    */
-    
-    public String getCostString()
-    {
-        return reservable.getTimeframe().getCostString();
-    }
-    
-    /**
-        GetEndDate - Return the ending date of the reservation
+        Returns the ending date of the reservation
     
         @return The ending date of the reservation
     */
@@ -93,7 +81,7 @@ public class Reservation
     }
     
     /**
-        GetEndTime - Return the ending time of the reservation
+        Returns the ending time of the reservation
     
         @return The ending time of the reservation
     */
@@ -104,7 +92,7 @@ public class Reservation
     }
     
     /**
-        GetEventType - Return the type of event the reservation entails
+        Returns the type of event the reservation entails
     
         @return The type of event the reservation was made for
     */
@@ -120,7 +108,7 @@ public class Reservation
         @return The location of this reservation
     */
     
-    public Location getLocation()
+    public ReservableLocation getLocation()
     {
         return reservable.getLocation();
     }
@@ -137,7 +125,7 @@ public class Reservation
     }
     
     /**
-        GetLocationName - Return the name of the location reserved
+        Returns the name of the location reserved
     
         @return The name of the location reserved
     */
@@ -148,7 +136,7 @@ public class Reservation
     }
     
     /**
-        GetNumberAttending - Return the expected number of attendees
+        Returns the expected number of attendees
     
         @return The expected number of attendees
     */
@@ -170,7 +158,7 @@ public class Reservation
     }
     
     /**
-        GetReserverEmail - Return the email address of the reserver
+        Returns the email address of the reserver
     
         @return The email address of the reserver
     */
@@ -214,7 +202,7 @@ public class Reservation
     }
     
     /**
-        GetReserverName - Return the name of the reserver
+        Returns the name of the reserver
     
         @return The name of the reserver
     */
@@ -225,7 +213,7 @@ public class Reservation
     }
     
     /**
-        GetReserverPhone - Return the phone number of the reserver
+        Returns the phone number of the reserver
     
         @return The phone number of the reserver
     */
@@ -236,7 +224,7 @@ public class Reservation
     }
     
     /**
-        GetStartDate - Return the starting date of the reservation
+        Returns the starting date of the reservation
     
         @return The starting date of the reservation
     */
@@ -247,7 +235,7 @@ public class Reservation
     }
     
     /**
-        GetStartTime - Return the starting time of the reservation
+        Returns the starting time of the reservation
     
         @return The starting time of the reservation
     */
@@ -255,6 +243,17 @@ public class Reservation
     public LocalTime getStartTime()
     {
         return reservable.getStartTime();
+    }
+    
+    /**
+        Returns the timeframe of the reservation
+    
+        @return The reservation's timeframe
+    */
+    
+    public ReservableTimeframe getTimeframe()
+    {
+        return reservable.getTimeframe();
     }
     
     /**
@@ -269,7 +268,7 @@ public class Reservation
     }
     
     /**
-        IsReviewed - Return if the reservation is reviewed
+        Returns if the reservation is reviewed
     
         @return If the reservation is reviewed
     */
@@ -280,7 +279,7 @@ public class Reservation
     }
     
     /**
-        Sets the reservation as not reviewed
+        Marks the reservation as not reviewed
     */
     
     public void notReviewed()

@@ -7,10 +7,11 @@
 package edu.faytechcc.student.mccanns0131.database;
 
 import edu.faytechcc.student.burnst9091.data.Location;
+import edu.faytechcc.student.burnst9091.data.ReservableLocation;
 import edu.faytechcc.student.burnst9091.data.Reservable;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.Reserver;
-import edu.faytechcc.student.burnst9091.data.Timeframe;
+import edu.faytechcc.student.burnst9091.data.ReservableTimeframe;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -89,15 +90,15 @@ public class ResultSetParser
         @return List of locations
     */
     
-    public List<Location> parseLocations() throws SQLException
+    public List<ReservableLocation> parseLocations() throws SQLException
     {
-        List<Location> locations = new ArrayList<>();
-        HashMap<Integer, Location> locationMap = new HashMap<>();
+        List<ReservableLocation> locations = new ArrayList<>();
+        HashMap<Integer, ReservableLocation> locationMap = new HashMap<>();
         
         int capacity, locationID, timeframeID;
         String name;
-        Location loc;
-        Timeframe timeframe;
+        ReservableLocation loc;
+        ReservableTimeframe timeframe;
         BigDecimal cost;
         LocalDate startDate, endDate;
         LocalTime startTime, endTime;
@@ -114,7 +115,7 @@ public class ResultSetParser
                 loc = locationMap.get(locationID);
             else
             {
-                loc = new Location(name, capacity, locationID);
+                loc = new ReservableLocation(name, capacity, locationID);
                 locationMap.put(locationID, loc);
                 locations.add(loc);
             }
@@ -134,11 +135,11 @@ public class ResultSetParser
             rs.getInt("ReservedTimeframeID");
             
             if (rs.wasNull())
-                timeframe = new Timeframe(sDateTime, eDateTime, cost,
+                timeframe = new ReservableTimeframe(sDateTime, eDateTime, cost,
                         timeframeID);
             else
-                timeframe = new Timeframe(sDateTime, eDateTime, cost, true,
-                        timeframeID);
+                timeframe = new ReservableTimeframe(sDateTime, eDateTime, cost,
+                        true, timeframeID);
             
             loc.addTimeframe(timeframe);            
         }
@@ -166,7 +167,7 @@ public class ResultSetParser
         BigDecimal cost;
         boolean reviewed;
         String firstName, lastName, email, phone, eventType;
-        Timeframe timeframe;
+        ReservableTimeframe timeframe;
         LocalDate startDate, endDate;
         LocalTime startTime, endTime;
         
@@ -181,7 +182,7 @@ public class ResultSetParser
             reserver = new Reserver(firstName, lastName, email, phone,
                     reserverID);
             
-            // Build Timeframe
+            // Build ReservableTimeframe
             timeframeID = rs.getInt("TimeframeID");
             startDate = rs.getDate("StartDate").toLocalDate();
             startTime = rs.getTime("StartTime").toLocalTime();
@@ -192,11 +193,11 @@ public class ResultSetParser
             LocalDateTime sDateTime = LocalDateTime.of(startDate, startTime);
             LocalDateTime eDateTime = LocalDateTime.of(endDate, endTime);
             
-            timeframe = new Timeframe(sDateTime, eDateTime, cost, true,
-                    timeframeID);
+            timeframe = new ReservableTimeframe(sDateTime, eDateTime, cost,
+                    true, timeframeID);
             
             // Build Reservable
-            reservable = new Reservable(loc, timeframe);            
+            reservable = new Reservable(((ReservableLocation)loc), timeframe);            
             
             // Build Reservation
             eventType = rs.getString("EventType");

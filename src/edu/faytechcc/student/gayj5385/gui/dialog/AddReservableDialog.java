@@ -6,7 +6,7 @@
 
 package edu.faytechcc.student.gayj5385.gui.dialog;
 
-import edu.faytechcc.student.burnst9091.data.Location;
+import edu.faytechcc.student.burnst9091.data.ReservableLocation;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -41,7 +41,7 @@ public class AddReservableDialog extends JDialog
         @param locs The locations
     */
 
-    public AddReservableDialog(List<Location> locs)
+    public AddReservableDialog(List<ReservableLocation> locs)
     {
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -51,7 +51,7 @@ public class AddReservableDialog extends JDialog
         setResizable(false);
         setLocationRelativeTo(null);
 
-        Location[] locArray = locs.toArray(new Location[locs.size()]);
+        ReservableLocation[] locArray = locs.toArray(new ReservableLocation[locs.size()]);
 
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -258,7 +258,7 @@ public class AddReservableDialog extends JDialog
         @return The built panel
     */
 
-    private JPanel buildRadioPanel(Location[] locs)
+    private JPanel buildRadioPanel(ReservableLocation[] locs)
     {
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -358,7 +358,7 @@ public class AddReservableDialog extends JDialog
         @return The built panel
     */
 
-    private JPanel buildTopPanel(Location[] locs)
+    private JPanel buildTopPanel(ReservableLocation[] locs)
     {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         panel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -462,10 +462,10 @@ public class AddReservableDialog extends JDialog
         @return The selected existing location
     */
 
-    public Location getSelectedLocation()
+    public ReservableLocation getSelectedLocation()
     {
 
-        return (Location) existingLocations.getSelectedItem();
+        return (ReservableLocation) existingLocations.getSelectedItem();
     }
 
     /**
@@ -754,14 +754,14 @@ public class AddReservableDialog extends JDialog
         @param locs Locations available to choose from
     */
 
-    public void setExistingLocations(List<Location> locs)
+    public void setExistingLocations(List<ReservableLocation> locs)
     {
         ActionListener[] als = existingLocations.getActionListeners();
         for (ActionListener al : als)
             existingLocations.removeActionListener(al);
 
         existingLocations.removeAllItems();
-        for (Location loc : locs)
+        for (ReservableLocation loc : locs)
             existingLocations.addItem(loc);
 
         for (ActionListener al : als)

@@ -6,7 +6,7 @@
 
 package Data;
 
-import edu.faytechcc.student.burnst9091.data.Timeframe;
+import edu.faytechcc.student.burnst9091.data.ReservableTimeframe;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -36,9 +36,9 @@ public class TimeframeTest {
         LocalDateTime otherEndDateTime = LocalDateTime.of(
                 LocalDate.of(2017, 4, 20), LocalTime.of(14, 0));
         
-        Timeframe timeframe = new Timeframe(startDateTime, endDateTime);
+        ReservableTimeframe timeframe = new ReservableTimeframe(startDateTime, endDateTime);
         
-        Timeframe otherTimeframe = new Timeframe(
+        ReservableTimeframe otherTimeframe = new ReservableTimeframe(
                 otherStartDateTime, otherEndDateTime);
         
         boolean expectedResult = true;
@@ -69,9 +69,9 @@ public class TimeframeTest {
         LocalDateTime otherEndDateTime = LocalDateTime.of(
                 LocalDate.of(2017, 3, 31), LocalTime.of(14, 0));
         
-        Timeframe timeframe = new Timeframe(startDateTime, endDateTime);
+        ReservableTimeframe timeframe = new ReservableTimeframe(startDateTime, endDateTime);
         
-        Timeframe otherTimeframe = new Timeframe
+        ReservableTimeframe otherTimeframe = new ReservableTimeframe
             (otherStartDateTime, otherEndDateTime);
         
         boolean expectedResult = false;
@@ -94,7 +94,7 @@ public class TimeframeTest {
         LocalDateTime endDateTime = LocalDateTime.of(
                 LocalDate.of(2017, 4, 20), LocalTime.of(14, 0));
         
-        Timeframe timeframe = new Timeframe(startDateTime, endDateTime);
+        ReservableTimeframe timeframe = new ReservableTimeframe(startDateTime, endDateTime);
         
         // April 20, 2017
         LocalDate date = LocalDate.of(2017, 4, 20);
@@ -119,7 +119,7 @@ public class TimeframeTest {
         LocalDateTime endDateTime = LocalDateTime.of(
                 LocalDate.of(2017, 4, 20), LocalTime.of(14, 0));
         
-        Timeframe timeframe = new Timeframe(startDateTime, endDateTime);
+        ReservableTimeframe timeframe = new ReservableTimeframe(startDateTime, endDateTime);
         
         // April 21, 2017
         LocalDate date = LocalDate.of(2017, 4, 21);
@@ -144,7 +144,7 @@ public class TimeframeTest {
         LocalDateTime endDateTime = LocalDateTime.of(
                 LocalDate.of(2017, 4, 20), LocalTime.of(14, 0));
         
-        Timeframe timeframe = new Timeframe(startDateTime, endDateTime);
+        ReservableTimeframe timeframe = new ReservableTimeframe(startDateTime, endDateTime);
         
         // March 25, 2017
         LocalDate date = LocalDate.of(2017, 3, 25);
@@ -169,7 +169,7 @@ public class TimeframeTest {
         LocalDateTime endDateTime = LocalDateTime.of(
                 LocalDate.of(2017, 4, 20), LocalTime.of(14, 0));
         
-        Timeframe timeframe = new Timeframe(startDateTime, endDateTime);
+        ReservableTimeframe timeframe = new ReservableTimeframe(startDateTime, endDateTime);
         
         // April 25, 2017
         LocalDate date = LocalDate.of(2017, 4, 25);
@@ -194,7 +194,7 @@ public class TimeframeTest {
         LocalDateTime endDateTime = LocalDateTime.of(
                 LocalDate.of(2017, 4, 20), LocalTime.of(14, 0));
         
-        Timeframe timeframe = new Timeframe(startDateTime, endDateTime);
+        ReservableTimeframe timeframe = new ReservableTimeframe(startDateTime, endDateTime);
         
         // 6:00
         LocalTime time = LocalTime.of(6, 0);
@@ -219,7 +219,7 @@ public class TimeframeTest {
         LocalDateTime endDateTime = LocalDateTime.of(
                 LocalDate.of(2017, 4, 20), LocalTime.of(14, 0));
         
-        Timeframe timeframe = new Timeframe(startDateTime, endDateTime);
+        ReservableTimeframe timeframe = new ReservableTimeframe(startDateTime, endDateTime);
         
         // 14:00
         LocalTime time = LocalTime.of(14, 0);
@@ -245,7 +245,7 @@ public class TimeframeTest {
         LocalDateTime endDateTime = LocalDateTime.of(
                 LocalDate.of(2017, 4, 20), LocalTime.of(14, 0));
         
-        Timeframe timeframe = new Timeframe(startDateTime, endDateTime);
+        ReservableTimeframe timeframe = new ReservableTimeframe(startDateTime, endDateTime);
         
         String expectedResult = "2017-03-25|06:00, 2017-04-20|14:00";
         String actualResult = timeframe.toString();

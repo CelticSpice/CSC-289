@@ -6,8 +6,8 @@
 
 package edu.faytechcc.student.gayj5385.controller;
 
-import edu.faytechcc.student.burnst9091.data.DatabaseSettings;
-import edu.faytechcc.student.burnst9091.data.Location;
+import edu.faytechcc.student.burnst9091.data.DataRepository;
+import edu.faytechcc.student.burnst9091.data.ReservableLocation;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.SHA256SaltHasher;
 import edu.faytechcc.student.burnst9091.data.SystemPreferences;
@@ -21,36 +21,29 @@ import java.awt.event.ActionListener;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 
 public class OpeningController implements ActionListener
 {
-    // Fields
-    private HashMap<Location, List<Reservation>> reservations;
-    private List<Location> locations;
+    private DataRepository repo;
     private MainPanel mainPanel;
     private OpenPanel view;
     
     /**
-        Constructs a new OpeningController initialized with the given panels,
-        location & reservation listings
+        Constructs a new OpeningController
     
         @param main Main panel
         @param v The view
-        @param locs The locations
-        @param reserves The reservations
+        @param repo Data repository
     */
     
-    public OpeningController(MainPanel main, OpenPanel v, List<Location> locs,
-        HashMap<Location, List<Reservation>> reserves)
+    public OpeningController(MainPanel main, OpenPanel v, DataRepository repo)
     {
         mainPanel = main;
         view = v;
-        locations = locs;
-        reservations = reserves;
+        this.repo = repo;
     }
     
     /**
@@ -138,20 +131,7 @@ public class OpeningController implements ActionListener
     {        
         try
         {
-            // Update locations & reservations
-            LocationSQLDAO locationDAO = new LocationSQLDAO();
-            locations.clear();
-            locations.addAll(locationDAO.getAll());
-
-            ReservationSQLDAO reservationDAO = new ReservationSQLDAO();
-            reservations.clear();
-            for (Location loc : locations)
-            {
-                List<Reservation> res = reservationDAO.getByLocation(loc);
-                
-                if (!res.isEmpty())
-                    reservations.put(loc, res);
-            }
+            repo.update();
         }
         catch (SQLException ex)
         {
@@ -160,7 +140,7 @@ public class OpeningController implements ActionListener
                     JOptionPane.ERROR_MESSAGE);
         }
         
-        mainPanel.showAdminPanel();
+        mainPanel.showAdminPanel(repo.getLocations());
     }
     
     /**
@@ -171,10 +151,7 @@ public class OpeningController implements ActionListener
     {        
         try
         {
-            // Update locations & reservations
-            LocationSQLDAO locationDAO = new LocationSQLDAO();
-            locations.clear();
-            locations.addAll(locationDAO.getAll());
+            repo.update();
         }
         catch (SQLException ex)
         {
@@ -183,13 +160,6 @@ public class OpeningController implements ActionListener
                     JOptionPane.ERROR_MESSAGE);
         }
         
-        List<Location> availLocs = new ArrayList<>();
-        for (Location loc : locations)
-        {
-            if (loc.deriveReservableTimeframes().size() > 0)
-                availLocs.add(loc);
-        }
-        
-        mainPanel.showGuestReservationPanel(availLocs);
+        mainPanel.showGuestReservationPanel(repo.getAvailableLocations());
     }
 }

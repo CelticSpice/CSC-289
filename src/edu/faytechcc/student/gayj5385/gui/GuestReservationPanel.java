@@ -6,8 +6,8 @@
 
 package edu.faytechcc.student.gayj5385.gui;
 
-import edu.faytechcc.student.burnst9091.data.Location;
-import edu.faytechcc.student.burnst9091.data.Timeframe;
+import edu.faytechcc.student.burnst9091.data.ReservableLocation;
+import edu.faytechcc.student.burnst9091.data.ReservableTimeframe;
 import edu.faytechcc.student.gayj5385.gui.renderer.TimeframeRenderer;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -37,8 +37,8 @@ public class GuestReservationPanel extends JPanel
     // Fields
     private DefaultListModel timeframes;
     private JButton reserve, exit, searchBtn, clear, help;
-    private JComboBox<Location> locations;
-    private JList<Timeframe> timeframeList;
+    private JComboBox<ReservableLocation> locations;
+    private JList<ReservableTimeframe> timeframeList;
     private JTextField capacity, search, startDate, startTime, endDate, endTime,
                        cost;
     
@@ -218,9 +218,9 @@ public class GuestReservationPanel extends JPanel
         @return The selected location
     */
 
-    public Location getSelectedLocation()
+    public ReservableLocation getSelectedLocation()
     {
-        return (Location) locations.getSelectedItem();
+        return (ReservableLocation) locations.getSelectedItem();
     }
 
     /**
@@ -229,7 +229,7 @@ public class GuestReservationPanel extends JPanel
         @return The selected timeframes
     */
 
-    public List<Timeframe> getSelectedTimeframes()
+    public List<ReservableTimeframe> getSelectedTimeframes()
     {
         return timeframeList.getSelectedValuesList();
     }
@@ -278,10 +278,10 @@ public class GuestReservationPanel extends JPanel
         @param locs Locations that can be reserved
     */
 
-    public void setLocations(List<Location> locs)
+    public void setLocations(List<ReservableLocation> locs)
     {
         locations.removeAllItems();
-        for (Location loc : locs)
+        for (ReservableLocation loc : locs)
             locations.addItem(loc);
     }
 
@@ -335,7 +335,7 @@ public class GuestReservationPanel extends JPanel
         @param loc The location to set as selected
     */
     
-    public void setSelectedLocation(Location loc)
+    public void setSelectedLocation(ReservableLocation loc)
     {
         locations.setSelectedItem(loc);
     }
@@ -368,11 +368,11 @@ public class GuestReservationPanel extends JPanel
         @param times Timeframes to display in the list
     */
 
-    public void setTimeframes(List<Timeframe> times)
+    public void setTimeframes(List<ReservableTimeframe> times)
     {
         timeframes.removeAllElements();
         if (times != null)
-            for (Timeframe timeframe : times)
+            for (ReservableTimeframe timeframe : times)
                 timeframes.addElement(timeframe);
     }
 }

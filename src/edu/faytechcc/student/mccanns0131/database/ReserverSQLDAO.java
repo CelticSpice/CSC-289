@@ -7,11 +7,13 @@
 package edu.faytechcc.student.mccanns0131.database;
 
 import edu.faytechcc.student.burnst9091.data.Reserver;
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class ReserverSQLDAO
 {
-    private DBConnection connection;
+    private Connection connection;
     private DBDataSource source;
     
     /**
@@ -27,10 +29,10 @@ public class ReserverSQLDAO
     /**
         Constructs a new ReserverSQLDAO initialized with the given connection
     
-        @param conn DBConnection
+        @param conn Connection
     */
     
-    public ReserverSQLDAO(DBConnection conn)
+    public ReserverSQLDAO(Connection conn)
     {
         source = null;
         connection = conn;
@@ -48,8 +50,20 @@ public class ReserverSQLDAO
         if (connection == null)
             connection = source.getConnection();
         
-        ResultSetParser parser = new ResultSetParser();
-        parser.setResultSet(new RecordAdd(connection).addReserver(reserver));
+        String fields = "(FirstName, LastName, Email, Phone)";
+        
+        String sql = "INSERT INTO Reservers " + fields + " "     +
+                     "VALUES ('" + reserver.getFirstName()     + "', '" +
+                                   reserver.getLastName()      + "', '" +
+                                   reserver.getEmailAddress()  + "', '" +
+                                   reserver.getPhoneNumber()   + "')";
+        
+        Statement stmt = connection.createStatement();
+        stmt.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+        
+        ResultSetParser parser = new ResultSetParser(stmt.getGeneratedKeys());
+        stmt.close();
+        
         int id = parser.parseID();
         reserver.setID(id);
     }
@@ -77,7 +91,12 @@ public class ReserverSQLDAO
         if (connection == null)
             connection = source.getConnection();
         
-        new RecordDelete(connection).deleteReserver(reserver);
+        String sql = "DELETE FROM Reservers " +
+                     "WHERE Reservers.ReserverID = " + reserver.getID();
+
+        try (Statement stmt = connection.createStatement()) {
+            stmt.executeUpdate(sql);
+        }
     }
     
     /**
@@ -92,6 +111,20 @@ public class ReserverSQLDAO
         if (connection == null)
             connection = source.getConnection();
         
-        new RecordUpdate(connection).updateReserver(reserver);
+        String sql = "UPDATE Reservers " +
+                     "SET Reservers.FirstName = '" +
+                        reserver.getFirstName() + "', " +
+                     "Reservers.LastName = '" +
+                        reserver.getLastName() + "', " +
+                     "Reservers.Email = '" +
+                        reserver.getEmailAddress() + "', " +
+                     "Reservers.Phone = '" +
+                        reserver.getPhoneNumber() + "' " +
+                     "WHERE Reservers.ReserverID = " +
+                        reserver.getID();
+        
+        try (Statement stmt = connection.createStatement()) {
+            stmt.executeUpdate(sql);
+        }        
     }
 }

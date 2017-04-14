@@ -1,4 +1,5 @@
 /**
+ * A dialog to assist a user with searching
  * 
  * @author Shane McCann
  */
@@ -30,6 +31,10 @@ public class SearchHelpDialog extends JDialog
     JList keyList;
     JButton okay;
     
+    /**
+     * Constructor
+     * @param reservation Whether it is a reservation being search or not
+     */
     public SearchHelpDialog(boolean reservation)
     {
         setLayout(new BorderLayout());
@@ -49,6 +54,10 @@ public class SearchHelpDialog extends JDialog
         setSize(475, 300);
     }
     
+    /**
+     * Build the panel that displays help information
+     * @return A panel that displays help information
+     */
     private JPanel buildInfoPanel()
     {
         JPanel panel = new JPanel(new GridBagLayout());
@@ -71,6 +80,12 @@ public class SearchHelpDialog extends JDialog
         return panel;
     }
     
+    /**
+     * Build the list that displays help options
+     * 
+     * @param reservation Whether it is a reservation search or not
+     * @return A panel containing the list
+     */
     private JPanel buildKeyListPanel(boolean reservation)
     {
         JPanel panel = new JPanel(new GridBagLayout());
@@ -103,6 +118,9 @@ public class SearchHelpDialog extends JDialog
         return panel;
     }
     
+    /**
+     * A button controller
+     */
     private class ButtonController implements ActionListener
     {
         /**
@@ -122,16 +140,28 @@ public class SearchHelpDialog extends JDialog
         }
     }
     
+    /**
+     * A list controller
+     */
     private class ListController implements ListSelectionListener
     {
-        // Field
+        // Fields
         private boolean reservation;
         
+        /**
+         * Constructs a new ListController
+         * @param r 
+         */
         public ListController(boolean r)
         {
             reservation = r;
         }
         
+        /**
+         * Displays help text pertaining to the item selected
+         * 
+         * @param e ActionEvent 
+         */
         @Override
         public void valueChanged(ListSelectionEvent e)
         {

@@ -85,6 +85,9 @@ public class ManageReservationButtonController implements ActionListener
             case "Clear":
                 clear();
                 break;
+            case "Help":
+                // Search Help
+                break;
             case "Logout":
                 System.exit(0);
                 break;
@@ -148,7 +151,11 @@ public class ManageReservationButtonController implements ActionListener
      */
     private void clear()
     {
+        reservationFilter.setPredicate(null);
+        locationFilter.setPredicate(null);
+        view.clearSearch();
         
+        setLocations();
     }
     
     /**
@@ -215,84 +222,45 @@ public class ManageReservationButtonController implements ActionListener
      */
     private void search(String criteria)
     {
-        SearchActualizer search = new SearchActualizer(criteria);
+        List<String> acceptedKeys = new ArrayList();
+        
+        acceptedKeys.add("locationname");
+        acceptedKeys.add("location");
+        acceptedKeys.add("loc");
+        acceptedKeys.add("startdate");
+        acceptedKeys.add("starttime");
+        acceptedKeys.add("enddate");
+        acceptedKeys.add("endtime");
+        acceptedKeys.add("cost");
+        acceptedKeys.add("price");
+        acceptedKeys.add("firstname");
+        acceptedKeys.add("first");
+        acceptedKeys.add("lastname");
+        acceptedKeys.add("last");
+        acceptedKeys.add("emailaddress");
+        acceptedKeys.add("email");
+        acceptedKeys.add("phonenumber");
+        acceptedKeys.add("phone");
+        
+        SearchActualizer search = new SearchActualizer(criteria, acceptedKeys);
         
         if (search.validateSearch())
         {
-            switch (search.getNumSearchLocations())
+            locationFilter.setPredicate(search.searchLocations());
+            setLocations();
+            
+            if (view.getSelectedLocation() != null)
             {
-                case 0:
-                    searchOnSelectedLocation(search);
-                    break;
-                case 1:
-                    searchOnOneLocation(search);
-                    break;
-                default:
-                    searchOnMultipleLocations(search);
-                    break;
+                reservationFilter.setPredicate(search.searchReservations());
+                setReservations(reservationFilter.filter(reservations.get(
+                        view.getSelectedLocation())));
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(view, "No locations found");
+                clear();
             }
         }
-    }
-    
-    /**
-     * Performs a search on two or more locations
-     * 
-     * @param s The SearchActualizer to perform the search with
-     * @param criteria The search criteria
-     */
-    private void searchOnMultipleLocations(SearchActualizer s)
-    {
-        locationFilter.setPredicate(s.searchLocations());
-        setLocations();
-        
-        if (reservationFilter.getPredicate() != null)
-        {
-            reservationFilter.setPredicate(s.searchReservations());
-            setReservations(reservationFilter.filter(reservations.get(view.getSelectedLocation())));
-        }
-    }
-    
-    /**
-     * Performs a search on one specified location
-     * 
-     * @param s The SearchActualizer to perform the search with
-     * @param criteria The search criteria
-     */
-    private void searchOnOneLocation(SearchActualizer s)
-    {
-        locationFilter.setPredicate(s.searchLocations());
-        setLocations();
-            
-        if (view.getSelectedLocation() != null)
-        {
-            reservationFilter.setPredicate(s.searchReservations());
-            setReservations(reservationFilter.filter(reservations.get(view.getSelectedLocation())));
-        }
-        else
-        {
-            JOptionPane.showMessageDialog(view, "No such location exists");
-//            clear();
-        }
-    }
-    
-    /**
-     * Performs a search on the currently selected location
-     * 
-     * @param s The SearchActualizer to perform the search with
-     * @param criteria The search criteria
-     */
-    private void searchOnSelectedLocation(SearchActualizer s)
-    {
-        if (view.getSelectedLocation() != null)
-        {
-            reservationFilter.setPredicate(s.searchReservations());
-            
-            List<Reservation> reserves = reservations.get(view.getSelectedLocation());
-
-            setReservations(reserves);
-        }
-        else
-            JOptionPane.showMessageDialog(view, "No location selected");
     }
     
     /**
@@ -302,6 +270,7 @@ public class ManageReservationButtonController implements ActionListener
     private void setLocations()
     {
         List<ReservableLocation> locs = new ArrayList<>(reservations.keySet());
+        
         if (locationFilter.getPredicate() != null)
             view.setLocations(locationFilter.filter(locs));
         else

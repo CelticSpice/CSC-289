@@ -8,7 +8,6 @@ package edu.faytechcc.student.burnst9091.data.search;
 import edu.faytechcc.student.burnst9091.data.ReservableLocation;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.ReservableTimeframe;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 import javax.swing.JOptionPane;
@@ -17,7 +16,6 @@ public class SearchActualizer
 {
     // Fields
     String criteria;
-    int numLocations;
     List<String> acceptedKeys;
     
     /**
@@ -25,32 +23,10 @@ public class SearchActualizer
      * 
      * @param c Search criteria
      */
-    public SearchActualizer(String c)
+    public SearchActualizer(String c, List<String> keys)
     {
         criteria = c;
-        acceptedKeys = new ArrayList();
-        
-        acceptedKeys.add("locationname");
-        acceptedKeys.add("location name");
-        acceptedKeys.add("location");
-        acceptedKeys.add("loc");
-        acceptedKeys.add("capacity");
-        acceptedKeys.add("cap");
-        acceptedKeys.add("startdate");
-        acceptedKeys.add("start date");
-        acceptedKeys.add("starttime");
-        acceptedKeys.add("start time");
-        acceptedKeys.add("enddate");
-        acceptedKeys.add("end date");
-        acceptedKeys.add("endtime");
-        acceptedKeys.add("end time");
-        acceptedKeys.add("cost");
-        acceptedKeys.add("price");
-    }
-    
-    public int getNumSearchLocations()
-    {
-        return numLocations;
+        acceptedKeys = keys;
     }
     
     /**
@@ -190,7 +166,7 @@ public class SearchActualizer
             for (String f : filterArray)
             {
                 // Split keys and values
-                String[] constraint = f.split(":");
+                String[] constraint = f.split("::");
                 
                 String key = constraint[0].trim(), 
                        val = constraint[1].trim();
@@ -205,7 +181,6 @@ public class SearchActualizer
                         case "loc":
                             if (!validateLocationName(val))
                                 return false;
-                            numLocations++;
                             break;
                         case "capacity":
                         case "cap":

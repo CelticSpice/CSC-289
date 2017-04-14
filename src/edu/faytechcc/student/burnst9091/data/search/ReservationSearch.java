@@ -15,22 +15,10 @@ import java.util.function.Predicate;
 public class ReservationSearch
 {
     // Fields
-    Predicate<Reservation> startDate;
-    Predicate<Reservation> startTime;
-    Predicate<Reservation> endDate;
-    Predicate<Reservation> endTime;
-    Predicate<Reservation> cost;
-    Predicate<Reservation> reserver;
     Predicate<Reservation> finalPredicate;
     
     public ReservationSearch()
     {
-        startDate = null;
-        startTime = null;
-        endDate = null;
-        endTime = null;
-        cost = null;
-        reserver = null;
         finalPredicate = null;
     }
     
@@ -42,7 +30,7 @@ public class ReservationSearch
         for (String filter : filters)
         {
             // Split keys and values
-            String[] constraint = filter.split(":");
+            String[] constraint = filter.split("::");
             
             String key = constraint[0].trim(), 
                    val = constraint[1].trim();
@@ -50,54 +38,64 @@ public class ReservationSearch
             switch(key.toLowerCase())
             {
                 case "startdate":
-                    startDate = filterByStartDate(val);
                     if (finalPredicate == null)
-                        finalPredicate = startDate;
+                        finalPredicate = filterByStartDate(val);
                     else
-                        finalPredicate = finalPredicate.and(startDate);
+                        finalPredicate = finalPredicate.and(filterByStartDate(val));
                     break;
-                case "starttime":                        
-                    startTime = filterByStartTime(val);
+                case "starttime":
                     if (finalPredicate == null)
-                        finalPredicate = startTime;
+                        finalPredicate = filterByStartTime(val);
                     else
-                        finalPredicate = finalPredicate.and(startTime);
+                        finalPredicate = finalPredicate.and(filterByStartTime(val));
                     break;
                 case "enddate":
-                    endDate = filterByEndDate(val);
                     if (finalPredicate == null)
-                        finalPredicate = endDate;
+                        finalPredicate = filterByEndDate(val);
                     else
-                        finalPredicate = finalPredicate.and(endDate);
+                        finalPredicate = finalPredicate.and(filterByEndDate(val));
                     break;
                 case "endtime":
-                    endTime = filterByEndTime(val);
                     if (finalPredicate == null)
-                        finalPredicate = endTime;
+                        finalPredicate = filterByEndTime(val);
                     else
-                        finalPredicate = finalPredicate.and(endTime);
+                        finalPredicate = finalPredicate.and(filterByEndTime(val));
                     break;
-                    //start=2017-03-20,13:00; end=2017-03-20,14:00
                 case "cost":
                 case "price":
-                    cost = filterByCost(val);
                     if (finalPredicate == null)
-                        finalPredicate = cost;
+                        finalPredicate = filterByCost(val);
                     else
-                        finalPredicate = finalPredicate.and(cost);
+                        finalPredicate = finalPredicate.and(filterByCost(val));
                     break;
                 case "first name":
                 case "firstname":
                 case "first":
+                    if (finalPredicate == null)
+                        finalPredicate = filterByFirstName(val);
+                    else
+                        finalPredicate = finalPredicate.and(filterByFirstName(val));
                     break;
                 case "last name":
                 case "lastname":
                 case "last":
+                    if (finalPredicate == null)
+                        finalPredicate = filterByLastName(val);
+                    else
+                        finalPredicate = finalPredicate.and(filterByLastName(val));
                     break;
                 case "email":
                 case "e-mail":
+                    if (finalPredicate == null)
+                        finalPredicate = filterByEmail(val);
+                    else
+                        finalPredicate = finalPredicate.and(filterByEmail(val));
                     break;
                 case "phone":
+                    if (finalPredicate == null)
+                        finalPredicate = filterByPhone(val);
+                    else
+                        finalPredicate = finalPredicate.and(filterByPhone(val));
                     break;
             }
         }
@@ -110,10 +108,10 @@ public class ReservationSearch
      * @param value The start date
      * @return A predicate that checks for a match with the start date
      */
-    private Predicate<Reservation> filterByStartDate(String value)
+    private Predicate<Reservation> filterByStartDate(String date)
     {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate start = LocalDate.parse(value, format);
+        LocalDate start = LocalDate.parse(date, format);
         
         return r -> r.getStartDate().equals(start);
     }
@@ -123,10 +121,10 @@ public class ReservationSearch
      * @param value The start time
      * @return A predicate that checks for a match with the start time
      */
-    private Predicate<Reservation> filterByStartTime(String value)
+    private Predicate<Reservation> filterByStartTime(String time)
     {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm");
-        LocalTime start = LocalTime.parse(value, format);
+        LocalTime start = LocalTime.parse(time, format);
         
         return r -> r.getStartTime().equals(start);
     }
@@ -136,10 +134,10 @@ public class ReservationSearch
      * @param value The end date
      * @return A predicate that checks for a match with the end date
      */
-    private Predicate<Reservation> filterByEndDate(String value)
+    private Predicate<Reservation> filterByEndDate(String date)
     {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate end = LocalDate.parse(value, format);
+        LocalDate end = LocalDate.parse(date, format);
         
         return r -> r.getEndDate().equals(end);
     }
@@ -149,10 +147,10 @@ public class ReservationSearch
      * @param value The end time
      * @return A predicate that checks for a match with the end time
      */
-    private Predicate<Reservation> filterByEndTime(String value)
+    private Predicate<Reservation> filterByEndTime(String time)
     {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm");
-        LocalTime end = LocalTime.parse(value, format);
+        LocalTime end = LocalTime.parse(time, format);
         
         return r -> r.getEndTime().equals(end);
     }
@@ -162,8 +160,28 @@ public class ReservationSearch
      * @param value The cost
      * @return A predicate that checks for a match with the cost
      */
-    private Predicate<Reservation> filterByCost(String value)
+    private Predicate<Reservation> filterByCost(String cost)
     {
-        return r -> r.getCost().equals(new BigDecimal(value));
+        return r -> r.getCost().equals(new BigDecimal(cost));
+    }
+    
+    private Predicate<Reservation> filterByFirstName(String name)
+    {
+        return r -> r.getReserverFirstName().equalsIgnoreCase(name);
+    }
+    
+    private Predicate<Reservation> filterByLastName(String name)
+    {
+        return r -> r.getReserverLastName().equalsIgnoreCase(name);
+    }
+    
+    private Predicate<Reservation> filterByEmail(String email)
+    {
+        return r -> r.getReserverEmail().equalsIgnoreCase(email);
+    }
+    
+    private Predicate<Reservation> filterByPhone(String phone)
+    {
+        return r -> r.getReserverPhone().equalsIgnoreCase(phone);
     }
 }

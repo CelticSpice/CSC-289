@@ -21,6 +21,7 @@ import edu.faytechcc.student.mccanns0131.database.ReservableSQLDAO;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 
@@ -79,6 +80,8 @@ public class ManageReservableButtonController implements ActionListener
                 break;
             case "Clear":
                 doClear();
+            case "Help":
+                // Search Help
                 break;
         }
     }
@@ -186,62 +189,39 @@ public class ManageReservableButtonController implements ActionListener
     
     private void doSearch(String criteria)
     {
-        SearchActualizer search = new SearchActualizer(criteria);
+        List<String> acceptedKeys = new ArrayList();
+        
+        acceptedKeys.add("locationname");
+        acceptedKeys.add("location");
+        acceptedKeys.add("loc");
+        acceptedKeys.add("capacity");
+        acceptedKeys.add("cap");
+        acceptedKeys.add("startdate");
+        acceptedKeys.add("starttime");
+        acceptedKeys.add("enddate");
+        acceptedKeys.add("endtime");
+        acceptedKeys.add("cost");
+        acceptedKeys.add("price");
+        
+        SearchActualizer search = new SearchActualizer(criteria, acceptedKeys);
         
         if (search.validateSearch())
         {            
-            switch (search.getNumSearchLocations())
-            {
-                case 0:
-                    if (criteria.toLowerCase().contains("cap:") ||
-                        criteria.toLowerCase().contains("capacity:"))
-                        searchOnMultipleLocations(search);
-                    else
-                        searchOnSelectedLocation(search);
-                    break;
-                case 1:
-                    searchOnOneLocation(search);
-                    break;
-                default:
-                    searchOnMultipleLocations(search);
-                    break;
-            }
-        }
-    }
-    
-    /**
-     * Returns the number of locations that are searched for
-     * 
-     * @param criteria The search criteria
-     * @return number of locations searched for
-     */
-    private int numSearchLocations(String criteria)
-    {
-        int num = 0;
-        
-        // Split search criteria
-        String[] filterArray = criteria.split(";");
-
-        for (String f : filterArray)
-        {
-            // Split keys and values
-            String[] constraint = f.split(":");
+            locationFilter.setPredicate(search.searchLocations());
+            view.setLocations(locationFilter.filter(locations));
             
-            String key = constraint[0].trim();
-
-            switch(key.toLowerCase())
-            {
-                case "locationname":
-                case "location":
-                case "loc":
-                    num++;
-                    break;
-                case "capacity":
-                case "cap":
+            if (view.getSelectedLocation() != null)
+            {            
+                timeframeFilter.setPredicate(search.searchTimeframes());
+                view.setTimeframes(timeframeFilter.filter(
+                        view.getSelectedLocation().getTimeframes()));
             }
-        }
-        
-        return num;
+            else
+            {
+                JOptionPane.showMessageDialog(view, "No locations found");
+                doClear();
+            }
+        }        
     }
     
     /**

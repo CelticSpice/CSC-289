@@ -9,6 +9,8 @@ package edu.faytechcc.student.gayj5385.controller;
 import edu.faytechcc.student.burnst9091.data.ReservableLocation;
 import edu.faytechcc.student.burnst9091.data.Reservable;
 import edu.faytechcc.student.burnst9091.data.ReservableTimeframe;
+import edu.faytechcc.student.burnst9091.data.search.Filter;
+import edu.faytechcc.student.burnst9091.data.search.SearchActualizer;
 import edu.faytechcc.student.gayj5385.gui.GuestReservationPanel;
 import edu.faytechcc.student.gayj5385.gui.MainPanel;
 import edu.faytechcc.student.gayj5385.gui.dialog.MakeReservationDialog;
@@ -16,11 +18,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 public class GuestReservationButtonController implements ActionListener
 {
     private GuestReservationPanel view;
     private List<ReservableLocation> locations;
+    private Filter<ReservableLocation> locationFilter;
+    private Filter<ReservableTimeframe> timeframeFilter;
     
     /**
         Constructs a new GuestReservationButtonController initialized with
@@ -35,6 +40,8 @@ public class GuestReservationButtonController implements ActionListener
     {
         view = v;
         locations = locs;
+        locationFilter = new Filter();
+        timeframeFilter = new Filter();
     }
     
     /**
@@ -52,15 +59,28 @@ public class GuestReservationButtonController implements ActionListener
                 showMakeReservationDialog();
                 break;
             case "Search":
-                // Do this
+                if (!view.getSearchCriteria().isEmpty())
+                    search(view.getSearchCriteria());
                 break;
             case "Clear":
-                // Do this
+                clear();
+                break;
+            case "Help":
+                // Search Help
                 break;
             case "Exit":
                 exit();
                 break;
         }
+    }
+    
+    private void clear()
+    {
+        locationFilter.setPredicate(null);
+        timeframeFilter.setPredicate(null);
+        view.clearSearch();
+        
+        updateLocations();
     }
     
     /**
@@ -80,6 +100,49 @@ public class GuestReservationButtonController implements ActionListener
             new MakeReservationDialog(reservable).setVisible(true);
             
             updateLocations();
+        }
+    }
+    
+    /**
+        Performs a search for reservables based on search criteria
+     
+        @param criteria The search criteria
+    */
+    
+    private void search(String criteria)
+    {
+        List<String> acceptedKeys = new ArrayList();
+        
+        acceptedKeys.add("locationname");
+        acceptedKeys.add("location");
+        acceptedKeys.add("loc");
+        acceptedKeys.add("capacity");
+        acceptedKeys.add("cap");
+        acceptedKeys.add("startdate");
+        acceptedKeys.add("starttime");
+        acceptedKeys.add("enddate");
+        acceptedKeys.add("endtime");
+        acceptedKeys.add("cost");
+        acceptedKeys.add("price");
+        
+        SearchActualizer search = new SearchActualizer(criteria, acceptedKeys);
+        
+        if (search.validateSearch())
+        {            
+            locationFilter.setPredicate(search.searchLocations());
+            view.setLocations(locationFilter.filter(locations));
+            
+            if (view.getSelectedLocation() != null)
+            {            
+                timeframeFilter.setPredicate(search.searchTimeframes());
+                view.setTimeframes(timeframeFilter.filter(
+                        view.getSelectedLocation().getTimeframes()));
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(view, "No locations found");
+                clear();
+            }
         }
     }
     

@@ -6,10 +6,10 @@
 
 package edu.faytechcc.student.gayj5385.gui.dialog;
 
+import edu.faytechcc.student.burnst9091.data.DataRepository;
 import edu.faytechcc.student.burnst9091.data.Reservable;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.Reserver;
-import edu.faytechcc.student.mccanns0131.database.ReservationSQLDAO;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -35,9 +35,10 @@ public class MakeReservationDialog extends JDialog
         reservable that is to be reserved
     
         @param r The reservable to be reserved
+        @param repo Data repository
     */
     
-    public MakeReservationDialog(Reservable r)
+    public MakeReservationDialog(Reservable r, DataRepository repo)
     {
         setLayout(new BorderLayout());
         setTitle("Make Reservation");
@@ -47,7 +48,7 @@ public class MakeReservationDialog extends JDialog
         setLocationRelativeTo(null);
         
         add(buildMainPanel(r), BorderLayout.CENTER);
-        add(buildButtonPanel(r), BorderLayout.SOUTH);
+        add(buildButtonPanel(r, repo), BorderLayout.SOUTH);
         
         pack();
     }
@@ -57,17 +58,18 @@ public class MakeReservationDialog extends JDialog
         reservable that is to be reserved
         
         @param r The reservable to be reserved
+        @param repo Data repository
         @return The built panel
     */
     
-    private JPanel buildButtonPanel(Reservable r)
+    private JPanel buildButtonPanel(Reservable r, DataRepository repo)
     {
         JPanel panel = new JPanel();
         
         panel.add(reserve = new JButton("Reserve"));
         panel.add(cancel = new JButton("Cancel"));
         
-        ButtonController controller = new ButtonController(r);
+        ButtonController controller = new ButtonController(r, repo);
         
         reserve.addActionListener(controller);
         cancel.addActionListener(controller);
@@ -190,6 +192,7 @@ public class MakeReservationDialog extends JDialog
     
     private class ButtonController implements ActionListener
     {
+        private DataRepository repo;
         private Reservable reservable;
         
         /**
@@ -197,11 +200,13 @@ public class MakeReservationDialog extends JDialog
             reservable that is to be reserved
         
             @param r The reservable to be reserved
+            @param repo Data repository
         */
         
-        public ButtonController(Reservable r)
+        public ButtonController(Reservable r, DataRepository repo)
         {
             reservable = r;
+            this.repo = repo;
         }
         
         /**
@@ -260,10 +265,9 @@ public class MakeReservationDialog extends JDialog
                 Reservation reservation = new Reservation(reserver, reservable,
                         numAttending, eventType, false);
                                 
-                ReservationSQLDAO resDAO = new ReservationSQLDAO();
-                resDAO.addReservation(reservation);
+                repo.addReservation(reservation);
                 
-                reservable.getTimeframe().reserve();
+                reservable.reserve();
                 
                 // Show confirmation
                 JOptionPane.showMessageDialog(null, "Reservation made");

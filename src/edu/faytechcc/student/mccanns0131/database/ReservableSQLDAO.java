@@ -8,6 +8,7 @@ package edu.faytechcc.student.mccanns0131.database;
 
 import edu.faytechcc.student.burnst9091.data.Reservable;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -121,9 +122,9 @@ public class ReservableSQLDAO
             stmt.executeUpdate(sql);
             
             // Check if a record of a location should also be removed
-            sql = "SELECT Locations.LocationID " +
-                   "FROM Locations " +
-                   "WHERE Locations.LocationID = " +
+            sql = "SELECT Reservables.LocationID " +
+                   "FROM Reservables " +
+                   "WHERE Reservables.LocationID = " +
                     reservable.getLocationID();
             
             stmt.executeQuery(sql);
@@ -135,9 +136,9 @@ public class ReservableSQLDAO
             }
             
             // Check if a record of a timeframe should also be removed
-            sql = "SELECT Timeframes.TimeframeID " +
-                  "FROM Timeframes " +
-                  "WHERE Timeframes.TimeframeID = " +
+            sql = "SELECT Reservables.TimeframeID " +
+                  "FROM Reservables " +
+                  "WHERE Reservables.TimeframeID = " +
                   reservable.getTimeframeID();
             
             stmt.executeQuery(sql);
@@ -173,5 +174,9 @@ public class ReservableSQLDAO
         try (Statement stmt = connection.createStatement()) {
             stmt.executeUpdate(sql);
         }
+        
+        // Update location
+        LocationSQLDAO locDAO = new LocationSQLDAO(connection);
+        locDAO.updateLocation(reservable.getLocation());
     }
 }

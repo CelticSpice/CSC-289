@@ -60,9 +60,10 @@ public class ReserverSQLDAO
         
         Statement stmt = connection.createStatement();
         stmt.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
-        stmt.close();
         
         ResultSetParser parser = new ResultSetParser(stmt.getGeneratedKeys());
+        stmt.close();
+        
         int id = parser.parseID();
         reserver.setID(id);
     }

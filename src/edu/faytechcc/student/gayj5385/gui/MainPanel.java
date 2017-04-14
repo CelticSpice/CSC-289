@@ -6,16 +6,16 @@
 
 package edu.faytechcc.student.gayj5385.gui;
 
+import edu.faytechcc.student.burnst9091.data.DataRepository;
 import edu.faytechcc.student.burnst9091.data.ReservableLocation;
-import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.gayj5385.controller.GuestReservationButtonController;
 import edu.faytechcc.student.gayj5385.controller.GuestReservationComboBoxController;
 import edu.faytechcc.student.gayj5385.controller.GuestReservationListController;
 import edu.faytechcc.student.gayj5385.controller.OpeningController;
 import java.awt.CardLayout;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.sql.SQLException;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class MainPanel extends JPanel
@@ -40,56 +40,67 @@ public class MainPanel extends JPanel
         parent = p;
         
         setLayout(layout = new CardLayout());
-        List<ReservableLocation> locations = new ArrayList<>();
-        HashMap<ReservableLocation, List<Reservation>> reservations = new HashMap<>();
         
-        buildOpenPanel(locations, reservations);
-        buildAdminPanel(locations, reservations);        
-        buildReservationPanel(locations);
+        DataRepository repo = null;
+        try
+        {
+            repo = new DataRepository();
+        }
+        catch (SQLException ex)
+        {
+            JOptionPane.showMessageDialog(null, "Failed initializing data " +
+                    "repository", "Error", JOptionPane.ERROR_MESSAGE);
+            System.exit(1);
+        }
+        
+        buildOpenPanel(repo);
+        buildAdminPanel(repo);        
+        buildReservationPanel(repo);
     }
     
     /**
         Builds the administrator's panel
+    
+        @param repo The data repository
     */
     
-    private void buildAdminPanel(List<ReservableLocation> locations,
-        HashMap<ReservableLocation, List<Reservation>> reservations)
+    private void buildAdminPanel(DataRepository repo)
     {
-        adminPanel = new AdminPanel(locations, reservations);
+        adminPanel = new AdminPanel(repo);
         
         add(adminPanel, CARDS[1]);
     }
     
     /**
         Builds the opening panel
+    
+        @param repo The data repository
     */
     
-    private void buildOpenPanel(List<ReservableLocation> locations,
-        HashMap<ReservableLocation, List<Reservation>> reservations)
+    private void buildOpenPanel(DataRepository repo)
     {
         openPanel = new OpenPanel();
         
         openPanel.registerButtonListener(new OpeningController(this, openPanel,
-            locations, reservations));
+            repo));
         
         add(openPanel, CARDS[0]);
     }
     
     /**
-        Builds the guest reservation panel, initialized with the given list
-        of locations
+        Builds the guest reservation panel
     
-        @param locs The locations
+        @param repo The data repository
     */
     
-    private void buildReservationPanel(List<ReservableLocation> locs)
+    private void buildReservationPanel(DataRepository repo)
     {
         final int CARD_INDEX = 2;
         
         guestReservePanel = new GuestReservationPanel();
         
         guestReservePanel.registerButtonController(
-                new GuestReservationButtonController(guestReservePanel, locs));
+                new GuestReservationButtonController(guestReservePanel, repo));
         
         guestReservePanel.registerComboBoxController(
                 new GuestReservationComboBoxController(guestReservePanel));
@@ -107,9 +118,7 @@ public class MainPanel extends JPanel
     public void showAdminPanel()
     {
         final int CARD_INDEX = 1;
-        
-        adminPanel.updateModel();
-        
+                
         layout.show(this, CARDS[CARD_INDEX]);
         
         parent.pack();
@@ -131,8 +140,7 @@ public class MainPanel extends JPanel
     }
     
     /**
-        Shows the guest reservation panel with the updated list of locations
-        that can be reserved
+        Shows the guest reservation panel
     
         @param availLocs Locations that can be reserved
     */

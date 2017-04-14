@@ -6,11 +6,11 @@
 
 package edu.faytechcc.student.gayj5385.controller;
 
+import edu.faytechcc.student.burnst9091.data.DataRepository;
 import edu.faytechcc.student.burnst9091.data.ReservableLocation;
 import edu.faytechcc.student.burnst9091.data.Reservable;
 import edu.faytechcc.student.burnst9091.data.ReservableTimeframe;
 import edu.faytechcc.student.gayj5385.gui.dialog.AddReservableDialog;
-import edu.faytechcc.student.mccanns0131.database.ReservableSQLDAO;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
@@ -26,21 +26,20 @@ public class ReservableAddButtonController implements ActionListener
     private static final int END = 1;
 
     private AddReservableDialog view;
-    private List<ReservableLocation> locations;
+    private DataRepository repo;
 
     /**
-        Constructs a new ReservableAddButtonController to manage the buttons
-        on the given view with the given set of existing locations
+        Constructs a new ReservableAddButtonController
 
         @param v The view
-        @param locs The locations
+        @param repo Data repository
     */
 
     public ReservableAddButtonController(AddReservableDialog v,
-            List<ReservableLocation> locs)
+            DataRepository repo)
     {
         view = v;
-        locations = locs;
+        this.repo = repo;
     }
 
     /**
@@ -79,17 +78,14 @@ public class ReservableAddButtonController implements ActionListener
                 
                 Reservable reservable = new Reservable(loc, timeframe);
 
-                ReservableSQLDAO reservableDAO = new ReservableSQLDAO();
-                reservableDAO.addReservable(reservable);
-
-                loc.addTimeframe(timeframe);
-
-                if (creatingNewLocation())
-                    addLocation(loc);
+                repo.addReservable(reservable);
+                
+                List<ReservableLocation> locs = repo.getLocations();
+                view.setExistingLocations(locs);
                                 
                 JOptionPane.showMessageDialog(view, "Reservable created");
                 
-                if (creatingNewLocation() && locations.size() == 1)
+                if (creatingNewLocation() && locs.size() == 1)
                     view.setExistingLocationsRadioEnabled(true);
             }
             catch (SQLException ex)
@@ -98,19 +94,6 @@ public class ReservableAddButtonController implements ActionListener
                         "Error adding record to database");
             }
         }
-    }
-
-    /**
-        Adds a location to the model
-
-        @param loc The location to add
-    */
-
-    private void addLocation(ReservableLocation loc)
-    {
-        locations.add(loc);
-        locations.sort((l1, l2) -> l1.getName().compareTo(l2.getName()));
-        view.setExistingLocations(locations);
     }
 
     /**
@@ -123,7 +106,7 @@ public class ReservableAddButtonController implements ActionListener
     {
         String inputName = view.getInputLocation().trim();
 
-        for (ReservableLocation loc : locations)
+        for (ReservableLocation loc : repo.getLocations())
         {
             if (loc.getName().equalsIgnoreCase(inputName))
                 return true;

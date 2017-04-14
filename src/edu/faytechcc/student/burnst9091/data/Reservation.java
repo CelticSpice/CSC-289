@@ -246,6 +246,17 @@ public class Reservation
     }
     
     /**
+        Returns the timeframe of the reservation
+    
+        @return The reservation's timeframe
+    */
+    
+    public ReservableTimeframe getTimeframe()
+    {
+        return reservable.getTimeframe();
+    }
+    
+    /**
         Returns the ID of the reservation's timeframe
     
         @return ID of reservation's timeframe

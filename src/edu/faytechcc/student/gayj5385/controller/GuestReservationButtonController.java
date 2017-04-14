@@ -6,6 +6,7 @@
 
 package edu.faytechcc.student.gayj5385.controller;
 
+import edu.faytechcc.student.burnst9091.data.DataRepository;
 import edu.faytechcc.student.burnst9091.data.ReservableLocation;
 import edu.faytechcc.student.burnst9091.data.Reservable;
 import edu.faytechcc.student.burnst9091.data.ReservableTimeframe;
@@ -22,24 +23,23 @@ import javax.swing.JOptionPane;
 
 public class GuestReservationButtonController implements ActionListener
 {
+    private DataRepository repo;
     private GuestReservationPanel view;
-    private List<ReservableLocation> locations;
     private Filter<ReservableLocation> locationFilter;
     private Filter<ReservableTimeframe> timeframeFilter;
     
     /**
-        Constructs a new GuestReservationButtonController initialized with
-        the given GuestReservationPanel to control & a list of locations
+        Constructs a new GuestReservationButtonController
     
-        @param v The view, GuestReservationPanel
-        @param locs The locations
+        @param v The view
+        @param repo Data repository
     */
     
     public GuestReservationButtonController(GuestReservationPanel v,
-            List<ReservableLocation> locs)
+            DataRepository repo)
     {
         view = v;
-        locations = locs;
+        this.repo = repo;
         locationFilter = new Filter();
         timeframeFilter = new Filter();
     }
@@ -97,7 +97,7 @@ public class GuestReservationButtonController implements ActionListener
             ReservableLocation loc = view.getSelectedLocation();
             Reservable reservable = new Reservable(loc, timeframes.get(0));
             
-            new MakeReservationDialog(reservable).setVisible(true);
+            new MakeReservationDialog(reservable, repo).setVisible(true);
             
             updateLocations();
         }
@@ -130,7 +130,8 @@ public class GuestReservationButtonController implements ActionListener
         if (search.validateSearch())
         {            
             locationFilter.setPredicate(search.searchLocations());
-            view.setLocations(locationFilter.filter(locations));
+            view.setLocations(
+                    locationFilter.filter(repo.getAvailableLocations()));
             
             if (view.getSelectedLocation() != null)
             {            
@@ -162,13 +163,6 @@ public class GuestReservationButtonController implements ActionListener
     
     private void updateLocations()
     {
-        List<ReservableLocation> availLocs = new ArrayList<>();
-        for (ReservableLocation loc : locations)
-        {
-            List<ReservableTimeframe> timeframes = loc.getReservableTimeframes();
-            if (timeframes.size() > 0)
-                availLocs.add(loc);
-        }
-        view.setLocations(availLocs);
+        view.setLocations(repo.getAvailableLocations());
     }
 }

@@ -168,4 +168,46 @@ public class Reservable
     {
         return timeframe.isReserved();
     }
+    
+    /**
+        Reserves the reservable
+    */
+    
+    public void reserve()
+    {
+        timeframe.reserve();
+    }
+    
+    /**
+        Sets the capacity of the reservable's location's capacity
+    
+        @param cap The reservable's location's capacity
+    */
+    
+    public void setLocationCapacity(int cap)
+    {
+        location.setCapacity(cap);
+    }
+    
+    /**
+        Sets the cost of the reservable
+    
+        @param cost Cost of the reservable
+    */
+    
+    public void setCost(BigDecimal cost)
+    {
+        timeframe.setCost(cost);
+    }
+    
+    /**
+        Sets the name of the reservable's location
+    
+        @param name Name of reservable's location
+    */
+    
+    public void setLocationName(String name)
+    {
+        location.setName(name);
+    }
 }

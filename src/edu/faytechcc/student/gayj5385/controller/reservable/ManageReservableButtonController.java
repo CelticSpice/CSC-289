@@ -7,6 +7,7 @@
 
 package edu.faytechcc.student.gayj5385.controller.reservable;
 
+import edu.faytechcc.student.burnst9091.data.DataRepository;
 import edu.faytechcc.student.burnst9091.data.ReservableLocation;
 import edu.faytechcc.student.burnst9091.data.Reservable;
 import edu.faytechcc.student.burnst9091.data.search.SearchActualizer;
@@ -17,7 +18,7 @@ import edu.faytechcc.student.gayj5385.controller.ReservableAddComboBoxController
 import edu.faytechcc.student.gayj5385.controller.ReservableAddRadioController;
 import edu.faytechcc.student.gayj5385.gui.ManageReservablePanel;
 import edu.faytechcc.student.gayj5385.gui.dialog.AddReservableDialog;
-import edu.faytechcc.student.mccanns0131.database.ReservableSQLDAO;
+import edu.faytechcc.student.gayj5385.gui.dialog.UpdateReservableDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -27,29 +28,26 @@ import javax.swing.JOptionPane;
 
 public class ManageReservableButtonController implements ActionListener
 {
-    // Fields
-    private List<ReservableLocation> locations;
+    private DataRepository repo;
     private ManageReservablePanel view;
     private Filter<ReservableTimeframe> timeframeFilter;
     private Filter<ReservableLocation> locationFilter;
     
     /**
-        Constructs a new ManageReservableButtonController to manage the
-        given view's buttons and accepts a list of locations, filters for
-        filtering timeframes & locations
+        Constructs a new ManageReservableButtonController
 
         @param v The view
-        @param locs The locations
+        @param repo Data repository
         @param timeFilter ReservableTimeframe filter
         @param locFilter ReservableLocation filter
     */
     
     public ManageReservableButtonController(ManageReservablePanel v,
-            List<ReservableLocation> locs, Filter<ReservableTimeframe> timeFilter,
+            DataRepository repo, Filter<ReservableTimeframe> timeFilter,
             Filter<ReservableLocation> locFilter)
     {
         view = v;
-        locations = locs;
+        this.repo = repo;
         timeframeFilter = timeFilter;
         locationFilter = locFilter;
     }
@@ -68,8 +66,8 @@ public class ManageReservableButtonController implements ActionListener
             case "Add":
                 showAddDialog();
                 break;
-            case "Modify":
-                //doModify();
+            case "Update":
+                doUpdate();
                 break;
             case "Delete":
                 doDelete();
@@ -89,7 +87,7 @@ public class ManageReservableButtonController implements ActionListener
     /**
         Returns if any timeframe within a list of timeframes is reserved
 
-        @param timeframes ReservableTimeframe list to check for any reserved timeframes
+        @param timeframes Timeframe list to check for any reserved timeframes
         @return If any timeframe in the list is reserved
     */
 
@@ -117,12 +115,8 @@ public class ManageReservableButtonController implements ActionListener
 
         try
         {            
-            ReservableSQLDAO reservableDAO = new ReservableSQLDAO();
             for (ReservableTimeframe timeframe : timeframes)
-            {
-                reservableDAO.removeReservable(new Reservable(loc, timeframe));
-                loc.removeTimeframe(timeframe);
-            }
+                repo.removeReservable(new Reservable(loc, timeframe));
         }
         catch (SQLException ex)
         {
@@ -162,16 +156,7 @@ public class ManageReservableButtonController implements ActionListener
                 if (choice == JOptionPane.YES_OPTION)
                 {
                     deleteTimeframes(timeframes);
-                    
-                    // Check if location should be deleted as well
-                    ReservableLocation loc = view.getSelectedLocation();
-                    if (loc.getNumTimeframes() == 0)
-                    {
-                        locations.remove(loc);
-                        setLocations();
-                    }
-                    else
-                        setTimeframes(loc.getTimeframes());
+                    setLocations();
                 }
             }
             else
@@ -208,7 +193,7 @@ public class ManageReservableButtonController implements ActionListener
         if (search.validateSearch())
         {            
             locationFilter.setPredicate(search.searchLocations());
-            view.setLocations(locationFilter.filter(locations));
+            view.setLocations(locationFilter.filter(repo.getLocations()));
             
             if (view.getSelectedLocation() != null)
             {            
@@ -222,6 +207,22 @@ public class ManageReservableButtonController implements ActionListener
                 doClear();
             }
         }        
+    }
+    
+    /**
+        Shows the dialog enabling an update to be made to a reservable
+    */
+    
+    private void doUpdate()
+    {
+        List<ReservableTimeframe> selectedTimes = view.getSelectedTimeframes();
+        if (selectedTimes.size() == 1 && !selectedTimes.get(0).isReserved())
+        {
+            ReservableLocation loc = view.getSelectedLocation();
+            ReservableTimeframe timeframe = selectedTimes.get(0);
+            new UpdateReservableDialog(new Reservable(loc, timeframe), repo);
+            setLocations();
+        }
     }
     
     /**
@@ -300,15 +301,15 @@ public class ManageReservableButtonController implements ActionListener
     }
     
     /**
-        Sets the locations on the view to the current location list
+        Sets the locations on the view to the current locating listing
     */
     
     private void setLocations()
     {
         if (locationFilter.getPredicate() != null)
-            view.setLocations(locationFilter.filter(locations));
+            view.setLocations(locationFilter.filter(repo.getLocations()));
         else
-            view.setLocations(locations);
+            view.setLocations(repo.getLocations());
     }
     
     /**
@@ -329,15 +330,15 @@ public class ManageReservableButtonController implements ActionListener
 
     private void showAddDialog()
     {
-        AddReservableDialog d = new AddReservableDialog(locations);
+        AddReservableDialog d = new AddReservableDialog(repo.getLocations());
 
         d.registerButtonController(new ReservableAddButtonController(d,
-            locations));
+            repo));
         d.registerRadioButtonController(new ReservableAddRadioController(d));
         d.registerComboBoxController(new ReservableAddComboBoxController(d));
 
         d.setVisible(true);
         
-        view.setLocations(locations);
+        setLocations();
     }
 }

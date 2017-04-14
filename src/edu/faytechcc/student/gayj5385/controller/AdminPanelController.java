@@ -6,6 +6,7 @@
 
 package edu.faytechcc.student.gayj5385.controller;
 
+import edu.faytechcc.student.burnst9091.data.DataRepository;
 import edu.faytechcc.student.burnst9091.data.DatabaseSettings;
 import edu.faytechcc.student.burnst9091.data.EmailSettings;
 import edu.faytechcc.student.burnst9091.data.SecurityOption;
@@ -16,18 +17,20 @@ import javax.swing.event.ChangeListener;
 
 public class AdminPanelController implements ChangeListener
 {
-    // Fields
     private AdminPanel view;
+    private DataRepository repo;
     
     /**
         Constructs a new AdminPanelController with the given view
     
         @param v The view
+        @param repo Data repository
     */
     
-    public AdminPanelController(AdminPanel v)
+    public AdminPanelController(AdminPanel v, DataRepository repo)
     {
         view = v;
+        this.repo = repo;
     }
     
     /**
@@ -39,7 +42,9 @@ public class AdminPanelController implements ChangeListener
     @Override
     public void stateChanged(ChangeEvent e)
     {
-        if (view.getActiveTab().equals("Settings"))
+        String tab = view.getActiveTab();
+        
+        if (tab.equals("Settings"))
         {
             EmailSettings adminEmail = SystemPreferences
                     .getAdminEmailSettings();
@@ -51,7 +56,13 @@ public class AdminPanelController implements ChangeListener
             
             view.setSettingsSettings(adminEmail, guestEmail, db, options);
         }
+        else if (tab.equals("Manage Reservables"))
+        {
+            view.updateView(tab, repo.getLocations());
+        }
         else
-            view.updateModel();
+        {
+            view.updateView(tab, repo.getReservedLocations());
+        }
     }
 }

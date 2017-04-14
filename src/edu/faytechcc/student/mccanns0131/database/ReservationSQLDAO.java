@@ -56,7 +56,7 @@ public class ReservationSQLDAO
         String sql = "SELECT Reservers.ReserverID " +
                      "FROM Reservers " +
                      "WHERE Reservers.ReserverID = " +
-                     reservation.getReserverID() + ")";
+                     reservation.getReserverID();
         
         try (Statement stmt = connection.createStatement()) {
             stmt.executeQuery(sql);
@@ -150,9 +150,9 @@ public class ReservationSQLDAO
             stmt.executeUpdate(sql);
             
             // Check if a record of a reserver should also be removed
-            sql = "SELECT Reservers.ReserverID " +
-                   "FROM Reservers " +
-                   "WHERE Reservers.ReserverID = " +
+            sql = "SELECT Reservations.ReserverID " +
+                   "FROM Reservations " +
+                   "WHERE Reservations.ReserverID = " +
                    reservation.getReserverID() + ")";
             
             stmt.executeQuery(sql);

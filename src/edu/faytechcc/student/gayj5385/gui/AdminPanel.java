@@ -6,6 +6,7 @@
 
 package edu.faytechcc.student.gayj5385.gui;
 
+import edu.faytechcc.student.burnst9091.data.DataRepository;
 import edu.faytechcc.student.burnst9091.data.DatabaseSettings;
 import edu.faytechcc.student.burnst9091.data.EmailSettings;
 import edu.faytechcc.student.burnst9091.data.ReservableLocation;
@@ -25,49 +26,38 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.event.ChangeListener;
 
 public class AdminPanel extends JPanel
 {
     // Fields
     private JButton logout;
     private JTabbedPane tabbedPane;
-    private List<ReservableLocation> locations;
-    private HashMap<ReservableLocation, List<Reservation>> reservations;
     private ManageReservablePanel mngReservablePanel;
     private ManageReservationPanel mngReservationPanel;
     private SettingsPanel settingsPanel;
     
     /**
-        Constructs a new AdminPanel initialized with the given listing of
-        locations & mapping of reservations
+        Constructs a new AdminPanel
     
-        @param locs The locations
-        @param reserves The reservations
+        @param repo Data repository
     */
     
-    public AdminPanel(List<ReservableLocation> locs,
-        HashMap<ReservableLocation, List<Reservation>> reserves)
+    public AdminPanel(DataRepository repo)
     {
         super(new BorderLayout());
-        
-        locations = locs;
-        reservations = reserves;
         
         tabbedPane = new JTabbedPane();
         tabbedPane.setBorder(BorderFactory.createEtchedBorder());
         
-        tabbedPane.addChangeListener(new AdminPanelController(this));
+        tabbedPane.addChangeListener(new AdminPanelController(this, repo));
         
-        buildManageReservablePanel(locations);
-        buildManageReservationPanel(reservations);
+        buildManageReservablePanel(repo);
+        buildManageReservationPanel(repo);
         buildSettingsPanel();
         buildBottomPanel();
         
@@ -102,13 +92,12 @@ public class AdminPanel extends JPanel
     }
     
     /**
-        Builds the panel to manage reservables on. initialized with the given
-        list of locations
+        Builds the panel to manage reservables on
     
-        @param locations The locations
+        @param repo Data repository
     */
     
-    private void buildManageReservablePanel(List<ReservableLocation> locations)
+    private void buildManageReservablePanel(DataRepository repo)
     {
         mngReservablePanel = new ManageReservablePanel();
         
@@ -117,7 +106,7 @@ public class AdminPanel extends JPanel
         
         mngReservablePanel.registerButtonController(
             new ManageReservableButtonController(mngReservablePanel,
-                locations, timeframeFilter, locationFilter));
+                repo, timeframeFilter, locationFilter));
         
         mngReservablePanel.registerComboBoxController(
             new ManageReservableComboBoxController(mngReservablePanel,
@@ -128,15 +117,12 @@ public class AdminPanel extends JPanel
     }
     
     /**
-        Builds the panel to manage reservations on, initialized with
-        the given mapping of reservations
+        Builds the panel to manage reservations on
     
-        @param reservations ReservableLocation reservation mapping
-        @return The built panel
+        @param repo Data repository
     */
     
-    private void buildManageReservationPanel(
-            HashMap<ReservableLocation, List<Reservation>> reservations)
+    private void buildManageReservationPanel(DataRepository repo)
     {   
         mngReservationPanel = new ManageReservationPanel();
         
@@ -145,11 +131,11 @@ public class AdminPanel extends JPanel
         
         mngReservationPanel.registerButtonController(
             new ManageReservationButtonController(mngReservationPanel,
-                reservations, locationFilter, reservationFilter));
+                repo, locationFilter, reservationFilter));
         
         mngReservationPanel.registerComboBoxController(
             new ManageReservationComboBoxController(mngReservationPanel,
-                reservations, reservationFilter));
+                repo, reservationFilter));
         
         mngReservationPanel.registerReservationListController(
             new ManageReservationListController(mngReservationPanel));
@@ -157,8 +143,6 @@ public class AdminPanel extends JPanel
     
     /**
         Builds the panel allowing updates to settings to be made
-    
-        @return The built panel
     */
     
     private void buildSettingsPanel()
@@ -199,37 +183,18 @@ public class AdminPanel extends JPanel
     }
     
     /**
-        Register change controller to the tabbed pane
+        Updates the view for the given tab with the given list of locations
     
-        @param controller The controller to register
+        @param tabName Name of tab to update view for
+        @param locs List of locations to display
     */
     
-    public void registerChangeController(ChangeListener controller)
+    public void updateView(String tabName, List<ReservableLocation> locs)
     {
-        tabbedPane.addChangeListener(controller);
-    }
-    
-    /**
-        Updates the panel's children with the latest model
-    */
-    
-    public void updateModel()
-    {
-        if (locations.size() > 0)
-        {
-            mngReservablePanel.setLocations(locations);
-            mngReservablePanel.setTimeframes(locations.get(0).getTimeframes());
-        }
+        if (tabName.equals("Manage Reservables"))
+            mngReservablePanel.setLocations(locs);
         
-        if (reservations.size() > 0)
-        {
-            List<ReservableLocation> reservedLocs = new ArrayList<>(
-                    reservations.keySet());
-            
-            mngReservationPanel.setLocations(reservedLocs);
-            
-            ReservableLocation loc = reservedLocs.get(0);
-            mngReservationPanel.setReservations(reservations.get(loc));
-        }
+        if (tabName.equals("Manage Reservations"))
+            mngReservationPanel.setLocations(locs);
     }
 }

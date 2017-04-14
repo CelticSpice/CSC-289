@@ -44,7 +44,10 @@ public class GuestReservationComboBoxController implements ActionListener
         if (loc != null)
         {
             view.setCapacity(String.valueOf(loc.getCapacity()));
-            List<ReservableTimeframe> timeframes = loc.getReservableTimeframes();
+            
+            List<ReservableTimeframe> timeframes =
+                    loc.getReservableTimeframes();
+            
             view.setTimeframes(timeframes);
         }
     }

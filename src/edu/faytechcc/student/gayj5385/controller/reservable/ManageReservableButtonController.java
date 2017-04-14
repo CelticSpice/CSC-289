@@ -100,7 +100,7 @@ public class ManageReservableButtonController implements ActionListener
                 doClear();
                 view.clearSearch();
             case "Help":
-                new SearchHelpDialog(searchKeys).setVisible(true);
+                new SearchHelpDialog(false).setVisible(true);
                 break;
         }
     }

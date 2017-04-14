@@ -108,7 +108,7 @@ public class ManageReservationButtonController implements ActionListener
                 clear();
                 break;
             case "Help":
-                new SearchHelpDialog(searchKeys).setVisible(true);
+                new SearchHelpDialog(true).setVisible(true);
                 break;
             case "Logout":
                 System.exit(0);
@@ -249,7 +249,18 @@ public class ManageReservationButtonController implements ActionListener
           switch (search.getNumSearchLocations())
             {
                 case 0:
-                    searchOnSelectedLocation(search);
+                    criteria = criteria.toLowerCase();
+                    if (criteria.contains("firstname::")    ||
+                        criteria.contains("first::")        ||
+                        criteria.contains("lastname::")     ||
+                        criteria.contains("last::")         ||
+                        criteria.contains("emailaddress::") ||
+                        criteria.contains("email::")        ||
+                        criteria.contains("phonenumber::")  ||
+                        criteria.contains("phone::"))
+                        searchOnMultipleLocations(search);
+                    else
+                        searchOnSelectedLocation(search);
                     break;
                 case 1:
                     searchOnOneLocation(search);
@@ -319,7 +330,8 @@ public class ManageReservationButtonController implements ActionListener
         {
             reservationFilter.setPredicate(s.searchReservations());
             
-            List<Reservation> reserves = reservations.get(view.getSelectedLocation());
+            List<Reservation> reserves = reservations.get(
+                    view.getSelectedLocation());
 
             setReservations(reserves);
         }

@@ -141,6 +141,10 @@ public class ManageReservationButtonController implements ActionListener
 //                    ReserverInformant informant = new ReserverInformant(repo);
 //                    informant.informOfReservationCancellation(reservation);
                     
+                    // Updating from database at the moment because
+                    // there is an issue with the timeframe objects in the
+                    // reservations not referring to the same timeframe objects
+                    // in locations
                     repo.update();
                     setLocations();
                 }

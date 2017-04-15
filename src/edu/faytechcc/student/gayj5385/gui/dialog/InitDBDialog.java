@@ -120,8 +120,9 @@ public class InitDBDialog extends JDialog
                 settings.setDBUser(username.getText());
                 settings.setDBPass(new String(password.getPassword()));
 
-                SystemPreferences.setDBSettings(settings);
-                SystemPreferences.setInitSetupRun(true);
+                SystemPreferences prefs = SystemPreferences.getInstance();
+                prefs.setDBSettings(settings);
+                prefs.setInitSetupRun(true);
 
                 dispose();
             }

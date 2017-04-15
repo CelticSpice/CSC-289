@@ -43,8 +43,10 @@ public class EmailUtil
         if (senderName != null && !senderName.isEmpty())
             address.setPersonal(senderName);
         
+        SystemPreferences prefs = SystemPreferences.getInstance();
+        
         // Get the settings for the guest to send email
-        EmailSettings settings = SystemPreferences.getGuestEmailSettings();
+        EmailSettings settings = prefs.getGuestEmailSettings();
         
         // Get address, username, password from settings
         InternetAddress from = new InternetAddress(settings.getSendAddress());
@@ -55,7 +57,7 @@ public class EmailUtil
         Properties smtpProps = settings.deriveSessionProperties();
         
         // Get the address for the administrator to receive email at
-        settings = SystemPreferences.getAdminEmailSettings();
+        settings = prefs.getAdminEmailSettings();
         InternetAddress to = new InternetAddress
             (settings.getGetAddress());
         
@@ -103,8 +105,10 @@ public class EmailUtil
                                      String body)
             throws AddressException, MessagingException
     {
+        SystemPreferences prefs = SystemPreferences.getInstance();
+        
         // Get the settings for the admin to send email
-        EmailSettings settings = SystemPreferences.getAdminEmailSettings();
+        EmailSettings settings = prefs.getAdminEmailSettings();
         
         // Get address, username, password from settings
         InternetAddress from = new InternetAddress(settings.getSendAddress());

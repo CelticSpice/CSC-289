@@ -21,15 +21,12 @@ public class DataRepository
     
     /**
         Constructs a new DataRepository
-    
-        @throws SQLException Error syncing repository with database
     */
     
-    public DataRepository() throws SQLException
+    public DataRepository()
     {
         locations = new HashMap<>();
         reservations = new HashMap<>();
-        update();
     }
     
     /**

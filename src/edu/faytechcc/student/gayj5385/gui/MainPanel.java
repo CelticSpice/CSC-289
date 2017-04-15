@@ -6,8 +6,6 @@
 
 package edu.faytechcc.student.gayj5385.gui;
 
-import edu.faytechcc.student.burnst9091.data.Location;
-import edu.faytechcc.student.burnst9091.data.Timeframe;
 import edu.faytechcc.student.burnst9091.data.search.Filter;
 import edu.faytechcc.student.burnst9091.data.DataRepository;
 import edu.faytechcc.student.burnst9091.data.ReservableLocation;
@@ -17,11 +15,8 @@ import edu.faytechcc.student.gayj5385.controller.GuestReservationComboBoxControl
 import edu.faytechcc.student.gayj5385.controller.GuestReservationListController;
 import edu.faytechcc.student.gayj5385.controller.OpeningController;
 import java.awt.CardLayout;
-import java.sql.SQLException;
 import java.util.List;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import static javax.swing.text.html.HTML.Tag.HEAD;
 
 public class MainPanel extends JPanel
 {
@@ -46,17 +41,7 @@ public class MainPanel extends JPanel
         
         setLayout(layout = new CardLayout());
         
-        DataRepository repo = null;
-        try
-        {
-            repo = new DataRepository();
-        }
-        catch (SQLException ex)
-        {
-            JOptionPane.showMessageDialog(null, "Failed initializing data " +
-                    "repository", "Error", JOptionPane.ERROR_MESSAGE);
-            System.exit(1);
-        }
+        DataRepository repo = new DataRepository();
         
         buildOpenPanel(repo);
         buildAdminPanel(repo);        

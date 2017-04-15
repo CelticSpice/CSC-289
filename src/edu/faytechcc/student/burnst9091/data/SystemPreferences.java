@@ -10,16 +10,24 @@ import java.util.prefs.Preferences;
 
 public class SystemPreferences
 {
-    // Fields
     private static final String ROOT = "event_reservation_system";
     
-    private static final Preferences PREFS = Preferences.userRoot().node(ROOT);
+    private static SystemPreferences systemPrefs;
     
-    private static final DatabasePreferences DB_PREFS =
-            new DatabasePreferences(ROOT + "/db");
+    private Preferences prefs;
+    private DatabasePreferences dbPrefs;
+    private EmailPreferences emailPrefs;
     
-    private static final EmailPreferences EMAIL_PREFS =
-            new EmailPreferences(ROOT + "/email");
+    /**
+        Constructs a new SystemPreferences
+    */
+    
+    private SystemPreferences()
+    {
+        prefs = Preferences.userRoot().node(ROOT);
+        dbPrefs = new DatabasePreferences(ROOT + "/db");
+        emailPrefs = new EmailPreferences(ROOT + "/email");
+    }
     
     /**
         Returns the administrator's password
@@ -27,9 +35,9 @@ public class SystemPreferences
         @return The administrator's password
     */
     
-    public static String getAdminPassword()
+    public String getAdminPassword()
     {
-        return PREFS.get("AdminPass", "");
+        return prefs.get("AdminPass", "");
     }
     
     /**
@@ -38,9 +46,9 @@ public class SystemPreferences
         @return The database settings
     */
     
-    public static DatabaseSettings getDBSettings()
+    public DatabaseSettings getDBSettings()
     {
-        return DB_PREFS.getDBSettings();
+        return dbPrefs.getDBSettings();
     }
     
     /**
@@ -49,9 +57,9 @@ public class SystemPreferences
         @return The administrator's email settings
     */
     
-    public static EmailSettings getAdminEmailSettings()
+    public EmailSettings getAdminEmailSettings()
     {
-        return EMAIL_PREFS.getAdminEmailSettings();
+        return emailPrefs.getAdminEmailSettings();
     }
     
     /**
@@ -60,9 +68,9 @@ public class SystemPreferences
         @return The guest's email settings
     */
     
-    public static EmailSettings getGuestEmailSettings()
+    public EmailSettings getGuestEmailSettings()
     {
-        return EMAIL_PREFS.getGuestEmailSettings();
+        return emailPrefs.getGuestEmailSettings();
     }
     
     /**
@@ -71,9 +79,22 @@ public class SystemPreferences
         @return If initial setup was run
     */
     
-    public static boolean getInitSetupRun()
+    public boolean getInitSetupRun()
     {
-        return PREFS.getBoolean("InitSetupRun", false);
+        return prefs.getBoolean("InitSetupRun", false);
+    }
+    
+    /**
+        Returns an instance of the system preferences
+    
+        @return Instance of system preferences
+    */
+    
+    public static SystemPreferences getInstance()
+    {
+        if (systemPrefs == null)
+            systemPrefs = new SystemPreferences();
+        return systemPrefs;
     }
     
     /**
@@ -82,9 +103,9 @@ public class SystemPreferences
         @param password The administrator's password
     */
     
-    public static void setAdminPassword(String password)
+    public void setAdminPassword(String password)
     {
-        PREFS.put("AdminPass", password);
+        prefs.put("AdminPass", password);
     }
     
     /**
@@ -93,9 +114,9 @@ public class SystemPreferences
         @param settings The database settings
     */
     
-    public static void setDBSettings(DatabaseSettings settings)
+    public void setDBSettings(DatabaseSettings settings)
     {
-        DB_PREFS.setDBSettings(settings);
+        dbPrefs.setDBSettings(settings);
     }
     
     /**
@@ -104,9 +125,9 @@ public class SystemPreferences
         @param setup If initial setup was run
     */
     
-    public static void setInitSetupRun(boolean setup)
+    public void setInitSetupRun(boolean setup)
     {
-        PREFS.putBoolean("InitSetupRun", setup);
+        prefs.putBoolean("InitSetupRun", setup);
     }
     
     /**
@@ -115,9 +136,9 @@ public class SystemPreferences
         @param settings The administrator's email settings
     */
     
-    public static void setAdminEmailSettings(EmailSettings settings)
+    public void setAdminEmailSettings(EmailSettings settings)
     {
-        EMAIL_PREFS.setAdminEmailSettings(settings);
+        emailPrefs.setAdminEmailSettings(settings);
     }
     
     /**
@@ -126,8 +147,8 @@ public class SystemPreferences
         @param settings The guest's email settings
     */
     
-    public static void setGuestEmailSettings(EmailSettings settings)
+    public void setGuestEmailSettings(EmailSettings settings)
     {
-        EMAIL_PREFS.setGuestEmailSettings(settings);
+        emailPrefs.setGuestEmailSettings(settings);
     }
 }

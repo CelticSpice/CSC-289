@@ -72,9 +72,10 @@ public class SettingsPanelController implements ActionListener
     
     private void cancelChanges()
     {        
-        view.setAdminEmailSettings(SystemPreferences.getAdminEmailSettings());
-        view.setGuestEmailSettings(SystemPreferences.getGuestEmailSettings());
-        view.setDBSettings(SystemPreferences.getDBSettings());
+        SystemPreferences prefs = SystemPreferences.getInstance();
+        view.setAdminEmailSettings(prefs.getAdminEmailSettings());
+        view.setGuestEmailSettings(prefs.getGuestEmailSettings());
+        view.setDBSettings(prefs.getDBSettings());
     }
     
     /**
@@ -95,13 +96,11 @@ public class SettingsPanelController implements ActionListener
         // Validate that fields are entered appropriately
         if (validateInput())
         {
-            // Update settings            
-            SystemPreferences.setAdminEmailSettings(
-                    view.getAdminEmailSettings());
-            SystemPreferences.setGuestEmailSettings(
-                    view.getGuestEmailSettings());
-            
-            SystemPreferences.setDBSettings(view.getDBSettings());
+            // Update settings      
+            SystemPreferences prefs = SystemPreferences.getInstance();
+            prefs.setAdminEmailSettings(view.getAdminEmailSettings());
+            prefs.setGuestEmailSettings(view.getGuestEmailSettings());
+            prefs.setDBSettings(view.getDBSettings());
             
             // Inform of success in saving settings
             JOptionPane.showMessageDialog(view, "Settings saved");

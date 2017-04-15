@@ -1,5 +1,5 @@
 /**
-    Change controller for root admin panel
+    Change controller for root admin panel's tabbed pane
     CSC-289 - Group 4
     @author Timothy Burns
 */
@@ -21,7 +21,7 @@ public class AdminPanelController implements ChangeListener
     private DataRepository repo;
     
     /**
-        Constructs a new AdminPanelController with the given view
+        Constructs a new AdminPanelController
     
         @param v The view
         @param repo Data repository

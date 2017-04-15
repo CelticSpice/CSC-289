@@ -115,7 +115,7 @@ public class ManageReservationButtonController implements ActionListener
     }
     
     /**
-        Cancels selected reservations
+        Cancels selected reservation
     */
     
     private void cancel()
@@ -138,10 +138,11 @@ public class ManageReservationButtonController implements ActionListener
                     repo.removeReservation(reservation);
                     reservation.cancel();
                     
-                    ReserverInformant informant = new ReserverInformant(repo);
-                    informant.informOfReservationCancellation(reservation);
+//                    ReserverInformant informant = new ReserverInformant(repo);
+//                    informant.informOfReservationCancellation(reservation);
                     
-                    setReservations();
+                    repo.update();
+                    setLocations();
                 }
                 catch (SQLException ex)
                 {

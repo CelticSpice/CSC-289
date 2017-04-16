@@ -25,20 +25,19 @@ public class DBDemiurge
     {
         MariaDbDataSource source = new MariaDbDataSource();
         
-        DatabaseSettings settings = SystemPreferences.getDBSettings();
+        SystemPreferences prefs = SystemPreferences.getInstance();
+        DatabaseSettings settings = prefs.getDBSettings();
         
         source.setServerName(settings.getDBHost());
         source.setPort(settings.getDBPort());
         source.setUserName(settings.getDBUser());
         source.setPassword(settings.getDBPass());
         
-        Connection conn = source.getConnection();
-        Statement stmt = conn.createStatement();
-        
-        craftDB(stmt);
-        
-        stmt.close();
-        conn.close();
+        try (Connection conn = source.getConnection()) {
+            Statement stmt = conn.createStatement();
+            craftDB(stmt);
+            stmt.close();
+        }
     }
     
     /**

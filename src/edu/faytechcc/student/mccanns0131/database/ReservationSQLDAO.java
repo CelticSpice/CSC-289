@@ -6,7 +6,7 @@
 
 package edu.faytechcc.student.mccanns0131.database;
 
-import edu.faytechcc.student.burnst9091.data.Location;
+import edu.faytechcc.student.burnst9091.data.ReservableLocation;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -98,7 +98,8 @@ public class ReservationSQLDAO
         @return List of reservations made at the location
     */
     
-    public List<Reservation> getByLocation(Location loc) throws SQLException
+    public List<Reservation> getByLocation(ReservableLocation loc)
+            throws SQLException
     {
         if (connection == null)
             connection = source.getConnection();

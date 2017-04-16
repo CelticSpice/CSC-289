@@ -24,7 +24,7 @@ import javax.swing.JTextField;
 
 public class InitDBDialog extends JDialog
 {
-    private JButton ok;
+    private JButton ok, exit;
     private JPasswordField password;
     private JTextField host, port, username;
     
@@ -62,8 +62,11 @@ public class InitDBDialog extends JDialog
         JPanel panel = new JPanel();
         
         panel.add(ok = new JButton("OK"));
+        panel.add(exit = new JButton("Exit"));
                 
-        ok.addActionListener(new ButtonController());
+        ButtonController controller = new ButtonController();
+        ok.addActionListener(controller);
+        exit.addActionListener(controller);
         
         return panel;
     }
@@ -111,7 +114,7 @@ public class InitDBDialog extends JDialog
         @Override
         public void actionPerformed(ActionEvent e)
         {
-            if (validateInput())
+            if (e.getSource() == ok && validateInput())
             {
                 DatabaseSettings settings = new DatabaseSettings();
 
@@ -120,11 +123,14 @@ public class InitDBDialog extends JDialog
                 settings.setDBUser(username.getText());
                 settings.setDBPass(new String(password.getPassword()));
 
-                SystemPreferences.setDBSettings(settings);
-                SystemPreferences.setInitSetupRun(true);
+                SystemPreferences prefs = SystemPreferences.getInstance();
+                prefs.setDBSettings(settings);
+                prefs.setInitSetupRun(true);
 
                 dispose();
             }
+            else
+                System.exit(0);
         }
         
         /**

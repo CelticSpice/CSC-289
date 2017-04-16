@@ -7,21 +7,15 @@
 package edu.faytechcc.student.gayj5385.controller;
 
 import edu.faytechcc.student.burnst9091.data.DataRepository;
-import edu.faytechcc.student.burnst9091.data.ReservableLocation;
-import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.SHA256SaltHasher;
 import edu.faytechcc.student.burnst9091.data.SystemPreferences;
 import edu.faytechcc.student.gayj5385.gui.MainPanel;
 import edu.faytechcc.student.gayj5385.gui.OpenPanel;
 import edu.faytechcc.student.gayj5385.gui.dialog.SendEmailDialog;
-import edu.faytechcc.student.mccanns0131.database.LocationSQLDAO;
-import edu.faytechcc.student.mccanns0131.database.ReservationSQLDAO;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 
@@ -97,6 +91,7 @@ public class OpeningController implements ActionListener
         if (action == JOptionPane.OK_OPTION)
         {
             SHA256SaltHasher saltHasher = new SHA256SaltHasher();
+            SystemPreferences prefs = SystemPreferences.getInstance();
             
             // Validate password
             String password = new String(passwordField.getPassword());
@@ -105,7 +100,7 @@ public class OpeningController implements ActionListener
             {
                 password = saltHasher.saltHash(password);
                 
-                String currentPassword = SystemPreferences.getAdminPassword();
+                String currentPassword = prefs.getAdminPassword();
                 if (currentPassword.isEmpty())
                     currentPassword = saltHasher.saltHash(currentPassword);
                 

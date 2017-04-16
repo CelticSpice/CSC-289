@@ -189,6 +189,7 @@ public class UpdatePasswordDialog extends JDialog
             if (e.getSource() == update)
             {
                 SHA256SaltHasher saltHasher = new SHA256SaltHasher();
+                SystemPreferences prefs = SystemPreferences.getInstance();
                 
                 // Check that old password matches
                 String oldPassword = new String(oldPass.getPassword());
@@ -197,8 +198,7 @@ public class UpdatePasswordDialog extends JDialog
                 {
                     oldPassword = saltHasher.saltHash(oldPassword);
                     
-                    String currentPassword = SystemPreferences
-                            .getAdminPassword();
+                    String currentPassword = prefs.getAdminPassword();
                     if (currentPassword.isEmpty())
                         currentPassword = saltHasher.saltHash(currentPassword);
                     
@@ -216,7 +216,7 @@ public class UpdatePasswordDialog extends JDialog
 
                         if (newPassword.equals(verifiedNewPassword))
                         {
-                            SystemPreferences.setAdminPassword(newPassword);
+                            prefs.setAdminPassword(newPassword);
                             setMessage("Password updated");
                         }
                         else

@@ -28,7 +28,9 @@ public class DBDataSource
     {
         source = new MariaDbDataSource();
         
-        DatabaseSettings settings = SystemPreferences.getDBSettings();
+        SystemPreferences prefs = SystemPreferences.getInstance();
+        
+        DatabaseSettings settings = prefs.getDBSettings();
         source.setDatabaseName(DB_NAME);
         source.setServerName(settings.getDBHost());
         source.setPort(settings.getDBPort());

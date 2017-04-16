@@ -10,143 +10,177 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.List;
 import java.util.function.Predicate;
 
 public class TimeframeSearch
 {
     // Fields
-    Predicate<ReservableTimeframe> startDate,
-                         startTime,
-                         endDate,
-                         endTime,
-                         cost,
-                         finalPredicate;
+    Predicate<ReservableTimeframe> predicate;
     
     /**
-     * Constructor
+     * Constructs a new TimeframeSearch
      */
     public TimeframeSearch()
     {
-        startDate = null;
-        startTime = null;
-        endDate = null;
-        endTime = null;
-        cost = null;
-        finalPredicate = null;
+        predicate = null;
     }
     
-    public Predicate<ReservableTimeframe> search(String criteria)
+    /**
+     * Builds a ReservableTimeframe predicate based on search parameters
+     * 
+     * @param searchParams The search parameters
+     * @return A ReservableTimeframe predicate containing search parameters to
+     *         match with existing timeframes
+     */
+    public Predicate<ReservableTimeframe> search(
+            HashMap<String, List<String>> searchParams)
     {
-        // Split search criteria
-        String[] filters = criteria.split(";");
-
-        for (String filter : filters)
+        // The following represent the number of times their respective key
+        // has been specified in the search
+        int numStartDates = 0;
+        int numStartTimes = 0;
+        int numEndDates = 0;
+        int numEndTimes = 0;
+        int numCosts = 0;
+        
+        if (searchParams.containsKey("StartDate"))
         {
-            // Split keys and values
-            String[] constraint = filter.split("::");
-            
-            String key = constraint[0].trim(), 
-                   val = constraint[1].trim();
-
-            switch(key.toLowerCase())
+            for (String v : searchParams.get("StartDate"))
             {
-                case "startdate":
-                    if (finalPredicate == null)
-                        finalPredicate = filterByStartDate(val);
-                    else
-                        finalPredicate = finalPredicate.and(filterByStartDate(val));
-                    break;
-                case "starttime":
-                    if (finalPredicate == null)
-                        finalPredicate = filterByStartTime(val);
-                    else
-                        finalPredicate = finalPredicate.and(filterByStartTime(val));
-                    break;
-                case "enddate":
-                    if (finalPredicate == null)
-                        finalPredicate = filterByEndDate(val);
-                    else
-                        finalPredicate = finalPredicate.and(filterByEndDate(val));
-                    break;
-                case "endtime":
-                    if (finalPredicate == null)
-                        finalPredicate = filterByEndTime(val);
-                    else
-                        finalPredicate = finalPredicate.and(filterByEndTime(val));
-                    break;
-                    //start=2017-03-20,13:00; end=2017-03-20,14:00
-                case "cost":
-                case "price":
-                    if (finalPredicate == null)
-                        finalPredicate = filterByCost(val);
-                    else
-                        finalPredicate = finalPredicate.and(filterByCost(val));
-                    break;
+                numStartDates++;
+                if (predicate == null)
+                    predicate = filterByStartDate(v);
+                else if (numStartDates == 1)
+                    predicate = predicate.and(filterByStartDate(v));
+                else
+                    predicate = predicate.or(filterByStartDate(v));
             }
         }
-        
-        return finalPredicate;
+        if (searchParams.containsKey("StartTime"))
+        {
+            for (String v : searchParams.get("StartTime"))
+            {
+                numStartTimes++;
+                if (predicate == null)
+                    predicate = filterByStartTime(v);
+                else if (numStartTimes == 1)
+                    predicate = predicate.and(filterByStartTime(v));
+                else
+                    predicate = predicate.or(filterByStartTime(v));
+            }
+        }
+        if (searchParams.containsKey("EndDate"))
+        {
+            for (String v : searchParams.get("EndDate"))
+            {
+                numEndDates++;
+                if (predicate == null)
+                    predicate = filterByEndDate(v);
+                else if (numEndDates == 1)
+                    predicate = predicate.and(filterByEndDate(v));
+                else
+                    predicate = predicate.or(filterByEndDate(v));
+            }
+        }
+        if (searchParams.containsKey("EndTime"))
+        {
+            for (String v : searchParams.get("EndTime"))
+            {
+                numEndTimes++;
+                if (predicate == null)
+                    predicate = filterByEndTime(v);
+                else if (numEndTimes == 1)
+                    predicate = predicate.and(filterByEndTime(v));
+                else
+                    predicate = predicate.or(filterByEndTime(v));
+            }
+        }
+        if (searchParams.containsKey("Cost"))
+        {
+            for (String v : searchParams.get("Cost"))
+            {
+                numCosts++;
+                if (predicate == null)
+                    predicate = filterByCost(v);
+                else if (numCosts == 1)
+                    predicate = predicate.and(filterByCost(v));
+                else
+                    predicate = predicate.or(filterByCost(v));
+            }
+        }
+        return predicate;
     }
     
     /**
-     * FilterByStartDate - Filter reservables by start date
-     * @param value The start date
-     * @return A predicate that checks for a match with the start date
+     * Filter reservables by cost
+     * 
+     * @param cost The cost
+     * @return A predicate that checks for matching reservables with the cost
      */
-    private Predicate<ReservableTimeframe> filterByStartDate(String value)
+    private Predicate<ReservableTimeframe> filterByCost(String cost)
+    {
+        return t -> t.getCost().equals(new BigDecimal(cost));
+    }
+    
+    /**
+     * Filter reservables by end date
+     * 
+     * @param date The end date
+     * @return A predicate that checks for matching reservables with the end
+     *         date
+     */
+    private Predicate<ReservableTimeframe> filterByEndDate(String date)
     {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate start = LocalDate.parse(value, format);
-        
-        return t -> t.getStartDate().equals(start);
-    }
-    
-    /**
-     * FilterByStartTime - Filter reservables by start time
-     * @param value The start time
-     * @return A predicate that checks for a match with the start time
-     */
-    private Predicate<ReservableTimeframe> filterByStartTime(String value)
-    {
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm");
-        LocalTime start = LocalTime.parse(value, format);
-        
-        return t -> t.getStartTime().equals(start);
-    }
-    
-    /**
-     * FilterByEndDate - Filter reservables by end date
-     * @param value The end date
-     * @return A predicate that checks for a match with the end date
-     */
-    private Predicate<ReservableTimeframe> filterByEndDate(String value)
-    {
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate end = LocalDate.parse(value, format);
+        LocalDate end = LocalDate.parse(date, format);
         
         return t -> t.getEndDate().equals(end);
     }
     
     /**
-     * FilterByEndTime - Filter reservables by end time
-     * @param value The end time
-     * @return A predicate that checks for a match with the end time
+     * Filter reservables by end time
+     * 
+     * @param time The end time
+     * @return A predicate that checks for matching reservables with the end
+     *         time
      */
-    private Predicate<ReservableTimeframe> filterByEndTime(String value)
+    private Predicate<ReservableTimeframe> filterByEndTime(String time)
     {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm");
-        LocalTime end = LocalTime.parse(value, format);
+        LocalTime end = LocalTime.parse(time, format);
         
         return t -> t.getEndTime().equals(end);
     }
     
     /**
-     * FilterByCost - Filter reservables by cost
-     * @param value The cost
-     * @return A predicate that checks for a match with the cost
+     * Filter reservables by start date
+     * 
+     * @param date The start date
+     * @return A predicate that checks for matching reservables with the start
+     *         date
      */
-    private Predicate<ReservableTimeframe> filterByCost(String value)
+    private Predicate<ReservableTimeframe> filterByStartDate(String date)
     {
-        return t -> t.getCost().equals(new BigDecimal(value));
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate start = LocalDate.parse(date, format);
+        
+        return t -> t.getStartDate().equals(start);
+    }
+    
+    /**
+     * Filter reservables by start time
+     * 
+     * @param time The start time
+     * @return A predicate that checks for matching reservables with the start
+     *         time
+     */
+    private Predicate<ReservableTimeframe> filterByStartTime(String time)
+    {
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm");
+        LocalTime start = LocalTime.parse(time, format);
+        
+        return t -> t.getStartTime().equals(start);
     }
 }

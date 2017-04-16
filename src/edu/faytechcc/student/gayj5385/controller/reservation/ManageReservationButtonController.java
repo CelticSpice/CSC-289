@@ -30,7 +30,6 @@ public class ManageReservationButtonController implements ActionListener
     private Filter<ReservableLocation> locationFilter;
     private Filter<Reservation> reservationFilter;
     private ManageReservationPanel view;
-    private List<String> searchKeys;
     
     /**
         Constructs a new ManageReservationButtonController
@@ -49,25 +48,6 @@ public class ManageReservationButtonController implements ActionListener
         this.repo = repo;
         locationFilter = locFilter;
         reservationFilter = resFilter;
-        searchKeys = new ArrayList();
-        
-        searchKeys.add("locationname");
-        searchKeys.add("location");
-        searchKeys.add("loc");
-        searchKeys.add("startdate");
-        searchKeys.add("starttime");
-        searchKeys.add("enddate");
-        searchKeys.add("endtime");
-        searchKeys.add("cost");
-        searchKeys.add("price");
-        searchKeys.add("firstname");
-        searchKeys.add("first");
-        searchKeys.add("lastname");
-        searchKeys.add("last");
-        searchKeys.add("emailaddress");
-        searchKeys.add("email");
-        searchKeys.add("phonenumber");
-        searchKeys.add("phone");
     }
     
     /**
@@ -232,100 +212,46 @@ public class ManageReservationButtonController implements ActionListener
      */
     private void search(String criteria)
     {
-        SearchActualizer search = new SearchActualizer(criteria, searchKeys);
+        SearchActualizer search = new SearchActualizer(criteria.toLowerCase());
         
-        if (search.validateSearch())
+        // Get relevant locations
+        locationFilter.setPredicate(search.searchLocations());
+        List<ReservableLocation> locs = repo.getAvailableLocations();
+        
+        if (locationFilter.getPredicate() != null)
         {
-          switch (search.getNumSearchLocations())
-            {
-                case 0:
-                    criteria = criteria.toLowerCase();
-                    if (criteria.contains("firstname::")    ||
-                        criteria.contains("first::")        ||
-                        criteria.contains("lastname::")     ||
-                        criteria.contains("last::")         ||
-                        criteria.contains("emailaddress::") ||
-                        criteria.contains("email::")        ||
-                        criteria.contains("phonenumber::")  ||
-                        criteria.contains("phone::"))
-                        searchOnMultipleLocations(search);
-                    else
-                        searchOnSelectedLocation(search);
-                    break;
-                case 1:
-                    searchOnOneLocation(search);
-                    break;
-                default:
-                    searchOnMultipleLocations(search);
-                    break;
-            }
+            locs = locationFilter.filter(repo.getAvailableLocations());
         }
-    }
-    
-    /**
-<<<<<<< HEAD
-     * Performs a search on two or more locations
-     * 
-     * @param s The SearchActualizer to perform the search with
-     * @param criteria The search criteria
-     */
-    private void searchOnMultipleLocations(SearchActualizer s)
-    {
-        locationFilter.setPredicate(s.searchLocations());
-        setLocations();
         
-        reservationFilter.setPredicate(s.searchReservations());
+        // Get relevant reservations
+        reservationFilter.setPredicate(search.searchReservations());
+        List<Reservation> reserves = new ArrayList();
             
         if (reservationFilter.getPredicate() != null)
         {
-            view.setReservations(reservationFilter.filter(
-                    repo.getLocationReservations(view.getSelectedLocation())));
-        }
-    }
-    
-    /**
-     * Performs a search on one specified location
-     * 
-     * @param s The SearchActualizer to perform the search with
-     * @param criteria The search criteria
-     */
-    private void searchOnOneLocation(SearchActualizer s)
-    {
-        locationFilter.setPredicate(s.searchLocations());
-        setLocations();
-        
-        reservationFilter.setPredicate(s.searchReservations());
+            // Used to specify locations to remove from locs
+            List<ReservableLocation> locsToRemove = new ArrayList();
             
-        if (view.getSelectedLocation() != null)
-        {
-            reservationFilter.setPredicate(s.searchReservations());
-            view.setReservations(reservationFilter.filter(
-                    repo.getLocationReservations(view.getSelectedLocation())));
-        }
-        else
-        {
-            JOptionPane.showMessageDialog(view, "No such location exists");
-            clear();
-        }
-    }
-    
-    /**
-     * Performs a search on the currently selected location
-     * 
-     * @param s The SearchActualizer to perform the search with
-     * @param criteria The search criteria
-     */
-    private void searchOnSelectedLocation(SearchActualizer s)
-    {
-        if (view.getSelectedLocation() != null)
-        {
-            reservationFilter.setPredicate(s.searchReservations());
+            for (ReservableLocation l : locs)
+            {
+                reserves = reservationFilter.filter(
+                        repo.getLocationReservations(l));
             
-            view.setReservations(reservationFilter.filter(
-                    repo.getLocationReservations(view.getSelectedLocation())));
+                if (reserves.isEmpty())
+                {
+                    // Add to locsToRemove since there is no matching
+                    // reservations
+                    locsToRemove.add(l);
+                }
+            }
+            // Remove each location in locsToRemove from locs
+            for (ReservableLocation l : locsToRemove)
+            {
+                locs.remove(l);
+            }
+            setReservations();
         }
-        else
-            JOptionPane.showMessageDialog(view, "No location selected");
+        view.setLocations(locs);
     }
     
     /**

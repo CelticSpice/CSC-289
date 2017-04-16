@@ -1,5 +1,5 @@
 /**
- * A SearchActualizer provides search functionality
+ * Provides search functionality
  * CSC-289
  * @author Shane McCann
  */
@@ -8,6 +8,8 @@ package edu.faytechcc.student.burnst9091.data.search;
 import edu.faytechcc.student.burnst9091.data.ReservableLocation;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.ReservableTimeframe;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.function.Predicate;
 import javax.swing.JOptionPane;
@@ -15,26 +17,19 @@ import javax.swing.JOptionPane;
 public class SearchActualizer
 {
     // Fields
-    String criteria;
-    List<String> acceptedKeys;
-    int numLocations;
-    
+    private String criteria;
+    private HashMap<String, List<String>> splitCriteria;
+        
     /**
-     * Constructor
+     * Constructs a new SearchActualizer
      * 
      * @param c Search criteria
      */
-    public SearchActualizer(String c, List<String> keys)
+    public SearchActualizer(String c)
     {
         criteria = c;
-        acceptedKeys = keys;
-        numLocations = 0;
+        splitCriteria = splitSearchCriteria();
     }
-    
-    public int getNumSearchLocations()
-    {
-        return numLocations;
-}
     
     /**
      * Return a predicate that checks for a match with a given location
@@ -43,7 +38,7 @@ public class SearchActualizer
      */
     public Predicate<ReservableLocation> searchLocations()
     {
-        return new LocationSearch().search(criteria);
+        return new LocationSearch().search(splitCriteria);
     }
     
     /**
@@ -53,7 +48,7 @@ public class SearchActualizer
      */
     public Predicate<Reservation> searchReservations()
     {
-        return new ReservationSearch().search(criteria);
+        return new ReservationSearch().search(splitCriteria);
     }
     
     /**
@@ -63,7 +58,186 @@ public class SearchActualizer
      */
     public Predicate<ReservableTimeframe> searchTimeframes()
     {
-        return new TimeframeSearch().search(criteria);
+        return new TimeframeSearch().search(splitCriteria);
+    }
+    
+    /**
+     * Splits the search parameters and store them into a HashMap to be passed
+     * into the xSearch classes to check if relevant keys are contained within
+     * it
+     * 
+     * @return A HashMap containing search parameters
+     */
+    public HashMap<String, List<String>> splitSearchCriteria()
+    {
+        // The following represent lists of values pertaining to their
+        // specified keys
+        List<String> locVals = new ArrayList(),
+                     capVals = new ArrayList(),
+                     sdVals = new ArrayList(),
+                     stVals = new ArrayList(),
+                     edVals = new ArrayList(),
+                     etVals = new ArrayList(),
+                     costVals = new ArrayList(),
+                     firstVals = new ArrayList(),
+                     lastVals = new ArrayList(),
+                     emailVals = new ArrayList(),
+                     phoneVals = new ArrayList();
+        
+        // Split the search constraints
+        String[] constraints = criteria.split(";");
+        
+        for (String c : constraints)
+        {
+            String[] params = c.split("::");
+            
+            String key = params[0].trim(),
+                   val = params[1].trim();            
+            
+            switch (key)
+            {
+                case "locationname":
+                case "location":
+                case "loc":
+                    if (validLocationName(val))
+                        locVals.add(val);
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null,
+                                "Invalid location name", "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                    break;
+                case "capacity":
+                case "cap":
+                    if (validCapacity(val))
+                        capVals.add(val);
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null,
+                                "Invalid location capacity", "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                    break;
+                case "startdate":
+                    if (validStartDate(val))
+                        sdVals.add(val);
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null,
+                                "Invalid start date", "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                    break;
+                case "starttime":
+                    if (validStartTime(val))
+                        stVals.add(val);
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null,
+                                "Invalid start time", "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                    break;
+                case "enddate":
+                    if (validEndDate(val))
+                        edVals.add(val);
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null,
+                                "Invalid end date", "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                    break;
+                case "endtime":
+                    if (validEndTime(val))
+                        etVals.add(val);
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null,
+                                "Invalid end time", "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                    break;
+                case "cost":
+                case "price":
+                    if (validCost(val))
+                        costVals.add(val);
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null,
+                                "Invalid cost", "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                    break;
+                case "firstname":
+                case "first":
+                    if (validReserverName(val))
+                        firstVals.add(val);
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null,
+                                "Invalid first name", "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                    break;
+                case "lastname":
+                case "last":
+                    if (validReserverName(val))
+                        lastVals.add(val);
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null,
+                                "Invalid last name", "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                    break;
+                case "emailaddress":
+                case "email":
+                    if (validEmailAddress(val))
+                        emailVals.add(val);
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null,
+                                "Invalid email address", "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                    break;
+                case "phonenumber":
+                case "phone":
+                    if (validPhoneNumber(val))
+                        phoneVals.add(val);
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null,
+                                "Invalid phone number", "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(null,
+                            "Invalid search key(s)\n\n" +
+                            "To view valid keys, click \"Help\" to view " +
+                            "the Search Help Dialog.", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    break;
+            }
+        }
+        splitCriteria = new HashMap();
+        
+        splitCriteria.put("Location", locVals);
+        splitCriteria.put("Capacity", capVals);
+        splitCriteria.put("StartDate", sdVals);
+        splitCriteria.put("StartTime", stVals);
+        splitCriteria.put("EndDate", edVals);
+        splitCriteria.put("EndTime", etVals);
+        splitCriteria.put("Cost", costVals);
+        splitCriteria.put("FirstName", firstVals);
+        splitCriteria.put("LastName", lastVals);
+        splitCriteria.put("EmailAddress", emailVals);
+        splitCriteria.put("PhoneNumber", phoneVals);
+        
+        return splitCriteria;
     }
 
     /**
@@ -72,13 +246,14 @@ public class SearchActualizer
      * @param capacity The capacity
      * @return If the capacity input is valid
      */
-    public boolean validateCapacity(String capacity)
+    private boolean validCapacity(String capacity)
     {
         boolean valid = capacity.matches("([<>]=|[<>=])\\d+");
 
         if (valid)
         {
-            valid = Integer.parseInt(capacity.replaceFirst("([<>]=|[<>=])", "")) > 0;
+            valid = Integer.parseInt(capacity.replaceFirst(
+                    "([<>]=|[<>=])", "")) > 0;
 
             if (!valid)
                 JOptionPane.showMessageDialog(null,
@@ -96,7 +271,7 @@ public class SearchActualizer
      * @param cost The cost
      * @return If the cost is valid
      */
-    public boolean validateCost(String cost)
+    private boolean validCost(String cost)
     {
         boolean valid = cost.matches("\\d+.\\d{2}");
         
@@ -115,12 +290,23 @@ public class SearchActualizer
     }
     
     /**
+     * Validate the email address input
+     * 
+     * @param email The email address
+     * @return If the email address is valid
+     */
+    private boolean validEmailAddress(String email)
+    {
+        return email.matches("\\b[\\w\\.-]+@[\\w\\.-]+\\.\\w{2,4}\\b");
+    }
+    
+    /**
      * Validate the end date input
      * 
      * @param date The end date
      * @return If the end date is valid
      */
-    public boolean validateEndDate(String date)
+    private boolean validEndDate(String date)
     {
         return date.matches("\\d{4}-\\d{2}-\\d{2}");
     }
@@ -131,9 +317,8 @@ public class SearchActualizer
      * @param time The end time
      * @return If the end time is valid
      */
-    public boolean validateEndTime(String time)
+    private boolean validEndTime(String time)
     {
-        
         return time.matches("\\d{2}:\\d{2}");
     }
     
@@ -143,7 +328,7 @@ public class SearchActualizer
      * @param name The location name
      * @return Whether the location is valid or not
      */
-    public boolean validateLocationName(String name)
+    private boolean validLocationName(String name)
     {
         for (char c : name.toCharArray())
         {
@@ -156,91 +341,33 @@ public class SearchActualizer
                 return false;
             }
         }
-        
-        numLocations++;
-        
         return true;
     }
     
     /**
-     * Validate the entire search
+     * Validate the phone number input
      * 
-     * @return If the search is valid
+     * @param phone The phone number
+     * @return If the phone number is valid or not
      */
-    public boolean validateSearch()
-    {        
-        // Split search criteria
-        String[] filterArray = criteria.split(";");
-        
-        try
+    private boolean validPhoneNumber(String phone)
+    {
+        return phone.matches("[0-9]{10,16}");
+    }
+    
+    /**
+     * Validate the first or last name of a reserver
+     * 
+     * @param name The reserver's first or last name
+     * @return If the name is valid or not
+     */
+    private boolean validReserverName(String name)
+    {
+        for (char c : name.toCharArray())
         {
-            for (String f : filterArray)
-            {
-                // Split keys and values
-                String[] constraint = f.split("::");
-                
-                String key = constraint[0].trim(), 
-                       val = constraint[1].trim();
-
-                if (!key.isEmpty() && acceptedKeys.contains(key))
-                {
-                    switch(key.toLowerCase())
-                    {
-                        case "locationname":
-                        case "location name":
-                        case "location":
-                        case "loc":
-                            if (!validateLocationName(val))
-                                return false;
-                            break;
-                        case "capacity":
-                        case "cap":
-                            if (!validateCapacity(val))
-                                return false;
-                            break;
-                        case "startdate":
-                        case "start date":
-                            if (!validateStartDate(val))
-                                return false;
-                            break;
-                        case "starttime":
-                        case "start time":
-                            if (!validateStartTime(val))
-                                return false;
-                            break;
-                        case "enddate":
-                        case "end date":
-                            if (!validateEndDate(val))
-                                return false;
-                            break;
-                        case "endtime":
-                        case "end time":
-                            if (!validateEndTime(val))
-                                return false;
-                            break;
-                        case "cost":
-                        case "price":
-                            if (!validateCost(val))
-                                return false;
-                            break;
-                    }
-                }
-                else
-                {
-                    JOptionPane.showMessageDialog(null,
-                            "Missing or misspelled key (i.e. \"start time\")");
-                    return false;
-                }
-            }
+            if (!Character.isLetter(c))
+                return false;
         }
-        catch (NullPointerException | ArrayIndexOutOfBoundsException ex)
-        {
-            JOptionPane.showMessageDialog(null, "Invalid search" +
-                    "\nEnsure your search keys (i.e. \"start time\") and " + 
-                    " parameters (i.e. \"12:00\") are correct.");
-            return false;
-        }
-        
         return true;
     }
     
@@ -250,7 +377,7 @@ public class SearchActualizer
      * @param date The start date
      * @return If the start date is valid
      */
-    public boolean validateStartDate(String date)
+    private boolean validStartDate(String date)
     {
         return date.matches("\\d{4}-\\d{2}-\\d{2}");
     }
@@ -261,7 +388,7 @@ public class SearchActualizer
      * @param time The start time
      * @return If the start time is valid
      */
-    public boolean validateStartTime(String time)
+    private boolean validStartTime(String time)
     {
         return time.matches("\\d{2}:\\d{2}");
     }

@@ -27,7 +27,7 @@ public class SearchHelpDialog extends JDialog
 {
     // Fields
     DefaultListModel keys;
-    JLabel info, acceptedKeys;
+    JLabel info;
     JList keyList;
     JButton okay;
     
@@ -193,10 +193,8 @@ public class SearchHelpDialog extends JDialog
                         "Enter the name of the location for the value.<br>" +
                         "<br>" +
                         "<b>Example:</b><br>" +
-                        "LocationName :: Cabin<br>");
-                    if (!reservation)
-                    {
-                        info.setText(info.getText() + "<br>" +
+                        "LocationName :: Cabin<br>" +
+                        "<br>" +
                         "You can also search for locations based on<br>" +
                         "their capacity using one of the following<br>" +
                         "keywords:<br>" +
@@ -210,7 +208,6 @@ public class SearchHelpDialog extends JDialog
                         "<b>Example:</b><br>" +
                         "Capacity :: >= 15");
                         // Must use html escape characters for '>'
-                     }
                     break;
                 case "Date and Time":
                     info.setText("<html>" +

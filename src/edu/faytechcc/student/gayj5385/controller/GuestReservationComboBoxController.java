@@ -25,6 +25,7 @@ public class GuestReservationComboBoxController implements ActionListener
         the given GuestReservationPanel to control the combo box of
     
         @param v The view
+        @param f Timeframe filter
     */
     
     public GuestReservationComboBoxController(GuestReservationPanel v,
@@ -49,10 +50,12 @@ public class GuestReservationComboBoxController implements ActionListener
         {
             view.setCapacity(String.valueOf(loc.getCapacity()));
             if (filter.getPredicate() != null)
-                view.setTimeframes(filter.filter(loc.getReservableTimeframes()));
+                view.setTimeframes(filter.filter(
+                        loc.getReservableTimeframes()));
             else
             {
-                List<ReservableTimeframe> timeframes = loc.getReservableTimeframes();
+                List<ReservableTimeframe> timeframes = 
+                        loc.getReservableTimeframes();
                 view.setTimeframes(timeframes);
             }
         }

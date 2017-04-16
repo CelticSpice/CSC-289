@@ -6,8 +6,6 @@
 
 package edu.faytechcc.student.gayj5385.gui;
 
-import edu.faytechcc.student.burnst9091.data.Location;
-import edu.faytechcc.student.burnst9091.data.Timeframe;
 import edu.faytechcc.student.burnst9091.data.search.Filter;
 import edu.faytechcc.student.burnst9091.data.DataRepository;
 import edu.faytechcc.student.burnst9091.data.ReservableLocation;
@@ -21,7 +19,6 @@ import java.sql.SQLException;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import static javax.swing.text.html.HTML.Tag.HEAD;
 
 public class MainPanel extends JPanel
 {

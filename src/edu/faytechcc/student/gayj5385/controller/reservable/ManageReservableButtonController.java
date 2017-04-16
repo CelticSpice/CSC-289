@@ -31,7 +31,6 @@ public class ManageReservableButtonController implements ActionListener
 {
     private DataRepository repo;
     private ManageReservablePanel view;
-    private List<String> searchKeys;
     private Filter<ReservableTimeframe> timeframeFilter;
     private Filter<ReservableLocation> locationFilter;
     
@@ -52,19 +51,6 @@ public class ManageReservableButtonController implements ActionListener
         this.repo = repo;
         timeframeFilter = timeFilter;
         locationFilter = locFilter;
-        searchKeys = new ArrayList();
-        
-        searchKeys.add("locationname");
-        searchKeys.add("location");
-        searchKeys.add("loc");
-        searchKeys.add("capacity");
-        searchKeys.add("cap");
-        searchKeys.add("startdate");
-        searchKeys.add("starttime");
-        searchKeys.add("enddate");
-        searchKeys.add("endtime");
-        searchKeys.add("cost");
-        searchKeys.add("price");
     }
 
     /**
@@ -191,27 +177,44 @@ public class ManageReservableButtonController implements ActionListener
     
     private void doSearch(String criteria)
     {        
-        SearchActualizer search = new SearchActualizer(criteria, searchKeys);
+        SearchActualizer search = new SearchActualizer(criteria);
         
-        if (search.validateSearch())
+        // Get relevant locations
+        locationFilter.setPredicate(search.searchLocations());
+        List<ReservableLocation> locs = repo.getAvailableLocations();
+        
+        if (locationFilter.getPredicate() != null)
         {
-            switch (search.getNumSearchLocations())
+            locs = locationFilter.filter(repo.getAvailableLocations());
+        }
+        
+        // Get relevant timeframes
+        timeframeFilter.setPredicate(search.searchTimeframes());
+        List<ReservableTimeframe> times = new ArrayList();
+            
+        if (timeframeFilter.getPredicate() != null)
+        {
+            // Used to specify locations to remove from locs
+            List<ReservableLocation> locsToRemove = new ArrayList();
+            
+            for (ReservableLocation l : locs)
             {
-                case 0:
-                    if (criteria.toLowerCase().contains("cap::") ||
-                        criteria.toLowerCase().contains("capacity::"))
-                        searchOnMultipleLocations(search);
-                    else
-                        searchOnSelectedLocation(search);
-                    break;
-                case 1:
-                    searchOnOneLocation(search);
-                    break;
-                default:
-                    searchOnMultipleLocations(search);
-                    break;
+                times = timeframeFilter.filter(l.getTimeframes());
+            
+                if (times.isEmpty())
+                {
+                    // Add to locsToRemove since there is no matching timeframes
+                    locsToRemove.add(l);
+                }
             }
-        }        
+            // Remove each location in locsToRemove from locs
+            for (ReservableLocation l : locsToRemove)
+            {
+                locs.remove(l);
+            }
+            view.setTimeframes(times);
+        }
+        view.setLocations(locs);
     }
     
     /**
@@ -228,70 +231,6 @@ public class ManageReservableButtonController implements ActionListener
             new UpdateReservableDialog(new Reservable(loc, timeframe), repo);
             setLocations();
         }
-    }
-    
-    /**
-     * Performs a search on two or more locations
-     * 
-     * @param s The SearchActualizer to perform the search with
-     * @param criteria The search criteria
-     */
-    private void searchOnMultipleLocations(SearchActualizer s)
-    {
-        locationFilter.setPredicate(s.searchLocations());
-        setLocations();
-        
-        if (timeframeFilter.getPredicate() != null)
-        {
-            timeframeFilter.setPredicate(s.searchTimeframes());
-            setTimeframes(timeframeFilter.filter(view.getSelectedLocation()
-                    .getTimeframes()));
-        }
-    }
-    
-    /**
-     * Performs a search on one specified location
-     * 
-     * @param s The SearchActualizer to perform the search with
-     * @param criteria The search criteria
-     */
-    private void searchOnOneLocation(SearchActualizer s)
-    {
-        locationFilter.setPredicate(s.searchLocations());
-        setLocations();
-            
-        if (view.getSelectedLocation() != null)
-        {
-            timeframeFilter.setPredicate(s.searchTimeframes());
-            setTimeframes(timeframeFilter.filter(view.getSelectedLocation()
-                    .getTimeframes()));
-        }
-        else
-        {
-            JOptionPane.showMessageDialog(view, "No such location exists");
-            doClear();
-        }
-    }
-    
-    /**
-     * Performs a search on the currently selected location
-     * 
-     * @param s The SearchActualizer to perform the search with
-     * @param criteria The search criteria
-     */
-    private void searchOnSelectedLocation(SearchActualizer s)
-    {
-        if (view.getSelectedLocation() != null)
-        {
-            timeframeFilter.setPredicate(s.searchTimeframes());
-            
-            List<ReservableTimeframe> timeframes = view.getSelectedLocation()
-                    .getTimeframes(timeframeFilter.getPredicate());
-
-            view.setTimeframes(timeframes);
-        }
-        else
-            JOptionPane.showMessageDialog(view, "No location selected");
     }
     
     /**

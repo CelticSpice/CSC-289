@@ -20,13 +20,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JOptionPane;
 
 public class GuestReservationButtonController implements ActionListener
 {
     private DataRepository repo;
     private GuestReservationPanel view;
-    private List<String> searchKeys;
     private Filter<ReservableLocation> locationFilter;
     private Filter<ReservableTimeframe> timeframeFilter;
     
@@ -35,6 +33,8 @@ public class GuestReservationButtonController implements ActionListener
     
         @param v The view
         @param repo Data repository
+        @param lf Location filter
+        @param tf Timeframe filter
     */
     
     public GuestReservationButtonController(GuestReservationPanel v,
@@ -45,19 +45,6 @@ public class GuestReservationButtonController implements ActionListener
         locationFilter = lf;
         timeframeFilter = tf;
         this.repo = repo;
-        searchKeys = new ArrayList();
-        
-        searchKeys.add("locationname");
-        searchKeys.add("location");
-        searchKeys.add("loc");
-        searchKeys.add("capacity");
-        searchKeys.add("cap");
-        searchKeys.add("startdate");
-        searchKeys.add("starttime");
-        searchKeys.add("enddate");
-        searchKeys.add("endtime");
-        searchKeys.add("cost");
-        searchKeys.add("price");
     }
     
     /**
@@ -92,6 +79,9 @@ public class GuestReservationButtonController implements ActionListener
         }
     }
     
+    /**
+     * Clears search results
+     */
     private void clear()
     {
         locationFilter.setPredicate(null);
@@ -128,95 +118,45 @@ public class GuestReservationButtonController implements ActionListener
     
     private void search(String criteria)
     {
-        SearchActualizer search = new SearchActualizer(criteria, searchKeys);
+        SearchActualizer search = new SearchActualizer(criteria);
         
-        if (search.validateSearch())
+        // Get relevant locations
+        locationFilter.setPredicate(search.searchLocations());
+        List<ReservableLocation> locs = repo.getAvailableLocations();
+        
+        if (locationFilter.getPredicate() != null)
         {
-            switch (search.getNumSearchLocations())
-            {
-                case 0:
-                    if (criteria.toLowerCase().contains("cap::") ||
-                        criteria.toLowerCase().contains("capacity::"))
-                        searchOnMultipleLocations(search);
-                    else
-                        searchOnSelectedLocation(search);
-                    break;
-                case 1:
-                    searchOnOneLocation(search);
-                    break;
-                default:
-                    searchOnMultipleLocations(search);
-                    break;
-            }
+            locs = locationFilter.filter(repo.getAvailableLocations());
         }
-    }
-    
-    /**
-     * Performs a search on two or more locations
-     * 
-     * @param s The SearchActualizer to perform the search with
-     * @param criteria The search criteria
-     */
-    private void searchOnMultipleLocations(SearchActualizer s)
-    {
-        locationFilter.setPredicate(s.searchLocations());
-        view.setLocations(locationFilter.filter(repo.getAvailableLocations()));
         
-        timeframeFilter.setPredicate(s.searchTimeframes());
+        // Get relevant timeframes
+        timeframeFilter.setPredicate(search.searchTimeframes());
+        List<ReservableTimeframe> times = new ArrayList();
             
         if (timeframeFilter.getPredicate() != null)
         {
-            view.setTimeframes(timeframeFilter.filter(view.getSelectedLocation()
-                    .getTimeframes()));
-        }
-    }
-    
-    /**
-     * Performs a search on one specified location
-     * 
-     * @param s The SearchActualizer to perform the search with
-     * @param criteria The search criteria
-     */
-    private void searchOnOneLocation(SearchActualizer s)
-    {
-        locationFilter.setPredicate(s.searchLocations());
-        view.setLocations(locationFilter.filter(repo.getAvailableLocations()));
-        
-        timeframeFilter.setPredicate(s.searchTimeframes());
+            // Used to specify locations to remove from locs
+            List<ReservableLocation> locsToRemove = new ArrayList();
             
-        if (view.getSelectedLocation() != null)
-        {
-            timeframeFilter.setPredicate(s.searchTimeframes());
-            view.setTimeframes(timeframeFilter.filter(view.getSelectedLocation()
-                    .getTimeframes()));
-        }
-        else
-        {
-            JOptionPane.showMessageDialog(view, "No such location exists");
-            clear();
-        }
-    }
-    
-    /**
-     * Performs a search on the currently selected location
-     * 
-     * @param s The SearchActualizer to perform the search with
-     * @param criteria The search criteria
-     */
-    private void searchOnSelectedLocation(SearchActualizer s)
-    {
-        if (view.getSelectedLocation() != null)
-        {
-            timeframeFilter.setPredicate(s.searchTimeframes());
+            for (ReservableLocation l : locs)
+            {
+                times = timeframeFilter.filter(l.getTimeframes());
             
-            List<ReservableTimeframe> timeframes = view.getSelectedLocation()
-                    .getTimeframes(timeframeFilter.getPredicate());
-
-            view.setTimeframes(timeframes);
+                if (times.isEmpty())
+                {
+                    // Add to locsToRemove since there is no matching timeframes
+                    locsToRemove.add(l);
+                }
+            }
+            // Remove each location in locsToRemove from locs
+            for (ReservableLocation l : locsToRemove)
+            {
+                locs.remove(l);
+            }
+            view.setTimeframes(times);
         }
-        else
-            JOptionPane.showMessageDialog(view, "No location selected");
-}
+        view.setLocations(locs);
+    }
     
     /**
         Exits the GuestReservationPanel

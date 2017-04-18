@@ -10,12 +10,12 @@ import edu.faytechcc.student.burnst9091.data.DataRepository;
 import edu.faytechcc.student.burnst9091.data.ReservableLocation;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.Reserver;
-import edu.faytechcc.student.burnst9091.data.ReserverInformant;
 import edu.faytechcc.student.burnst9091.data.search.Filter;
 import edu.faytechcc.student.burnst9091.data.search.SearchActualizer;
 import edu.faytechcc.student.gayj5385.gui.ManageReservationPanel;
 import edu.faytechcc.student.gayj5385.gui.dialog.SearchHelpDialog;
 import edu.faytechcc.student.gayj5385.gui.dialog.SendEmailDialog;
+import edu.faytechcc.student.gayj5385.gui.dialog.UpdateReservationDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -62,7 +62,7 @@ public class ManageReservationButtonController implements ActionListener
         switch (e.getActionCommand())
         {
             case "Update":
-                // Do this
+                doUpdate();
                 break;
             case "Contact":
                 contact();
@@ -169,6 +169,21 @@ public class ManageReservationButtonController implements ActionListener
             SendEmailDialog d = new SendEmailDialog(SendEmailDialog.ADMIN,
                 reserver);
             d.setVisible(true);
+        }
+    }
+    
+    /**
+        Performs an update operation
+    */
+    
+    private void doUpdate()
+    {
+        List<Reservation> selectedReservations = view.getSelectedReservations();
+        
+        if (selectedReservations.size() == 1)
+        {
+            new UpdateReservationDialog(selectedReservations.get(0), repo);
+            setLocations();
         }
     }
     

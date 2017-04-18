@@ -105,6 +105,20 @@ public class DataRepository
     }
     
     /**
+        Returns the names of every location in the repository
+    
+        @return Name of every location in the repository
+    */
+    
+    public List<String> getLocationNames()
+    {
+        List<String> locNames = new ArrayList<>();
+        for (Location loc : locations.values())
+            locNames.add(loc.getName());
+        return locNames;
+    }
+    
+    /**
         Gets reservations made from the repository
     
         @param loc Location to get reservations made at

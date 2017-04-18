@@ -114,6 +114,17 @@ public class Reservation
     }
     
     /**
+        Returns the capacity of the reservation's location
+    
+        @return Capacity of reservation's location
+    */
+    
+    public int getLocationCapacity()
+    {
+        return reservable.getCapacity();
+    }
+    
+    /**
         Returns the ID of the reservation's location
     
         @return ID of reservation's location
@@ -285,5 +296,71 @@ public class Reservation
     public void notReviewed()
     {
         reviewed = false;
+    }
+    
+    /**
+        Sets the event type of the reservation
+    
+        @param type Reservation event type
+    */
+    
+    public void setEventType(String type)
+    {
+        eventType = type;
+    }
+    
+    /**
+        Sets the reservation's expected number attending
+    
+        @param numAttending Expected number attending
+    */
+    
+    public void setNumAttending(int numAttending)
+    {
+        numberAttending = numAttending;
+    }
+    
+    /**
+        Sets the reserver's email
+    
+        @param e Reserver's email
+    */
+    
+    public void setReserverEmail(String e)
+    {
+        reserver.setEmail(e);
+    }
+    
+    /**
+        Sets the reserver's first name
+    
+        @param name Reserver's first name
+    */
+    
+    public void setReserverFirstName(String name)
+    {
+        reserver.setFirstName(name);
+    }
+    
+    /**
+        Sets the reserver's last name
+    
+        @param name Reserver's last name
+    */
+    
+    public void setReserverLastName(String name)
+    {
+        reserver.setLastName(name);
+    }
+    
+    /**
+        Sets the reserver's phone number
+    
+        @param p Reserver's phone number
+    */
+    
+    public void setReserverPhone(String p)
+    {
+        reserver.setPhoneNumber(p);
     }
 }

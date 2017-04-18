@@ -178,19 +178,32 @@ public class ReservationSQLDAO
         if (connection == null)
             connection = source.getConnection();
         
-        String sql = "UPDATE Reservations " +
-                     "SET Reservations.EventType = '" +
-                        reservation.getEventType() + "', " +
-                     "Reservations.NumberAttending = " +
-                        reservation.getNumberAttending() + ", " +
-                     "Reservations.Reviewed = " +
-                        reservation.isReviewed() + " " +
-                     "WHERE Reservations.LocationID = " +
-                        reservation.getLocationID() + " " +
-                     "AND Reservations.TimeframeID = " +
-                        reservation.getTimeframeID();
-        
         try (Statement stmt = connection.createStatement()) {
+            String sql = "UPDATE Reservations " +
+                         "SET Reservations.EventType = '" +
+                            reservation.getEventType() + "', " +
+                         "Reservations.NumberAttending = " +
+                            reservation.getNumberAttending() + ", " +
+                         "Reservations.Reviewed = " +
+                            reservation.isReviewed() + " " +
+                         "WHERE Reservations.LocationID = " +
+                            reservation.getLocationID() + " " +
+                         "AND Reservations.TimeframeID = " +
+                            reservation.getTimeframeID();
+            
+            stmt.executeUpdate(sql);
+            
+            sql = "UPDATE Reservers " +
+                  "SET Reservers.FirstName = '" +
+                    reservation.getReserverFirstName() + "', " +
+                  "Reservers.LastName = '" +
+                    reservation.getReserverLastName() + "', " +
+                  "Reservers.Email = '" +
+                    reservation.getReserverEmail() + "', " +
+                  "Reservers.Phone = '" +
+                    reservation.getReserverPhone() + "' " +
+                  "WHERE Reservers.ReserverID = " + reservation.getReserverID();
+            
             stmt.executeUpdate(sql);
         }
     }

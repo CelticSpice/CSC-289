@@ -118,6 +118,28 @@ public class Reserver
     }
     
     /**
+        Sets the reserver's email
+    
+        @param e Reserver's email
+    */
+    
+    public void setEmail(String e)
+    {
+        email = e;
+    }
+    
+    /**
+        Sets the reserver's first name
+    
+        @param name Reserver's first name
+    */
+    
+    public void setFirstName(String name)
+    {
+        firstName = name;
+    }
+    
+    /**
         Sets the reserver's ID
     
         @param id The reserver's ID
@@ -126,5 +148,27 @@ public class Reserver
     public void setID(int id)
     {
         this.id = id;
+    }
+    
+    /**
+        Sets the reserver's last name
+    
+        @param name Reserver's last name
+    */
+    
+    public void setLastName(String name)
+    {
+        lastName = name;
+    }
+    
+    /**
+        Sets the reserver's phone number
+    
+        @param p Reserver's phone number
+    */
+    
+    public void setPhoneNumber(String p)
+    {
+        phone = p;
     }
 }

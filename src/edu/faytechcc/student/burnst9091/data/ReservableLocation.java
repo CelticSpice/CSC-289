@@ -96,10 +96,10 @@ public class ReservableLocation extends Location
         
         for (ReservableTimeframe unavailable : unavails)
         {
-            for (ReservableTimeframe available : avails)
+            for (int i = 0; i < avails.size(); i++)
             {
-                if (unavailable.consistsOf(available))
-                    avails.remove(available);
+                if (unavailable.consistsOf(avails.get(i)))
+                    avails.remove(avails.get(i));
             }
         }
         

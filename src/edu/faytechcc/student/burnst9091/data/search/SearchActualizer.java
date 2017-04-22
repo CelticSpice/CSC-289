@@ -92,7 +92,7 @@ public class SearchActualizer
             String[] params = c.split("::");
             
             String key = params[0].trim(),
-                   val = params[1].trim();            
+                   val = params[1].trim();
             
             switch (key)
             {

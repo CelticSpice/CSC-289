@@ -39,6 +39,7 @@ public class ReservationSearch
     {
         // The following represent the number of times their respective key
         // has been specified in the search
+        int numLocations = 0;
         int numStartDates = 0;
         int numStartTimes = 0;
         int numEndDates = 0;
@@ -49,6 +50,34 @@ public class ReservationSearch
         int numEmails = 0;
         int numPhones = 0;
         
+        if (searchParams.containsKey("Location"))
+        {
+            for (String v : searchParams.get("Location"))
+            {
+                numLocations++;
+                if (predicate == null)
+                    predicate = filterByLocationName(v);
+                else if (numLocations == 1)
+                    predicate = predicate.and(filterByLocationName(v));
+                else
+                    predicate = predicate.or(filterByLocationName(v));
+            }
+        }
+        if (searchParams.containsKey("Capacity"))
+        {
+            for (String v : searchParams.get("Capacity"))
+            {
+                // For the purpose of searching, a capacity search acts as a
+                // separate location search, so we increment numLocations
+                numLocations++;
+                if (predicate == null)
+                    predicate = filterByCapacity(v);
+                else if (numLocations == 1)
+                    predicate = predicate.and(filterByCapacity(v));
+                else
+                    predicate = predicate.or(filterByCapacity(v));
+            }
+        }
         if (searchParams.containsKey("StartDate"))
         {
             for (String v : searchParams.get("StartDate"))
@@ -167,6 +196,45 @@ public class ReservationSearch
             }
         }
         return predicate;
+    }
+    
+    /**
+     * Filter locations by a location name
+     * 
+     * @param name The location name
+     * @return A Predicate that checks for matching locations with the location
+     *         name
+     */
+    private Predicate<Reservation> filterByLocationName(String name)
+    {
+        return r -> r.getLocationName().equalsIgnoreCase(name);
+    }
+    
+    /**
+     * Filter locations by capacity
+     * 
+     * @param cost The location capacity
+     * @return A predicate that checks for matching locations with the capacity
+     */
+    private Predicate<Reservation> filterByCapacity(String cost)
+    {
+        // Check for specific relational operators and remove it from cost to
+        // parse it into an integer
+        if (cost.startsWith(">="))
+            return r -> r.getLocation().getCapacity() >= Integer.parseInt(
+                    cost.replace(">=", ""));
+        else if (cost.startsWith("<="))
+            return r -> r.getLocation().getCapacity() <= Integer.parseInt(
+                    cost.replace("<=", ""));
+        else if (cost.startsWith(">"))
+            return r -> r.getLocation().getCapacity() > Integer.parseInt(
+                    cost.replace(">", ""));
+        else if (cost.startsWith("<"))
+            return r -> r.getLocation().getCapacity() < Integer.parseInt(
+                    cost.replace("<", ""));
+        else
+            return r -> r.getLocation().getCapacity() == Integer.parseInt(
+                    cost.replace("=", ""));
     }
     
     /**

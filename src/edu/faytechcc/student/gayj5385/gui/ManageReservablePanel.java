@@ -36,7 +36,7 @@ public class ManageReservablePanel extends JPanel
 {
     // Fields
     private DefaultListModel timeframes;
-    private JButton add, update, delete, searchBtn, clear, help;
+    private JButton add, update, delete, searchBtn, clear, help, createReport;
     private JComboBox<ReservableLocation> locations;
     private JList<ReservableTimeframe> timeframeList;
     private JTextField capacity, search, startDate, startTime, endDate, endTime,
@@ -69,6 +69,7 @@ public class ManageReservablePanel extends JPanel
         panel.add(add = new JButton("Add"));
         panel.add(update = new JButton("Update"));
         panel.add(delete = new JButton("Delete"));
+        panel.add(createReport = new JButton("Create Report"));
 
         return panel;
     }
@@ -253,6 +254,7 @@ public class ManageReservablePanel extends JPanel
         searchBtn.addActionListener(controller);
         clear.addActionListener(controller);
         help.addActionListener(controller);
+        createReport.addActionListener(controller);
     }
 
     /**

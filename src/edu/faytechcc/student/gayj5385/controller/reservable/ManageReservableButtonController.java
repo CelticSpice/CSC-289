@@ -18,6 +18,7 @@ import edu.faytechcc.student.gayj5385.controller.ReservableAddComboBoxController
 import edu.faytechcc.student.gayj5385.controller.ReservableAddRadioController;
 import edu.faytechcc.student.gayj5385.gui.ManageReservablePanel;
 import edu.faytechcc.student.gayj5385.gui.dialog.AddReservableDialog;
+import edu.faytechcc.student.gayj5385.gui.dialog.CreateReservableReportDialog;
 import edu.faytechcc.student.gayj5385.gui.dialog.SearchHelpDialog;
 import edu.faytechcc.student.gayj5385.gui.dialog.UpdateReservableDialog;
 import java.awt.event.ActionEvent;
@@ -84,6 +85,9 @@ public class ManageReservableButtonController implements ActionListener
                 break;
             case "Help":
                 new SearchHelpDialog(false).setVisible(true);
+                break;
+            case "Create Report":
+                new CreateReservableReportDialog(getAllMatchingReservables());
                 break;
         }
     }
@@ -181,12 +185,12 @@ public class ManageReservableButtonController implements ActionListener
         
         // Get relevant locations
         locationFilter.setPredicate(search.searchLocations());
-        List<ReservableLocation> locs = repo.getAvailableLocations();
+        List<ReservableLocation> locs;
         
         if (locationFilter.getPredicate() != null)
-        {
             locs = locationFilter.filter(repo.getAvailableLocations());
-        }
+        else
+            locs = repo.getAvailableLocations();
         
         // Get relevant timeframes
         timeframeFilter.setPredicate(search.searchTimeframes());
@@ -212,8 +216,8 @@ public class ManageReservableButtonController implements ActionListener
             {
                 locs.remove(l);
             }
-            view.setTimeframes(times);
         }
+        view.setTimeframes(times);
         view.setLocations(locs);
     }
     
@@ -231,6 +235,66 @@ public class ManageReservableButtonController implements ActionListener
             new UpdateReservableDialog(new Reservable(loc, timeframe), repo);
             setLocations();
         }
+    }
+    
+    /**
+     * Gets all reservables that match the location and timeframe filters
+     */
+    private List<Reservable> getAllMatchingReservables()
+    {
+        List<Reservable> reservables = new ArrayList();
+        
+        if (locationFilter.getPredicate() != null)
+        {
+            if (timeframeFilter.getPredicate() != null)
+            {
+                for (ReservableLocation l : locationFilter.filter(
+                        repo.getAvailableLocations()))
+                {            
+                    for (ReservableTimeframe t : timeframeFilter.filter(
+                            l.getTimeframes()))
+                    {
+                        reservables.add(new Reservable(l, t));
+                    }
+                }
+            }
+            else
+            {
+                for (ReservableLocation l : locationFilter.filter(
+                        repo.getAvailableLocations()))
+                {            
+                    for (ReservableTimeframe t : l.getTimeframes())
+                    {
+                        reservables.add(new Reservable(l, t));
+                    }
+                }
+            }
+        }
+        else
+        {
+            if (timeframeFilter.getPredicate() != null)
+            {
+                for (ReservableLocation l : repo.getAvailableLocations())
+                {            
+                    for (ReservableTimeframe t : timeframeFilter.filter(
+                            l.getTimeframes()))
+                    {
+                        reservables.add(new Reservable(l, t));
+                    }
+                }
+            }
+            else
+            {
+                for (ReservableLocation l : repo.getAvailableLocations())
+                {            
+                    for (ReservableTimeframe t : l.getTimeframes())
+                    {
+                        reservables.add(new Reservable(l, t));
+                    }
+                }
+            }
+        }
+        return reservables;
     }
     
     /**

@@ -35,7 +35,8 @@ public class ManageReservationPanel extends JPanel
 {
     // Fields
     private DefaultListModel<Reservation> reservations;
-    private JButton searchBtn, clear, update, contact, reviewed, cancel, help;
+    private JButton searchBtn, clear, update, contact, reviewed, cancel, help,
+            createReport;
     private JComboBox<ReservableLocation> locations;
     private JList<Reservation> reservationList;
     private JTextField capacity, search, startDate, startTime, endDate, endTime,
@@ -71,6 +72,7 @@ public class ManageReservationPanel extends JPanel
         panel.add(contact = new JButton("Contact"));
         panel.add(reviewed = new JButton("Reviewed"));
         panel.add(cancel = new JButton("Cancel"));
+        panel.add(createReport = new JButton("Create Report"));
         
         return panel;
     }
@@ -209,6 +211,9 @@ public class ManageReservationPanel extends JPanel
         return panel;
     }
     
+    /**
+     * Clears the text in the search text field
+     */
     public void clearSearch()
     {
         search.setText(null);
@@ -261,6 +266,7 @@ public class ManageReservationPanel extends JPanel
         reviewed.addActionListener(controller);
         cancel.addActionListener(controller);
         help.addActionListener(controller);
+        createReport.addActionListener(controller);
     }
     
     /**

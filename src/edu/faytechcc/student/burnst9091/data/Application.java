@@ -7,7 +7,6 @@
 package edu.faytechcc.student.burnst9091.data;
 
 import edu.faytechcc.student.gayj5385.gui.MainFrame;
-import edu.faytechcc.student.gayj5385.gui.dialog.CreateReportDialog;
 
 public class Application
 {    
@@ -21,6 +20,5 @@ public class Application
     {
         SystemInitialization.run();
         new MainFrame();
-        new CreateReportDialog(true);
     }
 }

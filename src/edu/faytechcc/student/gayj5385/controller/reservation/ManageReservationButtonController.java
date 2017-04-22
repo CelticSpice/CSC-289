@@ -13,6 +13,7 @@ import edu.faytechcc.student.burnst9091.data.Reserver;
 import edu.faytechcc.student.burnst9091.data.search.Filter;
 import edu.faytechcc.student.burnst9091.data.search.SearchActualizer;
 import edu.faytechcc.student.gayj5385.gui.ManageReservationPanel;
+import edu.faytechcc.student.gayj5385.gui.dialog.CreateReservationReportDialog;
 import edu.faytechcc.student.gayj5385.gui.dialog.SearchHelpDialog;
 import edu.faytechcc.student.gayj5385.gui.dialog.SendEmailDialog;
 import edu.faytechcc.student.gayj5385.gui.dialog.UpdateReservationDialog;
@@ -87,6 +88,9 @@ public class ManageReservationButtonController implements ActionListener
                 break;
             case "Help":
                 new SearchHelpDialog(true).setVisible(true);
+                break;
+            case "Create Report":
+                new CreateReservationReportDialog(getAllMatchingReservations());
                 break;
             case "Logout":
                 System.exit(0);
@@ -188,6 +192,66 @@ public class ManageReservationButtonController implements ActionListener
     }
     
     /**
+     * Gets all reservations that match the location and reservation filters
+     */
+    private List<Reservation> getAllMatchingReservations()
+    {
+        List<Reservation> reservations = new ArrayList();
+        
+        if (locationFilter.getPredicate() != null)
+        {
+            if (reservationFilter.getPredicate() != null)
+            {
+                for (ReservableLocation l : locationFilter.filter(
+                        repo.getReservedLocations()))
+                {            
+                    for (Reservation r : reservationFilter.filter(
+                            repo.getLocationReservations(l)))
+                    {
+                        reservations.add(r);
+                    }
+                }
+            }
+            else
+            {
+                for (ReservableLocation l : locationFilter.filter(
+                        repo.getReservedLocations()))
+                {            
+                    for (Reservation r : repo.getLocationReservations(l))
+                    {
+                        reservations.add(r);
+                    }
+                }
+            }
+        }
+        else
+        {
+            if (reservationFilter.getPredicate() != null)
+            {
+                for (ReservableLocation l : repo.getAvailableLocations())
+                {            
+                    for (Reservation r : reservationFilter.filter(
+                            repo.getLocationReservations(l)))
+                    {
+                        reservations.add(r);
+                    }
+                }
+            }
+            else
+            {
+                for (ReservableLocation l : repo.getAvailableLocations())
+                {            
+                    for (Reservation r : repo.getLocationReservations(l))
+                    {
+                        reservations.add(r);
+                    }
+                }
+            }
+        }
+        return reservations;
+    }
+    
+    /**
         Marks a reservation as either reviewed or not reviewed
     
         @param reviewed Whether to mark reservation as reviewed or not
@@ -236,11 +300,11 @@ public class ManageReservationButtonController implements ActionListener
         
         // Get relevant locations
         locationFilter.setPredicate(search.searchLocations());
-        List<ReservableLocation> locs = repo.getAvailableLocations();
+        List<ReservableLocation> locs = repo.getReservedLocations();
         
         if (locationFilter.getPredicate() != null)
         {
-            locs = locationFilter.filter(repo.getAvailableLocations());
+            locs = locationFilter.filter(repo.getReservedLocations());
         }
         
         // Get relevant reservations
@@ -269,8 +333,8 @@ public class ManageReservationButtonController implements ActionListener
             {
                 locs.remove(l);
             }
-            setReservations();
         }
+        setReservations();
         view.setLocations(locs);
     }
     
@@ -295,10 +359,11 @@ public class ManageReservationButtonController implements ActionListener
     {
         ReservableLocation loc = view.getSelectedLocation();
         
+        List<Reservation> reserves = repo.getLocationReservations(loc);
+        
         if (reservationFilter.getPredicate() != null)
-            view.setReservations(reservationFilter.filter(
-                    repo.getLocationReservations(loc)));
-        else
-            view.setReservations(repo.getLocationReservations(loc));
+            reserves = reservationFilter.filter(reserves);
+        
+        view.setReservations(reserves);
     }
 }

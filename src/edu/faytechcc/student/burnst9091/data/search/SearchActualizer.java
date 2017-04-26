@@ -91,136 +91,147 @@ public class SearchActualizer
         {
             String[] params = c.split("::");
             
-            String key = params[0].trim(),
-                   val = params[1].trim();
-            
-            switch (key)
+            if (params.length == 2)
             {
-                case "locationname":
-                case "location":
-                case "loc":
-                    if (validLocationName(val))
-                        locVals.add(val);
-                    else
-                    {
+                String key = params[0].trim(),
+                       val = params[1].trim();
+
+                switch (key)
+                {
+                    case "locationname":
+                    case "location":
+                    case "loc":
+                        if (validLocationName(val))
+                            locVals.add(val);
+                        else
+                        {
+                            JOptionPane.showMessageDialog(null,
+                                    "Invalid location name", "Error",
+                                    JOptionPane.ERROR_MESSAGE);
+                        }
+                        break;
+                    case "capacity":
+                    case "cap":
+                        if (validCapacity(val))
+                            capVals.add(val);
+                        else
+                        {
+                            JOptionPane.showMessageDialog(null,
+                                    "Invalid location capacity", "Error",
+                                    JOptionPane.ERROR_MESSAGE);
+                        }
+                        break;
+                    case "startdate":
+                        if (validStartDate(val))
+                            sdVals.add(val);
+                        else
+                        {
+                            JOptionPane.showMessageDialog(null,
+                                    "Invalid start date", "Error",
+                                    JOptionPane.ERROR_MESSAGE);
+                        }
+                        break;
+                    case "starttime":
+                        if (validStartTime(val))
+                            stVals.add(val);
+                        else
+                        {
+                            JOptionPane.showMessageDialog(null,
+                                    "Invalid start time", "Error",
+                                    JOptionPane.ERROR_MESSAGE);
+                        }
+                        break;
+                    case "enddate":
+                        if (validEndDate(val))
+                            edVals.add(val);
+                        else
+                        {
+                            JOptionPane.showMessageDialog(null,
+                                    "Invalid end date", "Error",
+                                    JOptionPane.ERROR_MESSAGE);
+                        }
+                        break;
+                    case "endtime":
+                        if (validEndTime(val))
+                            etVals.add(val);
+                        else
+                        {
+                            JOptionPane.showMessageDialog(null,
+                                    "Invalid end time", "Error",
+                                    JOptionPane.ERROR_MESSAGE);
+                        }
+                        break;
+                    case "cost":
+                    case "price":
+                        if (validCost(val))
+                            costVals.add(val);
+                        else
+                        {
+                            JOptionPane.showMessageDialog(null,
+                                    "Invalid cost", "Error",
+                                    JOptionPane.ERROR_MESSAGE);
+                        }
+                        break;
+                    case "firstname":
+                    case "first":
+                        if (validReserverName(val))
+                            firstVals.add(val);
+                        else
+                        {
+                            JOptionPane.showMessageDialog(null,
+                                    "Invalid first name", "Error",
+                                    JOptionPane.ERROR_MESSAGE);
+                        }
+                        break;
+                    case "lastname":
+                    case "last":
+                        if (validReserverName(val))
+                            lastVals.add(val);
+                        else
+                        {
+                            JOptionPane.showMessageDialog(null,
+                                    "Invalid last name", "Error",
+                                    JOptionPane.ERROR_MESSAGE);
+                        }
+                        break;
+                    case "emailaddress":
+                    case "email":
+                        if (validEmailAddress(val))
+                            emailVals.add(val);
+                        else
+                        {
+                            JOptionPane.showMessageDialog(null,
+                                    "Invalid email address", "Error",
+                                    JOptionPane.ERROR_MESSAGE);
+                        }
+                        break;
+                    case "phonenumber":
+                    case "phone":
+                        if (validPhoneNumber(val))
+                            phoneVals.add(val);
+                        else
+                        {
+                            JOptionPane.showMessageDialog(null,
+                                    "Invalid phone number", "Error",
+                                    JOptionPane.ERROR_MESSAGE);
+                        }
+                        break;
+                    default:
                         JOptionPane.showMessageDialog(null,
-                                "Invalid location name", "Error",
+                                "Invalid search key(s)\n\n" +
+                                "To view valid keys, click \"Help\" to view " +
+                                "the Search Help Dialog.", "Error",
                                 JOptionPane.ERROR_MESSAGE);
-                    }
-                    break;
-                case "capacity":
-                case "cap":
-                    if (validCapacity(val))
-                        capVals.add(val);
-                    else
-                    {
-                        JOptionPane.showMessageDialog(null,
-                                "Invalid location capacity", "Error",
+                        break;
+                }
+            }
+            else if (params.length == 1)
+            {
+                JOptionPane.showMessageDialog(null,
+                                "Invalid search\n\n" +
+                                "Missing a \"::\" delimiter. To view more\n" +
+                                "search info, click the Help button.", "Error",
                                 JOptionPane.ERROR_MESSAGE);
-                    }
-                    break;
-                case "startdate":
-                    if (validStartDate(val))
-                        sdVals.add(val);
-                    else
-                    {
-                        JOptionPane.showMessageDialog(null,
-                                "Invalid start date", "Error",
-                                JOptionPane.ERROR_MESSAGE);
-                    }
-                    break;
-                case "starttime":
-                    if (validStartTime(val))
-                        stVals.add(val);
-                    else
-                    {
-                        JOptionPane.showMessageDialog(null,
-                                "Invalid start time", "Error",
-                                JOptionPane.ERROR_MESSAGE);
-                    }
-                    break;
-                case "enddate":
-                    if (validEndDate(val))
-                        edVals.add(val);
-                    else
-                    {
-                        JOptionPane.showMessageDialog(null,
-                                "Invalid end date", "Error",
-                                JOptionPane.ERROR_MESSAGE);
-                    }
-                    break;
-                case "endtime":
-                    if (validEndTime(val))
-                        etVals.add(val);
-                    else
-                    {
-                        JOptionPane.showMessageDialog(null,
-                                "Invalid end time", "Error",
-                                JOptionPane.ERROR_MESSAGE);
-                    }
-                    break;
-                case "cost":
-                case "price":
-                    if (validCost(val))
-                        costVals.add(val);
-                    else
-                    {
-                        JOptionPane.showMessageDialog(null,
-                                "Invalid cost", "Error",
-                                JOptionPane.ERROR_MESSAGE);
-                    }
-                    break;
-                case "firstname":
-                case "first":
-                    if (validReserverName(val))
-                        firstVals.add(val);
-                    else
-                    {
-                        JOptionPane.showMessageDialog(null,
-                                "Invalid first name", "Error",
-                                JOptionPane.ERROR_MESSAGE);
-                    }
-                    break;
-                case "lastname":
-                case "last":
-                    if (validReserverName(val))
-                        lastVals.add(val);
-                    else
-                    {
-                        JOptionPane.showMessageDialog(null,
-                                "Invalid last name", "Error",
-                                JOptionPane.ERROR_MESSAGE);
-                    }
-                    break;
-                case "emailaddress":
-                case "email":
-                    if (validEmailAddress(val))
-                        emailVals.add(val);
-                    else
-                    {
-                        JOptionPane.showMessageDialog(null,
-                                "Invalid email address", "Error",
-                                JOptionPane.ERROR_MESSAGE);
-                    }
-                    break;
-                case "phonenumber":
-                case "phone":
-                    if (validPhoneNumber(val))
-                        phoneVals.add(val);
-                    else
-                    {
-                        JOptionPane.showMessageDialog(null,
-                                "Invalid phone number", "Error",
-                                JOptionPane.ERROR_MESSAGE);
-                    }
-                    break;
-                default:
-                    JOptionPane.showMessageDialog(null,
-                            "Invalid search key(s)\n\n" +
-                            "To view valid keys, click \"Help\" to view " +
-                            "the Search Help Dialog.", "Error",
-                            JOptionPane.ERROR_MESSAGE);
-                    break;
             }
         }
         splitCriteria = new HashMap();

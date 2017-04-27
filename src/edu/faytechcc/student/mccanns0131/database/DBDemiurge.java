@@ -113,7 +113,7 @@ public class DBDemiurge
               "ReserverID INT NOT NULL AUTO_INCREMENT, " +
               "FirstName VARCHAR(35) NOT NULL, " +
               "LastName VARCHAR(35) NOT NULL, " +
-              "Email VARCHAR(75) NOT NULL, " +
+              "Email VARCHAR(255) NOT NULL, " +
               "Phone VARCHAR(16) NOT NULL, " +
               "PRIMARY KEY (ReserverID)" +
               ")";

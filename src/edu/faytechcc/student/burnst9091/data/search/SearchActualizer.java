@@ -93,7 +93,7 @@ public class SearchActualizer
             
             if (params.length >= 2)
             {
-                String key = params[0].trim();
+                String key = params[0].toLowerCase().trim();
                 
                 for (int i = 1; i < params.length; i++)
                 {
@@ -117,12 +117,6 @@ public class SearchActualizer
                         case "cap":
                             if (validCapacity(val))
                                 capVals.add(val);
-                            else
-                            {
-                                JOptionPane.showMessageDialog(null,
-                                        "Invalid location capacity", "Error",
-                                        JOptionPane.ERROR_MESSAGE);
-                            }
                             break;
                         case "startdate":
                             if (validStartDate(val))
@@ -168,12 +162,6 @@ public class SearchActualizer
                         case "price":
                             if (validCost(val))
                                 costVals.add(val);
-                            else
-                            {
-                                JOptionPane.showMessageDialog(null,
-                                        "Invalid cost", "Error",
-                                        JOptionPane.ERROR_MESSAGE);
-                            }
                             break;
                         case "firstname":
                         case "first":
@@ -348,13 +336,7 @@ public class SearchActualizer
         for (char c : name.toCharArray())
         {
             if (!Character.isLetterOrDigit(c) && !Character.isSpaceChar(c))
-            {
-                JOptionPane.showMessageDialog(null,
-                        "A location name consists only of letters, digits," +
-                                " and/or spaces");
-                
                 return false;
-            }
         }
         return true;
     }

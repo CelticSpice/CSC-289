@@ -111,7 +111,7 @@ public class SearchHelpDialog extends JDialog
         
         panel.add(scrollPane, gbc);
         
-        ListController controller = new ListController(reservation);
+        ListController controller = new ListController();
         keyList.addListSelectionListener(controller);
         keyList.setSelectedIndex(0);
         
@@ -145,17 +145,7 @@ public class SearchHelpDialog extends JDialog
      */
     private class ListController implements ListSelectionListener
     {
-        // Fields
-        private boolean reservation;
-        
-        /**
-         * Constructs a new ListController
-         * @param r 
-         */
-        public ListController(boolean r)
-        {
-            reservation = r;
-        }
+        public ListController(){}
         
         /**
          * Displays help text pertaining to the item selected

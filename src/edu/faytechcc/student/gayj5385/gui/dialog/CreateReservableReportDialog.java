@@ -91,7 +91,7 @@ public class CreateReservableReportDialog extends JDialog
         panel.add(endDate = new JCheckBox("End Date", true), gbc);
         endDate.addChangeListener(listener);
         
-        gbc.gridx = 2;
+        gbc.gridx = 1;
         gbc.gridy = 1;
         panel.add(startTime = new JCheckBox("Start Time", true), gbc);
         startTime.addChangeListener(listener);
@@ -177,7 +177,8 @@ public class CreateReservableReportDialog extends JDialog
 
                     if (validFilename(filename))
                     {
-                        CSVWriter writer = new CSVWriter(filename);
+                        CSVWriter writer = new CSVWriter(
+                                chooser.getCurrentDirectory() + "/" + filename);
 
                         writer.writeReservableReport(dialog, reservables);
                         

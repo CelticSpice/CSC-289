@@ -28,7 +28,7 @@ public class CSVWriter
     {
         try
         {
-            fileWriter = new FileWriter("dist/reports/" + fileName);
+            fileWriter = new FileWriter(fileName);
             printWriter = new PrintWriter(fileWriter);
         }
         catch (IOException ex)

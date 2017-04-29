@@ -201,7 +201,8 @@ public class CreateReservationReportDialog extends JDialog
 
                     if (validFilename(filename))
                     {
-                        CSVWriter writer = new CSVWriter(filename);
+                        CSVWriter writer = new CSVWriter(
+                                chooser.getCurrentDirectory() + "/" + filename);
 
                         writer.writeReservationReport(dialog, reservations);
                         

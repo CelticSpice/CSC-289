@@ -10,6 +10,7 @@ import edu.faytechcc.student.burnst9091.data.DataRepository;
 import edu.faytechcc.student.burnst9091.data.ReservableLocation;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.Reserver;
+import edu.faytechcc.student.burnst9091.data.ReserverInformant;
 import edu.faytechcc.student.burnst9091.data.search.Filter;
 import edu.faytechcc.student.burnst9091.data.search.SearchActualizer;
 import edu.faytechcc.student.gayj5385.gui.ManageReservationPanel;
@@ -122,8 +123,8 @@ public class ManageReservationButtonController implements ActionListener
                     repo.removeReservation(reservation);
                     reservation.cancel();
                     
-//                    ReserverInformant informant = new ReserverInformant(repo);
-//                    informant.informOfReservationCancellation(reservation);
+                    ReserverInformant informant = new ReserverInformant(repo);
+                    informant.informOfReservationCancellation(reservation);
                     
                     // Updating from database at the moment because
                     // there is an issue with the timeframe objects in the

@@ -68,7 +68,7 @@ public class ReserverInformant
             {
                 reserversInformed.add(reserver.getID());
                 
-                String intro = "Dear " + reserver.getName() + ",\n\n" + body;
+                String intro = reserver.getName() + ",\n\n" + body;
                 
                 try
                 {
@@ -91,7 +91,7 @@ public class ReserverInformant
     
     public void informOfReservationCancellation(Reservation reservation)
     {
-        String body = "Dear " + reservation.getReserverName() + ",\n\n";
+        String body = reservation.getReserverName() + ",\n\n";
         body += "This message is to inform you that your reservation at " +
                 reservation.getLocationName() + ", at the timeframe of " +
                 reservation.getTimeframe() + ", has been cancelled.";
@@ -100,6 +100,31 @@ public class ReserverInformant
         {
             EmailUtil.emailReserver(reservation.getReserver(),
                     "Reservation Cancelled", body);
+        }
+        catch (MessagingException ex)
+        {
+            System.err.println(ex.getMessage());
+        }
+    }
+    
+    /**
+        Informs a reserver of a reservation being made successfully
+    
+        @param reservation Reservation made
+    */
+    
+    public void informOfReservationMade(Reservation reservation)
+    {
+        String body = reservation.getReserverName() + ",\n\n";
+        body += "This message is to inform you that your reservation at " +
+                reservation.getLocationName() + ", at the timeframe of " +
+                reservation.getTimeframe() + ", has been reserved " +
+                "successfully.";
+        
+        try
+        {
+            EmailUtil.emailReserver(reservation.getReserver(),
+                    "Reservation Made", body);
         }
         catch (MessagingException ex)
         {

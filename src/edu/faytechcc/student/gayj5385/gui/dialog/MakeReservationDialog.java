@@ -11,6 +11,7 @@ import edu.faytechcc.student.burnst9091.data.DataRepository;
 import edu.faytechcc.student.burnst9091.data.Reservable;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.Reserver;
+import edu.faytechcc.student.burnst9091.data.ReserverInformant;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -272,6 +273,9 @@ public class MakeReservationDialog extends JDialog
                 
                 // Show confirmation
                 JOptionPane.showMessageDialog(null, "Reservation made");
+                
+                new ReserverInformant(repo).informOfReservationMade(
+                        reservation);
             }
             catch (SQLException ex)
             {

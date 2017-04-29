@@ -217,11 +217,11 @@ public class UpdateReservableDialog extends JDialog
                             
                             if (nameOrCapacityChanged)
                             {
-//                                ReserverInformant informant =
-//                                        new ReserverInformant(repo);
-//                                
-//                                informant.informOfLocationChange(oldName,
-//                                        oldCapacity, reservable.getLocation());
+                                ReserverInformant informant =
+                                        new ReserverInformant(repo);
+                                
+                                informant.informOfLocationChange(oldName,
+                                        oldCapacity, reservable.getLocation());
                             }
                             
                             JOptionPane.showMessageDialog(null,

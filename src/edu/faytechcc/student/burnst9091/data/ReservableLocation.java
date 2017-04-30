@@ -99,10 +99,12 @@ public class ReservableLocation extends Location
             for (int i = 0; i < avails.size(); i++)
             {
                 if (unavailable.consistsOf(avails.get(i)))
-                    avails.remove(avails.get(i));
+                {
+                    avails.remove(i);
+                    i--;
+                }
             }
         }
-        
         return avails;
     }
     

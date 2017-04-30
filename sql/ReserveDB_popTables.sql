@@ -27,6 +27,9 @@ VALUES ('RV Lot 4', 6);
 INSERT INTO Locations (LocationName, Capacity)
 VALUES ('RV Lot 5', 6);
 
+INSERT INTO Locations (LocationName, Capacity)
+VALUES ('Tent Lot 1', 10);
+
 
 -- Insert test Timeframes records.
 
@@ -209,6 +212,51 @@ VALUES ('2017-06-29', '2017-06-30', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
 VALUES ('2017-06-30', '2017-07-01', '13:00', '12:00');
+
+INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
+VALUES ('2017-06-01', '2017-06-03', '13:00', '12:00');
+
+INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
+VALUES ('2017-06-03', '2017-06-05', '13:00', '12:00');
+
+INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
+VALUES ('2017-06-05', '2017-06-07', '13:00', '12:00');
+
+INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
+VALUES ('2017-06-07', '2017-06-09', '13:00', '12:00');
+
+INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
+VALUES ('2017-06-09', '2017-06-11', '13:00', '12:00');
+
+INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
+VALUES ('2017-06-11', '2017-06-13', '13:00', '12:00');
+
+INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
+VALUES ('2017-06-13', '2017-06-15', '13:00', '12:00');
+
+INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
+VALUES ('2017-06-15', '2017-06-17', '13:00', '12:00');
+
+INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
+VALUES ('2017-06-17', '2017-06-19', '13:00', '12:00');
+
+INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
+VALUES ('2017-06-19', '2017-06-21', '13:00', '12:00');
+
+INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
+VALUES ('2017-06-21', '2017-06-23', '13:00', '12:00');
+
+INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
+VALUES ('2017-06-23', '2017-06-25', '13:00', '12:00');
+
+INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
+VALUES ('2017-06-25', '2017-06-27', '13:00', '12:00');
+
+INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
+VALUES ('2017-06-27', '2017-06-29', '13:00', '12:00');
+
+INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
+VALUES ('2017-06-29', '2017-07-01', '13:00', '12:00');
 
 
 -- Insert test Reservables records.
@@ -1023,17 +1071,152 @@ VALUES (9, 59, 70);
 INSERT INTO Reservables (LocationID, TimeframeID, Cost)
 VALUES (9, 60, 70);
 
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 31, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 32, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 33, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 34, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 35, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 36, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 37, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 38, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 39, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 40, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 41, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 42, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 43, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 44, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 45, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 46, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 47, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 48, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 49, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 50, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 51, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 52, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 53, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 54, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 55, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 56, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 57, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 58, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 59, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 60, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 61, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 62, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 63, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 64, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 65, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 66, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 67, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 68, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 69, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 70, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 71, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 72, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 73, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 74, 70);
+
+INSERT INTO Reservables (LocationID, TimeframeID, Cost)
+VALUES (10, 75, 70);
+
 
 -- Insert test Reservers records.
 
 INSERT INTO Reservers (FirstName, LastName, Email, Phone)
-VALUES ('Timothy', 'Burns', 'celticspice@openbox.org', '6972130085');
+VALUES ('Timothy', 'Burns', 'celticspice@openmailbox.org', '6972130085');
 
 INSERT INTO Reservers (FirstName, LastName, Email, Phone)
-VALUES ('Jessica', 'Gay', 'jessica.gay@Email.com', '3025761097');
+VALUES ('Jessica', 'Gay', 'gayj5385@student.faytechcc.edu', '3025761097');
 
 INSERT INTO Reservers (FirstName, LastName, Email, Phone)
-VALUES ('Shane', 'McCann', 'shane.mccann@Email.com', '9105551234');
+VALUES ('Shane', 'McCann', 'mccanns0131@student.faytechcc.edu', '9105551234');
 
 INSERT INTO Reservers (FirstName, LastName, Email, Phone)
 VALUES ('Joe', 'Random', 'joe.random@Email.com', '1234567890');

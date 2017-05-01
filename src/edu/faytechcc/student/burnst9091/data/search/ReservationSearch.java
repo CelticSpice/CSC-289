@@ -49,6 +49,8 @@ public class ReservationSearch
         int numLasts = 0;
         int numEmails = 0;
         int numPhones = 0;
+        int numAttendings = 0;
+        int numEventTypes = 0;
         
         if (searchParams.containsKey("Location"))
         {
@@ -195,6 +197,32 @@ public class ReservationSearch
                     predicate = predicate.or(filterByPhone(v));
             }
         }
+        if (searchParams.containsKey("EventType"))
+        {
+            for (String v : searchParams.get("EventType"))
+            {
+                numEventTypes++;
+                if (predicate == null)
+                    predicate = filterByEventType(v);
+                else if (numPhones == 1)
+                    predicate = predicate.and(filterByEventType(v));
+                else
+                    predicate = predicate.or(filterByEventType(v));
+            }
+        }
+        if (searchParams.containsKey("Attending"))
+        {
+            for (String v : searchParams.get("Attending"))
+            {
+                numAttendings++;
+                if (predicate == null)
+                    predicate = filterByNumberAttending(v);
+                else if (numPhones == 1)
+                    predicate = predicate.and(filterByNumberAttending(v));
+                else
+                    predicate = predicate.or(filterByNumberAttending(v));
+            }
+        }
         return predicate;
     }
     
@@ -213,28 +241,28 @@ public class ReservationSearch
     /**
      * Filter locations by capacity
      * 
-     * @param cost The location capacity
+     * @param capacity The location capacity
      * @return A predicate that checks for matching locations with the capacity
      */
-    private Predicate<Reservation> filterByCapacity(String cost)
+    private Predicate<Reservation> filterByCapacity(String capacity)
     {
-        // Check for specific relational operators and remove it from cost to
-        // parse it into an integer
-        if (cost.startsWith(">="))
+        // Check for specific relational operators and remove it from capacity
+        // to parse it into an integer
+        if (capacity.startsWith(">="))
             return r -> r.getLocation().getCapacity() >= Integer.parseInt(
-                    cost.replace(">=", ""));
-        else if (cost.startsWith("<="))
+                    capacity.replace(">=", ""));
+        else if (capacity.startsWith("<="))
             return r -> r.getLocation().getCapacity() <= Integer.parseInt(
-                    cost.replace("<=", ""));
-        else if (cost.startsWith(">"))
+                    capacity.replace("<=", ""));
+        else if (capacity.startsWith(">"))
             return r -> r.getLocation().getCapacity() > Integer.parseInt(
-                    cost.replace(">", ""));
-        else if (cost.startsWith("<"))
+                    capacity.replace(">", ""));
+        else if (capacity.startsWith("<"))
             return r -> r.getLocation().getCapacity() < Integer.parseInt(
-                    cost.replace("<", ""));
+                    capacity.replace("<", ""));
         else
             return r -> r.getLocation().getCapacity() == Integer.parseInt(
-                    cost.replace("=", ""));
+                    capacity.replace("=", ""));
     }
     
     /**
@@ -291,6 +319,18 @@ public class ReservationSearch
     }
     
     /**
+     * Filter reservations by event type
+     * 
+     * @param type The event type
+     * @return A predicate that checks for matching reservations with the event
+     *         type
+     */
+    private Predicate<Reservation> filterByEventType(String type)
+    {
+        return r -> r.getEventType().equalsIgnoreCase(type);
+    }
+    
+    /**
      * Filter reservations by a reserver's first name
      * 
      * @param name The reserver's first name
@@ -312,6 +352,34 @@ public class ReservationSearch
     private Predicate<Reservation> filterByLastName(String name)
     {
         return r -> r.getReserverLastName().equalsIgnoreCase(name);
+    }
+    
+    /**
+     * Filter reservations by number attending
+     * 
+     * @param attending The number attending
+     * @return A predicate that checks for matching reservations with the
+     *         number attending.
+     */
+    private Predicate<Reservation> filterByNumberAttending(String attending)
+    {
+        // Check for specific relational operators and remove it from attending
+        // to parse it into an integer
+        if (attending.startsWith(">="))
+            return r -> r.getNumberAttending() >= Integer.parseInt(
+                    attending.replace(">=", ""));
+        else if (attending.startsWith("<="))
+            return r -> r.getNumberAttending() <= Integer.parseInt(
+                    attending.replace("<=", ""));
+        else if (attending.startsWith(">"))
+            return r -> r.getNumberAttending() > Integer.parseInt(
+                    attending.replace(">", ""));
+        else if (attending.startsWith("<"))
+            return r -> r.getNumberAttending() < Integer.parseInt(
+                    attending.replace("<", ""));
+        else
+            return r -> r.getNumberAttending() == Integer.parseInt(
+                    attending.replace("=", ""));
     }
     
     /**

@@ -82,7 +82,9 @@ public class SearchActualizer
                      firstVals = new ArrayList(),
                      lastVals = new ArrayList(),
                      emailVals = new ArrayList(),
-                     phoneVals = new ArrayList();
+                     phoneVals = new ArrayList(),
+                     eventVals = new ArrayList(),
+                     attendingVals = new ArrayList();
         
         // Split the search constraints
         String[] constraints = criteria.split(";");
@@ -207,6 +209,24 @@ public class SearchActualizer
                                         JOptionPane.ERROR_MESSAGE);
                             }
                             break;
+                        case "eventtype":
+                        case "event":
+                        case "type":
+                            if (validEventType(val))
+                                eventVals.add(val);
+                            else
+                            {
+                                JOptionPane.showMessageDialog(null,
+                                        "Invalid event type", "Error",
+                                        JOptionPane.ERROR_MESSAGE);
+                            }
+                            break;
+                        case "numberattending":
+                        case "attending":
+                        case "attendees":
+                            if (validCapacity(val))
+                                attendingVals.add(val);
+                            break;
                         default:
                             JOptionPane.showMessageDialog(null,
                                     "Invalid search key(s)\n\n" +
@@ -239,6 +259,8 @@ public class SearchActualizer
         splitCriteria.put("LastName", lastVals);
         splitCriteria.put("EmailAddress", emailVals);
         splitCriteria.put("PhoneNumber", phoneVals);
+        splitCriteria.put("EventType", eventVals);
+        splitCriteria.put("Attending", attendingVals);
         
         return splitCriteria;
     }
@@ -323,6 +345,22 @@ public class SearchActualizer
     private boolean validEndTime(String time)
     {
         return time.matches("\\d{2}:\\d{2}");
+    }
+    
+    /**
+     * Validate the event type input
+     * 
+     * @param type The event type
+     * @return If the event type is valid
+     */
+    private boolean validEventType(String type)
+    {
+        for (char c : type.toCharArray())
+        {
+            if (!Character.isLetter(c) && !Character.isSpaceChar(c))
+                return false;
+        }
+        return true;
     }
     
     /**

@@ -72,19 +72,19 @@ public class SearchActualizer
     {
         // The following represent lists of values pertaining to their
         // specified keys
-        List<String> locVals = new ArrayList(),
-                     capVals = new ArrayList(),
-                     sdVals = new ArrayList(),
-                     stVals = new ArrayList(),
-                     edVals = new ArrayList(),
-                     etVals = new ArrayList(),
-                     costVals = new ArrayList(),
-                     firstVals = new ArrayList(),
-                     lastVals = new ArrayList(),
-                     emailVals = new ArrayList(),
-                     phoneVals = new ArrayList(),
-                     eventVals = new ArrayList(),
-                     attendingVals = new ArrayList();
+        List<String> locVals = null,
+                     capVals = null,
+                     sdVals = null,
+                     stVals = null,
+                     edVals = null,
+                     etVals = null,
+                     costVals = null,
+                     firstVals = null,
+                     lastVals = null,
+                     emailVals = null,
+                     phoneVals = null,
+                     eventVals = null,
+                     attendingVals = null;
         
         // Split the search constraints
         String[] constraints = criteria.split(";");
@@ -107,7 +107,11 @@ public class SearchActualizer
                         case "location":
                         case "loc":
                             if (validLocationName(val))
+                            {
+                                if (locVals == null)
+                                    locVals = new ArrayList();
                                 locVals.add(val);
+                            }
                             else
                             {
                                 JOptionPane.showMessageDialog(null,
@@ -118,11 +122,19 @@ public class SearchActualizer
                         case "capacity":
                         case "cap":
                             if (validCapacity(val))
+                            {
+                                if (capVals == null)
+                                    capVals = new ArrayList();
                                 capVals.add(val);
+                            }
                             break;
                         case "startdate":
                             if (validStartDate(val))
+                            {
+                                if (sdVals == null)
+                                    sdVals = new ArrayList();
                                 sdVals.add(val);
+                            }
                             else
                             {
                                 JOptionPane.showMessageDialog(null,
@@ -132,7 +144,11 @@ public class SearchActualizer
                             break;
                         case "starttime":
                             if (validStartTime(val))
+                            {
+                                if (stVals == null)
+                                    stVals = new ArrayList();
                                 stVals.add(val);
+                            }
                             else
                             {
                                 JOptionPane.showMessageDialog(null,
@@ -142,7 +158,11 @@ public class SearchActualizer
                             break;
                         case "enddate":
                             if (validEndDate(val))
+                            {
+                                if (edVals == null)
+                                    edVals = new ArrayList();
                                 edVals.add(val);
+                            }
                             else
                             {
                                 JOptionPane.showMessageDialog(null,
@@ -152,7 +172,11 @@ public class SearchActualizer
                             break;
                         case "endtime":
                             if (validEndTime(val))
+                            {
+                                if (etVals == null)
+                                    etVals = new ArrayList();
                                 etVals.add(val);
+                            }
                             else
                             {
                                 JOptionPane.showMessageDialog(null,
@@ -163,12 +187,20 @@ public class SearchActualizer
                         case "cost":
                         case "price":
                             if (validCost(val))
+                            {
+                                if (costVals == null)
+                                    costVals = new ArrayList();
                                 costVals.add(val);
+                            }
                             break;
                         case "firstname":
                         case "first":
                             if (validReserverName(val))
+                            {
+                                if (firstVals == null)
+                                    firstVals = new ArrayList();
                                 firstVals.add(val);
+                            }
                             else
                             {
                                 JOptionPane.showMessageDialog(null,
@@ -179,7 +211,11 @@ public class SearchActualizer
                         case "lastname":
                         case "last":
                             if (validReserverName(val))
+                            {
+                                if (lastVals == null)
+                                    lastVals = new ArrayList();
                                 lastVals.add(val);
+                            }
                             else
                             {
                                 JOptionPane.showMessageDialog(null,
@@ -190,7 +226,11 @@ public class SearchActualizer
                         case "emailaddress":
                         case "email":
                             if (validEmailAddress(val))
+                            {
+                                if (emailVals == null)
+                                    emailVals = new ArrayList();
                                 emailVals.add(val);
+                            }
                             else
                             {
                                 JOptionPane.showMessageDialog(null,
@@ -201,7 +241,11 @@ public class SearchActualizer
                         case "phonenumber":
                         case "phone":
                             if (validPhoneNumber(val))
+                            {
+                                if (phoneVals == null)
+                                    phoneVals = new ArrayList();
                                 phoneVals.add(val);
+                            }
                             else
                             {
                                 JOptionPane.showMessageDialog(null,
@@ -213,7 +257,11 @@ public class SearchActualizer
                         case "event":
                         case "type":
                             if (validEventType(val))
+                            {
+                                if (eventVals == null)
+                                    eventVals = new ArrayList();
                                 eventVals.add(val);
+                            }
                             else
                             {
                                 JOptionPane.showMessageDialog(null,
@@ -225,7 +273,11 @@ public class SearchActualizer
                         case "attending":
                         case "attendees":
                             if (validCapacity(val))
+                            {
+                                if (attendingVals == null)
+                                    attendingVals = new ArrayList();
                                 attendingVals.add(val);
+                            }
                             break;
                         default:
                             JOptionPane.showMessageDialog(null,
@@ -248,19 +300,32 @@ public class SearchActualizer
         }
         splitCriteria = new HashMap();
         
-        splitCriteria.put("Location", locVals);
-        splitCriteria.put("Capacity", capVals);
-        splitCriteria.put("StartDate", sdVals);
-        splitCriteria.put("StartTime", stVals);
-        splitCriteria.put("EndDate", edVals);
-        splitCriteria.put("EndTime", etVals);
-        splitCriteria.put("Cost", costVals);
-        splitCriteria.put("FirstName", firstVals);
-        splitCriteria.put("LastName", lastVals);
-        splitCriteria.put("EmailAddress", emailVals);
-        splitCriteria.put("PhoneNumber", phoneVals);
-        splitCriteria.put("EventType", eventVals);
-        splitCriteria.put("Attending", attendingVals);
+        if (locVals != null)
+            splitCriteria.put("Location", locVals);
+        if (capVals != null)
+            splitCriteria.put("Capacity", capVals);
+        if (sdVals != null)
+            splitCriteria.put("StartDate", sdVals);
+        if (stVals != null)
+            splitCriteria.put("StartTime", stVals);
+        if (edVals != null)
+            splitCriteria.put("EndDate", edVals);
+        if (etVals != null)
+            splitCriteria.put("EndTime", etVals);
+        if (costVals != null)
+            splitCriteria.put("Cost", costVals);
+        if (firstVals != null)
+            splitCriteria.put("FirstName", firstVals);
+        if (lastVals != null)
+            splitCriteria.put("LastName", lastVals);
+        if (emailVals != null)
+            splitCriteria.put("EmailAddress", emailVals);
+        if (phoneVals != null)
+            splitCriteria.put("PhoneNumber", phoneVals);
+        if (eventVals != null)
+            splitCriteria.put("EventType", eventVals);
+        if (attendingVals != null)
+            splitCriteria.put("Attending", attendingVals);
         
         return splitCriteria;
     }

@@ -204,7 +204,7 @@ public class ReservationSearch
                 numEventTypes++;
                 if (predicate == null)
                     predicate = filterByEventType(v);
-                else if (numPhones == 1)
+                else if (numEventTypes == 1)
                     predicate = predicate.and(filterByEventType(v));
                 else
                     predicate = predicate.or(filterByEventType(v));
@@ -217,7 +217,7 @@ public class ReservationSearch
                 numAttendings++;
                 if (predicate == null)
                     predicate = filterByNumberAttending(v);
-                else if (numPhones == 1)
+                else if (numAttendings == 1)
                     predicate = predicate.and(filterByNumberAttending(v));
                 else
                     predicate = predicate.or(filterByNumberAttending(v));

@@ -380,7 +380,8 @@ public class UpdateReservableDialog extends JDialog
                 return false;
             }
             
-            if (nameMatchesExisting(input))
+            if (!reservable.getName().equalsIgnoreCase(input) && 
+                    nameMatchesExisting(input))
             {
                 displayError("A location with that name already exists");
                 return false;

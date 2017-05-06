@@ -103,6 +103,7 @@ public class SearchActualizer
 
                     switch (key)
                     {
+                        case "location name":
                         case "locationname":
                         case "location":
                         case "loc":
@@ -128,6 +129,7 @@ public class SearchActualizer
                                 capVals.add(val);
                             }
                             break;
+                        case "start date":
                         case "startdate":
                             if (validStartDate(val))
                             {
@@ -142,6 +144,7 @@ public class SearchActualizer
                                         JOptionPane.ERROR_MESSAGE);
                             }
                             break;
+                        case "start time":
                         case "starttime":
                             if (validStartTime(val))
                             {
@@ -156,6 +159,7 @@ public class SearchActualizer
                                         JOptionPane.ERROR_MESSAGE);
                             }
                             break;
+                        case "end date":
                         case "enddate":
                             if (validEndDate(val))
                             {
@@ -170,6 +174,7 @@ public class SearchActualizer
                                         JOptionPane.ERROR_MESSAGE);
                             }
                             break;
+                        case "end time":
                         case "endtime":
                             if (validEndTime(val))
                             {
@@ -193,6 +198,7 @@ public class SearchActualizer
                                 costVals.add(val);
                             }
                             break;
+                        case "first name":
                         case "firstname":
                         case "first":
                             if (validReserverName(val))
@@ -208,6 +214,7 @@ public class SearchActualizer
                                         JOptionPane.ERROR_MESSAGE);
                             }
                             break;
+                        case "last name":
                         case "lastname":
                         case "last":
                             if (validReserverName(val))
@@ -223,8 +230,12 @@ public class SearchActualizer
                                         JOptionPane.ERROR_MESSAGE);
                             }
                             break;
+                        case "email address":
+                        case "e-mail address":
                         case "emailaddress":
+                        case "e-mailaddress":
                         case "email":
+                        case "e-mail":
                             if (validEmailAddress(val))
                             {
                                 if (emailVals == null)
@@ -238,6 +249,7 @@ public class SearchActualizer
                                         JOptionPane.ERROR_MESSAGE);
                             }
                             break;
+                        case "phone number":
                         case "phonenumber":
                         case "phone":
                             if (validPhoneNumber(val))
@@ -253,6 +265,7 @@ public class SearchActualizer
                                         JOptionPane.ERROR_MESSAGE);
                             }
                             break;
+                        case "event type":
                         case "eventtype":
                         case "event":
                         case "type":
@@ -269,6 +282,7 @@ public class SearchActualizer
                                         JOptionPane.ERROR_MESSAGE);
                             }
                             break;
+                        case "number attending":
                         case "numberattending":
                         case "attending":
                         case "attendees":

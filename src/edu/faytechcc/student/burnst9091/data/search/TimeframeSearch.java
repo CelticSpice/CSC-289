@@ -121,7 +121,39 @@ public class TimeframeSearch
      */
     private Predicate<ReservableTimeframe> filterByCost(String cost)
     {
-        return t -> t.getCost().equals(new BigDecimal(cost));
+        BigDecimal c;
+        if (cost.startsWith(">="))
+        {
+            c = new BigDecimal(cost.replace(">=", "").trim());
+            
+            return (t -> t.getCost().compareTo(c) == 1 ||
+                    t.getCost().compareTo(c) == 0);
+        }
+        else if (cost.startsWith("<="))
+        {
+            c = new BigDecimal(cost.replace("<=", "").trim());
+            
+            return (t -> t.getCost().compareTo(c) == -1 ||
+                    t.getCost().compareTo(c) == 0);
+        }
+        else if (cost.startsWith(">"))
+        {
+            c = new BigDecimal(cost.replace(">", "").trim());
+            
+            return t -> t.getCost().compareTo(c) == 1;
+        }
+        else if (cost.startsWith("<"))
+        {
+            c = new BigDecimal(cost.replace("<", "").trim());
+            
+            return t -> t.getCost().compareTo(c) == -1;
+        }
+        else
+        {
+            c = new BigDecimal(cost.replace("=", "").trim());
+            
+            return t -> t.getCost().compareTo(c) == 0;
+        }
     }
     
     /**

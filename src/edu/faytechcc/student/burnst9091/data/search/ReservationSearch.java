@@ -273,7 +273,39 @@ public class ReservationSearch
      */
     private Predicate<Reservation> filterByCost(String cost)
     {
-        return r -> r.getCost().equals(new BigDecimal(cost));
+        BigDecimal c;
+        if (cost.startsWith(">="))
+        {
+            c = new BigDecimal(cost.replace(">=", "").trim());
+            
+            return (r -> r.getCost().compareTo(c) == 1 ||
+                    r.getCost().compareTo(c) == 0);
+        }
+        else if (cost.startsWith("<="))
+        {
+            c = new BigDecimal(cost.replace("<=", "").trim());
+            
+            return (r -> r.getCost().compareTo(c) == -1 ||
+                    r.getCost().compareTo(c) == 0);
+        }
+        else if (cost.startsWith(">"))
+        {
+            c = new BigDecimal(cost.replace(">", "").trim());
+            
+            return r -> r.getCost().compareTo(c) == 1;
+        }
+        else if (cost.startsWith("<"))
+        {
+            c = new BigDecimal(cost.replace("<", "").trim());
+            
+            return r -> r.getCost().compareTo(c) == -1;
+        }
+        else
+        {
+            c = new BigDecimal(cost.replace("=", "").trim());
+            
+            return r -> r.getCost().compareTo(c) == 0;
+        }
     }
     
     /**

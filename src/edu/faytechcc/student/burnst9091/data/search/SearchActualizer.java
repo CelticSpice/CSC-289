@@ -8,6 +8,7 @@ package edu.faytechcc.student.burnst9091.data.search;
 import edu.faytechcc.student.burnst9091.data.ReservableLocation;
 import edu.faytechcc.student.burnst9091.data.Reservation;
 import edu.faytechcc.student.burnst9091.data.ReservableTimeframe;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -377,7 +378,28 @@ public class SearchActualizer
      */
     private boolean validCost(String cost)
     {
-        boolean valid = cost.matches("\\d+.\\d{2}");
+        boolean valid = cost.matches("([<>]=|[<>=])\\d+.\\d{2}");
+        
+        if (cost.startsWith(">="))
+        {
+            cost = cost.replace(">=", "").trim();
+        }
+        else if (cost.startsWith("<="))
+        {
+            cost = cost.replace("<=", "").trim();
+        }
+        else if (cost.startsWith(">"))
+        {
+            cost = cost.replace(">", "").trim();
+        }
+        else if (cost.startsWith("<"))
+        {
+            cost = cost.replace("<", "").trim();
+        }
+        else
+        {
+            cost = cost.replace("=", "").trim();
+        }
         
         if (valid)
         {

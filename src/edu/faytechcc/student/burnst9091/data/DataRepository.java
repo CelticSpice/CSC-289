@@ -30,6 +30,34 @@ public class DataRepository
     }
     
     /**
+        Acquires the ID for a timeframe
+    
+        @param timeframe Timeframe to acquire ID of
+        @return Acquired ID of timeframe
+    */
+    
+    public int acquireTimeframeID(ReservableTimeframe timeframe)
+    {
+        int id = -1;
+        ReservableTimeframe time;
+        
+        for (ReservableLocation loc : locations.values())
+        {
+            time = loc.getTimeframe(t ->
+                    t.startsOnDatetime(timeframe.getStartDatetime()) &&
+                    t.endsOnDatetime(timeframe.getEndDatetime()));
+            
+            if (time != null)
+            {
+                id = time.getID();
+                break;
+            }
+        }
+        
+        return id;
+    }
+    
+    /**
         Adds a reservable to the repository
     
         @param reservable Reservable to add

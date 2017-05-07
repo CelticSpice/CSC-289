@@ -125,6 +125,17 @@ public class Timeframe
     }
     
     /**
+        Returns the ending datetime of the timeframe
+    
+        @return The ending datetime of the timeframe
+    */
+    
+    public LocalDateTime getEndDatetime()
+    {
+        return endDateTime;
+    }
+    
+    /**
         Returns the ending time of the timeframe
     
         @return The ending time of the timeframe
@@ -155,6 +166,17 @@ public class Timeframe
     public LocalDate getStartDate()
     {
         return startDateTime.toLocalDate();
+    }
+    
+    /**
+        Returns the starting datetime of the timeframe
+    
+        @return The starting datetime of the timeframe
+    */
+    
+    public LocalDateTime getStartDatetime()
+    {
+        return startDateTime;
     }
     
     /**

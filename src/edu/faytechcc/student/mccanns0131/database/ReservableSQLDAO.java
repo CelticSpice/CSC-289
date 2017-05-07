@@ -8,7 +8,6 @@ package edu.faytechcc.student.mccanns0131.database;
 
 import edu.faytechcc.student.burnst9091.data.Reservable;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 

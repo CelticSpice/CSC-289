@@ -109,6 +109,24 @@ public class ReservableLocation extends Location
     }
     
     /**
+        Returns the first timeframe found matching the given predicate; else,
+        if no match is found, null
+    
+        @param pred Predicate timeframes must match
+        @return The first timeframe found matching the given predicate; else,
+                null
+    */
+    
+    public ReservableTimeframe getTimeframe(Predicate<ReservableTimeframe> pred)
+    {
+        List<ReservableTimeframe> matches = getTimeframes(pred);
+        if (!matches.isEmpty())
+            return matches.get(0);
+        else
+            return null;
+    }
+    
+    /**
         Returns a list of timeframes allocated to the location. The order
         in which timeframes will be sorted is unreliable
     

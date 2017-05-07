@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.function.Predicate;
 import javax.swing.JOptionPane;
 
 public class ReservableAddButtonController implements ActionListener
@@ -173,11 +174,15 @@ public class ReservableAddButtonController implements ActionListener
     private ReservableTimeframe parseTimeframe()
     {
         BigDecimal cost = new BigDecimal(view.getCost());
-
         LocalDateTime startDateTime = parseDateTime(START);
         LocalDateTime endDateTime = parseDateTime(END);
+        
+        ReservableTimeframe timeframe = new ReservableTimeframe(startDateTime,
+                endDateTime, cost);
+        
+        timeframe.setID(repo.acquireTimeframeID(timeframe));
 
-        return new ReservableTimeframe(startDateTime, endDateTime, cost);
+        return timeframe;
     }
 
     /**

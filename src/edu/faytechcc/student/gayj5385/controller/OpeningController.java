@@ -12,6 +12,7 @@ import edu.faytechcc.student.burnst9091.data.SystemPreferences;
 import edu.faytechcc.student.gayj5385.gui.MainPanel;
 import edu.faytechcc.student.gayj5385.gui.OpenPanel;
 import edu.faytechcc.student.gayj5385.gui.dialog.SendEmailDialog;
+import edu.faytechcc.student.mccanns0131.database.DBJanitor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.security.NoSuchAlgorithmException;
@@ -126,6 +127,7 @@ public class OpeningController implements ActionListener
     {        
         try
         {
+            DBJanitor.run();
             repo.update();
         }
         catch (SQLException ex)
@@ -146,6 +148,7 @@ public class OpeningController implements ActionListener
     {        
         try
         {
+            DBJanitor.run();
             repo.update();
         }
         catch (SQLException ex)

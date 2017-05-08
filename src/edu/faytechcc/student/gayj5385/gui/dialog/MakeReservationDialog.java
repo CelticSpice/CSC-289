@@ -259,6 +259,9 @@ public class MakeReservationDialog extends JDialog
                 String p = phone.getText();
                 Reserver reserver = new Reserver(fName, lName, e, p);
                 
+                // Acquire reserver ID
+                reserver.setID(repo.acquireReserverID(reserver));
+                
                 // Get reservation info
                 int numAttending = Integer.parseInt(attendence.getText());
                 String eventType = event.getText();

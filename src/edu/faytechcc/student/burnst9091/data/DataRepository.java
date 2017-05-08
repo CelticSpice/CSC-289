@@ -30,6 +30,41 @@ public class DataRepository
     }
     
     /**
+        Acquires the ID for a reserver
+    
+        @param reserver Reserver to acquire ID of
+        @return Acquired ID of reserver
+    */
+    
+    public int acquireReserverID(Reserver reserver)
+    {
+        int id = -1;
+        Reserver r;
+        
+        for (List<Reservation> reserves : reservations.values())
+        {
+            for (Reservation reservation : reserves)
+            {
+                r = reservation.getReserver();
+                if (r.getFirstName().equalsIgnoreCase(
+                          reserver.getFirstName())
+                        && r.getLastName().equalsIgnoreCase(
+                          reserver.getLastName())
+                        && r.getEmailAddress().equalsIgnoreCase(
+                          reserver.getEmailAddress())
+                        && r.getPhoneNumber().equals(
+                          reserver.getPhoneNumber()))
+                {
+                    id = r.getID();
+                    break;
+                }
+            }
+        }
+        
+        return id;
+    }
+    
+    /**
         Acquires the ID for a timeframe
     
         @param timeframe Timeframe to acquire ID of

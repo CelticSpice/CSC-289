@@ -68,12 +68,12 @@ public class ReserverInformant
             {
                 reserversInformed.add(reserver.getID());
                 
-                String intro = reserver.getName() + ",\n\n" + body;
+                String message = reserver.getName() + ",\n\n" + body;
                 
                 try
                 {
                     EmailUtil.emailReserver(reserver,
-                            "Reserved Location Change", body);
+                            "Reserved Location Change", message);
                 }
                 catch (MessagingException ex)
                 {

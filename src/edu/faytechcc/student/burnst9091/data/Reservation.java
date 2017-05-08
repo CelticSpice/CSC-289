@@ -321,6 +321,17 @@ public class Reservation
     }
     
     /**
+        Sets the reservation's reserver
+    
+        @param reserver Reservation's reserver
+    */
+    
+    public void setReserver(Reserver reserver)
+    {
+        this.reserver = reserver;
+    }
+    
+    /**
         Sets the reserver's email
     
         @param e Reserver's email

@@ -267,17 +267,30 @@ public class DataRepository
         LocationSQLDAO locDAO = new LocationSQLDAO();
         ReservationSQLDAO resDAO = new ReservationSQLDAO();
         
+        HashMap<Integer, Reserver> reservers = new HashMap<>();
+        
+        Reserver reserver;
+        
         locations.clear();
         reservations.clear();
         
         for (ReservableLocation loc : locDAO.getAll())
         {
             locations.put(loc.getID(), loc);
-            
+                        
             List<Reservation> locReservations = resDAO.getByLocation(loc);
             
             if (!locReservations.isEmpty())
                 reservations.put(loc.getID(), locReservations);
+            
+            for (Reservation reservation : locReservations)
+            {
+                reserver = reservation.getReserver();
+                if (reservers.containsKey(reserver.getID()))
+                    reservation.setReserver(reservers.get(reserver.getID()));
+                else
+                    reservers.put(reserver.getID(), reserver);
+            }
         }
         
         locDAO.close();

@@ -274,6 +274,11 @@ public class SendEmailDialog extends JDialog
                                     JOptionPane.ERROR_MESSAGE);
                         }
                     }
+                    
+                    JOptionPane.showMessageDialog(null,
+                            "Email sent successfully");
+                    
+                    dispose();
                 }
             }
             else

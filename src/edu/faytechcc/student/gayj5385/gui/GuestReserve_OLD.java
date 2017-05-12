@@ -11,7 +11,7 @@ import javax.swing.*;
  * 
  * @author Jessica
  */
-public class GuestReserve extends JPanel
+public class GuestReserve_OLD extends JPanel
 {
     private JLabel lblName, lblEmail,lblLoc,lblDate, lblType, lblTime;
     private JTextField txtName, txtEmail;
@@ -19,7 +19,7 @@ public class GuestReserve extends JPanel
     private JList jlTime;
     private JButton reserveBtn;
     
-    public GuestReserve()
+    public GuestReserve_OLD()
     {
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();

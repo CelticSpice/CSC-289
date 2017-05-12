@@ -13,7 +13,7 @@ import java.time.LocalTime;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
-public class TimeframeTest {
+public class TimeframeTest_OLD {
     /**
         Test for a true consistency with another timeframe
     */

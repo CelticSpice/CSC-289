@@ -173,7 +173,9 @@ public class ReservableAddButtonController implements ActionListener
 
     private ReservableTimeframe parseTimeframe()
     {
-        BigDecimal cost = new BigDecimal(view.getCost());
+        String costInput = view.getCost();
+        costInput = costInput.replace("$", "");
+        BigDecimal cost = new BigDecimal(costInput);
         LocalDateTime startDateTime = parseDateTime(START);
         LocalDateTime endDateTime = parseDateTime(END);
         

@@ -34,229 +34,229 @@ VALUES ('Tent Lot 1', 10);
 -- Insert test Timeframes records.
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-01', '2017-06-02', '14:00', '11:00');
+VALUES ('2025-06-01', '2025-06-02', '14:00', '11:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-02', '2017-06-03', '14:00', '11:00');
+VALUES ('2025-06-02', '2025-06-03', '14:00', '11:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-03', '2017-06-04', '14:00', '11:00');
+VALUES ('2025-06-03', '2025-06-04', '14:00', '11:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-04', '2017-06-05', '14:00', '11:00');
+VALUES ('2025-06-04', '2025-06-05', '14:00', '11:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-05', '2017-06-06', '14:00', '11:00');
+VALUES ('2025-06-05', '2025-06-06', '14:00', '11:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-06', '2017-06-07', '14:00', '11:00');
+VALUES ('2025-06-06', '2025-06-07', '14:00', '11:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-07', '2017-06-08', '14:00', '11:00');
+VALUES ('2025-06-07', '2025-06-08', '14:00', '11:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-08', '2017-06-09', '14:00', '11:00');
+VALUES ('2025-06-08', '2025-06-09', '14:00', '11:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-09', '2017-06-10', '14:00', '11:00');
+VALUES ('2025-06-09', '2025-06-10', '14:00', '11:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-10', '2017-06-11', '14:00', '11:00');
+VALUES ('2025-06-10', '2025-06-11', '14:00', '11:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-11', '2017-06-12', '14:00', '11:00');
+VALUES ('2025-06-11', '2025-06-12', '14:00', '11:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-12', '2017-06-13', '14:00', '11:00');
+VALUES ('2025-06-12', '2025-06-13', '14:00', '11:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-13', '2017-06-14', '14:00', '11:00');
+VALUES ('2025-06-13', '2025-06-14', '14:00', '11:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-14', '2017-06-15', '14:00', '11:00');
+VALUES ('2025-06-14', '2025-06-15', '14:00', '11:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-15', '2017-06-16', '14:00', '11:00');
+VALUES ('2025-06-15', '2025-06-16', '14:00', '11:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-16', '2017-06-17', '14:00', '11:00');
+VALUES ('2025-06-16', '2025-06-17', '14:00', '11:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-17', '2017-06-18', '14:00', '11:00');
+VALUES ('2025-06-17', '2025-06-18', '14:00', '11:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-18', '2017-06-19', '14:00', '11:00');
+VALUES ('2025-06-18', '2025-06-19', '14:00', '11:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-19', '2017-06-20', '14:00', '11:00');
+VALUES ('2025-06-19', '2025-06-20', '14:00', '11:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-20', '2017-06-21', '14:00', '11:00');
+VALUES ('2025-06-20', '2025-06-21', '14:00', '11:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-21', '2017-06-22', '14:00', '11:00');
+VALUES ('2025-06-21', '2025-06-22', '14:00', '11:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-22', '2017-06-23', '14:00', '11:00');
+VALUES ('2025-06-22', '2025-06-23', '14:00', '11:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-23', '2017-06-24', '14:00', '11:00');
+VALUES ('2025-06-23', '2025-06-24', '14:00', '11:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-24', '2017-06-25', '14:00', '11:00');
+VALUES ('2025-06-24', '2025-06-25', '14:00', '11:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-25', '2017-06-26', '14:00', '11:00');
+VALUES ('2025-06-25', '2025-06-26', '14:00', '11:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-26', '2017-06-27', '14:00', '11:00');
+VALUES ('2025-06-26', '2025-06-27', '14:00', '11:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-27', '2017-06-28', '14:00', '11:00');
+VALUES ('2025-06-27', '2025-06-28', '14:00', '11:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-28', '2017-06-29', '14:00', '11:00');
+VALUES ('2025-06-28', '2025-06-29', '14:00', '11:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-29', '2017-06-30', '14:00', '11:00');
+VALUES ('2025-06-29', '2025-06-30', '14:00', '11:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-30', '2017-07-01', '14:00', '11:00');
+VALUES ('2025-06-30', '2025-07-01', '14:00', '11:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-01', '2017-06-02', '13:00', '12:00');
+VALUES ('2025-06-01', '2025-06-02', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-02', '2017-06-03', '13:00', '12:00');
+VALUES ('2025-06-02', '2025-06-03', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-03', '2017-06-04', '13:00', '12:00');
+VALUES ('2025-06-03', '2025-06-04', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-04', '2017-06-05', '13:00', '12:00');
+VALUES ('2025-06-04', '2025-06-05', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-05', '2017-06-06', '13:00', '12:00');
+VALUES ('2025-06-05', '2025-06-06', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-06', '2017-06-07', '13:00', '12:00');
+VALUES ('2025-06-06', '2025-06-07', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-07', '2017-06-08', '13:00', '12:00');
+VALUES ('2025-06-07', '2025-06-08', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-08', '2017-06-09', '13:00', '12:00');
+VALUES ('2025-06-08', '2025-06-09', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-09', '2017-06-10', '13:00', '12:00');
+VALUES ('2025-06-09', '2025-06-10', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-10', '2017-06-11', '13:00', '12:00');
+VALUES ('2025-06-10', '2025-06-11', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-11', '2017-06-12', '13:00', '12:00');
+VALUES ('2025-06-11', '2025-06-12', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-12', '2017-06-13', '13:00', '12:00');
+VALUES ('2025-06-12', '2025-06-13', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-13', '2017-06-14', '13:00', '12:00');
+VALUES ('2025-06-13', '2025-06-14', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-14', '2017-06-15', '13:00', '12:00');
+VALUES ('2025-06-14', '2025-06-15', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-15', '2017-06-16', '13:00', '12:00');
+VALUES ('2025-06-15', '2025-06-16', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-16', '2017-06-17', '13:00', '12:00');
+VALUES ('2025-06-16', '2025-06-17', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-17', '2017-06-18', '13:00', '12:00');
+VALUES ('2025-06-17', '2025-06-18', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-18', '2017-06-19', '13:00', '12:00');
+VALUES ('2025-06-18', '2025-06-19', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-19', '2017-06-20', '13:00', '12:00');
+VALUES ('2025-06-19', '2025-06-20', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-20', '2017-06-21', '13:00', '12:00');
+VALUES ('2025-06-20', '2025-06-21', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-21', '2017-06-22', '13:00', '12:00');
+VALUES ('2025-06-21', '2025-06-22', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-22', '2017-06-23', '13:00', '12:00');
+VALUES ('2025-06-22', '2025-06-23', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-23', '2017-06-24', '13:00', '12:00');
+VALUES ('2025-06-23', '2025-06-24', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-24', '2017-06-25', '13:00', '12:00');
+VALUES ('2025-06-24', '2025-06-25', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-25', '2017-06-26', '13:00', '12:00');
+VALUES ('2025-06-25', '2025-06-26', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-26', '2017-06-27', '13:00', '12:00');
+VALUES ('2025-06-26', '2025-06-27', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-27', '2017-06-28', '13:00', '12:00');
+VALUES ('2025-06-27', '2025-06-28', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-28', '2017-06-29', '13:00', '12:00');
+VALUES ('2025-06-28', '2025-06-29', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-29', '2017-06-30', '13:00', '12:00');
+VALUES ('2025-06-29', '2025-06-30', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-30', '2017-07-01', '13:00', '12:00');
+VALUES ('2025-06-30', '2025-07-01', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-01', '2017-06-03', '13:00', '12:00');
+VALUES ('2025-06-01', '2025-06-03', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-03', '2017-06-05', '13:00', '12:00');
+VALUES ('2025-06-03', '2025-06-05', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-05', '2017-06-07', '13:00', '12:00');
+VALUES ('2025-06-05', '2025-06-07', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-07', '2017-06-09', '13:00', '12:00');
+VALUES ('2025-06-07', '2025-06-09', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-09', '2017-06-11', '13:00', '12:00');
+VALUES ('2025-06-09', '2025-06-11', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-11', '2017-06-13', '13:00', '12:00');
+VALUES ('2025-06-11', '2025-06-13', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-13', '2017-06-15', '13:00', '12:00');
+VALUES ('2025-06-13', '2025-06-15', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-15', '2017-06-17', '13:00', '12:00');
+VALUES ('2025-06-15', '2025-06-17', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-17', '2017-06-19', '13:00', '12:00');
+VALUES ('2025-06-17', '2025-06-19', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-19', '2017-06-21', '13:00', '12:00');
+VALUES ('2025-06-19', '2025-06-21', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-21', '2017-06-23', '13:00', '12:00');
+VALUES ('2025-06-21', '2025-06-23', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-23', '2017-06-25', '13:00', '12:00');
+VALUES ('2025-06-23', '2025-06-25', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-25', '2017-06-27', '13:00', '12:00');
+VALUES ('2025-06-25', '2025-06-27', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-27', '2017-06-29', '13:00', '12:00');
+VALUES ('2025-06-27', '2025-06-29', '13:00', '12:00');
 
 INSERT INTO Timeframes (StartDate, EndDate, StartTime, EndTime)
-VALUES ('2017-06-29', '2017-07-01', '13:00', '12:00');
+VALUES ('2025-06-29', '2025-07-01', '13:00', '12:00');
 
 
 -- Insert test Reservables records.
